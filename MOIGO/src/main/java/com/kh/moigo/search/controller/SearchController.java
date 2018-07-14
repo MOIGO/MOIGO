@@ -34,9 +34,8 @@ public class SearchController {
 	
 	@ResponseBody
 	@RequestMapping("search/selectList.do")
-	public Map<String, String> selectList(Model model, @RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory, @RequestParam String sort) {
-		if(keyword == null) keyword = "";
-		if(place == null) place = "";
+	public Map<String, List<Groups>> selectList(Model model, @RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory, @RequestParam String sort) {
+		System.out.println("keyword : "+keyword);
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -51,10 +50,10 @@ public class SearchController {
 		
 		model.addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("list", list);
 		
-		Map<String, String> map2 = new HashMap<>();
+		Map<String, List<Groups>> ListMap = new HashMap<>();
 		
-		/*map2.put("list", list);*/
+		ListMap.put("list", list);
 		
-		return map;
+		return ListMap;
 	}
 }

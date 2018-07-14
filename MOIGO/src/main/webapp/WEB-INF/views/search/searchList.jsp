@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=2">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp"/>
@@ -22,7 +22,7 @@
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="inner-search">
-										<input type="text" placeholder="모임검색" autocomplete="off" name="keyword" id="keyword" class="form-control" value="${keyword }" onkeyup="search();" />
+										<input type="text" placeholder="모임검색" autocomplete="off" name="keyword" id="keyword" class="form-control" onkeyup="search();" />
 										<span class="search-btn">
 											<img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="search();">
 										</span>
@@ -70,12 +70,12 @@
 			</div>
 			<div class="content-meeting">
 				<div class="row" style="width: 100%; height: 50px;">
-					<div class="col-sm-4 count-sort" id="listCount"> 검색결과 ${requestScope.listCount }개</div>
+					<div class="col-sm-4 count-sort" id="listCount"></div>
 					<div class="col-sm-4 count-sort" id="sort-inner">
 						<select class="sort" name="sort" id="sort">
 							<option>최신순</option>
-							<option>조회순</option>
-							<option>멤버순</option>
+							<option value="hits">조회순</option>
+							<option value="member">멤버순</option>
 						</select>
 					</div>
 				</div>
@@ -105,15 +105,15 @@
 										<div class="location">
 											${group.groupAddress }
 										</div>
-										<span class="icon-container">
-											<span class="hitsIcon">
-												<img alt="" src="">
-											</span>
+										<span class="icon-container float-right">
 											<span class="memberIcon">
 												0<img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png">
-											</span> 
+											</span>
 											<span class="commentIcon">
 												0<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">
+											</span>
+											<span class="hitsIcon">
+												0 &nbsp;<img alt="hitsIcon" src="${pageContext.request.contextPath }/resources/images/search/hitsIcon.png">
 											</span>
 										</span>
 									</div>
@@ -203,7 +203,9 @@
 						sort : sort},
 				dataType : "json",
 				success : function(data) {
-					alert("test");
+					$('#listCount').html('검색결과 ${requestScope.listCount }개');
+					console.log(data);
+					
 				}, error : function(error, msg) {
 					alert("test2");
 				}

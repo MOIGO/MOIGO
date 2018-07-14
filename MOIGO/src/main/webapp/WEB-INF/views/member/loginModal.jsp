@@ -32,22 +32,25 @@
                     <!-- <div class="login_check_msg" style="display: none"></div> -->
                     <div class="btn_facebook">   <i class="fab fa-facebook-f" style="margin-right:20px;"></i>페이스북으로 시작하기</div>
                     <hr style="margin-top:8px; margin-bottom:15px;">
-                    <div></div>	
-                    <div class="form-group">
-                        <span class="letter_space_modal">아이디</span> 
-                        <input type="text" class="form-control login_form_control" name="memberEmail" id="loginId " placeholder="이메일을 입력해주세요">
-                    </div>
-                    <div  class="form-group" >
-                        <span class="letter_space_modal">비밀번호</span> 
-                        <input type="text" class="form-control login_form_control" name="memberPwd" id="loginPwd" placeholder="비밀번호를 입력해주세요" >
-                    </div>
-                    <div>
-                        <a href="" id="findPwd" class="link_forgotPwd"  data-toggle="modal" data-target="#findPwd_Modal" data-dismiss="modal">비밀번호를 잊으셨나요?</a>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn_login">로그인</button>
-                    </div>
+
+                    <form action="${pageContext.request.contextPath}/member/memberLogin.do" method="post" id="signUpForm">
+	                    <div class="form-group">
+	                        <span class="letter_space_modal">아이디</span> 
+	                        <input type="text" class="form-control login_form_control" name="memberEmail" id="loginId" placeholder="이메일을 입력해주세요"/>
+	                    </div>
+	                    <div  class="form-group" >
+	                        <span class="letter_space_modal">비밀번호</span> 
+	                        <input type="password" class="form-control login_form_control" name="memberPwd" id="loginPwd" placeholder="비밀번호를 입력해주세요" >
+	                    </div>
+	                    <div>
+	                        <a href="" id="findPwd" class="link_forgotPwd"  data-toggle="modal" data-target="#findPwd_Modal" data-dismiss="modal">비밀번호를 잊으셨나요?</a>
+	                    </div>
+	                    <div>
+	                        <button type="button" class="btn_login btn_disabled" id="btn_signUp" >로그인</button>
+	                    </div>
+                    </form>
                     <hr style="margin-top:15px; margin-bottom:10px;">
+                    
                 </div>
                 <div class="modal-footer login_modal_footer">
                     <div style="width: 100%;">
@@ -93,7 +96,7 @@
                         </ul>
                     </div>
                     <div>
-                        <button type="submit" class="btn_login" style="height:40px;">비밀번호 재설정</button>
+                        <button type="button" class="btn_login btn_disabled" id="findPwd" style="height:40px;" >비밀번호 재설정</button>
                     </div>
                 </div>
                 <div class="modal-footer login_modal_footer">
@@ -105,9 +108,22 @@
     <!-- 비밀번호 찾기 모달 끝 -->
   
 
-
     
     <script>
+    	$('#btn_signUp').on('click',function(){
+			var loginId = $('#loginId').val();
+			var loginPwd = $('#loginPwd').val();
+			
+			console.log(loginId);
+			console.log(loginPwd);
+				
+			if(loginId=="" || loginPwd==""){
+				alert("아디비번확인");
+			}else{
+				$('#signUpForm').submit();
+			}
+		
+    	}); 
     
     </script>
 </body>

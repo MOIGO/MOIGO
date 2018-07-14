@@ -1,6 +1,4 @@
-/*
-    DEMO STYLE
-*/
+
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 @import url(//fonts.googleapis.com/earlyaccess/hanna.css);
 
@@ -175,7 +173,7 @@ ul ul a {
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
-@media (max-width: 768px) {
+@media (max-width: 780px) {
     #sidebar {
         margin-left: -250px;
         transform: rotateY(90deg);
@@ -204,11 +202,13 @@ ul ul a {
     #sidebarCollapse.active span:last-of-type {
         transform: rotate(-45deg) translate(1px, -1px);
     }
+    
+    
 
 }
 
+th{
+	text-align: center;
+}
 
- .admin_report_table{
-      overflow: scroll;
-      width: 500px;
-    }
+

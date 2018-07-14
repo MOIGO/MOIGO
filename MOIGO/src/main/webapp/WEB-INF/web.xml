@@ -6,7 +6,7 @@
 	
 	<!-- #2. welcome-file 추가 -->
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>main.jsp</welcome-file>
 	</welcome-file-list>
 	
 

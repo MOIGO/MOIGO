@@ -24,7 +24,7 @@
 	</select>
 	
 	<select id="selectList" resultMap="groupsResultMap" parameterType="string">
-		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%'
+		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' ORDER BY ENROLL_DATE DESC
 	</select>
 	
 	<select id="detailListCount" resultType="_int" parameterType="hashmap">
@@ -33,7 +33,17 @@
 	
 	<select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
 		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
-		
+		<choose>
+			<when test="#{sort} == hits">
+				
+			</when>
+			<when test="#{sort} == member">
+				
+			</when>
+			<otherwise>
+				ORDER BY ENROLL_DATE DESC
+			</otherwise>
+		</choose>
 	</select>
 </mapper>
 	
