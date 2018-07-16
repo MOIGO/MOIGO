@@ -11,7 +11,7 @@
 	height: 200px;
 }
 
-.footerMenu {
+.footerMenu { 
 	color: white;
 	display: inline-block;
 	margin-top: 15px;
