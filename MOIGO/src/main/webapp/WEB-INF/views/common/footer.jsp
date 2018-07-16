@@ -16,7 +16,7 @@
 	display: inline-block;
 	margin-top: 15px;
 }
-
+  
 .footerMenu:hover {
 	cursor: pointer;
 }
