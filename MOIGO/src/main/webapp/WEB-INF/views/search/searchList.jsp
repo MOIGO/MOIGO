@@ -11,7 +11,7 @@
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp"/>
-<body>
+<body> 
 	<form id="searchFrm" action="selectList.do">
 		<div id="left-wrap">
 			<div class="filter default-filter">
