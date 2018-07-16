@@ -36,7 +36,7 @@
 					</div>
 					<div class="row place">
 						<div class="col-lg-2 col-md-12 pt-sm pb-sm">장소</div>
-						<div class="col-lg-10">
+						<div class="col-lg-10"> 
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="inner-search">
