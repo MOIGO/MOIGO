@@ -6,6 +6,9 @@
 <html>
 <head>
 <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
+<link rel="stylesheet" href="${root}/resources/css/groups/cropper.min.css">
+<script src="${root}/resources/js/groups/cropper.min.js" ></script>
+<script src="${root}/resources/js/groups/jquery-cropper.min.js" ></script>
 <style>
 
    body{
@@ -58,8 +61,8 @@
    }
    
    #listImg {
-   		width: 50px;
-   		height: 50px;
+         width: 50px;
+         height: 50px;
    }
    
    .list_wrap {
@@ -108,7 +111,7 @@
    
    #groupLeader {
       float: right;
-      margin-top : 10px;
+      margin-top : 12px;
       margin-left : 6px;
       padding : 7px 7px 5px 6px;
       font-family:'nanum-barun-gothic-bold', sans-serif;
@@ -116,64 +119,113 @@
    }
    
    /* 프로필 Modal 영역 */
-   .modal-header {
-		display: inline;
-		text-align: center;
-		padding : 10px 10px 7px 10px;
+   .gm_modal_header {
+      display: inline;
+      text-align: center;
+      padding : 10px 10px 7px 10px;
    }
    
-	.modal-title {
-		display : inline;
-		padding-left : 35px;
-		font-family:'nanum-barun-gothic-bold', sans-serif;
-		font-size: 1.4em;
-	}
-	.modal-title:hover {
-		cursor: default;
-	}
-   
-   .close {
-   		vertical-align : text-top;
-		font-size: 2em;
+   .gm_modal_tit{
+      display : inline;
+      padding-left : 35px;
+      font-family:'nanum-barun-gothic-bold', sans-serif;
+      font-size: 1.4em;
+   }
+   .gm_modal_tit:hover {
+      cursor: default;
    }
    
-   .modal-body {
-   		height : 310px;
-   		text-align: center;
+   .gm_close {
+         vertical-align : text-top;
+      font-size: 2em;
+   }
+   
+   .gm_modal_body {
+         height : 260px;
+         text-align: center;
    }
    
    #profileImg {
-   		margin-bottom: 10px;
-   		width: 150px;
-   		height: 150px;
+         margin-bottom: 10px;
+         width: 150px;
+         height: 150px;
+         border: 1px solid gray;
    }
    
-   .profile_wrap {
-   		text-align: left;
+   .profile_upload_inp {
+         display: none;
+   }
+   
+   .profile_upload_btn {
+         position : absolute;
+         top : 110px;
+         left : 280px;
+         width : 48px;
+         height : 48px;
+         border : 3px solid white;
+         border-radius: 50%;
+         background-image: url("${root}/resources/images/common/btn_profile.png");
+         background-size: 100%;
+   }
+   
+   .profile_upload_btn:hover {
+         cursor: pointer;
    }
    
    #profileLbl {
-   		float: left;
-   		margin-left : 3px;
-   		margin-bottom: 3px;
-	    font-family:'nanum-barun-gothic-bold', sans-serif;
+         float: left;
+         margin : 0px 5px 3px 3px;
+       font-family:'nanum-barun-gothic-bold', sans-serif;
+   }
+   
+   #msgMaxLength {
+         color: #0078ff;
    }
    
    #profileMsg {
-   		resize: none;
-   		font-size : 0.9em;
-		font-weight: normal;
+         resize: none;
+         font-size : 0.9em;
+      	 font-weight: normal;
    }
    
-   .modal-footer {
-   		display : inline-block;
-   		text-align: center;
-   		padding: 15px 0px 15px 0px;
+   .gm_modal_footer {
+         display : inline-block;
+         text-align: center;
+         padding: 10px 0px 10px 0px;
    }
    
-   #profileConfirm {
-  		padding : 4px 10px 1px 10px;
-  		font-size: 1em; 
+   /* 프로필 사진 변경 modal 부분 */   
+   #profileUploadTitle {
+         padding-left: 0px;
+   }
+   
+   #profileUploadBody {
+   		height : 500px;
+   }
+   
+   #profileUploadLbl {
+   		margin-left: 33px;
+    	font-size: 0.9em;
+    	color: gray;
+   }
+    
+   #profileUploadBtn {
+         top : 10px;
+         left : 100px;
+         width : 35px;
+         height : 35px;
+         background-size: 100%;
+   }
+   
+   #profileUploadCropper {
+   		outline : 1px solid black;
+   		margin-top : 5px;
+   		width : inherit;
+   		height : 430px;
+   }
+   
+   #cropperImg {
+   		max-width: 100%;
    }
   
 </style>
@@ -201,7 +253,7 @@
                
                <!-- 멤버 검색 부분 -->
                <div class="input-group mb-3">
-                  <input type="text" class="form-control gm_inp" placeholder="멤버 검색">
+                  <input type="text" class="form-control gm_inp" id="gmSearchInp" placeholder="멤버 검색"  />
                   <div class="input-group-append">
                      <button class="btn btn-outline-secondary gm_search_btn" type="button">
                         <ion-icon id="searchBtn" name="search"></ion-icon>
@@ -219,7 +271,7 @@
                            <div class="list_txt" id="listMsg">상태메시지는 최대 30자</div>
                         </span>
                         <span class="badge badge-primary" id="groupLeader">모임장</span>
-                        <ion-icon id="profileBtn" name="create" data-toggle="modal" data-target="#profileModal"></ion-icon>
+                        <ion-icon id="profileBtn" name="create" data-toggle="modal"></ion-icon>
                      </div>
                   </li>
                
@@ -231,6 +283,16 @@
                            <span class="list_txt" id="listMsg">상태메시지 영역 입니다.</span>
                         </span>
                         <span class="badge badge-success" id="groupLeader">운영진</span>
+                     </div>
+                  </li>
+                  
+                  <!-- 상태메시지 없을 경우 예시 -->
+                  <li class="list-group-item">
+                     <div class="list_wrap">
+                        <img class="rounded-circle" src="${root}/resources/images/common/img_profile.png" style="width: 50px; height: 50px;">
+                        <span class="list_inner" style="padding-top:12px;">
+                           <span class="list_txt" id="listName">김영희</span>
+                        </span>
                      </div>
                   </li>
                </ul>
@@ -252,60 +314,180 @@
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
       
-         <div class="modal-header">
-            <h5 class="modal-title" id="profileTitle">멤버 프로필</h5>
-            <button type="button" class="btn close" data-dismiss="modal" aria-label="Close">
+         <div class="modal-header gm_modal_header">
+            <h5 class="modal-title gm_modal_tit" id="profileTitle">멤버 프로필</h5>
+            <button type="button" class="btn close gm_close" data-dismiss="modal" aria-label="Close">
                <span class="modal_close" aria-hidden="true">&times;</span>
             </button>
          </div>
          
-         <div class="modal-body">         
-         	<form>
-	            <img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
-	            
-	            <div class="input-group mb-3 profile_wrap">
-					<label class="custom-file" >
-						<input type="file" class="custom-file-input" id="profileFile">
-						<span class="custom-file-label"></span>
-					</label>
-				</div>
-				
-				<div class="form-group">
-					<label id="profileLbl" for="profileMsg">상태 메시지</label>
-					<textarea class="form-control gm_inp" id="profileMsg" draggable="false" maxlength="30" rows="1" placeholder="최대 30자까지 입력 가능합니다."></textarea>
-				</div>
-         	</form>
+         <div class="modal-body gm_modal_body">         
+            <form>
+               <img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
+               <input type="file" class="profile_upload_inp" id="profileChangeInp" accept="image/*"/>
+               <div class="profile_upload_btn" id="profileChangeBtn"></div>
+            <div class="form-group">
+               <label id="profileLbl" for="profileMsg">
+                  상태 메시지 &nbsp;&nbsp;
+                  <span id="msgLengthCnt">0</span>
+                  /
+                  <span id="msgMaxLength">30</span>
+               </label>
+               <textarea class="form-control gm_inp" id="profileMsg" draggable="false" maxlength="30" rows="1" placeholder="최대 30자까지 입력 가능합니다."></textarea>
+            </div>
+            </form>
          </div>
          
-         <div class="modal-footer">
-            <button type="button" id="profileConfirm" class="btn btn-secondary">확인</button>
+         <div class="modal-footer gm_modal_footer">
+            <button type="button" id="profileConfirmBtn" class="btn btn-dark">확인</button>
          </div>
          
       </div>
    </div>
 </div>
 
+<!-- 프로필 사진 업로드 modal 부분 -->
+<div class="modal" id="profileUploadModal" tabindex="-1" role="dialog" aria-labelledby="profileUploadTitle" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+         <div class="modal-header gm_modal_header">
+            <h5 class="modal-title gm_modal_tit" id="profileUploadTitle">프로필 사진 변경</h5>
+         </div>
+         
+         <div class="modal-body gm_modal_body" id="profileUploadBody">         
+            <form>
+               	<input type="file" class="profile_upload_inp" id="profileUploadInp" accept="image/*"/>
+               	<label id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대 10MB까지 업로드 가능합니다.</label>
+               	<div class="profile_upload_btn" id="profileUploadBtn"></div>
+				<div id="profileUploadCropper">
+					<img id="cropperImg" />
+				</div>
+            </form>
+         </div>
+         
+         <div class="modal-footer gm_modal_footer">
+            <button type="button" id="profileUploadCloseBtn" class="btn btn-danger">취소</button>
+            <button type="button" id="profileUploadConfirmBtn" class="btn btn-dark">확인</button>
+         </div>
+         
+      </div>
+   </div>
+</div>
+
+
 <script>
 
    /* 
-      1. 정렬기준을 직급, 이름, 나, 나머지로 정렬하기
-      2. 프로필 modal 작성 상태에서 x나 바깥 영역 누르면 confirm dialog
-         (history 찾아보기)
-      3. fontfaceobserver 말고 local/sessionStorage를 이용해서 폰트 띄울것
+        1. 정렬기준을 직급, 이름, 나, 나머지로 정렬하기
+      v 2. 프로필 modal 작성 상태에서 x나 바깥 영역 누르면 confirm dialog
+           (history 찾아보기) 
+        3. fontfaceobserver 말고 local/sessionStorage를 이용해서 폰트 띄울것
    */
 
    $(function() {
       
       /* 검색부분의 border 부분을 수정 */
-      $(".gm_search_inp").on("focus",function(){
+      $("#gmSearchInp").on("focus",function(){
          $(".gm_search_btn").css("border-color", "#343A40");   
       }).on("focusout",function(){
          $(".gm_search_btn").css("border-color", "#6C757D");   
+      }).on("keypress", function(event) {
+         /* enterkey를 눌렀을 때 발생하는 event */
+          if (event.keyCode == 13)
+            alert("검색 엔터키 확인!");
       });
       
-      /* 프로필의 modal을 누르면  */
-      $("#profileBtn").on('shown.bs.modal');
+      /* 프로필의 modal을 누를때 esc나 모달 바깥영역을 클릭했을 경우 닫아주는 이벤트를 막는 부분*/
+      $("#profileBtn").on("click", function() {      
+         $('#profileModal').modal({
+             backdrop: 'static',
+             keyboard: false
+          });
+      });
       
+      /* 프로필 사진 업로드 버튼 이미지 커스텀 */
+      $("#profileChangeBtn").on("click", function() {
+         $("#profileChangeInp").click();
+      });
+      
+      var endFile = "";
+      
+      /* 프로필 사진 업로드부분의 파일이 변경됐을 경우 발생하는 이벤트 */
+      $(".profile_upload_inp").on("change", function() {
+
+    	 $("#cropperImg").cropper("destroy");
+    	 var reader = new FileReader();
+         var ext = $(this).val().split(".").pop().toLowerCase();
+         
+         if(ext.length > 0){
+            if($.inArray(ext, ["gif","png","jpg","jpeg"]) == -1) { 
+               alert("이미지파일(.jpg, .png, .gif)만 업로드 가능합니다.");
+            }
+            else{
+               if($(this).attr("id") == "profileChangeInp")
+                  $("#profileUploadModal").toggle();
+
+               	endFile = $(this)[0].files[0];
+                reader.readAsDataURL(endFile);
+                reader.onload = function(){
+	               	$("#cropperImg").attr("src", reader.result);
+	               	
+	               	$("#cropperImg").cropper({
+		               	  aspectRatio: 1 / 1,
+		               	  viewMode : 2,
+						  zoomable : false,
+						  autoCropArea : 1.0,
+						  minCropBoxWidth : 100,
+						  minCropBoxHeight : 100,
+		               	  crop: function(event) {
+		               	    console.log(event.detail.x);
+		               	    console.log(event.detail.y);
+		               	    console.log(event.detail.width);
+		               	    console.log(event.detail.height);
+		               	    console.log(event.detail.rotate);
+		               	    console.log(event.detail.scaleX);
+		               	    console.log(event.detail.scaleY);
+		               	  }
+			         });
+	               	
+	               	
+                 };   
+ 
+	            $(this).val("");
+            }
+         }
+      });
+      
+      
+      $("#profileUploadBtn").on("click", function() {
+         $("#profileUploadInp").click();
+      });
+      
+      /* 프로필 사진 변경 모달을 닫기 위한 click 이벤트  */
+      $("#profileUploadCloseBtn").click(function() {
+         $("#profileUploadModal").hide();
+      });
+      
+      $('#profileMsg').on("keyup", function(){
+         $("#msgLengthCnt").text($(this).val().length);
+               
+            if($(this).val().length > 30){
+	            /* 상태메시지를 한글로 30자 이상 입력했을 경우 alert로 알려줌 */
+	            alert("상태 메시지는 최대 30자까지 작성 가능합니다.");
+	            /* 29자까지 입력하고 마지막을 space로 마치면 글자수를
+	               31자로 인식하는 현상을 잡아주기 위해 내용을 갱신해줌*/
+	            $("#msgLengthCnt").text(30);               
+            }
+            /* 실시간 글자수에 따라서 글자색을 변경해줌 */
+            else if($(this).val().length == 30)
+            	$("#msgLengthCnt").css("color", "red");
+            else if($(this).val().length > 14)
+            	$("#msgLengthCnt").css("color", "orange");
+            else
+            	$("#msgLengthCnt").css("color", "black");
+               
+      });
       
    });
    

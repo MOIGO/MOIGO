@@ -30,5 +30,11 @@ public class GroupController {
 		return "groups/groupSchedule";
 	}
 	
+	@RequestMapping("/groups/groupSetting.do")
+	public String groupSetting(){
+		
+		return "groups/groupSetting";
+	}
+	
 
 }

@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <title>모이고 홈페이지</title>
 <style>
 /* 메인 */
