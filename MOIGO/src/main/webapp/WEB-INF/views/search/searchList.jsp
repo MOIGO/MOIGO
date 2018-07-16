@@ -11,8 +11,8 @@
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp"/>
-<body> 
-	<form id="searchFrm" action="selectList.do">
+<body>
+	<form action="${pageContext.request.contextPath}/search/selectList.do">
 		<div id="left-wrap">
 			<div class="filter default-filter">
 				<div class="filter-section default-section">
@@ -22,9 +22,9 @@
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="inner-search">
-										<input type="text" placeholder="모임검색" autocomplete="off" name="keyword" id="keyword" class="form-control" onkeyup="search();" />
+										<input type="text" placeholder="모임검색" autocomplete="off" onkeyup="if(event.keyCode==13) submit();" name="keyword" id="keyword" class="form-control" value="${keyword }"/>
 										<span class="search-btn">
-											<img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="search();">
+											<img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();">
 										</span>
 									</div>
 								</div>
@@ -36,13 +36,13 @@
 					</div>
 					<div class="row place">
 						<div class="col-lg-2 col-md-12 pt-sm pb-sm">장소</div>
-						<div class="col-lg-10"> 
+						<div class="col-lg-10">
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="inner-search">
-										<input type="text" placeholder="장소검색" autocomplete="off" name="place" id="place" class="form-control" value="${place }"/>
+										<input type="text" placeholder="장소검색" autocomplete="off" onkeyup="if(event.keyCode==13) submit();" name="place" id="place" class="form-control" value="${place }"/>
 										<span class="search-btn">
-											<img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="search();">
+											<img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();">
 										</span>
 									</div>
 								</div>
@@ -70,7 +70,7 @@
 			</div>
 			<div class="content-meeting">
 				<div class="row" style="width: 100%; height: 50px;">
-					<div class="col-sm-4 count-sort" id="listCount"></div>
+					<div class="col-sm-4 count-sort" id="listCount">검색결과 ${listCount }개</div>
 					<div class="col-sm-4 count-sort" id="sort-inner">
 						<select class="sort" name="sort" id="sort">
 							<option>최신순</option>
@@ -113,7 +113,7 @@
 												0<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">
 											</span>
 											<span class="hitsIcon">
-												0 &nbsp;<img alt="hitsIcon" src="${pageContext.request.contextPath }/resources/images/search/hitsIcon.png">
+												0<img alt="hitsIcon" src="${pageContext.request.contextPath }/resources/images/search/hitsIcon.png">
 											</span>
 										</span>
 									</div>
@@ -128,10 +128,18 @@
 	<div id="map"></div>
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d862551bbf9771ee59207808ec1876ca&libraries=services,clusterer,drawing"></script>
 	<script>
-		$(function() {
-			$('#sort option').on('onclick', function() {
-				search();
-			});
+		var keyword = $('#keyword').val();
+		var place = $('#place').val();
+		var bigCategory = $('#bigCategory').val();
+		var smallCategory = $('#smallCategory').val();
+		var sort = $('#sort').val();
+		
+		$('.map-btn').click(function() {
+			$('#map').toggle();
+			$('#left-wrap').toggleClass('widthHandler');
+		});
+		$('option').click(function() {
+			submit();
 		});
 		var map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
 	        center : new daum.maps.LatLng(35.180624570993196, 128.15614133888792), // 지도의 중심좌표
@@ -150,30 +158,43 @@
 		var clusterer = new daum.maps.MarkerClusterer({
 			map : map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
 			averageCenter : true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-			minLevel : 10, // 클러스터 할 최소 지도 레벨
+			minLevel : 3, // 클러스터 할 최소 지도 레벨
 			disableClickZoom : true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
 		});
-		
-		var keyword = $('#keyword').val();
-		var place = $('#place').val();
-		var bigCategory = $('#bigCategory').val();
-		var smallCategory = $('#smallCategory').val();
-		var sort = $('#sort').val();
-		
-		// 데이터를 가져오기 위해 jQuery를 사용합니다
-	    // 데이터를 가져와 마커를 생성하고 클러스터러 객체에 넘겨줍니다
-	   /*  $.get("/download/web/data/chicken.json", function(data) {
-	        // 데이터에서 좌표 값을 가지고 마커를 표시합니다
-	        // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
-	        var markers = $(data.positions).map(function(i, position) {
-	            return new daum.maps.Marker({
-	                position : new daum.maps.LatLng(position.lat, position.lng)
-	            });
-	        });
-
-	        // 클러스터러에 마커들을 추가합니다
-	        clusterer.addMarkers(markers);
-	    }); */
+		var position = "";
+	    var marker = "";
+	    var markers = new Array();
+		$.ajax({
+			url : "${pageContext.request.contextPath}/search/getAddress.do",
+			data : {keyword : keyword,
+					place : place,
+					bigCategory : bigCategory,
+					smallCategory : smallCategory},
+			success : function(data) {
+				var geocoder = new daum.maps.services.Geocoder();
+				
+				// 주소로 좌표를 검색합니다
+				for(var i = 0 ; i < data.length ; i ++) {
+					geocoder.addressSearch(data[i].groupAddress, function(result, status) {
+	
+					    // 정상적으로 검색이 완료됐으면 
+					     if (status === daum.maps.services.Status.OK) {
+					        coords = new daum.maps.LatLng(result[0].y, result[0].x);
+					        
+					        markers[i] = result[0].y, result[0].x;
+	
+					        // 결과값으로 받은 위치를 마커로 표시합니다
+					        marker = new daum.maps.Marker({
+					            map: map,
+					            position: coords
+					        });
+					     }
+					});
+					
+			      	/* clusterer.addMarkers(markers[i]); */
+				}
+			}
+		});
 	    
 		// 마커 클러스터러에 클릭이벤트를 등록합니다
 		// 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
@@ -188,30 +209,6 @@
 			});
 		});
 
-		$('.map-btn').click(function() {
-			$('#map').toggle();
-			$('#left-wrap').toggleClass('widthHandler');
-		});
-		
-		function search() {
-			$.ajax({
-				url : "${pageContext.request.contextPath}/search/selectList.do",
-				data : {keyword : keyword,
-						place : place,
-						bigCategory : bigCategory,
-						smallCategory : smallCategory,
-						sort : sort},
-				dataType : "json",
-				success : function(data) {
-					$('#listCount').html('검색결과 ${requestScope.listCount }개');
-					console.log(data);
-					
-				}, error : function(error, msg) {
-					alert("test2");
-				}
-			});
-		}
-		
 	</script>
 </body>
 </html>

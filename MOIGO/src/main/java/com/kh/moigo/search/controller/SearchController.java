@@ -1,5 +1,6 @@
 package com.kh.moigo.search.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,7 @@ public class SearchController {
 	SearchService searchService;
 
 	@RequestMapping("search/searchList.do")
-	public String keywordList(@RequestParam String keyword, Model model) {
-		
+	public String keywordList(Model model, @RequestParam String keyword) {
 		if(keyword == null) keyword = "";
 		
 		int listCount = searchService.listCount(keyword);
@@ -32,10 +32,10 @@ public class SearchController {
 		return "search/searchList";
 	}
 	
-	@ResponseBody
 	@RequestMapping("search/selectList.do")
-	public Map<String, List<Groups>> selectList(Model model, @RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory, @RequestParam String sort) {
-		System.out.println("keyword : "+keyword);
+	public String selectList(Model model, @RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory, @RequestParam String sort) {
+		if(keyword == null) keyword = "";
+		if(place == null) place = "";
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -48,12 +48,26 @@ public class SearchController {
 		int listCount = searchService.detailListCount(map);
 		List<Groups> list = searchService.detailSelectList(map);
 		
-		model.addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("list", list);
+		model.addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("bigCategory", bigCategory).addAttribute("smallCategory", smallCategory).addAttribute("sort", sort).addAttribute("list", list);
 		
-		Map<String, List<Groups>> ListMap = new HashMap<>();
+		return "search/searchList";
+	}
+	
+	@ResponseBody
+	@RequestMapping("search/getAddress.do")
+	public List<Groups> getAddressList(@RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory) {
+		if(keyword == null) keyword = "";
+		if(place == null) place = "";
 		
-		ListMap.put("list", list);
+		Map<String, String> map = new HashMap<>();
 		
-		return ListMap;
+		map.put("keyword", keyword);
+		map.put("place", place);
+		map.put("bigCategory", bigCategory);
+		map.put("smallCategory", smallCategory);
+		
+		List<Groups> list = searchService.getAddressList(map);
+		
+		return list;
 	}
 }

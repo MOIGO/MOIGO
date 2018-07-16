@@ -132,12 +132,12 @@ body {
 		<!-- 검색 -->
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 search">
 		<form action="${pageContext.request.contextPath}/search/searchList.do">
-		<div class="input-group" id="search-input">
-				<input type="text" class="form-control" placeholder="검색하세요~" size="50px">
+			<div class="input-group" id="search-input">
+				<input type="text" class="form-control" name="keyword" placeholder="모임검색" size="50px">
 				<span class="input-group-btn">
-					<button class="btn btn-info" type="button" onclick="search()">검색</button>
+					<button class="btn btn-info" type="button" onclick="submit()">검색</button>
 				</span>
-		</div>
+			</div>
 		</form>
 		</div>
 		<!-- 로그인 -->
@@ -169,10 +169,6 @@ body {
 		$('#loginIcon').on('click',function(){
 			$('.usercon').css('color','skyblue');	
 		});
-
-		function search(){
-			alert("검색어를 입력해주세요!");
-		}
 	</script>
 
 	<!-- 헤더 카테고리 부분 -->

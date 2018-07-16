@@ -35,4 +35,9 @@ public class SearchDaoImpl implements SearchDao {
 		return session.selectList("search.detailSelectList", map);
 	}
 
+	@Override
+	public List<Groups> getAddressList(Map<String, String> map) {
+		return session.selectList("search.getAddressList", map);
+	}
+
 }
