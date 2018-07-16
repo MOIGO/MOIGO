@@ -9,13 +9,13 @@
 <head>
 <meta charset="UTF-8">
 <title>모이고</title>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> 
 <script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <script src="${root}/resources/js/common/fontfaceobserver.js"></script>
 <link rel="stylesheet" href="${root}/resources/css/bootstrap/bootstrap.min.css"> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 <script src="${root}/resources/js/bootstrap/bootstrap.min.js" ></script>	
 <link rel="stylesheet" href="${root}/resources/css/common/fonts.css" media="none" onload="this.media='all';">
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css">
 <style>
