@@ -154,7 +154,8 @@ body {
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 맴버</a>
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 멤버</a>
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSetting.do">모임 설정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
 					  <a class="dropdown-item" href="#">로그아웃</a>
@@ -230,11 +231,11 @@ body {
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 
 			   	스크롤 이벤트가 발생할 때마다 폰트로드를 확인함
 			*/
-			/* var font = new FontFaceObserver('nanum-barun-gothic-regular');
+			var font = new FontFaceObserver('nanum-barun-gothic-regular');
 
 			font.load().then(function () {
 			  document.documentElement.className += " fonts_loaded";
-			}); */
+			}); 
 			
 		});
 		

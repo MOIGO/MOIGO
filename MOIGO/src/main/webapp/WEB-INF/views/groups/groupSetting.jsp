@@ -5,6 +5,7 @@
 <c:set var="root" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
+<script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
 <style>
 
    body{
@@ -128,7 +129,7 @@
          cursor: default;
    }
    
-   #maxMember {
+   #minMember {
          color : #0078ff;
          font-weight: bold;
    }
@@ -143,23 +144,44 @@
          letter-spacing: -1px;
    }
    
+   /* 멤버 설정 관리 부분 */
+   #memberSearchWrap {
+      display: none;
+   }
+   
+   .gm_inp:focus, .gm_inp:active:focus {
+      border-color : #343A40;
+      box-shadow: none;
+   }
+   
+   .gm_search_btn {
+      margin : 0px;
+      padding : 0px;
+      width : 38px;
+   }
+   
+   #searchBtn {
+      vertical-align:text-bottom;
+      font-size: 24px; 
+   }
+   
    /* 모임 삭제 모달 부분 */
-    .modal-header {
+    .gs_modal_header {
       display: inline;
       text-align: center;
       padding : 10px 10px 7px 10px;
    }
    
-   .modal-title {
+   .gs_modal_tit {
       display : inline;
       font-family:'nanum-barun-gothic-bold', sans-serif;
       font-size: 1.3em;
    }
-   .modal-title:hover, .modal-body:hover {
+   .gs_modal_tit:hover, .gs_modal_body:hover {
       cursor: default;
    }
    
-   .modal-footer{
+   .gs_modal_footer{
       display : inline-block;
       text-align: center;
       padding: 12px 0px 12px 0px;
@@ -217,7 +239,8 @@
                
                <!-- 가입 조건 관리 -->
                 <form action="">
-                
+                   
+                   <!-- 성별 -->
                    <ul class="list-group" id="conditionList"> 
                      <li class="list-group-item">
                         <span class="setting_tit">성별</span>
@@ -228,6 +251,7 @@
                      </select>
                      </li>
                      
+                   <!-- 나이 -->
                       <li class="list-group-item">
                         <span class="setting_tit">나이</span>
                         <span class="float_right age_wrap">
@@ -247,17 +271,18 @@
                         </span>
                      </li>
                      
+                   <!-- 지역 -->
                       <li class="list-group-item">
                         <span class="setting_tit">지역</span>
                         <span class="float_right region_wrap">
                            <select class="list_common condition_font_size" id="conditionRegionLarge">
-                           		<option value="regionNone">- 시도 -</option>
-                        	</select>
-                        	&nbsp;
-	                       <select class="list_common condition_font_size" id="conditionRegionSmall">
-	                          <option value="regionNone">- 시군구 -</option>
-	                       </select>
-                        	&nbsp;
+                                 <option value="regionNone">- 시도 -</option>
+                           </select>
+                           &nbsp;
+                          <select class="list_common condition_font_size" id="conditionRegionSmall">
+                             <option value="regionNone">- 시군구 -</option>
+                          </select>
+                           &nbsp;
                           <span class="float_right form-check">
                              <input class="form-check-input" type="checkbox" id="regionNone">
                              <label class="form-check-label condition_font_size" for="regionNone">지역 무관</label>
@@ -266,12 +291,14 @@
                         </span>
                      </li>
                      
+                   <!-- 최대 멤버수 -->
                       <li class="list-group-item">
                         <span class="setting_tit">최대 멤버수</span>
                         <span class="float_right max_member_wrap">
-                           <input type="text" class="gs_inp form-control condition_font_size" id="maxMemberInp" maxlength="2"/>
+                           <span class="max_member_txt condition_font_size" id="minMember">1</span>                           
                            <span class="max_member_txt condition_font_size">/</span>
-                           <span class="max_member_txt condition_font_size" id="maxMember">30</span>                           
+                           <input type="text" class="gs_inp form-control condition_font_size" id="maxMemberInp" maxlength="2"/>
+                           <span class="max_member_txt condition_font_size">(최대 멤버수는 50명 입니다.)</span>
                         </span>
                      </li>
                   </ul>
@@ -284,24 +311,53 @@
                
                
                <!-- 멤버 설정 관리 -->
+               <div id="memberSearchWrap">    
+                                
+                  <!-- 멤버 검색 부분 -->
+                  <div class="input-group mb-3">
+                     <input type="text" class="form-control gm_inp" placeholder="멤버 검색">
+                     <div class="input-group-append">
+                        <button class="btn btn-outline-secondary gm_search_btn" type="button">
+                           <ion-icon id="searchBtn" name="search"></ion-icon>
+                        </button>
+                     </div>
+                  </div>
+                  
+                  <!-- 멤버 설정 부분 -->
+                     <nav>
+                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                   <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab">멤버등급</a>
+                   <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab">리더위임</a>
+                   <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab">멤버탈퇴</a>
+                   <a class="nav-item nav-link" id="nav-contact2-tab" data-toggle="tab" href="#nav-contact2" role="tab">가입승인</a>
+                 </div>
+               </nav>
+               <div class="tab-content" id="nav-tabContent">
+                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel">멤버등급</div>
+                 <div class="tab-pane fade" id="nav-profile" role="tabpanel">리더위임</div>
+                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" >멤버탈퇴</div>
+                 <div class="tab-pane fade" id="nav-contact2" role="tabpanel" >가입승인</div>
+               </div>
+                  
+               </div>
                
                <!-- 모임 삭제 -->
                <div class="modal" id="groupDeleteModal" tabindex="-1" role="dialog" aria-labelledby="groupDeleteTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                  <div class="modal-content">
                  
-                    <div class="modal-header">
-                       <h5 class="modal-title" id="groupDeleteTitle">모임 삭제</h5>
+                    <div class="modal-header gs_modal_header">
+                       <h5 class="modal-title gs_modal_tit" id="groupDeleteTitle">모임 삭제</h5>
                     </div>
                     
-                    <div class="modal-body">         
+                    <div class="modal-body gs_modal_body">         
                        <span class="delete_info">
-                          모임을 삭제하시겠습니까? <br />
+                        모임을 삭제하시겠습니까? <br />
                         삭제 후에는 복구가 불가능합니다.
                        </span>
                     </div>
                      
-                     <div class="modal-footer">
+                     <div class="modal-footer gs_modal_footer">
                      <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
                      <button type="button" class="btn btn-danger btn-sm" id="groupDelConfirmBtn">삭제하기</button>
                      </div>
@@ -333,32 +389,32 @@ $(function() {
    
    /* 가입 조건 관리 */
    $("#groupConditionBtn").on("click", function() {
-		$(".group_tit").text("가입 조건 관리");
-		$("#settingList").css("display", "none");
-		$("#conditionList").css("display", "block");
-		$("#conditionFooter").css("display", "block");
+      $(".group_tit").text("가입 조건 관리");
+      $("#settingList").css("display", "none");
+      $("#conditionList").css("display", "block");
+      $("#conditionFooter").css("display", "block");
       
-   		// 행정구역 list를 가져오기 위한 ajax 부분
-		$.ajax({
-			url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
-      			+'&domain=http://127.0.0.1:8080&attrFilter=ctprvn_cd:between:11,50&size=17',
-  			type:'GET',
-  			dataType:'jsonp',
-  			async: false,
-  			success:function(data){
-      	  
-				var features =  data.response.result.featureCollection.features;
-				var regionLarges = [];
+         // 행정구역 list를 가져오기 위한 ajax 부분
+      $.ajax({
+         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+               +'&domain=http://127.0.0.1:8080&attrFilter=ctprvn_cd:between:11,50&size=17',
+           type:'GET',
+           dataType:'jsonp',
+           async: false,
+           success:function(data){
            
-				for(var i=0 ; i < features.length; i++){
-					regionLarges[i] = features[i].properties.ctp_kor_nm;
-					$("#conditionRegionLarge").append("<option value="+regionLarges[i]+">"+regionLarges[i]+"</option>");
-				}
+            var features =  data.response.result.featureCollection.features;
+            var regionLarges = [];
+           
+            for(var i=0 ; i < features.length; i++){
+               regionLarges[i] = features[i].properties.ctp_kor_nm;
+               $("#conditionRegionLarge").append("<option value="+regionLarges[i]+">"+regionLarges[i]+"</option>");
+            }
               
-           	},error:function(data){
+              },error:function(data){
                  console.log("에러입니다"); 
-  			}
-  		});
+           }
+        });
    });
    
    // 지역무관을 선택했을 경우 발생하는 이벤트
@@ -375,16 +431,28 @@ $(function() {
          $("#conditionRegionSmall").prop("disabled", false);
       }
    });
+   
+   // 최대 멤버수는 숫자만 입력하고 인원수를 50명 이상은 알려주는 이벤트
+   $('#maxMemberInp').keyup(function(event){
+      $(this).val($(this).val().replace(/[^0-9]/g,''));
+      
+      if($(this).val() > 50){
+            alert("최대 멤버 수는 50명입니다.");
+            $(this).val("");         
+      }
+   });
 
    /* 멤버 설정 관리 */
    $("#groupMemberManageBtn").on("click", function() {
-      
+         $(".group_tit").text("멤버 설정 관리");
+      $("#settingList").css("display", "none");
+      $("#memberSearchWrap").css("display", "block");
    });
    
    /* 모임 삭제 */
    $("#groupDeleteBtn").on("click", function() {
       $('#groupDeleteModal').modal({
-           backdrop: 'static',
+          backdrop: 'static',
           keyboard: false
        });
    });
