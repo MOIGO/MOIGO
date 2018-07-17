@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -117,7 +118,7 @@ body {
 </head>
 <body>
 <c:import url="/WEB-INF/views/member/loginModal.jsp"/>
-		
+
 		<!-- // 헤더부분 // -->
 	<div class="container-fluid" id="headerBar">
 		<div class="row">
