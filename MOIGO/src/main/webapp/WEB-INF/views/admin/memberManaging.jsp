@@ -8,9 +8,9 @@
 <head>
 
  <style type="text/css">
-	.admin_group_table{ height: 600px; overflow: scroll;}
+	.admin_member_table{ height: 600px; overflow: scroll;}
     tr:hover {background-color: #f5f5f5;}
-	.group_detail{ padding: 50px 120px; border: 10px solid #d2e7d2; }
+	.mem_detail{ padding: 50px 120px; }
   </style>
 </head>
 <body>
@@ -24,31 +24,29 @@
   <div class="row">
    <div class="col-1"></div>
    <div class="col-5">
-    <input class="form-control admin_group_search col-5" id="myInput" type="text" placeholder="Search..">
+    <input class="form-control admin_member_search col-5" id="myInput" type="text" placeholder="Search..">
    <br>
-    <div class="admin_group_table ">
+    <div class="admin_member_table ">
     
     <table class="table table-bordered text-center">
       <thead class="thead-light table-primary">
         <tr>
           <th>no</th>
           <th>name</th>
-          <th>Grade</th>        
-          <th>State</th>
-          <th>상세보기</th>
+          <th colspan="3">email</th>
+          <th>상세정보 확인</th>
         </tr>
       </thead>
-      <c:forEach items="${groupList}" var="group">
+      <c:forEach items="${memberList}" var="member">
 				<tbody id="myTable">
 					<tr>
-						<td>${group.groupNo}</td>
-		          		<td>${group.groupName}</td>
-		          		<td>${group.groupGradeCode}</td>
-		          		<td>${group.groupStateCode}</td>
-				        <td><button type="button"  data-target="#targetDiv" data-toggle="collapse" data-id="${group.groupNo}"class="btn btn-outline-success btn-sm show_view_detail_group">확인</button> </td>   	
+		          		<td>${member.memberNo}</td>
+		          		<td>${member.memberName}</td>
+		          		<td  colspan="3">${member.memberEmail}</td>
+				        <td><button type="button"  data-target="#targetDiv" data-toggle="collapse" data-id="${member.memberNo}"class="btn btn-outline-success btn-sm show_view_detail_member">확인</button> </td>   	
 	        		</tr>      
 	      		</tbody>
-	   </c:forEach>
+			</c:forEach>
     </table>
   
     </div>
@@ -56,7 +54,7 @@
   </div>
   <div class="col-6">
   	<br><br><br>
-  	<div class="group_detail collapse" id="targetDiv">
+  	<div class="mem_detail collapse" id="targetDiv">
   	
   	
   	</div>
@@ -79,21 +77,21 @@ $(document).ready(function(){
     });
   });
   
-	$(".show_view_detail_group").click(function () {
+	$(".show_view_detail_member").click(function () {
 		var id = $(this).data('id');
 		   $.ajax({
-	            url: "${pageContext.request.contextPath}/grpDetail.ad",
+	            url: "${pageContext.request.contextPath}/memDetail.ad",
 	            type:'get',
 	            data: {id:id},
 	            dataType:"json",
 	            success:function(data){	
-	            		$(".group_detail").empty();
+	            		$(".mem_detail").empty();
 	            		console.log(data[0]);
 		            	var str ='<h4> 상세 정보 </h4>'+
 		            			'<table class="table table-bordered text-center">'+
 		            			'<tr>'+
-		            			'<td>이름</td>' +
-								'<td>'+data[0].groupName+'</td>' +
+		            			'<td>이메일</td>' +
+								'<td>'+data[0].memberEmail+'</td>' +
 								' </tr>'+
 								'<tr>'+
 		            			'<td>이름</td>' +
@@ -123,7 +121,7 @@ $(document).ready(function(){
 								'<td>'+data[0].replyCount+'</td>' +
 								' </tr>'+
 								'<table>';
-		            	 $('.group_detail').append(str);
+		            	 $('.mem_detail').append(str);
 
 	            }, error : function(code){
 	            	console.log(code);

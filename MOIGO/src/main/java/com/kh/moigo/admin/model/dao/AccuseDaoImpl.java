@@ -8,7 +8,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.moigo.admin.model.vo.Accuse;
+import com.kh.moigo.admin.model.vo.GroupDetail;
+import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.member.model.vo.Member;
 
@@ -51,6 +52,37 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("accuse.selectList",id);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectmemberList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("member.selectMemberList");
+	}
+
+	@Override
+	public MemberDetail memDetail(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("memberDetail.memDetail",id);
+	}
+
+	@Override
+	public List<Map<String, Object>> memPerGroup(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.memPerGroup",id);
+	}
+
+	@Override
+	public GroupDetail grpDetail(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("groupDetail.grpDetail",id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectgroupList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groups.selectGroupList");
+	}
+	
 
 
 	

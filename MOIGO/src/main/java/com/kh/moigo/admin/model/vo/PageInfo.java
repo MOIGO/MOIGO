@@ -4,10 +4,13 @@ package com.kh.moigo.admin.model.vo;
 
 public class PageInfo implements java.io.Serializable{
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2767495166449571836L;
+	
+	
 	private int startPage; // 한번에 표시될 게시글들의 시작 페이지
 	private int endPage;  // 한번에 표시될 게시글들의 마지막 페이지
 	private int maxPage;   // 전체 페이지의 마지막 페이지 
