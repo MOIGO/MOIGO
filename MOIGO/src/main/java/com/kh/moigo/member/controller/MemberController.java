@@ -41,12 +41,14 @@ public class MemberController {
 	@RequestMapping("/member/checkIdDup.do")
 	public Map<String, Object> checkIdDuplicate(@RequestParam String memberEmail){
 		
+
 		Map<String, Object> map = new HashMap<>();
 		
 		boolean isUsable =memberService.checkIdDuplicate(memberEmail)==0? true: false;
 		
 		map.put("isUsable", isUsable);
 		
+
 		return map;
 	}
 	
