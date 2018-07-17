@@ -40,27 +40,27 @@
                                 <h6 style="font-weight: bold;">  모이고를 떠나려는 이유를 선택해주세요 (필수)</h6>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">원하는 모임이 없어요.
+                                        <input type="radio" class="form-check-input" name="outR" value="원하는 모임이 없어요"> 원하는 모임이 없어요.
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">개인정보에 대한 우려가 있어서요.
+                                        <input type="radio" class="form-check-input" name="outR" value="개인정보에 대한 우려가 있어서요"> 개인정보에 대한 우려가 있어서요.
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">이용방법을 잘 모르겠어요.
+                                        <input type="radio" class="form-check-input" name="outR" value="이용방법을 잘 모르겠어요"> 이용방법을 잘 모르겠어요.
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">자주 방문하지 않아서요.
+                                        <input type="radio" class="form-check-input" name="outR" value="자주 방문하지 않아서요"> 자주 방문하지 않아서요.
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">기타
+                                        <input type="radio" class="form-check-input" name="outR" value="기타"> 기타
                                     </label>
                                 </div>
                             </div>
@@ -68,9 +68,9 @@
 
                         <div class="row profile_wrap">
                             <div class="profile_box col-md-12 ">
-                                <h6 style="font-weight: bold;">더 자세한 이유가 있다면 우리에게 말해주세요 (선택)</h6>
+                                <h6 style="font-weight: bold;">더 자세한 이유가 있다면 우리에게 말해주세요 (기타 선택시)</h6>
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="3" id="comment" style="resize: none;"></textarea>
+                                    <textarea class="form-control" rows="3" id="comment" style="resize: none;" disabled></textarea>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,11 @@
 
                 <div class="row no_margin col-md-12" >
                     <div class="profile_box col-md-12 ">
-                        <button class="btn_profileUpdate col-md-2 col-xs-12"> 탈퇴하기</button>
+                    	<form action='' method="post">
+							<input type="hidden" name="memberNo" id="memberNo" value=${m.memberNo }>
+							<input type="hidden" name="content" id="content" value="">
+            	            <button class="btn_profileUpdate col-md-2 col-xs-12" type="button" id="withdrawal"> 탈퇴하기</button>
+                        </form>
                     </div>
                 </div>
                 <br>
@@ -104,5 +108,31 @@
     </div>
 
     <br><br><br><br><br><br>
+    <script>
+    var  outType;
+    $('input[type="radio"][name=outR]').click(function(){
+    	outType= $(this).val(); 
+    	 if(outType=='기타'){
+    			$('#comment').attr('disabled',false);
+    	 }else{
+    			$('#comment').attr('disabled',true);
+    			 $('#comment').val('');
+    	 }
+    	$('#content').val(outType);
+    });
+    
+	$('#comment').on('keyup',function(){
+		outType =$(this).val();
+		$('#content').val(outType);
+	})
+    
+    $('#withdrawal').on('click',function(){
+    	if($('input:radio[name=outR]').is(':checked')){
+    		alert($('#content').val());
+		}else{
+			alert('탙퇴이유 체크 plz');
+		}
+    });
+    </script>
 </body>
 </html>

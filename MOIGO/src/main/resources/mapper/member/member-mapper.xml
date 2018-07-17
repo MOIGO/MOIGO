@@ -6,15 +6,34 @@
 		<id property="memberNo" column="MEMBER_NO"/>
 		<result property="memberEmail" column="MEMBER_EMAIL"/>
 		<result property="memberPwd" column="MEMBER_PWD"/>
+		<result property="memberName" column="MEMBER_NAME"/>
 		<result property="memberAddress" column="MEMBER_ADDRESS"/>
 		<result property="memberBirth" column="MEMBER_BIRTH"/>
 		<result property="memberGender" column="MEMBER_GENDER"/>
 		<result property="enrollDate" column="ENROLL_DATE"/>
 	</resultMap>
 	
-	<select id="selectOne" resultMap="memberResultMap" >
+
+	<select id="selectOneMember" resultMap="memberResultMap" >
 		SELECT * FROM MEMBER
-		WHERE MEMBER_NO = #{memberNo}
+		WHERE MEMBER_EMAIL = #{memberEmail}
 	</select>
 	
+	<select id="checkIdDuplicate" resultType="_int">
+		SELECT COUNT(*) AS CNT FROM MEMBER WHERE MEMBER_EMAIL = #{memberEmail}
+	</select>
+	
+ 	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBER 
+		VALUES('A'||TO_CHAR(SEQ_MEMBER.NEXTVAL,'FM000'),#{memberEmail}, #{memberPwd},#{memberName}, #{memberAddress, jdbcType=VARCHAR},
+			   TO_DATE(TO_CHAR(#{memberBirth},'RRRR/MM/DD'), 'RRRR/MM/DD'), #{memberGender}, DEFAULT, 'N')
+	</insert>
+	
+<!-- 	<update id="updateMember" parameterType="member">
+		UPDATE MEMBER 
+		SET USERNAME=#{userName}, GENDER=#{gender}, AGE=#{age}, 
+			EMAIL=#{email}, PHONE=#{phone}, ADDRESS=#{address}, 
+			HOBBY=#{hobby, typeHandler=strArrTypeHandler} 
+		WHERE USERID=#{userId}
+	</update>  -->
 </mapper>

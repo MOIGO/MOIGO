@@ -12,12 +12,31 @@ public class MemberDaoImpl implements MemberDao {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 	
+
 	@Override
-	public Member selectOne(String memberNo) {
-		
-		System.out.println(memberNo);
-		
-		return sqlSession.selectOne("member.selectOne",memberNo);
+	public Member selectOneMember(String memberEmail) {
+		return sqlSession.selectOne("member.selectOneMember",memberEmail);
 	}
+
+	@Override
+	public int insertMember(Member member) {
+		return sqlSession.insert("member.insertMember", member);
+	}
+
+	@Override
+	public int updateMember(Member member) {
+		return sqlSession.update("member.updateMember", member);
+	}
+
+	@Override
+	public int deleteMember(int memberNo) {
+		return sqlSession.update("member.deleteMember", memberNo);
+	}
+
+	@Override
+	public int checkIdDuplicate(String memberEmail) {
+		return sqlSession.selectOne("member.checkIdDuplicate",memberEmail);
+	}
+
 
 }
