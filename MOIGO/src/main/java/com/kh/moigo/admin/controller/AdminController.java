@@ -245,7 +245,7 @@ public class AdminController {
 		
 		//List<Map<String, Object>> a = as.memPerGroup(id);		
 		//memList.add(a);
-		System.out.println("list:"+grpList);
+		System.out.println("groups:"+grpList);
 
 		return grpList;	
 	}

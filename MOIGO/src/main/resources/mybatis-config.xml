@@ -3,7 +3,8 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.kh.moigo.admin.model.vo.Accuse" alias="accuse"/>
-		<typeAlias type="com.kh.moigo.admin.model.vo.MemberDetail" alias="memberDetail"/>		
+		<typeAlias type="com.kh.moigo.admin.model.vo.MemberDetail" alias="memberDetail"/>	
+		<typeAlias type="com.kh.moigo.admin.model.vo.GroupDetail" alias="groupDetail"/>					
 		<typeAlias type="com.kh.moigo.post.model.vo.Files" alias="files"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.Groups" alias="groups"/>
 		<typeAlias type="com.kh.moigo.member.model.vo.Member" alias="member"/>

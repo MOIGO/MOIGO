@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -7,66 +7,77 @@
 <html>
 <head>
 
- <style type="text/css">
-	.admin_member_table{ height: 600px; overflow: scroll;}
-    tr:hover {background-color: #f5f5f5;}
-	.mem_detail{ padding: 50px 120px; }
-  </style>
+<style type="text/css">
+.admin_member_table {
+	height: 600px;
+	overflow: scroll;
+}
+
+tr:hover {
+	background-color: #f5f5f5;
+}
+
+.mem_detail {
+	padding: 50px 120px;
+}
+</style>
 </head>
 <body>
 
 	<c:import url="common/adminSidebar.jsp"></c:import>
 
-  <div class="row"> 
-  </div>
-  <br>
+	<div class="row"></div>
+	<br>
 
-  <div class="row">
-   <div class="col-1"></div>
-   <div class="col-5">
-    <input class="form-control admin_member_search col-5" id="myInput" type="text" placeholder="Search..">
-   <br>
-    <div class="admin_member_table ">
-    
-    <table class="table table-bordered text-center">
-      <thead class="thead-light table-primary">
-        <tr>
-          <th>no</th>
-          <th>name</th>
-          <th colspan="3">email</th>
-          <th>상세정보 확인</th>
-        </tr>
-      </thead>
-      <c:forEach items="${memberList}" var="member">
-				<tbody id="myTable">
-					<tr>
-		          		<td>${member.memberNo}</td>
-		          		<td>${member.memberName}</td>
-		          		<td  colspan="3">${member.memberEmail}</td>
-				        <td><button type="button"  data-target="#targetDiv" data-toggle="collapse" data-id="${member.memberNo}"class="btn btn-outline-success btn-sm show_view_detail_member">확인</button> </td>   	
-	        		</tr>      
-	      		</tbody>
-			</c:forEach>
-    </table>
-  
-    </div>
+	<div class="row">
+		<div class="col-1"></div>
+		<div class="col-5">
+			<input class="form-control admin_member_search col-5" id="myInput"
+				type="text" placeholder="Search.."> <br>
+			<div class="admin_member_table ">
 
-  </div>
-  <div class="col-6">
-  	<br><br><br>
-  	<div class="mem_detail collapse" id="targetDiv">
-  	
-  	
-  	</div>
-  
-  </div>
+				<table class="table table-bordered text-center">
+					<thead class="thead-light table-primary">
+						<tr>
+							<th>no</th>
+							<th>name</th>
+							<th colspan="3">email</th>
+							<th>상세정보 확인</th>
+						</tr>
+					</thead>
+					<c:forEach items="${memberList}" var="member">
+						<tbody id="myTable">
+							<tr>
+								<td>${member.memberNo}</td>
+								<td>${member.memberName}</td>
+								<td colspan="3">${member.memberEmail}</td>
+								<td><button type="button" data-target="#targetDiv"
+										data-toggle="collapse" data-id="${member.memberNo}"
+										class="btn btn-outline-success btn-sm show_view_detail_member">확인</button>
+								</td>
+							</tr>
+						</tbody>
+					</c:forEach>
+				</table>
 
-</div>
-</div><!-- container end-->
+			</div>
+
+		</div>
+		<div class="col-6">
+			<br>
+			<br>
+			<br>
+			<div class="mem_detail collapse" id="targetDiv"></div>
+
+		</div>
+
+	</div>
+	</div>
+	<!-- container end-->
 
 
 
-<script>
+	<script>
 $(document).ready(function(){
 	
 	//검색 자바스크립트
