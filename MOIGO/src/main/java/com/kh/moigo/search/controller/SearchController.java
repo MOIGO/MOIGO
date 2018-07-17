@@ -70,4 +70,9 @@ public class SearchController {
 		
 		return list;
 	}
+	@ResponseBody
+	@RequestMapping("search/getPosition.do")
+	public String getPosition() {
+		return null;
+	}
 }
