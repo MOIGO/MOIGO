@@ -15,12 +15,12 @@
    <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
         <br><br>
 
- 
+
 
     <div class="container" >
-        <div class="col-md-9" style="float:none; margin:0 auto;">
+          <div class="col-md-9" style="float:none; margin:0 auto;">
             <h2>마이페이지</h2>
-            <ul class="nav nav-tabs nav-justified" >
+            <ul class="nav nav-tabs nav-justified " >
                 <li class="nav-item"><a  class="nav-link  letter_space " href="${pageContext.request.contextPath}/mypage/profile.do">회원정보</a></li>
                 <li class="nav-item"><a  class="nav-link letter_space active" href="${pageContext.request.contextPath}/mypage/changePwd.do"">비밀번호 변경</a></li>
                 <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/openGroup.do">주최모임</a></li>

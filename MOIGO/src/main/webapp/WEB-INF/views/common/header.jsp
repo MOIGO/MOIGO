@@ -159,7 +159,7 @@ body {
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSetting.do">모임 설정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
-					  <a class="dropdown-item" href="#">로그아웃</a>
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
 				  </div>
 		</div>

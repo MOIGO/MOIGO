@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kh.moigo.HomeController;
 import com.kh.moigo.admin.model.service.AccuseService;
 import com.kh.moigo.admin.model.vo.Accuse;
+import com.kh.moigo.admin.model.vo.GroupDetail;
+import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.member.model.vo.Member;
 
@@ -56,7 +58,34 @@ public class AdminController {
 		return "admin/dashBoard";
 	
 	}
-
+	@RequestMapping("adminMember.ad")
+	public String adminMember(Model model){
+		
+		
+		List<Map<String,Object>> memberListnotPaging = as.selectmemberList();
+		System.out.println(memberListnotPaging);
+		
+		model.addAttribute("memberList",memberListnotPaging);
+		model.addAttribute("pageName","Member");
+		
+		return "admin/memberManaging";
+	
+	}
+	
+	
+	
+	@RequestMapping("adminGroup.ad")
+	public String adminGroup(Model model){
+		List<Map<String,Object>> groupListnotPaging = as.selectgroupList();
+		System.out.println(groupListnotPaging);
+		
+		model.addAttribute("groupList",groupListnotPaging);
+		model.addAttribute("pageName","Group");
+		return "admin/groupManaging";
+	
+	}
+	
+	
 	
 	@RequestMapping("adminAnalytics.ad")
 	public String adminAnalytics(Model model){
@@ -64,16 +93,10 @@ public class AdminController {
 		return "admin/analystics";
 	
 	}
-	@RequestMapping("adminGroup.ad")
-	public String adminGroup(Model model){
-		model.addAttribute("pageName","Group");
-		return "admin/groupManaging";
 	
-	}
 	
 	@RequestMapping("adminReport.ad")
-	public String adminReport(@ModelAttribute("accuse") Accuse accuse,
-			@RequestParam(defaultValue="1") int currentPage,Model model) throws Exception{
+	public String adminReport(@RequestParam(defaultValue="1") int currentPage,Model model) throws Exception{
 		
 		// -- 페이지 처리 코드 부분 -- //
 		
@@ -175,7 +198,7 @@ public class AdminController {
 	}
 	
 	
-	@RequestMapping(value="sendMessage.ad", method=RequestMethod.GET)
+	/*@RequestMapping(value="sendMessage.ad", method=RequestMethod.GET)
 	public String adminSendMessage(@RequestParam("email") String recipientName,@RequestParam("messageText") String messageText, HttpServletResponse res) throws Exception{
 		
 		System.out.println("아이디 넣기"+recipientName);
@@ -184,8 +207,47 @@ public class AdminController {
 		
 		return "admin/reportManaging";
 		
+	}*/ //이걸 ajax로 넘기는 게 차라리 덜 시간이 덜릴 수도 페이지 로딩을 한다면  @RequestMapping("adminReport.ad")이 함수랑 동일한 값을 보내야함
+	
+	
+	@RequestMapping(value="modals.ad", method=RequestMethod.GET)
+	public String adminSendMessage(Model model) throws Exception{
+		
+		
+		
+		return "admin/modals";
+		
 	}
 	
 	
+	@ResponseBody
+	@RequestMapping(value="memDetail.ad", method=RequestMethod.GET)
+	public Object memDetail(@RequestParam String id) throws Exception{
+		List<Object> memList= new ArrayList<Object>();
+		System.out.println("아이디 넣기"+id);		
+		MemberDetail m = as.memDetail(id);
+		memList.add(m);
+		
+		//List<Map<String, Object>> a = as.memPerGroup(id);		
+		//memList.add(a);
+		System.out.println("list:"+memList);
+
+		return memList;	
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="grpDetail.ad", method=RequestMethod.GET)
+	public Object grpDetail(@RequestParam String id) throws Exception{
+		List<Object> grpList= new ArrayList<Object>();
+		System.out.println("아이디 넣기"+id);		
+		GroupDetail g = as.grpDetail(id);
+		grpList.add(g);
+		
+		//List<Map<String, Object>> a = as.memPerGroup(id);		
+		//memList.add(a);
+		System.out.println("list:"+grpList);
+
+		return grpList;	
+	}
 	
 }
