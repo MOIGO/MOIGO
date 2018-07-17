@@ -15,4 +15,6 @@ public interface SearchService {
 
 	List<Groups> detailSelectList(Map<String, String> map);
 
+	List<Groups> getAddressList(Map<String, String> map);
+
 }
