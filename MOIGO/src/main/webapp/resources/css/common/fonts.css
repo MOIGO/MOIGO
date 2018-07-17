@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+/* 나눔바른고딕 Bold */
+@font-face {
+    font-family:'nanum-barun-gothic-bold';
+    src: url('../../fonts/nanumbarungothic/nanumbarungothicbold.eot');
+    src: url('../../fonts/nanumbarungothic/nanumbarungothicbold.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicbold.woff2') format('woff2'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicbold.woff') format('woff'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicbold.ttf') format('truetype'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicbold.svg#nanum-barun-gothic-bold') format('svg');
+}
+
+/* 나눔바른고딕 Regular */
+@font-face {
+    font-family:'nanum-barun-gothic-regular';
+    src: url('../../fonts/nanumbarungothic/nanumbarungothicregular.eot');
+    src: url('../../fonts/nanumbarungothic/nanumbarungothicregular.eot?#iefix') format('embedded-opentype'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicregular.woff2') format('woff2'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicregular.woff') format('woff'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicregular.ttf') format('truetype'),
+         url('../../fonts/nanumbarungothic/nanumbarungothicregular.svg#nanum-barun-gothic-regular') format('svg');
+	font-display : fallback;
+}
