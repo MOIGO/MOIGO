@@ -60,6 +60,11 @@
 	box-shadow: 1px 1px 1px #ddd;
 	cursor: pointer;
 }
+.btn_facebook:hover{
+	background-color: #324b81;
+}
+
+
 
 .link_forgotPwd {
 	float: right;
@@ -87,6 +92,15 @@
 	cursor: pointer;
 }
 
+.btn_login:hover {
+	  border: 1px solid;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 15px;
+    text-shadow: 1px 1px 2px #427388;
+}
+
+
 .btn_join {
 	font-size: 14px;
 	float: right;
@@ -97,9 +111,13 @@
 	background-color: #fff !important;
 }
 
+.btn_join:hover{
+	color:#fff !important;
+	background-color: #00bfff !important;
+}
+
 .letter_space_modal {
 	letter-spacing: -1px;
 	font-size: 0.9em;
 	font-weight: bold;
 }
-
