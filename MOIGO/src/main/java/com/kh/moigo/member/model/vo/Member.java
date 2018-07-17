@@ -167,8 +167,6 @@ public class Member implements java.io.Serializable{
 		return true;
 	}
 	
-	
-	
-	
-	
+
 }
+

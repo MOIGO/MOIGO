@@ -18,5 +18,8 @@
 		<result property="groupGender" column="GROUP_GENDER"/>
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
+	<select id="selectGroupList" resultMap="groupsResultMap">
+	SELECT * FROM GROUPS
+	</select>
 </mapper>
 	
