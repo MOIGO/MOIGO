@@ -185,7 +185,7 @@
    #profileMsg {
          resize: none;
          font-size : 0.9em;
-      	 font-weight: normal;
+          font-weight: normal;
    }
    
    .gm_modal_footer {
@@ -200,13 +200,13 @@
    }
    
    #profileUploadBody {
-   		height : 500px;
+         height : 500px;
    }
    
    #profileUploadLbl {
-   		margin-left: 33px;
-    	font-size: 0.9em;
-    	color: gray;
+         margin-left: 33px;
+       font-size: 0.9em;
+       color: gray;
    }
     
    #profileUploadBtn {
@@ -218,14 +218,14 @@
    }
    
    #profileUploadCropper {
-   		outline : 1px solid black;
-   		margin-top : 5px;
-   		width : inherit;
-   		height : 430px;
+         outline : 1px solid black;
+         margin-top : 5px;
+         width : inherit;
+         height : 430px;
    }
    
    #cropperImg {
-   		max-width: 100%;
+         max-width: 100%;
    }
   
 </style>
@@ -322,7 +322,7 @@
          </div>
          
          <div class="modal-body gm_modal_body">         
-            <form>
+            <form id="profileForm">
                <img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
                <input type="file" class="profile_upload_inp" id="profileChangeInp" accept="image/*"/>
                <div class="profile_upload_btn" id="profileChangeBtn"></div>
@@ -357,12 +357,12 @@
          
          <div class="modal-body gm_modal_body" id="profileUploadBody">         
             <form>
-               	<input type="file" class="profile_upload_inp" id="profileUploadInp" accept="image/*"/>
-               	<label id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대 10MB까지 업로드 가능합니다.</label>
-               	<div class="profile_upload_btn" id="profileUploadBtn"></div>
-				<div id="profileUploadCropper">
-					<img id="cropperImg" />
-				</div>
+                  <input type="file" class="profile_upload_inp" id="profileUploadInp" accept="image/*"/>
+                  <label id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대 10MB까지 업로드 가능합니다.</label>
+                  <div class="profile_upload_btn" id="profileUploadBtn"></div>
+            <div id="profileUploadCropper">
+               <img id="cropperImg" />
+            </div>
             </form>
          </div>
          
@@ -374,7 +374,6 @@
       </div>
    </div>
 </div>
-
 
 <script>
 
@@ -415,51 +414,49 @@
       
       /* 프로필 사진 업로드부분의 파일이 변경됐을 경우 발생하는 이벤트 */
       $(".profile_upload_inp").on("change", function() {
-
-    	 $("#cropperImg").cropper("destroy");
-    	 var reader = new FileReader();
+      
+        // cropper.js 사용시 이미지를 갱신해주려면 이전 이미지 파일을 destroy 해줘야 함
+        $("#cropperImg").cropper("destroy");
+        var reader = new FileReader();
          var ext = $(this).val().split(".").pop().toLowerCase();
          
          if(ext.length > 0){
-            if($.inArray(ext, ["gif","png","jpg","jpeg"]) == -1) { 
+            if($.inArray(ext, ["gif","png","jpg","jpeg"]) == -1)
                alert("이미지파일(.jpg, .png, .gif)만 업로드 가능합니다.");
-            }
             else{
                if($(this).attr("id") == "profileChangeInp")
                   $("#profileUploadModal").toggle();
 
-               	endFile = $(this)[0].files[0];
-                reader.readAsDataURL(endFile);
-                reader.onload = function(){
-	               	$("#cropperImg").attr("src", reader.result);
-	               	
-	               	$("#cropperImg").cropper({
-		               	  aspectRatio: 1 / 1,
-		               	  viewMode : 2,
-						  zoomable : false,
-						  autoCropArea : 1.0,
-						  minCropBoxWidth : 100,
-						  minCropBoxHeight : 100,
-		               	  crop: function(event) {
-		               	    console.log(event.detail.x);
-		               	    console.log(event.detail.y);
-		               	    console.log(event.detail.width);
-		               	    console.log(event.detail.height);
-		               	    console.log(event.detail.rotate);
-		               	    console.log(event.detail.scaleX);
-		               	    console.log(event.detail.scaleY);
-		               	  }
-			         });
-	               	
-	               	
+                // src는 local resource 경로를 읽지 못하므로 filereader를 사용
+                  endFile = $(this)[0].files[0];
+	              reader.readAsDataURL(endFile);
+	              reader.onload = function(){
+	                   
+                   var $cropperImg = $("#cropperImg");
+                   $cropperImg.attr("src", reader.result);
+                   
+					$cropperImg.cropper({
+	               		aspectRatio: 1 / 1,
+	               		viewMode : 1,
+	               		zoomable : false,
+	               		autoCropArea : 1.0,
+	               		minCropBoxWidth : 100,
+	               		minCropBoxHeight : 100
+					});   
+                   
+                     $("#profileUploadConfirmBtn").click(function() {
+                    	 console.log($cropperImg.cropper("getCroppedCanvas", {width:150, height:150}).toDataURL());
+                        $("#profileImg").attr("src", $cropperImg.cropper("getCroppedCanvas", {width:150, height:150}).toDataURL());
+                        $("#profileUploadModal").hide();
+               		 });
                  };   
  
-	            $(this).val("");
+               $(this).val("");
             }
          }
       });
       
-      
+      /* 프로필 사진 변경 부분에서 클릭했을때 파일 input 효과주기 */
       $("#profileUploadBtn").on("click", function() {
          $("#profileUploadInp").click();
       });
@@ -473,19 +470,19 @@
          $("#msgLengthCnt").text($(this).val().length);
                
             if($(this).val().length > 30){
-	            /* 상태메시지를 한글로 30자 이상 입력했을 경우 alert로 알려줌 */
-	            alert("상태 메시지는 최대 30자까지 작성 가능합니다.");
-	            /* 29자까지 입력하고 마지막을 space로 마치면 글자수를
-	               31자로 인식하는 현상을 잡아주기 위해 내용을 갱신해줌*/
-	            $("#msgLengthCnt").text(30);               
+               /* 상태메시지를 한글로 30자 이상 입력했을 경우 alert로 알려줌 */
+               alert("상태 메시지는 최대 30자까지 작성 가능합니다.");
+               /* 29자까지 입력하고 마지막을 space로 마치면 글자수를
+                  31자로 인식하는 현상을 잡아주기 위해 내용을 갱신해줌*/
+               $("#msgLengthCnt").text(30);               
             }
             /* 실시간 글자수에 따라서 글자색을 변경해줌 */
             else if($(this).val().length == 30)
-            	$("#msgLengthCnt").css("color", "red");
+               $("#msgLengthCnt").css("color", "red");
             else if($(this).val().length > 14)
-            	$("#msgLengthCnt").css("color", "orange");
+               $("#msgLengthCnt").css("color", "orange");
             else
-            	$("#msgLengthCnt").css("color", "black");
+               $("#msgLengthCnt").css("color", "black");
                
       });
       

@@ -105,8 +105,13 @@
          margin-top: 7px;
    }
    
-   .form-check-input {
+   .gm_region_inp {
          margin-left: -1em;
+         margin-top: 5px;
+   }
+   
+   .gm_region_lbl {
+   		padding-left: 0px;
    }
    
    .max_member_wrap {
@@ -275,17 +280,23 @@
                       <li class="list-group-item">
                         <span class="setting_tit">지역</span>
                         <span class="float_right region_wrap">
-                           <select class="list_common condition_font_size" id="conditionRegionLarge">
+                           <select class="list_common condition_font_size condition_region" id="conditionRegionLarge">
                                  <option value="regionNone">- 시도 -</option>
                            </select>
                            &nbsp;
-                          <select class="list_common condition_font_size" id="conditionRegionSmall">
+                           <select class="list_common condition_font_size condition_region" id="conditionRegionMedium">
                              <option value="regionNone">- 시군구 -</option>
+                             <option>전체</option>
+                          </select>
+                           &nbsp;
+                          <select class="list_common condition_font_size condition_region" id="conditionRegionSmall">
+                             <option value="regionNone">- 읍면동 -</option>
+                             <option>전체</option>
                           </select>
                            &nbsp;
                           <span class="float_right form-check">
-                             <input class="form-check-input" type="checkbox" id="regionNone">
-                             <label class="form-check-label condition_font_size" for="regionNone">지역 무관</label>
+                             <input class="form-check-input gm_region_inp" type="checkbox" id="regionNone">
+                             <label class="form-check-label gm_region_lbl condition_font_size" for="regionNone">지역 무관</label>
                           </span>
                              
                         </span>
@@ -387,8 +398,8 @@ $(function() {
       alert("모임 관리 버튼 확인!");
    });
    
-   /* 가입 조건 관리 */
-   $("#groupConditionBtn").on("click", function() {
+	/* 가입 조건 관리 */
+	$("#groupConditionBtn").on("click", function() {
       $(".group_tit").text("가입 조건 관리");
       $("#settingList").css("display", "none");
       $("#conditionList").css("display", "block");
@@ -417,18 +428,79 @@ $(function() {
         });
    });
    
+		var lRegion = "";
+		$("#conditionRegionLarge").change(function() {
+			lRegion = $(this).val();
+			$("#conditionRegionMedium").children().not(":lt(2)").remove();
+			$("#conditionRegionSmall").children().not(":lt(2)").remove();
+			if(lRegion != 'regionNone')
+				$.ajax({
+			         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIGG_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+			               +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion +'&size=100',
+			           type:'GET',
+			           dataType:'jsonp',
+			           async: false,
+			           success:function(data){
+			           
+			            var features =  data.response.result.featureCollection.features;
+			            var regionMediums = [];
+			           
+			            for(var i=0 ; i < features.length; i++){
+			               regionMediums[i] = features[i].properties.sig_kor_nm;
+			               $("#conditionRegionMedium").append("<option value="+regionMediums[i]+">"+regionMediums[i]+"</option>");
+			            }
+			              
+			        },error:function(data){
+			             console.log("에러입니다"); 
+			        }
+			   });
+		});
+		
+		$("#conditionRegionMedium").change(function() {
+			
+			var mRegion = $(this).val();
+			$("#conditionRegionSmall").children().not(":lt(2)").remove();
+			if(mRegion == '전체'){
+				$("#conditionRegionSmall").prop("disabled", true);  
+				$("#conditionRegionSmall").val("regionNone").prop("selected", true);			
+			}
+			else if(mRegion != 'regionNone'){
+				$("#conditionRegionSmall").prop("disabled", false);  
+				$.ajax({
+			         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+			               +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion + " " + mRegion +'&size=100',
+			           type:'GET',
+			           dataType:'jsonp',
+			           async: false,
+			           success:function(data){
+	
+			            var features =  data.response.result.featureCollection.features;
+			            var regionSmalls = [];
+			           
+			            for(var i=0 ; i < features.length; i++){
+			               regionSmalls[i] = features[i].properties.emd_kor_nm;
+			               $("#conditionRegionSmall").append("<option value="+regionSmalls[i]+">"+regionSmalls[i]+"</option>");
+			            }
+			              
+			        },error:function(data){
+			             console.log("에러입니다"); 
+			        }
+			   });
+			}
+			else
+				$("#conditionRegionSmall").prop("disabled", false);  
+		});
+		
+		
+   
    // 지역무관을 선택했을 경우 발생하는 이벤트
    $("#regionNone").change(function() {
       if($(this).is(":checked")){
-         $("#conditionRegionLarge").prop("disabled", true);
-         $("#conditionRegionSmall").prop("disabled", true);
-         
-         $("#conditionRegionLarge").val("regionNone").prop("selected", true);
-         $("#conditionRegionSmall").val("regionNone").prop("selected", true);
+         $(".condition_region").prop("disabled", true);         
+         $(".condition_region").val("regionNone").prop("selected", true);
       }
       else{
-         $("#conditionRegionLarge").prop("disabled", false);
-         $("#conditionRegionSmall").prop("disabled", false);
+         $(".condition_region").prop("disabled", false);
       }
    });
    
