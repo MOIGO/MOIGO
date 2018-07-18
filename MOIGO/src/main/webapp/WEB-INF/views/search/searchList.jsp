@@ -82,9 +82,9 @@
 						${listCount }개</div>
 					<div class="col-sm-4 count-sort" id="sort-inner">
 						<select class="sort" name="sort" id="sort">
-							<option>최신순</option>
-							<option value="hits">조회순</option>
-							<option value="member">멤버순</option>
+							<option value="최신순">최신순</option>
+							<option value="조회순">조회순</option>
+							<option value="멤버순">멤버순</option>
 						</select>
 					</div>
 				</div>
@@ -183,7 +183,6 @@
 							j++;
 							if(j == listData.length) {
 								data = { positions };
-								
 								var markers = data.positions.map(function(position) {
 									return new daum.maps.Marker({
 										position : new daum.maps.LatLng(position.lat, position.lng)
