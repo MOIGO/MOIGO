@@ -44,7 +44,7 @@
 
 		<div class="row">
 
-			<c:import url="/WEB-INF/views/groups/leftAside.jsp" />
+			<c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
 
 			<div class="col-7">
 				<div class="col">
@@ -115,7 +115,7 @@ function createSummerNote(){
 		    container:false,
 		    tooltip: '지도 삽입',
 		    click: function () {
-		      toggleMapModal(false);
+		      toggleMapModal();
 		    }
 		  });
 
@@ -141,9 +141,9 @@ function createSummerNote(){
 
 		 
 		 
-function toggleMapModal(isEdit){
+function toggleMapModal(editObj){
 	 $('#insertMap').modal("toggle");
-     $('#insertMap').on("shown.bs.modal",makeMap(isEdit));
+     $('#insertMap').on("shown.bs.modal",makeMap(editObj));
 }
 		
 	
