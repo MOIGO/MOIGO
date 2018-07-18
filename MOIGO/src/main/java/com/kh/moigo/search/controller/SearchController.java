@@ -58,6 +58,8 @@ public class SearchController {
 	public List<Groups> getAddressList(@RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory) {
 		if(keyword == null) keyword = "";
 		if(place == null) place = "";
+		if(bigCategory == null) bigCategory = "";
+		if(smallCategory == null) smallCategory = "";
 		
 		Map<String, String> map = new HashMap<>();
 		
@@ -69,10 +71,5 @@ public class SearchController {
 		List<Groups> list = searchService.getAddressList(map);
 		
 		return list;
-	}
-	@ResponseBody
-	@RequestMapping("search/getPosition.do")
-	public String getPosition() {
-		return null;
 	}
 }

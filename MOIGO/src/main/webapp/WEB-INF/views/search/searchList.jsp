@@ -185,8 +185,7 @@
 				var geocoder = new daum.maps.services.Geocoder();
 				// 주소로 좌표를 검색합니다
 				for (var i = 0; i < listData.length; i++) {
-					geocoder.addressSearch(listData[i].groupAddress, function(
-							result, status) {
+					geocoder.addressSearch(listData[i].groupAddress, function(result, status) {
 						// 정상적으로 검색이 완료됐으면 
 						if (status === daum.maps.services.Status.OK) {
 							positions.push({
@@ -207,16 +206,14 @@
 				console.log("1");
 				console.log(positions);
 
-				data = {
-					"positions" : positions
-				};
+				data.positions = positions;
 				
+				console.log(data);
 				var markers = data.positions.map(function(position) {
-					console.log(position);
-					/* return new daum.maps.Marker({
-						"position" : new daum.maps.LatLng(position.lat,
+					return new daum.maps.Marker({
+						position : new daum.maps.LatLng(position.lat,
 								position.lng)
-					}); */
+					});
 				});
 				
 				clusterer.addMarkers(markers);
