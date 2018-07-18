@@ -386,6 +386,8 @@
 
    $(function() {
       
+	   console.log("${requestScope.groupMemberList}");
+	   
       /* 검색부분의 border 부분을 수정 */
       $("#gmSearchInp").on("focus",function(){
          $(".gm_search_btn").css("border-color", "#343A40");   
