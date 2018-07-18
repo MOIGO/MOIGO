@@ -8,7 +8,7 @@
 <title>검색 - moigo</title>
 
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=2">
+	href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=3">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -88,45 +88,34 @@
 						</select>
 					</div>
 				</div>
-				<div class="moigo-item-container">
-					<c:forEach items="${list}" var="group">
-						<div
-							class="float-left col-lg-4 col-md-6 col-sm-12 col-xs-12 moigo-item-wrap">
-							<div class="content-context">
-								<div class="moigo-item list-item align-left" data-lat=""
-									data-lng="" data-index="">
-									<div class="moigo-item-overlay"></div>
-									<div class="header-bg"></div>
-									<div class="header-text-container">
-										<div class="isPayment"></div>
-										<div class="header-text">
-											<div class="title-wrap">
-												<div class="title">${group.groupName}</div>
-											</div>
-											<div class="tag-wrap">
-												<div class="tag">#tag1</div>
-												<div class="tag">#tag2</div>
-												<div class="tag">#tag3</div>
-												<div class="tag">#tag4</div>
-												<div class="tag">#tag5</div>
-											</div>
+				<c:forEach items="${list}" var="group">
+					<div class="float-left col-lg-4 col-md-6 col-sm-12 col-xs-12 moigo-item-wrap">
+						<div class="content-context">
+							<div class="moigo-item list-item align-left" data-lat=""
+								data-lng="" data-index="">
+								<div class="moigo-item-overlay"></div>
+								<div class="header-bg"></div>
+								<div class="header-text-container">
+									<div class="header-text">
+										<div class="title-wrap">
+											<div class="title">${group.groupName}</div>
 										</div>
 									</div>
-									<div class="item-contents align-left">
-										<div class="location">${group.groupAddress }</div>
-										<span class="icon-container float-right"> <span
-											class="memberIcon"> 0<img alt="memberIcon"
-												src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png">
-										</span> <span class="commentIcon"> 0<img alt="commentIcon"
-												src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">
-										</span>
-										</span>
-									</div>
+								</div>
+								<div class="item-contents align-left">
+									<div class="location">${group.groupAddress }</div>
+									<span class="icon-container float-right"> <span
+										class="memberIcon"> 0<img alt="memberIcon"
+											src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png">
+									</span> <span class="commentIcon"> 0<img alt="commentIcon"
+											src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">
+									</span>
+									</span>
 								</div>
 							</div>
 						</div>
-					</c:forEach>
-				</div>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
 	</form>
@@ -156,8 +145,6 @@
 
 		/* console.log('지도의 중심 좌표는 ' + map.getCenter().toString() +' 입니다.'); */
 
-		var geocoder = new daum.maps.services.Geocoder();
-
 		// 마커 클러스터러를 생성합니다
 		// 마커 클러스터러를 생성할 때 disableClickZoom 값을 true로 지정하지 않은 경우
 		// 클러스터 마커를 클릭했을 때 클러스터 객체가 포함하는 마커들이 모두 잘 보이도록 지도의 레벨과 영역을 변경합니다
@@ -166,13 +153,11 @@
 		var clusterer = new daum.maps.MarkerClusterer({
 			map : map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
 			averageCenter : true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-			minLevel : 8, // 클러스터 할 최소 지도 레벨
+			minLevel : 9, // 클러스터 할 최소 지도 레벨
 			disableClickZoom : true
 		// 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
 		});
 
-		var data = new Object();
-		var positions = new Array();
 		$.ajax({
 			url : "${pageContext.request.contextPath}/search/getAddress.do",
 			data : {
@@ -182,45 +167,37 @@
 				smallCategory : smallCategory
 			},
 			success : function(listData) {
+				var j = 0;
+				var data = new Object();
+				var positions = new Array();
 				var geocoder = new daum.maps.services.Geocoder();
 				// 주소로 좌표를 검색합니다
-				for (var i = 0; i < listData.length; i++) {
-					geocoder.addressSearch(listData[i].groupAddress, function(
-							result, status) {
+				for (var i = 0; i < listData.length ; i++) {
+					geocoder.addressSearch(listData[i].groupAddress, function(result, status) {
 						// 정상적으로 검색이 완료됐으면 
 						if (status === daum.maps.services.Status.OK) {
 							positions.push({
-								"lat" : result[0].y,
-								"lng" : result[0].x
+								"lat" : Number(result[0].y),
+								"lng" : Number(result[0].x)
 							});
-
-							//positions.push(data);
-							/* var markers = data.positions.map(function(position) {
-								    return new daum.maps.Marker({
-								        position : new daum.maps.LatLng(position.lat, position.lng)
-								    });
-							 });
-							clusterer.addMarkers(markers); */
+							j++;
+							if(j == listData.length) {
+								data = { positions };
+								
+								var markers = data.positions.map(function(position) {
+									return new daum.maps.Marker({
+										position : new daum.maps.LatLng(position.lat, position.lng)
+									});
+								});
+								
+								
+								clusterer.addMarkers(markers);
+							}
 						}
 					});
 				}
-				console.log("1");
-				console.log(positions);
-
-				data = {
-					"positions" : positions
-				};
 				
-				var markers = data.positions.map(function(position) {
-					console.log(position);
-					/* return new daum.maps.Marker({
-						"position" : new daum.maps.LatLng(position.lat,
-								position.lng)
-					}); */
-				});
 				
-				clusterer.addMarkers(markers);
-
 				// 마커 클러스터러에 클릭이벤트를 등록합니다
 				// 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
 				// 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
