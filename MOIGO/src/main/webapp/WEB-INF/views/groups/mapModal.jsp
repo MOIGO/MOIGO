@@ -21,8 +21,8 @@
 
 .map_btn_wrapper{
 	position:absolute;
-	top:40px;
-	left:300px;
+	top:20px;
+	right:20px;
 	visibility:hidden;
 	z-index: 2;
 }
@@ -56,7 +56,7 @@
 							<label for="searchPlace" class="sr-only">Email address</label>
 							<input type="text"  class="form-control" id="placeKeyword" placeholder="장소를 입력하세요"/>
 							<div class="input-group-append">
-								<button class="btn btn-primary" type="submit">검색</button>
+								<button class="btn btn-primary" id="btn_searchMap" type="submit">검색</button>
 							</div>
 						</div>
 					</div>
@@ -87,8 +87,6 @@ $(function(){
 		$('#placeListDiv').css("display","none");
 		$('#placeKeyword').val("");
 	});
-	
-	
 });
 
 var insertMap_markers=[];
@@ -97,7 +95,8 @@ var infowindow_for_Modal = new daum.maps.InfoWindow({zIndex:1}); //인포 윈도
 
 var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
 
-function makeMap(isEdit){
+function makeMap(editObj){
+	
 	map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
 	    center : new daum.maps.LatLng(37.499053, 127.032920), // 지도의 중심좌표
 	    level : 6 // 지도의 확대 레벨
@@ -111,10 +110,14 @@ function makeMap(isEdit){
          position: coords
      });
      
-     insertMap_marker.push(marker); */
      
-     searchPlaces("kh 정보교육원 강남지원2관");
-	
+     insertMap_marker.push(marker); */
+
+    if(typeof(editObj)!='undefined'){
+    	$('#placeKeyword').val($(editObj).parents().find('.place_name').text());
+    	$('#btn_searchMap').submit();
+    }
+     
 	$('#searchPlace').focus();
 }
 
@@ -288,25 +291,35 @@ function displayInfowindow(marker, place) {
 	
 	/* var addr = 'closeMapModal("'+place+'")';
     var content = "<button class='card' onclick='"+addr+"'>" +"<div class='card-body'>"; */
-    var content = "<button class='card' onclick='"+'closeMapModal('+place+');'+"'><div class='card-body'>";
+    /* var content = "<button class='card' onclick='"+'closeMapModal('+place+');'+"'><div class='card-body'>";
     content+="<div class='row test'><div class='col-12 test'>"+'<strong>이 위치를 추가</strong>'+"</div>";
     content+="<div class='col-12'>"+"<span class='text-muted'>"+place.place_name+"</span>"+"</div>";
-    content+="</div></div></button>";
+    content+="</div></div></button>"; */
     
-    var $wrapper= $('<button class="btn btn-info btn-block">');
+    /* var $wrapper= $('<button class="btn btn-info btn-block">');
+    $wrapper.append('<strong>이 위치를 추가</strong><br>');
+    $wrapper.append('<span style="text-align:center;">'+place.place_name+'</span>');
+    $wrapper.append("<i class='fas fa-map-marker-alt marker_font'></i>"); */
+    
+    
+    var $wrapper = makeInfoWindow(place.place_name);
     
     $wrapper.on('click',function(){
     	closeMapModal(place);
     });
     
-    $wrapper.append('<strong>이 위치를 추가</strong><br>');
-    $wrapper.append('<span style="text-align:center;">'+place.place_name+'</span>');
-    $wrapper.append("<i class='fas fa-map-marker-alt marker_font'></i>");
     
- 
-  
     infowindow_for_Modal.setContent($wrapper[0]);
     infowindow_for_Modal.open(map, marker);
+    
+    return $wrapper;
+}
+
+function makeInfoWindow(placeName){
+	var $wrapper= $('<button class="btn btn-info btn-block">');
+    $wrapper.append('<strong>이 위치를 추가</strong><br>');
+    $wrapper.append('<span style="text-align:center;">'+placeName+'</span>');
+    $wrapper.append("<i class='fas fa-map-marker-alt marker_font'></i>");
     
     return $wrapper;
 }
@@ -325,14 +338,14 @@ function setMapOnSummerNote(place){
 			+'</div></div>'); */
 			
 			
-	var $mapDiv = $('<div class="card" style="border:3px solid black;" contenteditable="false">');	
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false">');	
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');
 	var $mapCol10 = $('<div class="col-10">');
 	var $col10Row = $('<div class="row">');
-	var $col10RowCol1 =$('<div class="col-12 map_address">'+place.place_name+'</div>');
-	var $col10RowCol2 =$('<div class="col-6 map_address">'+place.address_name+'</div>');
+	var $col10RowCol1 =$('<div class="col-12 map_address place_name">'+place.place_name+'</div>');
+	var $col10RowCol2 =$('<div class="col-12 map_address">'+place.address_name+'</div>');
 	var $btnWrapper = $('<div class="map_btn_wrapper float-right">');
 	var $btn_edit =$('<button class="btn btn-primary mr-3 test" >수정</button>');
 	var $btn_del =$('<button class="btn btn-info test">삭제</button>');
@@ -345,13 +358,29 @@ function setMapOnSummerNote(place){
 	$col10Row.append($col10RowCol2);
 	$mapCol10.append($col10Row);
 	$mapRow.append($mapCol2);
-	$mapDiv.append($btnWrapper);
+	$col10Row.append($btnWrapper);
 	$mapRow.append($mapCol10);
 	$mapBody.append($mapRow);
 	$mapDiv.append($mapBody);
 	
+	
+	
 	$btn_edit.on("click",function(){
-		alert("예스!");
+		
+		var $wrapper = makeInfoWindow(place.place_name);
+		
+		$wrapper.on("click", function(){
+			console.log("확인");
+		});
+		
+		console.log($wrapper);
+		infowindow_for_Modal.setContent($wrapper[0]);
+	
+		editEditMap($(this));
+	});
+	
+	$btn_del.on("click",function(){
+		deleteEditMap($(this));
 	});
 	
 	
@@ -370,6 +399,16 @@ function setMapOnSummerNote(place){
 	});
 	
 	$('#summernote').summernote('insertNode', $mapDiv[0]);
+}
+
+function editEditMap(obj){
+	toggleMapModal(obj);
+	
+}
+
+function deleteEditMap(obj){
+
+	$(obj).closest('[name=editMapWrap]').remove();	
 }
 
  // 검색결과 목록의 자식 Element를 제거하는 함수입니다
