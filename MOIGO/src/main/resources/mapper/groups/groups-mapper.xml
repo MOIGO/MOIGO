@@ -26,7 +26,7 @@
 		<result property="memberNo" column="MEMBER_NO"/>
 		<result property="isNotice" column="IS_NOTICE"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
-		<collection property="postReply" column="POST_NO" ofType="PostReply" resultMap="postReplyResultMap"></collection>
+		<collection property="postReply" column="POST_NO" ofType="PostReply" resultMap="postReplyResultMap" select="selectPostsForBlog"></collection>
 	</resultMap>
 	
 	<resultMap type="files" id="filesResultMap">
@@ -50,6 +50,23 @@
 	<insert id="addPost" parameterType="hashmap">
 		INSERT INTO POST VALUES(SEQ_POST.NEXTVAL,#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
 	</insert>
+	
+	
+	<select id="getPostList" parameterType="Post">
+		
+	</select>
+	
+	<select id="selectPostList">
+		
+	</select>
+	
+	<select id="selectPostCnt" resultMap="postResultMap">
+		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
+	</select>
+	
+	<select id="selectReplyForPost" >
+		SELECT * FROM POST_REPLY WHERE POST_NO =
+	</select>
 
 	<!-- 혜진 -->
 	

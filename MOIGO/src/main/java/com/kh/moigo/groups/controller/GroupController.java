@@ -1,5 +1,6 @@
 package com.kh.moigo.groups.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
 import com.kh.moigo.groups.model.vo.Post;
 
@@ -29,9 +31,13 @@ public class GroupController {
 	
 	@RequestMapping("/groups/getPostList.do")
 	@ResponseBody
-	public String getPostList(@RequestParam String groupNo){
+	public String getPostList(@RequestParam String groupNo, @RequestParam int currPage){
 		
-		groupService.
+		
+		PageInfo p = new PageInfo();
+		p.setPageInfo(currPage, groupService.selectPostCnt(groupNo), 3);
+		
+		ArrayList<Post> list = groupService.selectPostList(groupNo, p);
 		
 		return "groups/createGroup";
 	}

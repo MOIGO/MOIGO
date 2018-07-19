@@ -88,5 +88,26 @@ public class PageInfo implements java.io.Serializable{
 		this.endRow = endRow;
 	}
 	
+	public PageInfo() {
+		super();
+	}
+	public void setPageInfo(int currPage,int listCount,int limit){
+		
+		maxPage = (int)((double)listCount / limit + 0.9);
+		
+		startPage
+		 = (((int)((double)currentPage / limit + 0.9)) - 1) * limit + 1;
+		
+		endPage
+		 = startPage + limit - 1;
+		
+		if( maxPage < endPage){
+			endPage = maxPage;
+		}
+	
+		startRow = ((currentPage-1)*limit)+1;
+		endRow = startRow+(limit-1);
+		
+	}
 	
 }
