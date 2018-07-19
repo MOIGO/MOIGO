@@ -50,13 +50,13 @@
     <div class="container" id="footerCategory">
         <div class="row">
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="serviceInfo">서비스소개</b></div>
+            <b class="cursorPo" id="serviceInfo2">서비스소개</b></div>
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="personalInfo">개인정보 취급 방침</b></div>
+            <b class="cursorPo" id="personalInfo2">개인정보 취급 방침</b></div>
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="useGuide" style="color:skyblue;">이용안내</b></div>
+            <b class="cursorPo" id="useGuide2" style="color:skyblue;">이용안내</b></div>
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="maps">연락처 및 지도</b></div>
+            <b class="cursorPo" id="maps2">연락처 및 지도</b></div>
         </div>
     </div>
     <hr>
