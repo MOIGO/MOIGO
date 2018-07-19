@@ -143,7 +143,7 @@ function createSummerNote(){
 		 
 function toggleMapModal(editObj){
 	 $('#insertMap').modal("toggle");
-     $('#insertMap').on("shown.bs.modal",makeMap(editObj));
+     $('#insertMap').on("shown.bs.modal",makeMap());
 }
 		
 	
