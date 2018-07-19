@@ -115,8 +115,7 @@ function createSummerNote(){
 		    container:false,
 		    tooltip: '지도 삽입',
 		    click: function () {
-		      $('#insertMap').modal("toggle");
-		      $('#insertMap').on("shown.bs.modal",makeMap(false));
+		      toggleMapModal(false);
 		    }
 		  });
 
@@ -142,7 +141,10 @@ function createSummerNote(){
 
 		 
 		 
-
+function toggleMapModal(isEdit){
+	 $('#insertMap').modal("toggle");
+     $('#insertMap').on("shown.bs.modal",makeMap(isEdit));
+}
 		
 	
 </script>

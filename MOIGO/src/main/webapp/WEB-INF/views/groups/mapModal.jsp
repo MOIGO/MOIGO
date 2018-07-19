@@ -98,6 +98,7 @@ var infowindow_for_Modal = new daum.maps.InfoWindow({zIndex:1}); //인포 윈도
 var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
 
 function makeMap(isEdit){
+	
 	map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
 	    center : new daum.maps.LatLng(37.499053, 127.032920), // 지도의 중심좌표
 	    level : 6 // 지도의 확대 레벨
@@ -111,9 +112,11 @@ function makeMap(isEdit){
          position: coords
      });
      
-     insertMap_marker.push(marker); */
      
-     searchPlaces("kh 정보교육원 강남지원2관");
+     insertMap_marker.push(marker); */
+
+     
+    $('#placeKeyword').val();
 	
 	$('#searchPlace').focus();
 }
@@ -325,7 +328,7 @@ function setMapOnSummerNote(place){
 			+'</div></div>'); */
 			
 			
-	var $mapDiv = $('<div class="card" style="border:3px solid black;" contenteditable="false">');	
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false">');	
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');
@@ -351,7 +354,11 @@ function setMapOnSummerNote(place){
 	$mapDiv.append($mapBody);
 	
 	$btn_edit.on("click",function(){
-		alert("예스!");
+		editEditMap($(this));
+	});
+	
+	$btn_del.on("click",function(){
+		deleteEditMap($(this));
 	});
 	
 	
@@ -370,6 +377,15 @@ function setMapOnSummerNote(place){
 	});
 	
 	$('#summernote').summernote('insertNode', $mapDiv[0]);
+}
+
+function editEditMap(obj){
+	
+}
+
+function deleteEditMap(obj){
+
+	$(obj).closest('[name=editMapWrap]').remove();	
 }
 
  // 검색결과 목록의 자식 Element를 제거하는 함수입니다
