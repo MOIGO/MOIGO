@@ -21,7 +21,7 @@
 	</resultMap>
 	
 	<select id="selectGroupList" resultMap="groupsResultMap">
-	SELECT * FROM GROUPS
+	SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
 	</select>
 	
 

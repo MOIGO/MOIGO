@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="groupDetail">
+	<resultMap id="groupDetailResultMap" type="groupDetail">
+		<id property="groupNo" column="GROUP_NO" />
+		<result property="groupName" column="GROUP_NAME" />
+		<result property="groupMsg" column="GROUP_MSG" />
+		<result property="groupPicture" column="GROUP_PICTURE" />
+		<result property="groupGradeCode" column="GROUP_GRADE_CODE" />
+		<result property="groupStateCode" column="GROUP_STATE_CODE" />
+		<result property="maxMember" column="MAX_MEMBER" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="interestBigCode" column="INTEREST_BIG_CODE" />
+		<result property="interestSmallCode" column="INTEREST_SMALL_CODE" />
+		<result property="allowSignup" column="ALLOW_SIGNUP" />
+		<result property="minAge" column="MIN_AGE" />
+		<result property="maxAge" column="MAX_AGE" />
+		<result property="groupGender" column="GROUP_GENDER" />
+		<result property="openSetting" column="OPEN_SETTING" />
+		<result property="openSetting" column="OPEN_SETTING" />
+		<result property="memNum" column="MEM_NUM" />		
+	</resultMap>
+	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
+		FROM ACCUSE ORDER BY ACCUSE_NO DESC </select> -->
+
+
+	<select id="grpDetail" resultMap="groupDetailResultMap">
+		SELECT GROUP_NO,
+		GROUP_NAME,GROUP_MSG,GROUP_PICTURE,GROUP_ADDRESS,GROUP_GRADE_CODE,GROUP_STATE_CODE,MAX_MEMBER,ENROLL_DATE,INTEREST_BIG_CODE,INTEREST_SMALL_CODE,ALLOW_SIGNUP,MIN_AGE,MAX_AGE,GROUP_GENDER,OPEN_SETTING,
+		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEM_NUM 
+		FROM GROUPS G
+		WHERE GROUP_NO =#{id}
+	</select>
+</mapper>
