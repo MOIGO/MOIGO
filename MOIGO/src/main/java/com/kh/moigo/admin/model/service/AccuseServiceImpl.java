@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.kh.moigo.admin.model.dao.AccuseDao;
-import com.kh.moigo.admin.model.vo.Accuse;
+import com.kh.moigo.admin.model.vo.GroupDetail;
+import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.member.model.vo.Member;
 
@@ -47,6 +47,36 @@ public class AccuseServiceImpl implements AccuseService {
 	public List<Map<String, Object>> selectAccuse(String id) {
 		// TODO Auto-generated method stub
 		return ad.selectAccuse(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectmemberList() {
+		// TODO Auto-generated method stub
+		return ad.selectmemberList();
+	}
+
+	@Override
+	public List<Map<String, Object>> memPerGroup(String id) {
+		// TODO Auto-generated method stub
+		return ad.memPerGroup(id);
+	}
+
+	@Override
+	public MemberDetail memDetail(String id) {
+		// TODO Auto-generated method stub
+		return ad.memDetail(id);
+	}
+
+	@Override
+	public GroupDetail grpDetail(String id) {
+		// TODO Auto-generated method stub
+		return ad.grpDetail(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectgroupList() {
+		// TODO Auto-generated method stub
+		return ad.selectgroupList();
 	}
 
 }

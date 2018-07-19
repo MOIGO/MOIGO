@@ -199,7 +199,7 @@ body {
     display: table;
 }
 .moigo-item .item-contents.align-left {
-    height: 120px;
+    height: 100px;
     overflow: inherit;
 }
 .moigo-item .item-contents {

@@ -14,4 +14,6 @@ public interface SearchDao {
 	int detailListCount(Map<String, String> map);
 
 	List<Groups> detailSelectList(Map<String, String> map);
+
+	List<Groups> getAddressList(Map<String, String> map);
 }

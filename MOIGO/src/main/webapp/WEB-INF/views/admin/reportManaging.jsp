@@ -21,8 +21,6 @@
 	<c:import url="common/adminSidebar.jsp"></c:import>
 
     
-    
-    
  
   	
 
@@ -66,7 +64,7 @@
 				          </c:choose>  
 		         		 </td>
 				        <td colspan="4">${accuse.content}</td>
-				        <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${accuse.targetMember}" class="btn btn-outline-warning btn-sm identifyingClass" >확인</button> </td>   	
+				        <td><button type="button" class="btn btn-outline-success btn-sm">확인</button> </td>   	
 	        		</tr>      
 	      		</tbody>
 			</c:forEach>
@@ -118,6 +116,8 @@
     <!-- top 5 신고 시작 -->
  	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 	    <h2>Blacklist M</h2>
+	    <div class="float-right"><i class="fas fa-sync" style="color: tomato"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> 
+	    
 	    <br>
 	    <table class="table table-hover ">
 	      <thead class="thead-light table-primary">
@@ -134,20 +134,19 @@
 	          <td>t</td>
 	          <td>t</td>
 	          <td>t</td>
-	          <td><button type="button" class="btn btn-outline-info btn-sm">확인</button></td>
-	        </tr>
-	        <tr>
-	          <td>t</td>
-	          <td>t</td>
-	          <td>t</td>
-	       	  <td><button type="button" class="btn btn-outline-info btn-sm">확인</button></td>
+	          <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${accuse.targetMember}" class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
 	        </tr>
 	    
 	
 	      </tbody>
 	    </table>
 	    <br>
-	    <h2>Blacklist G</h2>
+	    <h2>Blacklist G </h2>
+	    
+	    
+	    <div class="float-right"><i class="fas fa-sync" style="color: tomato"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> 
+	    
+	    
 	    <br>
 	    <table class="table table-hover ">
 	      <thead class="thead-light table-primary">
@@ -199,7 +198,7 @@
 
 
 <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog ">
       <div class="modal-content">
       
    		<div class="modal-body">
@@ -226,18 +225,13 @@
 			      	<thead class="thead-light">
 			        <tr>
 			          <th>신고내용</th>
-			          <th>신고자</th>			     			          
+			          <th>신고자</th>
+			          <th>신고날짜</th>			     			          
 			        </tr>
 			      </thead>
-			      <tbody id="myTable">
-			        <tr>
-			          <td>t</td>
-			          <td>t</td>
-			        </tr>
-			        <tr>
-			          <td>t</td>
-			          <td>t</td>
-			        </tr>
+			      <tbody id="myTable" class="input_accuse_list">
+			       
+			        
 			      </tbody>
 			    </table>
 	        </div>
@@ -275,6 +269,18 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
   
 
 <script>
@@ -290,8 +296,17 @@ $(document).ready(function(){
 	            success:function(data){	
 	            	
 		            $(".hiddennn").text(data[0].memberEmail);
-		            for(var i ; i <data[1].length; i++){
-		            	  $("#recipientName").val(data[1][0]. targetMember);
+		            $("#recipientName").val(data[0].memberEmail);
+		            console.log(data[1].length);
+		            
+		            for(var i in data[1]){
+		            	console.log(i);
+		            	var str ='<tr>'+
+								'<td>'+data[1][i].content+'</td>' +
+ 								' <td>'+data[1][i].targetMember+'</td>' +
+ 								' <td>'+data[1][i].accuseDate+'</td>' +
+								' </tr>';
+		            	 $('.input_accuse_list').append(str);
 		            }
 	              
 	            }
