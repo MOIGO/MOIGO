@@ -11,8 +11,12 @@ public interface MemberService {
 
 	int updateMember(Member member);
 	
-	int deleteMember(int memberNo);
-	
 	int checkIdDuplicate(String memberEmail);
+
+	int updateMemberPwd(String memberEmail, String memberPwd);
+
+	int deleteMember(String memberNo, String contentW);
+
+
 	
 }

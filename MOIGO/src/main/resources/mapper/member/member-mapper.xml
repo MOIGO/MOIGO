@@ -16,17 +16,29 @@
 
 	<select id="selectOneMember" resultMap="memberResultMap" >
 		SELECT * FROM MEMBER
-		WHERE MEMBER_EMAIL = #{memberEmail}
+		WHERE MEMBER_EMAIL = #{memberEmail} AND DELFLAG='N'
 	</select>
 	
 	<select id="checkIdDuplicate" resultType="_int">
-		SELECT COUNT(*) AS CNT FROM MEMBER WHERE MEMBER_EMAIL = #{memberEmail}
+		SELECT COUNT(*) AS CNT FROM MEMBER WHERE MEMBER_EMAIL = #{memberEmail}  
 	</select>
 	
  	<insert id="insertMember" parameterType="member">
 		INSERT INTO MEMBER 
-		VALUES('A'||TO_CHAR(SEQ_MEMBER.NEXTVAL,'FM000'),#{memberEmail}, #{memberPwd},#{memberName}, #{memberAddress, jdbcType=VARCHAR},
+		VALUES('M'||TO_CHAR(SEQ_MEMBER.NEXTVAL,'FM000'),#{memberEmail}, #{memberPwd},#{memberName}, #{memberAddress, jdbcType=VARCHAR},
 			   TO_DATE(TO_CHAR(#{memberBirth},'RRRR/MM/DD'), 'RRRR/MM/DD'), #{memberGender}, DEFAULT, 'N')
+	</insert>
+	
+	<update id="updateMemberPwd" parameterType="hashmap">
+		UPDATE MEMBER SET MEMBER_PWD = #{memberPwd} WHERE MEMBER_EMAIL=#{memberEmail}
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER SET DELFLAG = 'Y' WHERE MEMBER_NO=#{memberNo}
+	</update>
+	
+	<insert id="insertDropout" parameterType="hashmap">
+		INSERT INTO DROPOUT VALUES(#{memberNo}, #{contentW}) 
 	</insert>
 	
 <!-- 	<update id="updateMember" parameterType="member">

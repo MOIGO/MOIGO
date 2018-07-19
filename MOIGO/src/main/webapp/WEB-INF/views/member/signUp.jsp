@@ -17,7 +17,7 @@
 <title>Insert title here</title>
  <style>
 	input:DISABLED {
-		background-color : lightgray;
+		background-color : #e9ecef;
 	}
     </style>
 
@@ -43,6 +43,7 @@
                         <input type="text" class="col-md-9 col-8  join_form_control " id="joinCode" placeholder="인증번호" disabled>
                         <button class="col-md-3  col-4  join_form_control btn_sign"  type="button" id="btn_joinCode" disabled>확인</button>
                         <span id="codeChkMsg"></span>
+                        <span id="timer"></span>
                     </div>
                     <div class="form-group col-md-12 col-12 row no_margin" >
                         <div class="row no_margin letter_space_join " >비밀번호</div>
@@ -113,8 +114,9 @@
 
                     <div class="form-group col-md-12 col-12 row no_margin">
                             <div class="row  col-12 no_margin letter_space_join no_padding" >성별</div>
-                       <input type="radio" name="memberGender" id="male" class="inp_gender" value="M"><label for="male" id="label_m" class="col-md-6 col-6"> 남자</label>
-                        <input type="radio"name="memberGender" id="femail" class="inp_gender"  value="F"><label for="femail" id="label_w" class="col-md-6 col-6">여자</label>
+	                       <input type="radio" name="memberGender" id="male" class="inp_gender" value="M"><label for="male" id="label_m" class="col-md-6 col-6"> 남자</label>
+	                        <input type="radio"name="memberGender" id="femail" class="inp_gender"  value="F"><label for="femail" id="label_w" class="col-md-6 col-6">여자</label>
+                    		<span id="genderChkMsg"></span>
                     </div>
     
                         <hr style=" background: #dddfe4;">
@@ -189,7 +191,7 @@
     <script>
     
     var chkId= false;
-    var chkNum = false;
+    var chkNum = true;  //false 로 변경 할것 ㅎ 인증 받으려면
     var chkPwd = false;
     var chkPwd2 = false;
     var chkName = false;
@@ -198,6 +200,8 @@
     
         // 성별 체크
         $('input[type="radio"][name="memberGender"]').click(function(){
+        	
+        	 $('#genderChkMsg').html('OK!').addClass('okChk').removeClass('noChk');
         	chkGender=true;
             if($(this).val()=='M'){
                 $('#label_m').addClass('label_border');
@@ -276,11 +280,10 @@
 				data : {userEmail : userEmail },
 				dataType : "json",
 				success : function(data){
-						alert(data.msg);
+						/* alert(data.msg); */
 						joinCode=data.joinCode;
-						$('#joinCode').attr('disabled',false);
-						$('#btn_joinCode').attr('disabled',false);
-						
+						$('#joinCode, #btn_joinCode').attr('disabled',false);
+						$('#codeChkMsg').html('인증번호가 발송되었습니다. 메일을 확인해주세요').addClass('okChk').removeClass('noChk');
 				}, error : function(error,msg){
 					
 				}
@@ -291,13 +294,11 @@
         	var cn = $('#joinCode').val();
         	
         	if(cn==joinCode){
-        		alert('인증성공')
-        		chkNum=true;
         		$('#btn_joinCode, #joinCode').attr('disabled',true);
         		$('#codeChkMsg').html('인증완료').addClass('okChk').removeClass('noChk');
+        		chkNum=true;
         	}
         	else{
-        		alert('인증실패');
         		$('#codeChkMsg').html('인증실패').addClass('noChk').removeClass('okChk');
         		chkNum=false;
         	}
@@ -382,6 +383,7 @@
     	  if(chkId==true && chkNum==true && chkPwd==true && chkPwd2==true && chkName==true && chkBirth==true && chkGender==true){
       		  $('#btn_signUp').attr('disabled',false);
     	  }else{
+    		  
      	  		$('#btn_signUp').attr('disabled',true);
      	  }
       });
@@ -389,17 +391,22 @@
      
       
       /* ㄴㄴㄴ */
-    /*   $('#btn_signUp').on('click',function(){
+ /*   $('#btn_signUp').on('click',function(){
       	var cName = $('#cityName').val();
      	var dName = $('#districtName').val();
      		$('#memberAddress').val(cName + " " + dName);
      		
-    	  	
+     		if(chkGender==false){
+  			  if(!$('input:radio[name=memberGender]').is(':checked'))
+  			  $('#genderChkMsg').html('성별체크').addClass('noChk').removeClass('okChk');
+  		  }
+     		
+     		
      		if(cName !=null && dName==null){
      			alert('구 군선택도 ㄱㄱ');
      			return false;
      		}
-      }); */
+      });  */
   
 
     </script>

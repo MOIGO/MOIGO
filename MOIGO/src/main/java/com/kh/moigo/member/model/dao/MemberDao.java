@@ -1,5 +1,7 @@
 package com.kh.moigo.member.model.dao;
 
+import java.util.HashMap;
+
 import com.kh.moigo.member.model.vo.Member;
 
 public interface MemberDao {
@@ -11,7 +13,13 @@ public interface MemberDao {
 
 	int updateMember(Member member);
 	
-	int deleteMember(int memberNo);
-	
 	int checkIdDuplicate(String memberEmail);
+
+	int updateMemberPwd(HashMap<String, String> hmap);
+
+	int deleteMember(String memberNo);
+
+	int insertDropout(HashMap<String, String> hmap);
+
+
 }
