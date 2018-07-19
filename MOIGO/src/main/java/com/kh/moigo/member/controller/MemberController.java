@@ -66,6 +66,7 @@ public class MemberController {
 		Member member=(Member) session.getAttribute("m");
 		String memberEmail=member.getMemberEmail();
 		
+
 		Map<String, Object> map = new HashMap<>();
 		
 		boolean result =memberService.updateMemberPwd(memberEmail,memberPwd)==0? false: true;
@@ -73,6 +74,7 @@ public class MemberController {
 		
 		map.put("result", result);
 		
+
 		return map;
 	}
 	

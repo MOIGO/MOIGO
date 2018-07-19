@@ -79,4 +79,23 @@ public class AccuseServiceImpl implements AccuseService {
 		return ad.selectgroupList();
 	}
 
+	@Override
+	public List<Map<String, Object>> grpPerMem(String id) {
+		// TODO Auto-generated method stub
+		return ad.grpPerMem(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> atop5memberList() {
+		// TODO Auto-generated method stub
+		return ad.atop5memberList();
+	}
+
+	@Override
+	public List<Map<String, Object>> atop5groupList() {
+		// TODO Auto-generated method stub
+		return ad.atop5groupList();
+	}
+
+
 }

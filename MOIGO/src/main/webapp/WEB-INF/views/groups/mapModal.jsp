@@ -21,8 +21,8 @@
 
 .map_btn_wrapper{
 	position:absolute;
-	top:40px;
-	left:300px;
+	top:20px;
+	right:20px;
 	visibility:hidden;
 	z-index: 2;
 }
@@ -56,7 +56,7 @@
 							<label for="searchPlace" class="sr-only">Email address</label>
 							<input type="text"  class="form-control" id="placeKeyword" placeholder="장소를 입력하세요"/>
 							<div class="input-group-append">
-								<button class="btn btn-primary" type="submit">검색</button>
+								<button class="btn btn-primary" id="btn_searchMap" type="submit">검색</button>
 							</div>
 						</div>
 					</div>
@@ -86,9 +86,8 @@ $(function(){
 		removeAllChildNods($('#placesList'));
 		$('#placeListDiv').css("display","none");
 		$('#placeKeyword').val("");
+		toEditTarget=undefined;
 	});
-	
-	
 });
 
 var insertMap_markers=[];
@@ -97,43 +96,36 @@ var infowindow_for_Modal = new daum.maps.InfoWindow({zIndex:1}); //인포 윈도
 
 var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
 
-function makeMap(isEdit){
+var toEditTarget;
+
+function makeMap(){
+	
 	map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
 	    center : new daum.maps.LatLng(37.499053, 127.032920), // 지도의 중심좌표
 	    level : 6 // 지도의 확대 레벨
 	});
-	
-	 /* var coords = new daum.maps.LatLng(37.499053, 127.032920);
-
-     // 결과값으로 받은 위치를 마커로 표시합니다
-     var marker = new daum.maps.Marker({
-         map: map,
-         position: coords
-     });
      
-     insertMap_marker.push(marker); */
-     
-     searchPlaces("kh 정보교육원 강남지원2관");
-	
 	$('#searchPlace').focus();
 }
 
 function searchPlaces() {
 
-	
-    var keyword = $('#placeKeyword').val();
-	
-    
-    if (!keyword.replace(/^\s+|\s+$/g, '')) {
-        alert('키워드를 입력해주세요!');
-        return false;
-    }
-    
-    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-    ps_for_Modal.keywordSearch(keyword, placesSearchCB); 
-    
+ 	var keyword = $('#placeKeyword').val();
+	 if (!keyword.replace(/^\s+|\s+$/g, '')) {
+	     alert('키워드를 입력해주세요!');
+	     return false;
+	 }
+
+	if(typeof(toEditTarget)=='undefined')
+	{
+    	ps_for_Modal.keywordSearch(keyword, placesSearchCB);
+	}
+	else{
+		ps_for_Modal.keywordSearch(keyword, placesSearchCB,{"size":1});
+	}
    
 }
+
 
 //장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 function placesSearchCB(data, status, pagination) {
@@ -169,6 +161,15 @@ function resizeMap(x,y){
 	    map.relayout();
 }
 
+function displayEditPlace(place){
+	 var listEl = $('#placesList')
+	 removeAllChildNods(listEl);
+	 removeMarker();
+	 
+	 displayInfowindow(makeInfoWindow(marker,place,closeMapModal),marker);
+	 
+}
+
 //검색 결과 목록과 마커를 표출하는 함수입니다
 function displayPlaces(places) {
 
@@ -182,16 +183,21 @@ function displayPlaces(places) {
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker();
 
+    console.log(toEditTarget);
     
     for ( var i=0; i<places.length; i++ ) {
     	
         // 마커를 생성하고 지도에 표시합니다
-        placePosition = new daum.maps.LatLng(places[i].y, places[i].x);
+        var placePosition = new daum.maps.LatLng(places[i].y, places[i].x);
        	var marker = addMarker(placePosition, i);
         var itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
 		
         if(i==0){
-        	displayInfowindow(marker, places[i]);
+        	if(typeof(toEditTarget)=='undefined')
+        		displayInfowindow(makeInfoWindow(marker,places[i],closeMapModal),marker);	
+        	else
+        		displayInfowindow(makeInfoWindow(marker,places[i],editMapContent),marker);
+        	
         }
         
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
@@ -204,13 +210,22 @@ function displayPlaces(places) {
         // mouseout 했을 때는 인포윈도우를 닫습니다
 		 (function(marker, place) {
             daum.maps.event.addListener(marker, 'click', function() {
-                displayInfowindow(marker, place);
+            	if(typeof(toEditTarget)=='undefined')
+            		
+                	displayInfowindow(makeInfoWindow(marker,place,closeMapModal),marker);
+            	else{
+            		
+            		displayInfowindow(makeInfoWindow(marker,place,editMapContent),marker);
+            	}
                 panTo(marker)
             });
 
             
             $(itemEl).on("click",  function () {
-                displayInfowindow(marker, place);
+            	if(typeof(toEditTarget)=='undefined')
+                	displayInfowindow(makeInfoWindow(marker,place,closeMapModal),marker);
+            	else
+            		displayInfowindow(makeInfoWindow(marker,place,editMapContent),marker);
                 panTo(marker)
             });
 
@@ -283,56 +298,49 @@ function removeMarker() {
 
 // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
 // 인포윈도우에 장소명을 표시합니다
-function displayInfowindow(marker, place) {
+function displayInfowindow(infoWindow,marker) {
+
+    infowindow_for_Modal.setContent(infoWindow[0]);
+    infowindow_for_Modal.open(map, marker);
+
+}
+
+function makeInfoWindow(marker,place,callbackFunc){
 	
-	
-	/* var addr = 'closeMapModal("'+place+'")';
-    var content = "<button class='card' onclick='"+addr+"'>" +"<div class='card-body'>"; */
-    var content = "<button class='card' onclick='"+'closeMapModal('+place+');'+"'><div class='card-body'>";
-    content+="<div class='row test'><div class='col-12 test'>"+'<strong>이 위치를 추가</strong>'+"</div>";
-    content+="<div class='col-12'>"+"<span class='text-muted'>"+place.place_name+"</span>"+"</div>";
-    content+="</div></div></button>";
-    
-    var $wrapper= $('<button class="btn btn-info btn-block">');
-    
-    $wrapper.on('click',function(){
-    	closeMapModal(place);
-    });
-    
+	var $wrapper= $('<button class="btn btn-info btn-block">');
     $wrapper.append('<strong>이 위치를 추가</strong><br>');
     $wrapper.append('<span style="text-align:center;">'+place.place_name+'</span>');
     $wrapper.append("<i class='fas fa-map-marker-alt marker_font'></i>");
     
- 
-  
-    infowindow_for_Modal.setContent($wrapper[0]);
-    infowindow_for_Modal.open(map, marker);
+    $wrapper.on('click',function(){
+    	callbackFunc(marker,place);
+    });
     
     return $wrapper;
 }
 
-function closeMapModal(place){
+function closeMapModal(marker,place){
 	
-	setMapOnSummerNote(place);
+	addMapOnSummerNote(marker,place);
 	$('#insertMap').modal('hide');
 }
 
 //summernote에 붙이기
-function setMapOnSummerNote(place){
+function addMapOnSummerNote(marker,place){
 
 	/* var mapDiv = $('<div class="card"><div class="row"><div class="col-2"><div><div class="col-10">'+
 			'<div class="row"><div class="col-12">'+place.place_name+'</div></div>'
 			+'</div></div>'); */
 			
 			
-	var $mapDiv = $('<div class="card" style="border:3px solid black;" contenteditable="false">');	
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false">');	
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');
 	var $mapCol10 = $('<div class="col-10">');
 	var $col10Row = $('<div class="row">');
-	var $col10RowCol1 =$('<div class="col-12 map_address">'+place.place_name+'</div>');
-	var $col10RowCol2 =$('<div class="col-6 map_address">'+place.address_name+'</div>');
+	var $col10RowCol1 =$('<div class="col-12 map_address place_name">'+place.place_name+'</div>');
+	var $col10RowCol2 =$('<div class="col-12 map_address address_name">'+place.address_name+'</div>');
 	var $btnWrapper = $('<div class="map_btn_wrapper float-right">');
 	var $btn_edit =$('<button class="btn btn-primary mr-3 test" >수정</button>');
 	var $btn_del =$('<button class="btn btn-info test">삭제</button>');
@@ -345,13 +353,22 @@ function setMapOnSummerNote(place){
 	$col10Row.append($col10RowCol2);
 	$mapCol10.append($col10Row);
 	$mapRow.append($mapCol2);
-	$mapDiv.append($btnWrapper);
+	$col10Row.append($btnWrapper);
 	$mapRow.append($mapCol10);
 	$mapBody.append($mapRow);
 	$mapDiv.append($mapBody);
 	
+	
+	
 	$btn_edit.on("click",function(){
-		alert("예스!");
+		toEditTarget=$mapDiv;
+		
+		$('#placeKeyword').val($col10RowCol1.text());
+		editMap();
+	});
+	
+	$btn_del.on("click",function(){
+		deleteMap($(this));
 	});
 	
 	
@@ -360,7 +377,6 @@ function setMapOnSummerNote(place){
 		
 		$(this).find('.map_btn_wrapper').css("visibility","visible");
 		
-		console.log($(this).find('.map_btn_wrapper').length);
 		
 	}).on('mouseout',function(){
 		
@@ -370,6 +386,25 @@ function setMapOnSummerNote(place){
 	});
 	
 	$('#summernote').summernote('insertNode', $mapDiv[0]);
+}
+
+function editMap(){
+	toggleMapModal();
+	searchPlaces();
+}
+
+function editMapContent(marker,place){
+	if(typeof(toEditTarget)!='undefined')
+	{
+		$(toEditTarget).find('.place_name').text(place.place_name);
+		$(toEditTarget).find('.address_name').text(place.address_name);
+		$('#insertMap').modal('hide');
+	}
+}
+
+function deleteMap(obj){
+
+	$(obj).closest('[name=editMapWrap]').remove();	
 }
 
  // 검색결과 목록의 자식 Element를 제거하는 함수입니다

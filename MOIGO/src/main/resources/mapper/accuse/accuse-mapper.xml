@@ -28,8 +28,10 @@
 	 SELECT * FROM ACCUSE WHERE TARGET_MEMBER = #{id}
 	  </select>
 
-
 	<delete id="deleteAccuse" parameterType="_int"> 
 	DELETE FROM ACCUSE WHERE TARGET_MEMBER = #{id}
-	  </delete>
+	</delete>
+	  
+	  
+	  
 </mapper>

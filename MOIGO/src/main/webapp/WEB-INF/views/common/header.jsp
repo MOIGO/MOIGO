@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -117,7 +118,7 @@ body {
 </head>
 <body>
 <c:import url="/WEB-INF/views/member/loginModal.jsp"/>
-		
+
 		<!-- // 헤더부분 // -->
 	<div class="container-fluid" id="headerBar">
 		<div class="row">
@@ -132,12 +133,12 @@ body {
 		<!-- 검색 -->
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 search">
 		<form action="${pageContext.request.contextPath}/search/searchList.do">
-		<div class="input-group" id="search-input">
-				<input type="text" class="form-control" placeholder="검색하세요~" size="50px">
+			<div class="input-group" id="search-input">
+				<input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="모임검색" size="50px">
 				<span class="input-group-btn">
-					<button class="btn btn-info" type="button" onclick="search()">검색</button>
+					<button class="btn btn-info" type="button" onclick="submit()">검색</button>
 				</span>
-		</div>
+			</div>
 		</form>
 		</div>
 		<!-- 로그인 -->
@@ -154,8 +155,6 @@ body {
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 맴버</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
@@ -169,10 +168,6 @@ body {
 		$('#loginIcon').on('click',function(){
 			$('.usercon').css('color','skyblue');	
 		});
-
-		function search(){
-			alert("검색어를 입력해주세요!");
-		}
 	</script>
 
 	<!-- 헤더 카테고리 부분 -->
@@ -213,6 +208,11 @@ body {
 		  </ul>
 		</div>
 	</nav>
+	
+	<!-- 테스트 -->
+	<c:set var="m" value="${sessionScope.m}"></c:set>
+	<!-- 테스트 -->
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -226,15 +226,17 @@ body {
 		
 		$(function() {
 			
+			console.log("${m}");
+			
 			/* 
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 
 			   	스크롤 이벤트가 발생할 때마다 폰트로드를 확인함
 			*/
-			/* var font = new FontFaceObserver('nanum-barun-gothic-regular');
+			var font = new FontFaceObserver('nanum-barun-gothic-regular');
 
 			font.load().then(function () {
 			  document.documentElement.className += " fonts_loaded";
-			}); */
+			}); 
 			
 		});
 		

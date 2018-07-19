@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="groups">
+
 	<resultMap type="groups" id="groupsResultMap">
 		<id property="groupNo" column="GROUP_NO"/>
 		<result property="groupName" column="GROUP_NAME"/>
@@ -18,8 +19,31 @@
 		<result property="groupGender" column="GROUP_GENDER"/>
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
+	
 	<select id="selectGroupList" resultMap="groupsResultMap">
-	SELECT * FROM GROUPS
+	SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
 	</select>
+	
+
+	<!-- 혜진 -->
+	
+	<resultMap type="groupMember" id="groupMemberResultMap">
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="profileImg" column="PROFILE_IMG"/>
+		<result property="profileThumb" column="PROFILE_THUMB"/>
+		<result property="profileMsg" column="PROFILE_MSG"/>
+		<result property="memberGradeCode" column="MEMBER_GRADE_CODE"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<select id="selectGroupMemberList" resultMap="groupMemberResultMap">
+		SELECT GM.*, M.MEMBER_NAME
+		FROM GROUP_MEMBER GM, MEMBER M 
+		WHERE GM.MEMBER_NO = M.MEMBER_NO
+		AND GROUP_NO = #{groupNo}
+		ORDER BY 6 DESC, 7
+	</select>
+	
 </mapper>
 	

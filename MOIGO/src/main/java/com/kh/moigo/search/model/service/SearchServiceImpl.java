@@ -35,5 +35,10 @@ public class SearchServiceImpl implements SearchService {
 		return searchDao.detailSelectList(map);
 	}
 
+	@Override
+	public List<Groups> getAddressList(Map<String, String> map) {
+		return searchDao.getAddressList(map);
+	}
+
 
 }
