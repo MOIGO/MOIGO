@@ -5,14 +5,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <title>서비스소개</title>
 <style>
 #footerCategory{
     font-size: 18px;
 }
 
-#serviceInfo{
+.cursorPo{
+	cursor: pointer;
+}
+
+#si{
     background-color: lightgray;
     height: 200px;
 }
@@ -47,15 +50,19 @@
 	<hr>
     <div class="container" id="footerCategory">
         <div class="row">
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>서비스소개</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>개인정보 취급방침</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>이용안내</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>연락처 및 지도</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="serviceInfo" style="color:skyblue;">서비스소개</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="personalInfo">개인정보 취급 방침</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="useGuide">이용안내</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="maps">연락처 및 지도</b></div>
         </div>
     </div>
     <hr>
     <br>
-    <div class="container-fluid" id="serviceInfo">
+    <div class="container-fluid" id="si">
         <div class="row" style="height: 100%;">
             <div class="col-md-3 col-lg-3 disb">
 					<div class="infocate d-flex justify-content-center align-items-center">

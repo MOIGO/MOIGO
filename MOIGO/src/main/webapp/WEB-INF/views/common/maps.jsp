@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=957e8ab378d0238256ca0d11fe001e7a"></script>	
 <title>연락처 및 지도</title>
 <style>
@@ -15,9 +14,8 @@
     font-size: 18px;
 }
 
-#serviceInfo{
-    background-color: lightgray;
-    height: 200px;
+.cursorPo{
+	cursor: pointer;
 }
 
 .disb{
@@ -58,10 +56,14 @@
 	<hr>
     <div class="container" id="footerCategory">
         <div class="row">
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>서비스소개</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>개인정보 취급방침</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>이용안내</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>연락처 및 지도</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="serviceInfo">서비스소개</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="personalInfo">개인정보 취급 방침</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="useGuide">이용안내</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="maps" style="color:skyblue;">연락처 및 지도</b></div>
         </div>
     </div>
     <hr>
