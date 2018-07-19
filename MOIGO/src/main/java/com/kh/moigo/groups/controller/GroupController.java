@@ -1,5 +1,6 @@
 package com.kh.moigo.groups.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.moigo.groups.model.service.GroupsService;
+import com.kh.moigo.groups.model.vo.Post;
 
 @Controller
 public class GroupController {
@@ -24,10 +27,37 @@ public class GroupController {
 		return "groups/groupMain";
 	}
 	
-	@RequestMapping("/groups/createGroup.do")
-	public String groupCreate(){
+	@RequestMapping("/groups/getPostList.do")
+	@ResponseBody
+	public String getPostList(@RequestParam String groupNo){
+		
+		groupService.
 		
 		return "groups/createGroup";
+	}
+	
+	@RequestMapping("/groups/setGroupMain.gp")
+	public String setGroupMain(@RequestParam String groupNo,Model model){
+	
+		return "groups/groupMain";
+	}
+	
+	
+	
+	@RequestMapping("/groups/addPost.gp")
+	@ResponseBody
+	public Map <String,Object> addPost(	@RequestParam String groupNo,
+							@RequestParam String memberNo,
+							@RequestParam String content,
+							@RequestParam String isNotice,
+							Model model)
+	{
+		Post p = new Post(groupNo,memberNo,content,isNotice);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		map.put("result", groupService.addPost(p));
+		
+		return map;
 	}
 	
 	// ------------------------------------------------------------------ 혜진

@@ -1,4 +1,4 @@
-package com.kh.moigo.post.model.vo;
+package com.kh.moigo.groups.model.vo;
 
 public class Files implements java.io.Serializable{
 

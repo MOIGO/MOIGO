@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.moigo.groups.model.dao.GroupsDao;
+import com.kh.moigo.groups.model.exception.GroupsExeption;
+import com.kh.moigo.groups.model.vo.Post;
 
 @Service
 public class GroupsServiceImpl implements GroupsService {
@@ -17,6 +19,16 @@ public class GroupsServiceImpl implements GroupsService {
 	@Override
 	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
 		return groupDao.selectGroupMemberList(groupNo);
+	}
+
+	@Override
+	public int addPost(Post p) {
+	
+		int result = groupDao.addPost(p);
+		
+		if(result==0) throw new GroupsExeption();
+		
+		return result;
 	}
 
 }

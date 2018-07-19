@@ -285,8 +285,6 @@ public class Groups implements java.io.Serializable{
 		this.groupGender = groupGender;
 		this.openSetting = openSetting;
 	}
-	public Groups() {
-		super();
-	}
+	
 	
 }

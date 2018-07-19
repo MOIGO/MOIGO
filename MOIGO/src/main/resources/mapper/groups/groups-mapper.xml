@@ -20,10 +20,36 @@
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
 	
+	<resultMap type="post" id="postResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="isNotice" column="IS_NOTICE"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+		<collection property="postReply" column="POST_NO" ofType="PostReply" resultMap="postReplyResultMap"></collection>
+	</resultMap>
+	
+	<resultMap type="files" id="filesResultMap">
+		<id property="accuseNo" column="ACCUSE_NO"/>
+		<result property="targetType" column="TARGET_TYPE"/>
+		<result property="accuseDate" column="ACCUSE_DATE"/>
+	</resultMap>
+	
+	<resultMap type="postReply" id="postReplyResultMap">
+		<id property="replyNo" column="REPLY_NO"/>
+		<result property="postNo" column="POST_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="content" column="CONTENT"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+	</resultMap>
+	
 	<select id="selectGroupList" resultMap="groupsResultMap">
-	SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
+		SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
 	</select>
 	
+	<insert id="addPost" parameterType="hashmap">
+		INSERT INTO POST VALUES(SEQ_POST.NEXTVAL,#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
+	</insert>
 
 	<!-- 혜진 -->
 	

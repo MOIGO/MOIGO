@@ -1,6 +1,6 @@
-package com.kh.moigo.post.model.vo;
-
+package com.kh.moigo.groups.model.vo;
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Post implements java.io.Serializable{
 
@@ -13,61 +13,114 @@ public class Post implements java.io.Serializable{
 	private String content;
 	private String delflag;
 	private Date submitDate;
+	private ArrayList<PostReply> postReply;
+	
+	
+	public Post() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Post(String groupNo,String memberNo ,String postContent,String isNotice){
+		super();
+		this.groupNo = groupNo;
+		this.memberNo = memberNo;
+		this.isNotice = isNotice;
+		this.content = postContent;
+	}
+
+	public Post(String postNo, String groupNo, String memberNo, String isNotice, String content, String delflag,
+			Date submitDate, ArrayList<PostReply> postReply) {
+		super();
+		this.postNo = postNo;
+		this.groupNo = groupNo;
+		this.memberNo = memberNo;
+		this.isNotice = isNotice;
+		this.content = content;
+		this.delflag = delflag;
+		this.submitDate = submitDate;
+		this.postReply = postReply;
+	}
+
 	public String getPostNo() {
 		return postNo;
 	}
+
 	public void setPostNo(String postNo) {
 		this.postNo = postNo;
 	}
+
 	public String getGroupNo() {
 		return groupNo;
 	}
+
 	public void setGroupNo(String groupNo) {
 		this.groupNo = groupNo;
 	}
+
 	public String getMemberNo() {
 		return memberNo;
 	}
+
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
 	}
+
 	public String getIsNotice() {
 		return isNotice;
 	}
+
 	public void setIsNotice(String isNotice) {
 		this.isNotice = isNotice;
 	}
-	public String getPostContent() {
+
+	public String getContent() {
 		return content;
 	}
-	public void setPostContent(String postContent) {
-		this.content = postContent;
+
+	public void setContent(String content) {
+		this.content = content;
 	}
+
 	public String getDelflag() {
 		return delflag;
 	}
+
 	public void setDelflag(String delflag) {
 		this.delflag = delflag;
 	}
+
 	public Date getSubmitDate() {
 		return submitDate;
 	}
+
 	public void setSubmitDate(Date submitDate) {
 		this.submitDate = submitDate;
 	}
+
+	public ArrayList<PostReply> getPostReply() {
+		return postReply;
+	}
+
+	public void setPostReply(ArrayList<PostReply> postReply) {
+		this.postReply = postReply;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((delflag == null) ? 0 : delflag.hashCode());
 		result = prime * result + ((groupNo == null) ? 0 : groupNo.hashCode());
 		result = prime * result + ((isNotice == null) ? 0 : isNotice.hashCode());
 		result = prime * result + ((memberNo == null) ? 0 : memberNo.hashCode());
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((postNo == null) ? 0 : postNo.hashCode());
+		result = prime * result + ((postReply == null) ? 0 : postReply.hashCode());
 		result = prime * result + ((submitDate == null) ? 0 : submitDate.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -77,6 +130,11 @@ public class Post implements java.io.Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Post other = (Post) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
 		if (delflag == null) {
 			if (other.delflag != null)
 				return false;
@@ -97,15 +155,15 @@ public class Post implements java.io.Serializable{
 				return false;
 		} else if (!memberNo.equals(other.memberNo))
 			return false;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
 		if (postNo == null) {
 			if (other.postNo != null)
 				return false;
 		} else if (!postNo.equals(other.postNo))
+			return false;
+		if (postReply == null) {
+			if (other.postReply != null)
+				return false;
+		} else if (!postReply.equals(other.postReply))
 			return false;
 		if (submitDate == null) {
 			if (other.submitDate != null)
@@ -114,26 +172,16 @@ public class Post implements java.io.Serializable{
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "Post [postNo=" + postNo + ", groupNo=" + groupNo + ", memberNo=" + memberNo + ", isNotice=" + isNotice
-				+ ", postContent=" + content + ", delflag=" + delflag + ", submitDate=" + submitDate + "]";
+				+ ", content=" + content + ", delflag=" + delflag + ", submitDate=" + submitDate + ", postReply="
+				+ postReply + "]";
 	}
-	public Post(String postNo, String groupNo, String memberNo, String isNotice, String postContent, String delflag,
-			Date submitDate) {
-		super();
-		this.postNo = postNo;
-		this.groupNo = groupNo;
-		this.memberNo = memberNo;
-		this.isNotice = isNotice;
-		this.content = postContent;
-		this.delflag = delflag;
-		this.submitDate = submitDate;
-	}
-	public Post() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
+
+	
 	
 	
 }

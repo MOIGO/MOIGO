@@ -75,18 +75,20 @@
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLongTitle">글쓰기</h5>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close" onclick="destroySummerNote();">
+						aria-label="Close" onclick="destroyPostEditModal();">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<div id="summernote"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal" onclick="destroySummerNote();">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+					<div class="modal-body">
+						<div id="summernote"></div>
+					</div>
+					
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal" onclick="destroyPostEditModal();">취소</button>
+						<button type="button" class="btn btn-primary" onclick="submitPost()">확인</button>
+						
+					</div>
 			</div>
 		</div>
 	</div>
@@ -96,10 +98,68 @@
 
 <script>
 
-function destroySummerNote(){
+function deleteAllPost(){
+	
+}
+
+
+function setPostList(){
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
+		data:{groupNo:"G001"},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("글 등록 성공!");
+			}else
+				alert("글 등록 실패!");
+			
+			deleteAllPost();
+			setPostList();
+			destroySummerNote();
+		},
+		error:function(){
+			alert("글 등록 도중 에러가 생겼습니다.");
+			destroySummerNote();
+		}
+		
+	});
+	
+}
+
+function submitPost(){
+	
+	$('input[name=noteContent]').val($('#summernote').summernote('code'));
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/addPost.gp",
+		data:{groupNo:"G001",memberNo:"M001",content:"<p>안녕하세요!!</p>",isNotice:"N"},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("글 등록 성공!");
+			}else
+				alert("글 등록 실패!");
+			
+			deleteAllPost();
+			setPostList();
+			destroySummerNote();
+		},
+		error:function(){
+			alert("글 등록 도중 에러가 생겼습니다.");
+			destroySummerNote();
+		}
+		
+	});
+
+}
+
+function destroyPostEditModal(){
 	
 	if($('#summernote').length>0){
-		
+		 $('#postEdit').modal("hide");
 		$('#summernote').summernote('reset');
 		$('#summernote').summernote('destroy');
 	}
