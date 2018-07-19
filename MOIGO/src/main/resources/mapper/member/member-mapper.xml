@@ -13,7 +13,6 @@
       <result property="enrollDate" column="ENROLL_DATE"/>
    </resultMap>
    
-
    <select id="selectOneMember" resultMap="memberResultMap" >
       SELECT * FROM MEMBER
       WHERE MEMBER_EMAIL = #{memberEmail}

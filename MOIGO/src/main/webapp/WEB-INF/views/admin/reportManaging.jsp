@@ -198,8 +198,7 @@
 
 <div class="modal fade" id="myModal">
     <div class="modal-dialog ">
-      <div class="modal-content">
-      
+      <div class="modal-content">     
    		<div class="modal-body">
         <div class="tabbable"> <!-- Only required for left/right tabs -->
          <div class="btn-group ">
@@ -208,52 +207,97 @@
 			    <li><button type="button" class="btn btn-outline-light" a href="#tab2" data-toggle="tab">Report Bin</button></li>
 			    <li><button type="button" class="btn btn-outline-light" a href="#tab3" data-toggle="tab">Message</button></li>
 		   </ul>
-		  </div> 
-		   
-        <div class="tab-content">
-	        <div class="tab-pane active" id="tab1">
-	        	<div class="hiddennn"></div>
-	        </div>
-	        
-	        
-	        
-	        <div class="tab-pane" id="tab2">
-	        	<div  class="container-fluid">
-	        	<div class="row">
-	        	   <table class="table table-hover table-sm">	        	   
-			      	<thead class="thead-light">
-			        <tr>
-			          <th>신고내용</th>
-			          <th>신고자</th>
-			          <th>신고날짜</th>			     			          
-			        </tr>
-			      </thead>
-			      <tbody id="myTable" class="input_accuse_list">
-			       
-			        
-			      </tbody>
-			    </table>
-	        </div>
-	        </div>
-	        </div>
-	        <div class="tab-pane" id="tab3">
-			    <form action="${pageContext.request.contextPath}/sendMessage.ad" method="get">
-		          <div class="form-group">
-		            <label for="recipient-name" class="col-form-label">Recipient:</label>
-		            <input type="text" class="form-control" id="recipientName" name="email">
-		          </div>
-		          <div class="form-group">
-		            <label for="message-text" class="col-form-label">Message:</label>
-		            <textarea class="form-control" id="messageText" name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
-		          </div>
-		          <div class="text-center">
-		        <button type="submit" class="btn btn-success">Send message</button>
-		        </div>
-		        </form>
-		        
-	        </div>
-        </div>
-        </div>
+		  </div>
+
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab1">
+								<br>
+								<form action="" method="get">
+									<fieldset class="form-group">
+									<legend> 회원 정보 </legend>
+									<div class="form-group row">
+										
+										<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+										<div class="col-sm-10">
+											<input type="email" class="form-control" id="inputEmail3" readonly>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="inputName" class="col-sm-2 col-form-label">Name</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"
+												id="inputName"  readonly>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"
+												id="inputAddress"  readonly>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="inputAddress" class="col-sm-2 col-form-label">생년월일</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control"
+												id="inputAddress"  readonly>
+										</div>
+									</div>
+									
+										
+									</fieldset>
+									
+									<div class="form-group row">
+										<div class="col-sm-12  text-center">
+											<button type="submit" class="btn btn-outline-info"> 회원 탈퇴</button>
+										</div>
+									</div>
+								</form>
+							</div>
+
+
+
+							<div class="tab-pane" id="tab2">
+								<div class="container-fluid">
+									<div class="row">
+										<table class="table table-hover table-sm">
+											<thead class="thead-light">
+												<tr>
+													<th>신고내용</th>
+													<th>신고자</th>
+													<th>신고날짜</th>
+												</tr>
+											</thead>
+											<tbody id="myTable" class="input_accuse_list">
+
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab3">
+								<form action="${pageContext.request.contextPath}/sendMessage.ad"
+									method="get">
+									<div class="form-group">
+										<label for="recipient-name" class="col-form-label">Recipient:</label>
+										<input type="text" class="form-control" id="recipientName"
+											name="email">
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Message:</label>
+										<textarea class="form-control" id="messageText"
+											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-success">Send
+											message</button>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
    </div>
         
         <!-- Modal footer -->
@@ -294,7 +338,10 @@ $(document).ready(function(){
 	            dataType:"json",
 	            success:function(data){	
 	            	
-		            $(".hiddennn").text(data[0].memberEmail);
+		            $("#inputEmail3").val(data[0].memberEmail);
+		            $("#inputName").val(data[0].memberName);
+		            $("#inputAddress").val(data[0].memberAddress);
+
 		            $("#recipientName").val(data[0].memberEmail);
 		            console.log(data[1].length);
 		            
