@@ -157,13 +157,19 @@ public class AdminController {
 		List<Map<String,Object>> accuseList = as.selectAccuseListPaging(pi);
 		
 		
-		
+		List<Map<String,Object>> mtop5 = as.atop5memberList();
+		List<Map<String,Object>> gtop5 = as.atop5groupList();
+
+		System.out.println("top5"+mtop5);
+		System.out.println("top5"+gtop5);
 
 		System.out.println(pi);
 		System.out.println(accuseList);
 		model.addAttribute("pi",pi);
 		model.addAttribute("accuseList",accuseList);
-		
+		model.addAttribute("mtop5",mtop5);
+		model.addAttribute("gtop5",gtop5);
+
 		model.addAttribute("pageName","Report");
 		return "admin/reportManaging";
 	
@@ -172,12 +178,10 @@ public class AdminController {
 	
 	
 	/**
-	모달 창을 누른 뒤에 멤버 정보와 상세 신고목록 확인 가능
-	
-	 
+	모달 창을 누른 뒤에 멤버 정보와 상세 신고목록 확인 가능	 
 	 */
 	@RequestMapping(value="mrDetail.ad", method=RequestMethod.GET)
-	public @ResponseBody List<Object> mrDetail(@RequestParam String id, HttpServletResponse res) throws Exception{
+	public @ResponseBody Object mrDetail(@RequestParam String id, HttpServletResponse res) throws Exception{
 		List<Object> mrdList= new ArrayList<Object>();
 		//System.out.println("아이디 넣기"+id);
 		
@@ -218,8 +222,9 @@ public class AdminController {
 		return "admin/modals";
 		
 	}
-	
-	
+	/**
+	 * 회원 상세 정보 확인 및 가입 그룹 확인
+	 */
 	@ResponseBody
 	@RequestMapping(value="memDetail.ad", method=RequestMethod.GET)
 	public Object memDetail(@RequestParam String id) throws Exception{
@@ -228,13 +233,21 @@ public class AdminController {
 		MemberDetail m = as.memDetail(id);
 		memList.add(m);
 		
-		//List<Map<String, Object>> a = as.memPerGroup(id);		
-		//memList.add(a);
+		List<Map<String, Object>> a = as.memPerGroup(id);		
+		memList.add(a);
+	
+		
 		System.out.println("list:"+memList);
 
 		return memList;	
 	}
 	
+	
+	
+	/**
+	 * Group Detail info
+	 * 
+	 * */
 	@ResponseBody
 	@RequestMapping(value="grpDetail.ad", method=RequestMethod.GET)
 	public Object grpDetail(@RequestParam String id) throws Exception{
@@ -243,8 +256,8 @@ public class AdminController {
 		GroupDetail g = as.grpDetail(id);
 		grpList.add(g);
 		
-		//List<Map<String, Object>> a = as.memPerGroup(id);		
-		//memList.add(a);
+		List<Map<String, Object>> a = as.grpPerMem(id);		
+		grpList.add(a);
 		System.out.println("groups:"+grpList);
 
 		return grpList;	

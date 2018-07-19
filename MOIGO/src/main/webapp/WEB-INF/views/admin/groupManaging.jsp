@@ -8,6 +8,11 @@
 <head>
 
 <style type="text/css">
+.carousel-inner div {
+	width: 100%;
+	height: 100%;
+}
+
 .admin_group_table {
 	height: 600px;
 	overflow: scroll;
@@ -23,8 +28,16 @@ tr:hover {
 }
 
 .group_detail {
-	padding: 50px 70px;
-	
+	padding: 30px 70px;
+}
+
+
+.carousel-inner div {
+	width: 100%;
+	height: 700px;
+}
+.carousel-control-prev>span, .carousel-control-next>span {
+	background-color: green;
 }
 </style>
 </head>
@@ -72,8 +85,54 @@ tr:hover {
 
 		</div>
 		<div class="col-6">
-			
-			<div class="group_detail collapse text-center" id="targetDiv"></div>
+
+			<div class="collapse text-center" id="targetDiv">
+				<div id="demo" class="carousel slide group_detail" >
+
+					<!-- Indicators -->
+					<ul class="carousel-indicators">
+						<li data-target="#demo" data-slide-to="0" class="active"></li>
+						<li data-target="#demo" data-slide-to="1"></li>
+						<li data-target="#demo" data-slide-to="2"></li>
+					</ul>
+
+					<!-- The slideshow -->
+					<div class="carousel-inner">
+						<div class="carousel-item active group_detail_slide1">
+							
+						</div>
+						<div class="carousel-item">
+							<h4> 가입 회원 </h4>
+							<table class="table table-bordered table-hover text-center grp_per_member">
+								<thead class="thead-dark">
+									<tr>
+										<th style="width:18%">NAME</th>
+										<th style="width:18%">댓글수</th>
+										<th style="width:22%">게시글수</th>
+										<th style="width:20%">GRADE</th>
+										<th style="width:22%">회원정보</th>
+									</tr>
+								</thead>
+								<tbody class="group_detail_slide2">
+								</tbody>
+							</table>
+						</div>
+						<div class="carousel-item">
+							<img src="ny.jpg" alt="New York">
+						</div>
+					</div>
+
+					<!-- Left and right controls -->
+					<a class="carousel-control-prev" href="#demo" data-slide="prev">
+						<span class="carousel-control-prev-icon"></span>
+					</a> <a class="carousel-control-next" href="#demo" data-slide="next">
+						<span class="carousel-control-next-icon"></span>
+					</a>
+
+				</div>
+
+
+			</div>
 
 		</div>
 
@@ -86,14 +145,20 @@ tr:hover {
 	<script>
 $(document).ready(function(){
 	
-	//검색 자바스크립트
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-  
+	//검색 자바스크립트--
+	$("#myInput").on("keyup", function() {
+		var value = $(this).val().toLowerCase();
+		$("#myTable tr").filter(function() {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+	//--
+	
+	//캐러셀 움직임 방지--
+	$('.carousel').carousel('pause');
+	//--
+	
+	//group detail ajax--
 	$(".show_view_detail_group").click(function () {
 		var id = $(this).data('id');
 		   $.ajax({
@@ -102,10 +167,16 @@ $(document).ready(function(){
 	            data: {id:id},
 	            dataType:"json",
 	            success:function(data){	
-	            		$(".group_detail").empty();
-	            		console.log(data[0]);
-		            	var str ='<h3>'+data[0].groupNo+'</h3>'+
+	            		$(".group_detail_slide1").empty();
+		            	$('.group_detail_slide2').empty();
+
+	            		//console.log(data[0]);
+		            	var str ='<h4>상세정보</h4>'+
 		            			'<table class="table table-bordered text-center detail_group">'+
+		            			'<tr>'+
+		            			'<td>번호</td>' +
+								'<td colspan="2" style="width:70%">'+data[0].groupNo+'</td>' +
+								' </tr>'+
 		            			'<tr>'+
 		            			'<td >이름</td>' +
 								'<td colspan="2" style="width:70%">'+data[0].groupName+'</td>' +
@@ -163,15 +234,26 @@ $(document).ready(function(){
 								' </tr>'+
 								
 								'<table>';
-		            	 $('.group_detail').append(str);
-
-	            }, error : function(code){
-	            	console.log(code);
-	            }
-	        });
-		
-		
-	});
+		            	 $('.group_detail_slide1').append(str);
+		            	 
+		            	  for(var i in data[1]){
+				            	console.log(i);
+				            	var num = i*1+1;
+				            	var idx =data[1][i].memberGradeName.indexOf('(');
+				            	var str ='<tr>'+
+										
+		 								' <td>'+data[1][i].memberName+'</td>' +
+		 							
+		 								' <td>'+data[1][i].postCount+'</td>' +
+		 								' <td>'+data[1][i].replyCount+'</td>' +
+		 								' <td>'+data[1][i].memberGradeName.substring(0,idx)+'</td>' +
+		 								'<td><button type="button" data-target="#groupModal" data-toggle="modal" data-id="'+data[1][i].groupNo+'" class="btn btn-outline-success btn-sm">보기</button></td>'+
+										'<tr>';
+		            	  }//for문 end
+		            	  $('.group_detail_slide2').append(str);
+	            }//success end
+	        });//ajax end		
+		});//--
   
 });
    

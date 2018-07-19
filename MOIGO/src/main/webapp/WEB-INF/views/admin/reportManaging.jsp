@@ -42,7 +42,7 @@
 		          <th>피신고자</th>
 		          <th>신고타입</th>
 		          <th colspan="4">신고내용</th>         
-		          <th>신고 삭제</th> 
+		          <th>상세 정보</th> 
 		        </tr>
 			</thead>
 	      
@@ -129,16 +129,20 @@
 	          
 	        </tr>
 	      </thead>
+	       <c:forEach items="${mtop5}" var="mblack">
 	      <tbody id="myTable">
+	      
+	     
 	        <tr>
-	          <td>t</td>
-	          <td>t</td>
-	          <td>t</td>
-	          <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${accuse.targetMember}" class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
+	          <td>${mblack.rNum}</td>
+	          <td>${mblack.targetMember}</td>
+	          <td>${mblack.aCount}</td>
+	          <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${mblack.targetMember}" class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
 	        </tr>
-	    
+	   	
 	
 	      </tbody>
+	       </c:forEach> 
 	    </table>
 	    <br>
 	    <h2>Blacklist G </h2>
@@ -158,22 +162,17 @@
 	          
 	        </tr>
 	      </thead>
+	      <c:forEach items="${gtop5}" var="gblack">
 	      <tbody id="myTable">
+	      
+	     
 	        <tr>
-	          <td>t</td>
-	          <td>t</td>
-	          <td>t</td>
-	          <td><button type="button" class="btn btn-outline-info btn-sm">관리</button></td>
+	          <td>${gblack.rNum}</td>
+	          <td>${gblack.targetGroup}</td>
+	          <td>${gblack.aCount}</td>
+	          <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${mblack.targetGroup}" class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
 	        </tr>
-	        <tr>
-	          <td>t</td>
-	          <td>t</td>
-	          <td>t</td>
-	       	  <td><button type="button" class="btn btn-outline-info btn-sm">관리</button></td>
-	        </tr>
-	    
-	
-	      </tbody>
+	   	   </c:forEach> 
 	   	 </table>
 	    
 	    
