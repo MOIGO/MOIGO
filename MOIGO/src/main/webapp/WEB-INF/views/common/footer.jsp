@@ -40,9 +40,9 @@
 		<div class="cotainer d-flex justify-content-center">
 			<div class="col-sm-2 col-md-2 col-lg-2"></div>
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2" id="serviceInfo">서비스소개</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2"><span id="serviceInfo">서비스소개</span></div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2" id="personalInfo">개인정보 취급방침</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2"><span id="personalInfo">개인정보 취급방침</span></div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
 						col-sm-2 col-md-2 col-lg-2" id="useGuide">이용안내</div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
