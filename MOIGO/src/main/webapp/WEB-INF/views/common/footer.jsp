@@ -40,13 +40,13 @@
 		<div class="cotainer d-flex justify-content-center">
 			<div class="col-sm-2 col-md-2 col-lg-2"></div>
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">서비스소개</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2" id="serviceInfo">서비스소개</div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">개인정보 취급방침</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2" id="personalInfo">개인정보 취급방침</div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">이용안내</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2" id="useGuide">이용안내</div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">연락처 및 지도</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2" id="maps">연락처 및 지도</div> &nbsp;&nbsp;
 			<div class="col-sm-2 col-md-2 col-lg-2"></div>
 		</div>
 		<hr>
@@ -68,4 +68,21 @@
 	<!-- // 풋터부분 // -->
 	<br><br><br>
 </body>
+<script>
+	$('#serviceInfo').on('click',function(){
+		location.href="${pageContext.request.contextPath}/common/serviceInfo.ft";
+	});
+	
+	$('#personalInfo').on('click',function(){
+		location.href="${pageContext.request.contextPath}/common/personalInfo.ft";
+	});
+	
+	$('#useGuide').on('click',function(){
+		location.href="${pageContext.request.contextPath}/common/useGuide.ft";
+	});
+	
+	$('#maps').on('click',function(){
+		location.href="${pageContext.request.contextPath}/common/maps.ft";
+	});
+</script>
 </html>

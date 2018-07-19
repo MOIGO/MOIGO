@@ -79,7 +79,7 @@
 	<div class="container mt-4">
 		<div class="row cover_select">
 			<div class="col-5  m-auto">
-				<img class="mainCover img-thumbnail" src="../resources/images/common/createGroupDefaultPictures/defaultPic01.jpg" alt="" />
+				<img class="mainCover img-thumbnail" src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" />
 			</div>
 			<div class="col-7 cover_list ">
 				<div class="list_head d-flex flex-row ">
@@ -107,22 +107,22 @@
 				</div>
 		
 				<div class="row mt-4 cover_lists">
-					<a class="col-3 mb-4"><img src="../resources/images/common/createGroupDefaultPictures/addNewPicture.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic01.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic02.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic03.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic04.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic05.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic06.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic07.jpg" alt="" class="img-fluid"/></a>	
+					<a class="col-3 mb-4"><img src="../resources/images/createGroupDefaultPictures/addNewPicture.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic02.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic03.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic04.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic05.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic06.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic07.jpg" alt="" class="img-fluid"/></a>	
 					                             
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic08.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic09.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic10.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic11.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic12.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic13.jpg" alt="" class="img-fluid"/></a>
-					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/common/createGroupDefaultPictures/defaultPic14.jpg" alt="" class="img-fluid"/></a>		
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic08.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic09.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic10.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic11.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic12.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic13.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 cover_set_1" style="display:none;"><img src="../resources/images/createGroupDefaultPictures/defaultPic14.jpg" alt="" class="img-fluid"/></a>		
 				</div>
 			
 			</div>
@@ -183,8 +183,8 @@
 					<div class="row">
 						<div class="col-5 mt-1">
 							<div class="form-group">
-							    <label for="ageSelect" class="bolder_text">최소 나이</label>
-							    <select class="form-control" id="ageSelect" name="age_select">
+							    <label for="min_ageSelect" class="bolder_text">최소 나이</label>
+							    <select class="form-control" id="min_ageSelect" name="create_age_select">
 							    	<option value="N">무관</option>
 							      	<option value="1991">1991</option>
 							    </select>
@@ -193,8 +193,8 @@
 						<span class="col-1 mt-5"> 부터 </span>
 						<div class="col-5 mt-1">
 							<div class="form-group">
-							    <label for="ageSelect" class="bolder_text">최대 나이</label>
-							    <select class="form-control" id="ageSelect" name="age_select">
+							    <label for="max_ageSelect" class="bolder_text">최대 나이</label>
+							    <select class="form-control" id="max_ageSelect" name="create_age_select">
 							    	<option value="N">무관</option>
 							      	<option value="1991">1991</option>
 							    </select>
@@ -208,24 +208,24 @@
 		    				<div class="row">
 								<div class="col mt-1">
 									<div class="form-group">
-									    <label for="citySelect" class="bolder_text">시</label>
-									    <select class="form-control" id="citySelect" name="age_select">
+									    <label for="create_city_select" class="bolder_text">시</label>
+									    <select class="form-control" id="create_city_select" name="create_city_select">
 									    	<option value="N">서울특별시</option>
 									    </select>
 									</div>
 								</div>
 								<div class="col mt-1">
 									<div class="form-group">
-									    <label for="districtSelect" class="bolder_text">구/군</label>
-									    <select class="form-control" id="districtSelect" name="age_select">
+									    <label for="create_city_select" class="bolder_text">구/군</label>
+									    <select class="form-control" id="create_district_select" name="create_city_select">
 									    	<option value="N">강남구</option>
 									    </select>
 									</div>
 								</div>
 								<div class="col mt-1">
 									<div class="form-group">
-									    <label for="districtSelect" class="bolder_text">동</label>
-									    <select class="form-control" id="districtSelect" name="age_select">
+									    <label for="create_borough_select" class="bolder_text">동</label>
+									    <select class="form-control" id="create_borough_select" name="create_borough_select">
 									    	<option value="N">강남구</option>
 									    </select>
 									</div>

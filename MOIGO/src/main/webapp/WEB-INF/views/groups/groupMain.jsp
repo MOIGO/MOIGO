@@ -44,6 +44,7 @@
 
 		<div class="row">
 
+
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
             	<c:param name="groupNo" value="G007"/>
          	</c:import>
@@ -116,8 +117,7 @@ function createSummerNote(){
 		    container:false,
 		    tooltip: '지도 삽입',
 		    click: function () {
-		      $('#insertMap').modal("toggle");
-		      $('#insertMap').on("shown.bs.modal",makeMap(false));
+		      toggleMapModal();
 		    }
 		  });
 
@@ -139,6 +139,11 @@ function createSummerNote(){
 		     insertmap: insertMap
 		  }
 	});
+}
+
+function toggleMapModal(editObj){
+	 $('#insertMap').modal("toggle");
+     $('#insertMap').on("shown.bs.modal",makeMap());
 }
 	
 </script>

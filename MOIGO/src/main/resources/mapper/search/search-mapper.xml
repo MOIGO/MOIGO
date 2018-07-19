@@ -34,16 +34,19 @@
 	<select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
 		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
 		<choose>
-			<when test="#{sort} == hits">
+			<!-- <when test="#{sort} == 최신순">
 				
 			</when>
-			<when test="#{sort} == member">
+			<when test="#{sort} == 멤버순">
 				
-			</when>
+			</when> -->
 			<otherwise>
 				ORDER BY ENROLL_DATE DESC
 			</otherwise>
 		</choose>
+	</select>
+	<select id="getAddressList" resultMap="groupsResultMap" parameterType="hashmap" resultType="Groups">
+		SELECT GROUP_ADDRESS FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
 	</select>
 </mapper>
 	
