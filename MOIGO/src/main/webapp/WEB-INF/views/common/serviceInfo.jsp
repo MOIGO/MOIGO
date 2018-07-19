@@ -35,7 +35,7 @@
 	width: 100%;
 	height: 65px;
 	text-align: center;
-	margin-left: 5px;
+	margin-left: 5px !important;
 }
 
 .infocontent{
