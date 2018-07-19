@@ -57,7 +57,9 @@
 	</select>
 	
 	<select id="selectPostList">
-		
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo})
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow};
 	</select>
 	
 	<select id="selectPostCnt" resultMap="postResultMap">
