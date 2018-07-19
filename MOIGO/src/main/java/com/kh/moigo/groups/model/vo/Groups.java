@@ -5,6 +5,7 @@ import java.sql.Date;
 public class Groups implements java.io.Serializable{
 	
 	private static final long serialVersionUID = 2632711817694753551L;
+	
 	private String groupNo;
 	private String groupName;
 	private String groupMsg;
@@ -21,6 +22,33 @@ public class Groups implements java.io.Serializable{
 	private int maxAge;
 	private String groupGender;
 	private String openSetting;
+	
+	public Groups(String groupNo, String groupName, String groupMsg, String groupPicture, String groupGradeCode,
+			String groupStateCode, int maxMember, Date enrollDate, String interestBigCode, String interestSmallCode,
+			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting) {
+		super();
+		this.groupNo = groupNo;
+		this.groupName = groupName;
+		this.groupMsg = groupMsg;
+		this.groupPicture = groupPicture;
+		this.groupGradeCode = groupGradeCode;
+		this.groupStateCode = groupStateCode;
+		this.maxMember = maxMember;
+		this.enrollDate = enrollDate;
+		this.interestBigCode = interestBigCode;
+		this.interestSmallCode = interestSmallCode;
+		this.allowSignup = allowSignup;
+		this.minAge = minAge;
+		this.maxAge = maxAge;
+		this.groupGender = groupGender;
+		this.openSetting = openSetting;
+	}
+	
+	public Groups() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
 	public String getGroupNo() {
 		return groupNo;
 	}
@@ -119,7 +147,6 @@ public class Groups implements java.io.Serializable{
 		this.openSetting = openSetting;
 	}
 	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -142,6 +169,7 @@ public class Groups implements java.io.Serializable{
 		result = prime * result + ((openSetting == null) ? 0 : openSetting.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -227,7 +255,8 @@ public class Groups implements java.io.Serializable{
 	
 	@Override
 	public String toString() {
-		return "Groups [groupNo=" + groupNo + ", groupName=" + groupName + ", groupMsg=" + groupMsg + ", groupAddress="
+
+	return "Groups [groupNo=" + groupNo + ", groupName=" + groupName + ", groupMsg=" + groupMsg + ", groupAddress="
 				+ groupAddress + ", groupPicture=" + groupPicture + ", groupGradeCode=" + groupGradeCode
 				+ ", groupStateCode=" + groupStateCode + ", maxMember=" + maxMember + ", enrollDate=" + enrollDate
 				+ ", interestBigCode=" + interestBigCode + ", interestSmallCode=" + interestSmallCode + ", allowSignup="
@@ -259,6 +288,5 @@ public class Groups implements java.io.Serializable{
 	public Groups() {
 		super();
 	}
-	
 	
 }

@@ -155,9 +155,6 @@ body {
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 멤버</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSetting.do">모임 설정</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
@@ -211,6 +208,11 @@ body {
 		  </ul>
 		</div>
 	</nav>
+	
+	<!-- 테스트 -->
+	<c:set var="m" value="${sessionScope.m}"></c:set>
+	<!-- 테스트 -->
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -223,6 +225,8 @@ body {
 	<script>
 		
 		$(function() {
+			
+			console.log("${m}");
 			
 			/* 
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 

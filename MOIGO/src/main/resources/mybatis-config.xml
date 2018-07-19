@@ -6,6 +6,7 @@
 		<typeAlias type="com.kh.moigo.admin.model.vo.MemberDetail" alias="memberDetail"/>		
 		<typeAlias type="com.kh.moigo.post.model.vo.Files" alias="files"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.Groups" alias="groups"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.GroupMember" alias="groupMember"/>
 		<typeAlias type="com.kh.moigo.member.model.vo.Member" alias="member"/>
 		<typeAlias type="com.kh.moigo.post.model.vo.Post" alias="post"/>
 		<typeAlias type="com.kh.moigo.schedule.model.vo.Schedule" alias="schedule"/>
@@ -16,5 +17,6 @@
 		해당패키지의 모든 TypeHandler구현클래스를 등록함
 		<package name="com.kh.spring.common.typehandler"/>
 	</typeHandlers> -->
+
 	
 </configuration>

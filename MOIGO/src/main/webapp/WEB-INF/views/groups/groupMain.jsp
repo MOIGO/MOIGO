@@ -44,7 +44,10 @@
 
 		<div class="row">
 
-			<c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
+
+			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
+            	<c:param name="groupNo" value="G007"/>
+         	</c:import>
 
 			<div class="col-7">
 				<div class="col">
@@ -87,8 +90,7 @@
 			</div>
 		</div>
 	</div>
-
-
+	
 
 </body>
 
@@ -139,13 +141,10 @@ function createSummerNote(){
 	});
 }
 
-		 
-		 
 function toggleMapModal(editObj){
 	 $('#insertMap').modal("toggle");
      $('#insertMap').on("shown.bs.modal",makeMap());
 }
-		
 	
 </script>
 
