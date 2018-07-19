@@ -12,7 +12,7 @@
 .carousel-inner img { 
   margin: auto;
 }
-
+ 
 .mainGroup{
 	display: inline-block;
 	width: 200px;

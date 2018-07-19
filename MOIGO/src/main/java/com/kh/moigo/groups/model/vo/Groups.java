@@ -8,6 +8,7 @@ public class Groups implements java.io.Serializable{
 	private String groupNo;
 	private String groupName;
 	private String groupMsg;
+	private String groupAddress;
 	private String groupPicture;
 	private String groupGradeCode;
 	private String groupStateCode;
@@ -37,6 +38,13 @@ public class Groups implements java.io.Serializable{
 	}
 	public void setGroupMsg(String groupMsg) {
 		this.groupMsg = groupMsg;
+	}
+	
+	public String getGroupAddress() {
+		return groupAddress;
+	}
+	public void setGroupAddress(String groupAddress) {
+		this.groupAddress = groupAddress;
 	}
 	public String getGroupPicture() {
 		return groupPicture;
@@ -110,12 +118,15 @@ public class Groups implements java.io.Serializable{
 	public void setOpenSetting(String openSetting) {
 		this.openSetting = openSetting;
 	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((allowSignup == null) ? 0 : allowSignup.hashCode());
 		result = prime * result + ((enrollDate == null) ? 0 : enrollDate.hashCode());
+		result = prime * result + ((groupAddress == null) ? 0 : groupAddress.hashCode());
 		result = prime * result + ((groupGender == null) ? 0 : groupGender.hashCode());
 		result = prime * result + ((groupGradeCode == null) ? 0 : groupGradeCode.hashCode());
 		result = prime * result + ((groupMsg == null) ? 0 : groupMsg.hashCode());
@@ -149,6 +160,11 @@ public class Groups implements java.io.Serializable{
 			if (other.enrollDate != null)
 				return false;
 		} else if (!enrollDate.equals(other.enrollDate))
+			return false;
+		if (groupAddress == null) {
+			if (other.groupAddress != null)
+				return false;
+		} else if (!groupAddress.equals(other.groupAddress))
 			return false;
 		if (groupGender == null) {
 			if (other.groupGender != null)
@@ -208,21 +224,25 @@ public class Groups implements java.io.Serializable{
 			return false;
 		return true;
 	}
+	
 	@Override
 	public String toString() {
-		return "Groups [groupNo=" + groupNo + ", groupName=" + groupName + ", groupMsg=" + groupMsg + ", groupPicture="
-				+ groupPicture + ", groupGradeCode=" + groupGradeCode + ", groupStateCode=" + groupStateCode
-				+ ", maxMember=" + maxMember + ", enrollDate=" + enrollDate + ", interestBigCode=" + interestBigCode
-				+ ", interestSmallCode=" + interestSmallCode + ", allowSignup=" + allowSignup + ", minAge=" + minAge
-				+ ", maxAge=" + maxAge + ", groupGender=" + groupGender + ", openSetting=" + openSetting + "]";
+		return "Groups [groupNo=" + groupNo + ", groupName=" + groupName + ", groupMsg=" + groupMsg + ", groupAddress="
+				+ groupAddress + ", groupPicture=" + groupPicture + ", groupGradeCode=" + groupGradeCode
+				+ ", groupStateCode=" + groupStateCode + ", maxMember=" + maxMember + ", enrollDate=" + enrollDate
+				+ ", interestBigCode=" + interestBigCode + ", interestSmallCode=" + interestSmallCode + ", allowSignup="
+				+ allowSignup + ", minAge=" + minAge + ", maxAge=" + maxAge + ", groupGender=" + groupGender
+				+ ", openSetting=" + openSetting + "]";
 	}
-	public Groups(String groupNo, String groupName, String groupMsg, String groupPicture, String groupGradeCode,
-			String groupStateCode, int maxMember, Date enrollDate, String interestBigCode, String interestSmallCode,
-			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting) {
+	public Groups(String groupNo, String groupName, String groupMsg, String groupAddress, String groupPicture,
+			String groupGradeCode, String groupStateCode, int maxMember, Date enrollDate, String interestBigCode,
+			String interestSmallCode, String allowSignup, int minAge, int maxAge, String groupGender,
+			String openSetting) {
 		super();
 		this.groupNo = groupNo;
 		this.groupName = groupName;
 		this.groupMsg = groupMsg;
+		this.groupAddress = groupAddress;
 		this.groupPicture = groupPicture;
 		this.groupGradeCode = groupGradeCode;
 		this.groupStateCode = groupStateCode;
@@ -238,7 +258,6 @@ public class Groups implements java.io.Serializable{
 	}
 	public Groups() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	
