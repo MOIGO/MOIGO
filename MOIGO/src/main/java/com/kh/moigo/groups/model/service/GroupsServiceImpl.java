@@ -1,7 +1,6 @@
 package com.kh.moigo.groups.model.service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,11 @@ public class GroupsServiceImpl implements GroupsService {
 	@Override
 	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
 		return groupDao.selectGroupMemberList(groupNo);
+	}
+
+	@Override
+	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+		return groupDao.searchGroupMemberList(searchMap);
 	}
 
 }

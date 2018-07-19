@@ -35,7 +35,6 @@ public class MemberController {
 
 	@Autowired
 	MemberService memberService;
-	
 
 	@ResponseBody
 	@RequestMapping("/member/checkIdDup.do")

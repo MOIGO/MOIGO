@@ -1,5 +1,6 @@
 package com.kh.moigo.groups.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,20 @@ public class GroupController {
 		List<Map<String, String>> groupMemberList = groupService.selectGroupMemberList(groupNo);
 		
 		model.addAttribute("groupMemberList", groupMemberList);
+		
+		return "groups/groupMember";
+	}
+	
+	@RequestMapping("/groups/searchGroupMember.gp")
+	public String searchGroupMember(@RequestParam String groupNo, @RequestParam String searchName, Model model){
+		
+		Map<String, String> searchMap = new HashMap<String, String>();
+		searchMap.put("groupNo", groupNo);
+		searchMap.put("searchName", searchName);
+		
+		List<Map<String, String>> searchGroupMemberList = groupService.searchGroupMemberList(searchMap);
+		
+		model.addAttribute("searchGroupMemberList", searchGroupMemberList);
 		
 		return "groups/groupMember";
 	}
