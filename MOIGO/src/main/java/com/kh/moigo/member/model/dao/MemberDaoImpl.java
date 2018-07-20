@@ -1,6 +1,7 @@
 package com.kh.moigo.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,16 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public int insertDropout(HashMap<String, String> hmap) {
 		return sqlSession.insert("member.insertDropout",hmap);
+	}
+
+	@Override
+	public int insertMemberInterest(HashMap<String, String> hmap) {
+		return sqlSession.insert("member.insertMemberInterest",hmap);
+	}
+
+	@Override
+	public List<String> selectInterestList(String memberNo) {
+		return sqlSession.selectList("member.selectInterestList", memberNo);
 	}
 
 
