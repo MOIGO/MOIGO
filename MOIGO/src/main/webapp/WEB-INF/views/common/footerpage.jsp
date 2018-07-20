@@ -5,11 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>개인정보 취급방침</title>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=957e8ab378d0238256ca0d11fe001e7a"></script>	
+<title>서비스소개</title>
 <style>
-/* 메인 */ 
-/* 개인정보 이용약관 페이지 */
-
+/* 공통 */
 #footerCategory{
     font-size: 18px;
 }
@@ -18,9 +17,41 @@
 	cursor: pointer;
 }
 
+/* 서비스 소개 */
+#si{
+    background-color: lightgray;
+    height: 200px;
+    display: inline-block;
+}
+
+.disb{
+	display:inline-block;
+	border: 1px solid gray;
+	border-bottom: none;
+	border-top: none;
+}
+
+.wit{
+	width: 100%;
+}
+
+.infocate{
+	width: 100%;
+	height: 65px;
+	text-align: center;
+	margin-left: 5px !important;
+}
+
+.infocontent{
+	position:absolute; 
+	text-align: center;
+}
+
+/* 개인정보 이용약관 페이지 */
 #pi{
     border: 1px solid lightgray;
     padding: 30px;
+   
 }
 
 .bluecolor{
@@ -42,6 +73,46 @@
     margin-left: 10px;
 }
 
+/* 이용안내 */
+/* #usgui{
+	display: none;
+} */
+
+.testdiv{
+    height: 400px;
+}
+
+.guideCate{
+    width:33.3%;
+    height: 60px;
+    text-align: center;
+    padding: 20px;
+    cursor:pointer;
+}
+
+.gage1{
+	background-color:skyblue;
+	height: 5px;
+}
+.gage2{
+	background-color:lightgray;
+	height: 5px;
+}
+.gage3{
+	background-color:lightgray;
+	height: 5px;
+}
+
+/* 지도 페이지 */
+/* #mapdiv{
+	display: none;
+} */
+
+.textc{
+    text-align: center;
+}
+
+
 </style>
 </head>
 <body>
@@ -51,18 +122,101 @@
     <div class="container" id="footerCategory">
         <div class="row">
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="serviceInfo2">서비스소개</b></div>
+            <b class="cursorPo" id="serviceInfo">서비스소개</b>
+            </div>
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="personalInfo2" style="color:skyblue;">개인정보 취급 방침</b></div>
+            <b class="cursorPo" id="personalInfo">개인정보 취급 방침</b>
+            </div>
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="useGuide2">이용안내</b></div>
+            <b class="cursorPo" id="useGuide">이용안내</b>
+            </div>
             <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-            <b class="cursorPo" id="maps2">연락처 및 지도</b></div>
+            <b class="cursorPo" id="maps">연락처 및 지도</b>
+            </div>
         </div>
     </div>
     <hr>
     <br>
-    <div class="container" id="pi">
+    
+    <!-- 서비스 소개 --> 
+    <c:choose>
+		<c:when test="${selected ne 'ser'}">
+			<div id="servinfo" style="display:none;">
+		</c:when>
+		<c:otherwise>
+			<script>
+				$('#serviceInfo').css('color','skyblue');
+			</script>
+			<div id="servinfo">
+		</c:otherwise>
+	</c:choose> 
+	
+    <!-- <div id="servinfo"> -->
+    <div class="container-fluid" id="si">
+        <div class="row" style="height: 100%;">
+            <div class="col-md-3 col-lg-3 disb">
+					<div class="infocate d-flex justify-content-center align-items-center">
+						<i class="fas fa-exclamation-triangle" style="font-size: 5ex;"></i></div>
+					<div class="row infocate d-flex justify-content-center align-items-center">
+						<h4 class="wit">새로운 서비스</h4>
+						<pre class="wit">모임을 한곳에 모아 누구나 편리하고 <br>쉽게 찾을 수 있습니다.</pre>
+					</div>
+			</div>
+            <div class="col-md-3 col-lg-3 disb">
+				<div class="infocate d-flex justify-content-center align-items-center">
+					<i class="fas fa-won-sign" style="font-size: 5ex;"></i></div>
+				<div class="row infocate d-flex justify-content-center align-items-center">	
+					<h4 class="wit">저렴한 가격</h4>
+					<pre class="wit">더 이상 모임을 찾느라 돈을 <br>사용하실 필요가 없습니다.</pre>
+				</div>
+			</div>
+            <div class="col-md-3 col-lg-3 disb">
+				<div class="infocate d-flex justify-content-center align-items-center">
+					<i class="fas fa-users" style="font-size: 5ex;"></i></div>
+				<div class="row infocate d-flex justify-content-center align-items-center">	
+					<h4 class="wit">다양한 모임</h4>
+					<pre class="wit">스터디,핸드메이드,취미생활,<br>스포츠 원하는 모든 모임</pre>
+				</div>
+			</div>
+            <div class="col-md-3 col-lg-3 disb">
+				<div class="infocate d-flex justify-content-center align-items-center">
+					<i class="fas fa-map-marker-alt" style="font-size: 5ex;"></i></div>
+				<div class="row infocate d-flex justify-content-center align-items-center">
+					<h4 class="wit">위치기반 검색</h4>
+					<pre class="wit">상세 검색 기능과 목적에 <br>맞는 인원 혹은 장소를 <br>지도로 쉽게 볼 수 있도록 지원 </pre>
+				</div>
+			</div>
+        </div>
+    </div>
+	
+	<br><br>
+
+	<div class="container d-flex justify-content-center align-items-center" style="width:1200px; height:600px;">
+			<img src="../resources/images/main/running.jpg" 
+				style="width: 100%; height:100%; vertical-align: middle; position:relative; opacity: 0.7;"/>
+			<div class="infocontent">
+			<h2>모임 커넥팅 서비스</h2> <br>
+			<p>
+				모든 모임들을 한 곳에 모아서 찾아볼 수 있습니다. <br>
+				취미,스포츠,외국어 어떤 모임이든 모이고와 함께하세요.
+			</p>
+			</div>
+	</div>
+    </div>
+    
+    <!-- 개인정보 취급방침 -->
+    <c:choose>
+		<c:when test="${selected ne 'per'}">
+			<div class="container" id="pi" style="display:none;">
+		</c:when>
+		<c:otherwise>
+			<script>
+				$('#personalInfo').css('color','skyblue');
+			</script>
+			<div class="container" id="pi">
+		</c:otherwise>
+	</c:choose>   
+    
         <br>
         <h3>개인정보 취급방침</h3>
         <br>
@@ -260,9 +414,226 @@
                  다만, 개인정보의 수집 및 활용, 제3자 제공 등과 같이 이용자 권리의 중요한 변경이 있을 경우에는 최소 30일 전에 고지합니다.</p>
 
     </div>
+    
+    <!-- 이용안내 -->
+    <c:choose>
+		<c:when test="${selected ne 'guid'}">
+			<div class="container testdiv" id="usgui" style="display:none;">
+		</c:when>
+		<c:otherwise>
+			<script>
+				$('#useGuide').css('color','skyblue');
+			</script>
+			<div class="container testdiv" id="usgui">
+		</c:otherwise>
+	</c:choose>
+    
+        <hr>
+        <div class="row">
+            <div class="guideCate justify-content-center" id="qna">
+            <h5>자주묻는 질문</h5>
+            <div class="gage1"></div>
+            </div>
+            <div class="guideCate justify-content-center" id="guide">
+            <h5>이용 관련</h5>
+            <div class="gage2"></div>
+            </div>
+            <div class="guideCate justify-content-center" id="declare">
+            <h5>신고 관련</h5>
+            <div class="gage3"></div>
+            </div>
+        </div>
+        <br>
+        <!-- 컬랩스 부분 -->
+        <div>
+                <div id="accordion" role="tablist">
+                        <div class="card">
+                          <div class="card-header" role="tab" id="headingOne">
+                            <h5 class="mb-0">
+                              <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                01 사이트에 치명적인 오류나 건의사항이 있어요
+                              </a>
+                            </h5>
+                          </div>
+                      
+                          <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                              없어!! 그냥써라
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="card">
+                          <div class="card-header" role="tab" id="headingTwo">
+                            <h5 class="mb-0">
+                              <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                02 부적절한 게시글을 발견했습니다. 어떻게 해야하나요?
+                              </a>
+                            </h5>
+                          </div>
+                          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                                없어!! 그냥써라
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="card">
+                          <div class="card-header" role="tab" id="headingThree">
+                            <h5 class="mb-0">
+                              <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                03 프로필 변경하고 싶어요
+                              </a>
+                            </h5>
+                          </div>
+                          <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+                                없어!! 그냥써라
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+        </div>
+    </div>
+    
+    <!-- 연락처 및 지도 -->
+    <c:choose>
+		<c:when test="${selected ne 'ma'}">
+			<div class="container" id="mapdiv" style="display:none;">
+		</c:when>
+		<c:otherwise>
+			<script>
+				$('#maps').css('color','skyblue');
+			</script>
+			<div class="container" id="mapdiv">
+		</c:otherwise>
+	</c:choose>
+    
+        <div class=" justify-content-center textc">
+            <br>
+            <h3><i class="fas fa-phone-volume" style="font-size: 3ex;"></i>고객센터</h3><br>
+            <h4>02-2222-2222</h4>
+		</div>
+		<br><hr><br>
+        <div class="textc"><h3>Location</h3></div><br>
+        <div class="textc"><i class="fas fa-map-signs" style="font-size: 7ex;"></i></div><br>
+        <div class="textc"><h4>서울특별시 강남구 테헤란로 14길 6 남도빌딩 3F</h4></div>
+    </div>
+    <br>
+    <div class="container mapHeight" id="map"></div>
+	
 
+		<br><br><br>
 	<!-- // 바디부분 // -->
-    <br><br><br>
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
+<script>
+	/* $('.cursorPo').on('click',function(){
+	
+		var select = $(this).siblings('input').val();
+		alert(select);
+		$.ajax({
+		url : "${pageContext.request.contextPath}/common/ajax.ft",
+		data : {selected: }
+		
+		});
+	}); */
+	
+
+	
+	$('#serviceInfo').on('click',function(){
+		$('#servinfo').css("display","inherit");
+		$('#pi').css("display","none");
+		$('#usgui').css("display","none");
+		$('#mapdiv').css("display","none");
+		$('#map').css("display","none");
+		
+		$('#serviceInfo').css("color","skyblue");
+		$('#personalInfo').css("color","black");
+		$('#useGuide').css("color","black");
+		$('#maps').css("color","black");
+		
+	});
+	$('#personalInfo').on('click',function(){
+		$('#servinfo').css("display","none");
+		$('#pi').css("display","inherit");
+		$('#usgui').css("display","none");
+		$('#mapdiv').css("display","none");
+		$('#map').css("display","none");
+		
+		$('#serviceInfo').css("color","black");
+		$('#personalInfo').css("color","skyblue");
+		$('#useGuide').css("color","black");
+		$('#maps').css("color","black");
+	});
+	$('#useGuide').on('click',function(){
+		$('#servinfo').css("display","none");
+		$('#pi').css("display","none");
+		$('#usgui').css("display","inherit");
+		$('#mapdiv').css("display","none");
+		$('#map').css("display","none");
+		
+		$('#serviceInfo').css("color","black");
+		$('#personalInfo').css("color","black");
+		$('#useGuide').css("color","skyblue");
+		$('#maps').css("color","black");
+	});
+	$('#maps').on('click',function(){
+		$('#map').css("height","400px");
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new daum.maps.LatLng(37.498960, 127.032940), // 지도의 중심좌표
+	        level: 1 // 지도의 확대 레벨
+	    };
+
+		var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+		// 마커가 표시될 위치입니다 
+		var markerPosition  = new daum.maps.LatLng(37.498960, 127.032940); 
+
+		// 마커를 생성합니다
+		var marker = new daum.maps.Marker({
+	  	  position: markerPosition
+		});
+
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
+
+		// 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+		// marker.setMap(null);
+		
+		$('#servinfo').css("display","none");
+		$('#pi').css("display","none");
+		$('#usgui').css("display","none");
+		$('#mapdiv').css("display","inherit");
+		$('#map').css("display","inherit");
+		
+		$('#serviceInfo').css("color","black");
+		$('#personalInfo').css("color","black");
+		$('#useGuide').css("color","black");
+		$('#maps').css("color","skyblue");
+		
+	});
+	
+	
+	$('#qna').on('click',function(){
+		$('.gage1').css("background-color","skyblue");
+		$('.gage2').css("background-color","lightgray");
+		$('.gage3').css("background-color","lightgray");
+	});
+	$('#guide').on('click',function(){
+		$('.gage1').css("background-color","lightgray");
+		$('.gage2').css("background-color","skyblue");
+		$('.gage3').css("background-color","lightgray");
+	});
+	$('#declare').on('click',function(){
+		$('.gage1').css("background-color","lightgray");
+		$('.gage2').css("background-color","lightgray");
+		$('.gage3').css("background-color","skyblue");
+	});
+
+	
+	   
+	
+</script>
 </html>
