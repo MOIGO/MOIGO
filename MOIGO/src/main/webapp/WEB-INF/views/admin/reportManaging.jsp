@@ -513,13 +513,13 @@
 									method="get">
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">Recipient:</label>
-										<input type="text" class="form-control" id="recipientName"
+										<input type="text" class="form-control" id="masterEmail"
 											name="email">
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">Message:</label>
-										<textarea class="form-control" id="messageText"
-											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
+										<textarea class="form-control" id="messageTextToMaster"
+											name="messageText"></textarea>
 									</div>
 									<div class="text-center">
 										<button type="submit" class="btn btn-outline-success">Send
@@ -590,9 +590,7 @@ $(document).ready(function(){
 	
 		
 		$(".identifyingClass2").click(function () {
-			var grpId =$(this).data('id');
-		        alert(grpId); 
-		        	
+			var grpId =$(this).data('id');		        	
 		        $.ajax({
 		            url: "${pageContext.request.contextPath}/gpDetail.ad",
 		            type:'get',
@@ -602,17 +600,17 @@ $(document).ready(function(){
 		            	
 			            $("#inputGname").val(data[0].groupName);
 			            $("#inputGmsg").val(data[0].groupMsg);
+						$("#inputGaddress").val(data[0].groupAddress);
 			            $("#inputMaxMem").val(data[0].maxMember);
 			            $("#inputGenrollDate").val(data[0].enrollDate);
 						$("#inputGgc").val(data[0].groupGradeCode);
 						$("#inputGsc").val(data[0].groupStateCode);
-						$("#inputGaddress").val(data[0].groupAddress);
 						$("#inputGsc").val(data[0].minAge);
 						$("#inputGsc").val(data[0].maxAge);
 						$("#inputGsc").val(data[0].groupGender);
+						$("#masterEmail").val(data[0].masterEmail); //모임장
 						
-						
-			            $("#recipientName").val(data[0].memberEmail);
+			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다.");
 			            
 			            $('.input_accuse_list').empty();
 			            for(var i in data[1]){

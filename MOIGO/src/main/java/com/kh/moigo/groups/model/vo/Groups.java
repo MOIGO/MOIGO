@@ -9,6 +9,7 @@ public class Groups implements java.io.Serializable{
 	private String groupName;
 	private String groupMsg;
 	private String groupPicture;
+	private String groupAddress;
 	private String groupGradeCode;
 	private String groupStateCode;
 	private int maxMember;
@@ -216,7 +217,7 @@ public class Groups implements java.io.Serializable{
 				+ ", interestSmallCode=" + interestSmallCode + ", allowSignup=" + allowSignup + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", groupGender=" + groupGender + ", openSetting=" + openSetting + "]";
 	}
-	public Groups(String groupNo, String groupName, String groupMsg, String groupPicture, String groupGradeCode,
+	public Groups(String groupNo, String groupName, String groupMsg, String groupPicture, String groupAddress, String groupGradeCode,
 			String groupStateCode, int maxMember, Date enrollDate, String interestBigCode, String interestSmallCode,
 			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting) {
 		super();
@@ -224,6 +225,7 @@ public class Groups implements java.io.Serializable{
 		this.groupName = groupName;
 		this.groupMsg = groupMsg;
 		this.groupPicture = groupPicture;
+		this.groupAddress =groupAddress;
 		this.groupGradeCode = groupGradeCode;
 		this.groupStateCode = groupStateCode;
 		this.maxMember = maxMember;
@@ -239,6 +241,12 @@ public class Groups implements java.io.Serializable{
 	public Groups() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public String getGroupAddress() {
+		return groupAddress;
+	}
+	public void setGroupAddress(String groupAddress) {
+		this.groupAddress = groupAddress;
 	}
 	
 	

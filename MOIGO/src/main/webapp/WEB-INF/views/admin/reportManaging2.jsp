@@ -382,7 +382,7 @@ $(document).ready(function(){
 				            $("#inputEnrollDate").val(data[0].enrollDate);
 				            $("#inlineFormInputPost").val(data[0].postCount);
 							$("#inlineFormInputReply").val(data[0].replyCount);		            
-				            $("#recipientName").val(data[0].memberEmail);
+				            $("#recipientName").val(data[0].masterEmail);
 				            $('.input_accuse_list').empty();
 				            for(var i in data[1]){
 				            	console.log(i);
