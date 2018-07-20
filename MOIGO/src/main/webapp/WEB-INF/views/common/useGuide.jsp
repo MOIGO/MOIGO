@@ -5,13 +5,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <title>이용안내</title>
 <style>
 /* 이용안내 */
 
 #footerCategory{
     font-size: 18px;
+}
+
+.cursorPo{
+	cursor: pointer;
 }
 
 .testdiv{
@@ -21,6 +24,22 @@
 .guideCate{
     width:33.3%;
     height: 60px;
+    text-align: center;
+    padding: 20px;
+    cursor:pointer;
+}
+
+.gage1{
+	background-color:lightgray;
+	height: 5px;
+}
+.gage2{
+	background-color:lightgray;
+	height: 5px;
+}
+.gage3{
+	background-color:lightgray;
+	height: 5px;
 }
 </style>
 </head>
@@ -30,23 +49,37 @@
 	<hr>
     <div class="container" id="footerCategory">
         <div class="row">
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>서비스소개</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>개인정보 취급방침</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>이용안내</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>연락처 및 지도</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="serviceInfo2">서비스소개</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="personalInfo2">개인정보 취급 방침</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="useGuide2" style="color:skyblue;">이용안내</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="maps2">연락처 및 지도</b></div>
         </div>
     </div>
     <hr>
     <br>
-    <div class="container test testdiv">
+    <div class="container testdiv">
         <hr>
         <div class="row">
-            <div class="guideCate test d-flex justify-content-center align-items-center"><h5>자주묻는 질문</h5></div>
-            <div class="guideCate test d-flex justify-content-center align-items-center"><h5>이용 관련</h5></div>
-            <div class="guideCate test d-flex justify-content-center align-items-center"><h5>신고 관련</h5></div>
+            <div class="guideCate justify-content-center" id="qna">
+            <h5>자주묻는 질문</h5>
+            <div class="gage1"></div>
+            </div>
+            <div class="guideCate justify-content-center" id="guide">
+            <h5>이용 관련</h5>
+            <div class="gage2"></div>
+            </div>
+            <div class="guideCate justify-content-center" id="declare">
+            <h5>신고 관련</h5>
+            <div class="gage3"></div>
+            </div>
         </div>
         <br>
-        <div class="test">
+        <!-- 컬랩스 부분 -->
+        <div>
                 <div id="accordion" role="tablist">
                         <div class="card">
                           <div class="card-header" role="tab" id="headingOne">
@@ -102,4 +135,21 @@
     <br><br><br>
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
+<script>
+	$('#qna').on('click',function(){
+		$('.gage1').css("background-color","skyblue");
+		$('.gage2').css("background-color","lightgray");
+		$('.gage3').css("background-color","lightgray");
+	});
+	$('#guide').on('click',function(){
+		$('.gage1').css("background-color","lightgray");
+		$('.gage2').css("background-color","skyblue");
+		$('.gage3').css("background-color","lightgray");
+	});
+	$('#declare').on('click',function(){
+		$('.gage1').css("background-color","lightgray");
+		$('.gage2').css("background-color","lightgray");
+		$('.gage3').css("background-color","skyblue");
+	});
+</script>
 </html>

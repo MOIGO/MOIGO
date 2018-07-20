@@ -5,6 +5,7 @@
 <c:import url="/WEB-INF/views/common/header.jsp" />
 <c:set var="root" value="${pageContext.request.contextPath}" />
 <c:set var="groupMemberList" value="${requestScope.groupMemberList}" />
+<c:set var="searchMemberList" value="${requestScope.searchGroupMemberList}" />
 <html>
 <head>
 <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
@@ -38,6 +39,13 @@ body {
 	outline: none !important;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+}
+
 /* 멤버 검색 부분 */
 .gm_inp:focus, .gm_inp:active:focus {
 	border-color: #343A40;
@@ -56,6 +64,13 @@ body {
 }
 
 /* 멤버 리스트 부분 */
+.search_result_none {
+	padding-top : 135px;
+	height : 300px;
+	text-align: center;
+	color: gray;
+}
+
 .list-group-item {
 	padding-left: 13px;
 	padding-right: 13px;
@@ -253,20 +268,30 @@ body {
 				<div class="card-body">
 				
 					<!-- 멤버 검색 부분 -->
-					<div class="input-group mb-3">
-						<input type="text" class="form-control gm_inp" id="gmSearchInp" placeholder="멤버 검색" />
-						<div class="input-group-append">
-							<button class="btn btn-outline-secondary gm_search_btn"
-								type="button">
-								<ion-icon id="searchBtn" name="search"></ion-icon>
-							</button>
+					<form id="searchMemberForm" action="${root}/groups/searchGroupMember.gp">
+						<div class="input-group mb-3">
+							<input type="hidden" name="groupNo" value="${param.groupNo}"/>
+							<input type="text" class="form-control gm_inp" name="searchName" id="gmSearchInp" placeholder="멤버 검색" />
+							<div class="input-group-append">
+								<button class="btn btn-outline-secondary gm_search_btn" type="button">
+									<ion-icon id="searchBtn" name="search"></ion-icon>
+								</button>
+							</div>
 						</div>
-					</div>
+					</form>
 
+					<c:if test="${searchMemberList eq null}">
+						<c:set var="resultMemberList" value="${groupMemberList}"></c:set>
+					</c:if>
+					<c:if test="${searchMemberList eq '[]'}">
+						<div class="card search_result_none">검색 결과가 없습니다.</div>
+					</c:if>
+					<c:if test="${searchMemberList ne null}">
+						<c:set var="resultMemberList" value="${searchMemberList}"></c:set>
+					</c:if>
 					<!-- 멤버 리스트 부분 -->
 					<ul class="list-group">
-					
-						<c:forEach var="groupMember" items="${groupMemberList}">
+							<c:forEach var="groupMember" items="${resultMemberList}">
 							<li class="list-group-item group_member_list_one">
 								<div class="list_wrap">
 									<c:if test="${groupMember.profileImg eq null and groupMember.profileThumb eq null}">
@@ -321,11 +346,17 @@ body {
 					<span class="modal_close" aria-hidden="true">&times;</span>
 				</button>
 			</div>
-
+			
+			<c:url var="updateGroupMember" value="/groups/updateGroupMember.gp" >
+				<c:param name="groupNo" value="${param.groupNo}" />
+				<c:param name="memberNo" value="${loginGroupMember.memberNo}"/>
+			</c:url>
+			
 			<div class="modal-body gm_modal_body">
-				<form id="profileForm">
+				<form id="profileForm" method="POST" action="${updateGroupMember}" enctype="multipart/form-data">
 					<img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
-					<input type="file" class="profile_upload_inp" id="profileChangeInp" accept="image/*" />
+					<input type="hidden" name="resizeProfile" id="resizeProfile" />
+					<input type="file" class="profile_upload_inp" name="uploadProfile" id="profileChangeInp" accept="image/*"/>
 					<div class="profile_upload_btn" id="profileChangeBtn"></div>
 					<div class="form-group">
 						<label id="profileLbl" for="profileMsg">
@@ -334,7 +365,7 @@ body {
 							 / 
 						 	<span id="msgMaxLength">30</span>
 						</label>
-						<textarea class="form-control gm_inp" id="profileMsg" draggable="false" maxlength="30" rows="1" placeholder="최대 30자까지 입력 가능합니다.">${loginGroupMember.profileMsg}</textarea>
+						<textarea class="form-control gm_inp" name="profileMsg" id="profileMsg" draggable="false" maxlength="30" rows="1" placeholder="최대 30자까지 입력 가능합니다.">${loginGroupMember.profileMsg}</textarea>
 					</div>
 				</form>
 			</div>
@@ -354,28 +385,21 @@ body {
 		<div class="modal-content">
 
 			<div class="modal-header gm_modal_header">
-				<h5 class="modal-title gm_modal_tit" id="profileUploadTitle">프로필
-					사진 변경</h5>
+				<h5 class="modal-title gm_modal_tit" id="profileUploadTitle">프로필 사진 변경</h5>
 			</div>
 
 			<div class="modal-body gm_modal_body" id="profileUploadBody">
-				<form>
-					<input type="file" class="profile_upload_inp"
-						id="profileUploadInp" accept="image/*" /> <label
-						id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대
-						10MB까지 업로드 가능합니다.</label>
-					<div class="profile_upload_btn" id="profileUploadBtn"></div>
-					<div id="profileUploadCropper">
-						<img id="cropperImg" />
-					</div>
-				</form>
+				<input type="file" class="profile_upload_inp" id="profileUploadInp" accept="image/*" /> 
+				<label id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대 10MB까지 업로드 가능합니다.</label>
+				<div class="profile_upload_btn" id="profileUploadBtn"></div>
+				<div id="profileUploadCropper">
+					<img id="cropperImg" />
+				</div>
 			</div>
 
 			<div class="modal-footer gm_modal_footer">
-				<button type="button" id="profileUploadCloseBtn"
-					class="btn btn-danger">취소</button>
-				<button type="button" id="profileUploadConfirmBtn"
-					class="btn btn-dark">확인</button>
+				<button type="button" id="profileUploadCloseBtn" class="btn btn-danger">취소</button>
+				<button type="button" id="profileUploadConfirmBtn" class="btn btn-dark">확인</button>
 			</div>
 
 		</div>
@@ -392,7 +416,6 @@ body {
 	 
 	 /* 상태메시지 실시간 글자수 색깔 변경 */
 	 function countColorChange() {
-		
 		if ($("#profileMsg").val().length == 30)
 			$("#msgLengthCnt").css("color", "red");
 		else if ($("#profileMsg").val().length > 14)
@@ -403,24 +426,31 @@ body {
 
 	$(function() {
 
-		console.log("빈칸");
+		console.log("searchMember : ${searchMemberList}");
 		
+		var normalmemberLogin = "${loginGroupMember.memberGradeCode}";
 		/* 
 		   로그인한 모임의 멤버가 멤버리스트를 볼 경우 자신의 이름 위치가
 		   운영진 바로 아래로 위치하도록 하는 부분
 		*/
 		$("li").has("#profileBtn").addClass("login_group_member");
-		$(".group_member_list_one").has(".badge-success").last().after($(".login_group_member"));
+		if(normalmemberLogin == 1)
+			$(".group_member_list_one").has(".badge-success").last().after($(".login_group_member"));
 
 		/* 검색부분의 border 부분을 수정 */
 		$("#gmSearchInp").on("focus", function() {
 			$(".gm_search_btn").css("border-color", "#343A40");
 		}).on("focusout", function() {
 			$(".gm_search_btn").css("border-color", "#6C757D");
-		}).on("keypress", function(event) {
+		}).on("keyup", function(event) {
 			/* enterkey를 눌렀을 때 발생하는 event */
 			if (event.keyCode == 13)
-				alert("검색 엔터키 확인!");
+				$("#searchMemberForm").submit();
+		});
+		
+		/* 검색버튼을 눌렀을 때 발생하는 이벤트 */
+		$(".gm_search_btn").click(function() {
+			$("#searchMemberForm").submit();
 		});
 
 		/* 프로필의 modal을 누를때 esc나 모달 바깥영역을 클릭했을 경우 닫아주는 이벤트를 막는 부분*/
@@ -438,34 +468,32 @@ body {
 			$("#profileChangeInp").click();
 		});
 
-		var endFile = "";
-
+		var cropperImg = "";
+		
 		/* 프로필 사진 업로드부분의 파일이 변경됐을 경우 발생하는 이벤트 */
 		$(".profile_upload_inp").on("change", function() {
 
 			// cropper.js 사용시 이미지를 갱신해주려면 이전 이미지 파일을 destroy 해줘야 함
 			$("#cropperImg").cropper("destroy");
 			var reader = new FileReader();
-			var ext = $(this).val().split(".").pop()
-					.toLowerCase();
+		
+			var ext = $(this).val().split(".").pop().toLowerCase();
 
 			if (ext.length > 0) {
-				if ($.inArray(ext, [ "gif", "png", "jpg",
-						"jpeg" ]) == -1)
+				if ($.inArray(ext, [ "gif", "png", "jpg", "jpeg" ]) == -1)
 					alert("이미지파일(.jpg, .png, .gif)만 업로드 가능합니다.");
 				else {
 					if ($(this).attr("id") == "profileChangeInp")
 						$("#profileUploadModal").toggle();
 
 					// src는 local resource 경로를 읽지 못하므로 filereader를 사용
-					endFile = $(this)[0].files[0];
-					reader.readAsDataURL(endFile);
+					console.log($(this)[0].files[0]);
+					reader.readAsDataURL($(this)[0].files[0]);
 					reader.onload = function() {
 
 						var $cropperImg = $("#cropperImg");
-						$cropperImg.attr("src",
-								reader.result);
-
+						$cropperImg.attr("src", reader.result);
+						/* cropper.js의 초기 option setting*/
 						$cropperImg.cropper({
 							aspectRatio : 1 / 1,
 							viewMode : 1,
@@ -474,12 +502,14 @@ body {
 							minCropBoxWidth : 100,
 							minCropBoxHeight : 100
 						});
-
+					
+						/* 프로필 사진 변경 modal의 확인 버튼을 눌렀을때 발생하는 이벤트 */
 						$("#profileUploadConfirmBtn").click(function() {
-							console.log($cropperImg.cropper("getCroppedCanvas",{width : 150,height : 150}).toDataURL());
+							cropperImg = $cropperImg.cropper("getCroppedCanvas",{width : 150,height : 150}).toDataURL();
 							$("#profileImg").attr("src",$cropperImg.cropper("getCroppedCanvas",{width : 150,height : 150}).toDataURL());
 							$("#profileUploadModal").hide();
 						});
+						
 					};
 
 					$(this).val("");
@@ -507,9 +537,14 @@ body {
 				   31자로 인식하는 현상을 잡아주기 위해 내용을 갱신해줌*/
 				$("#msgLengthCnt").text(30);
 			}
-			/* 실시간 글자수에 따라서 글자색을 변경해줌 */
 			else 
 				countColorChange();
+		});
+		
+		/* 프로필 modal의 확인 버튼을 누르면 발생하는 이벤트 */
+		$("#profileConfirmBtn").click(function() {
+			$("#resizeProfile").val(cropperImg);
+			$("#profileForm").submit();
 		});
 
 	});

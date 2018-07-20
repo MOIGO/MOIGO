@@ -138,5 +138,14 @@
 		ORDER BY 6 DESC, 7
 	</select>
 	
+	<select id="searchGroupMemberList" parameterType="hashmap" resultMap="groupMemberResultMap">
+		SELECT GM.*, M.MEMBER_NAME
+		FROM GROUP_MEMBER GM, MEMBER M 
+		WHERE GM.MEMBER_NO = M.MEMBER_NO
+		AND GROUP_NO = #{groupNo}
+		AND M.MEMBER_NAME LIKE #{searchName}||'%'
+		ORDER BY 6 DESC, 7
+	</select>
+	
 </mapper>
 	

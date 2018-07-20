@@ -72,17 +72,11 @@
 	</div>
 	<br />
 	<div>
-		<form id="testForm" action="${root}/member/testMember.me" method="post">
-			<input type="text" name="memberEmail" value="yjw100@life.com" style="display:none;"/>
-		</form>
-
 		<ul class="list-group">
 			<li class="list-group-item group_list"><i class="fas fa-book mr-2"></i><span>전체글</span></li>
 			<li class="list-group-item group_list"><i class="far fa-images mr-2"></i><span>사진첩</span></li>
 			<li class="list-group-item group_list"><i class="far fa-calendar-alt mr-2"></i><span>일정</span></li>
-			<li class="list-group-item group_list"><i class="fas fa-users mr-2"></i><span>멤버</span></li>
-			
-			<li class="list-group-item group_list"><i class="fas fa-check mr-2"></i><span>멤버 확인</span></li>					
+			<li class="list-group-item group_list"><i class="fas fa-users mr-2"></i><span>멤버</span></li>				
 		</ul>
 	</div>
 	<hr />
@@ -91,7 +85,7 @@
 	</div>
  </div>
  
- <form id="groupNoForm" method="post">
+ <form id="groupNoForm">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
  </form>
 
@@ -107,8 +101,6 @@ $(function() {
 		
 		if(groupMenu == '전체글')
 			alert("전체글!");
-		else if(groupMenu == '멤버 확인')
-			$("#testForm").submit();
 		else if(groupMenu == '사진첩')
 			alert("사진첩");
 		else if(groupMenu == '일정')

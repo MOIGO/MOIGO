@@ -36,7 +36,6 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
-	
 	// 암호화?
 	// 비밀번호 확인
 	@ResponseBody
@@ -118,20 +117,23 @@ public class MemberController {
 	// 암호화?
 	// 회원가입
 	@RequestMapping(value ="/member/signUpEnd.do", method = RequestMethod.POST)
-	public String signUpEnd(Member member){
+	public String signUpEnd(Member member,
+							@RequestParam (value = "interest", required = false,	defaultValue = "") List<String> interestList){
 
-		if(member.getMemberAddress().equals("null null")) member.setMemberAddress(null);
-
-		System.out.println(member);
+		/*if(member.getMemberAddress().equals("null null")) member.setMemberAddress(null);*/
 		
-		int result = memberService.insertMember(member);
+		System.out.println(interestList);
+		System.out.println(member);
+		System.out.println(interestList.size());
+		
+		int result = memberService.insertMember(member, interestList);
 		
 		String msg = "";
 		if(result>0) msg="회원가입성공!";
 		else msg="회원가입실패!";
 
 		System.out.println(msg);
-		
+
 		return "redirect:/";
 	}
 	
@@ -180,14 +182,38 @@ public class MemberController {
 		String userYear= strBirth[0];
 		String userMonth= strBirth[1];
 		String userDay= strBirth[2];
+		
+		List<String> interestList = memberService.selectInterestList(member.getMemberNo());
+		
+		System.out.println(interestList);
 
-		model.addAttribute("userYear",userYear).addAttribute("userMonth",userMonth).addAttribute("userDay",userDay);
+		model.addAttribute("userYear",userYear)
+			.addAttribute("userMonth",userMonth)
+			.addAttribute("userDay",userDay)
+			.addAttribute("interestList",interestList);
 		
 		return "mypage/profile";
 	}
 	
 	
-	
+		@RequestMapping("/member/memberUpdate.do")
+		public String memberUpdate(HttpSession session, Member mm,
+					@RequestParam (value = "interest", required = false,	defaultValue = "") List<String> interestList){
+				
+			
+			Member member = (Member) session.getAttribute("m");
+
+			member.setMemberAddress(mm.getMemberAddress());
+			member.setMemberBirth(mm.getMemberBirth());
+			member.setMemberName(mm.getMemberName());
+
+			int result = memberService.updateMember(member);
+		
+			if(result>0) System.out.println("회원정보 수정 성공");
+			else System.out.println("회원정보 수정 실패");
+			
+			return "redirect:/";
+		}
 	
 	// 회원탈퇴
 	@RequestMapping("/mypage/withdrawalEnd.do")

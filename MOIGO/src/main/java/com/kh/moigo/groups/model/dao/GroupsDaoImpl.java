@@ -1,6 +1,8 @@
 package com.kh.moigo.groups.model.dao;
 
+
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class GroupsDaoImpl implements GroupsDao {
 	}
 
 	@Override
+
 	public int addPost(Post p) {
 		
 		Map<String,String> map = new HashMap<String, String>();
@@ -54,6 +57,10 @@ public class GroupsDaoImpl implements GroupsDao {
 		map.put("endRow", p.getEndRow());
 		
 		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectPostWithMemList",map));
+	}
+
+	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
 	}
 
 }

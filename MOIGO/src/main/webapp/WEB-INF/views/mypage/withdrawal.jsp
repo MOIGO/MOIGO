@@ -30,7 +30,7 @@
         <br>
             
         <!-- style="float:none; margin:0 auto;"  -->
-        <div class="col-md-9 content_box_wrap " style="float:none; margin:0 auto;" >
+        <div class="col-md-9 content_box_wrap " style="float:none; margin:0 auto; font-size:14px;" >
             <h5><i class="fas fa-check-square"></i> 회원탈퇴</h5> 
             <div class="content_box_area ">
                 <div class="row no_margin">

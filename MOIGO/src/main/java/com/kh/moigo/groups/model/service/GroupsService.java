@@ -1,6 +1,10 @@
 package com.kh.moigo.groups.model.service;
 
+
 import java.util.ArrayList;
+
+import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,4 +20,6 @@ public interface GroupsService {
 	ArrayList<PostWithMem> selectPostList(String groupNo,PageInfo p);
 	
 	int selectPostCnt(String groupNo);
+  
+	List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap);
 }
