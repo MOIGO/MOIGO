@@ -16,6 +16,7 @@
 		<typeAlias type="com.kh.moigo.groups.model.vo.Post" alias="post"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.Schedule" alias="schedule"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.PostReply" alias="postReply"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostWithMem" alias="postWithMem"/>
 	</typeAliases>
 	
 	<!-- <typeHandlers>

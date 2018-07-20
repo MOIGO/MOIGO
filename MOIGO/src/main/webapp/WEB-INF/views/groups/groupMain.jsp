@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
+<c:set var="postList" value="${requestScope.list}"></c:set>
+<c:set var="pageInfo" value="${requestScope.pageInfo}"></c:set>
 <html>
 <head>
 <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootStrap/bootstrap.min.css">
@@ -37,7 +39,7 @@
 </head>
 
 <body>
-
+	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 
 	<div class="container">
@@ -52,7 +54,10 @@
 			<div class="col-7">
 				<div class="col">
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
-					<input type="hidden" name="memberNo" value="A001" />
+					<input type="hidden" name="memberNo" value="${m.memberNo}" />
+					<div id="postDiv" class="test">
+						
+					</div>
 				</div>
 				<div class="col">
 					
@@ -98,30 +103,43 @@
 
 <script>
 
+$(function(){
+	setPostList(1);
+});
+
 function deleteAllPost(){
 	
 }
 
 
-function setPostList(){
+function setPostList(currentPage){
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
-		data:{groupNo:"G001"},
+		data:{groupNo:"G001",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
+			var $Outer= $('<div>');
 			
-			if(data.result>0){
-				alert("글 등록 성공!");
-			}else
-				alert("글 등록 실패!");
+			/*profile Element  */
+			var $profileWrapper = $('<div>');
+			var $profileImg = 			
 			
-			deleteAllPost();
-			setPostList();
-			destroySummerNote();
+			
+			/*content Element  */
+			var $contentWrapper = $('<div>');
+			
+			/*reply Element  */
+			var $replyWrapper = $('<div>');
+			
+			var
+			
+			
+			$('#postDiv').append($Outer);
+			
+			
 		},
 		error:function(){
-			alert("글 등록 도중 에러가 생겼습니다.");
-			destroySummerNote();
+		
 		}
 		
 	});
@@ -145,11 +163,11 @@ function submitPost(){
 			
 			deleteAllPost();
 			setPostList();
-			destroySummerNote();
+			destroyPostEditModal();
 		},
 		error:function(){
 			alert("글 등록 도중 에러가 생겼습니다.");
-			destroySummerNote();
+			destroyPostEditModal();
 		}
 		
 	});
@@ -201,7 +219,7 @@ function createSummerNote(){
 	});
 }
 
-function toggleMapModal(editObj){
+function toggleMapModal(){
 	 $('#insertMap').modal("toggle");
      $('#insertMap').on("shown.bs.modal",makeMap());
 }

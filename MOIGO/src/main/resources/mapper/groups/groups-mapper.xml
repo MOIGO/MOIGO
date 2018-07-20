@@ -26,7 +26,16 @@
 		<result property="memberNo" column="MEMBER_NO"/>
 		<result property="isNotice" column="IS_NOTICE"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
-		<collection property="postReply" column="POST_NO" ofType="PostReply" resultMap="postReplyResultMap" select="selectPostsForBlog"></collection>
+	</resultMap>
+	
+	<resultMap type="postWithMem" id="postWithMemResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="isNotice" column="IS_NOTICE"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+		<collection property="postReply" column="POST_NO" ofType="postReply" select="selectReplyForPost"/>
+		<collection property="files" column="POST_NO" ofType="postReply" select="selectReplyForPost"/><!--여기서부터!!  -->
 	</resultMap>
 	
 	<resultMap type="files" id="filesResultMap">
@@ -51,23 +60,18 @@
 		INSERT INTO POST VALUES(SEQ_POST.NEXTVAL,#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
 	</insert>
 	
-	
-	<select id="getPostList" parameterType="Post">
-		
-	</select>
-	
-	<select id="selectPostList">
+	<select id="selectPostList" resultType="post" resultMap="postResultMap">
 		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
 		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo})
-		WHERE RNUM BETWEEN #{startRow} AND #{endRow};
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
 	</select>
 	
-	<select id="selectPostCnt" resultMap="postResultMap">
+	<select id="selectReplyForPost" resultMap="postReplyResultMap" >
+		SELECT * FROM POST_REPLY WHERE POST_NO = #{postNo}
+	</select>
+	
+	<select id="selectPostCnt" resultType="_int">
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
-	</select>
-	
-	<select id="selectReplyForPost" >
-		SELECT * FROM POST_REPLY WHERE POST_NO =
 	</select>
 
 	<!-- 혜진 -->

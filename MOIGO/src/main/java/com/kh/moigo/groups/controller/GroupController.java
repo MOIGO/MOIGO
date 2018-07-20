@@ -29,17 +29,22 @@ public class GroupController {
 		return "groups/groupMain";
 	}
 	
-	@RequestMapping("/groups/getPostList.do")
+	
+	//그룹 메인 들어갈때 글 가져오기
+	@RequestMapping("/groups/getPostList.gp")
 	@ResponseBody
-	public String getPostList(@RequestParam String groupNo, @RequestParam int currPage){
+	public Map<String,Object> getPostList(@RequestParam String groupNo, @RequestParam int currPage,Model model){
 		
-		
-		PageInfo p = new PageInfo();
-		p.setPageInfo(currPage, groupService.selectPostCnt(groupNo), 3);
+		PageInfo p = new PageInfo(currPage, groupService.selectPostCnt(groupNo),5);
 		
 		ArrayList<Post> list = groupService.selectPostList(groupNo, p);
 		
-		return "groups/createGroup";
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("posts", list);
+		map.put("pageInfo", p);
+		
+		return map;
 	}
 	
 	@RequestMapping("/groups/setGroupMain.gp")
@@ -49,7 +54,7 @@ public class GroupController {
 	}
 	
 	
-	
+	//글 쓰기
 	@RequestMapping("/groups/addPost.gp")
 	@ResponseBody
 	public Map <String,Object> addPost(	@RequestParam String groupNo,
@@ -58,10 +63,10 @@ public class GroupController {
 							@RequestParam String isNotice,
 							Model model)
 	{
-		Post p = new Post(groupNo,memberNo,content,isNotice);
+		//Post p = new Post(groupNo,memberNo,content,isNotice);
 		
 		Map <String,Object> map = new HashMap<String, Object>();
-		map.put("result", groupService.addPost(p));
+		//map.put("result", groupService.addPost(p));
 		
 		return map;
 	}
