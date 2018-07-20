@@ -37,7 +37,7 @@
       <url-pattern>/</url-pattern>
    </servlet-mapping>
    
-   
+    
 	<!-- #4. post방식 인코딩 설정 UTF-8 필터 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -49,7 +49,7 @@
 	</filter>
   	<filter-mapping>
   		<filter-name>encodingFilter</filter-name>
-  		<url-pattern>*.do</url-pattern>
+  		<url-pattern>/*</url-pattern>
   	</filter-mapping>
 
 </web-app>

@@ -54,5 +54,13 @@
 		ORDER BY 6 DESC, 7
 	</select>
 	
+	<update id="updateGroupMember">
+		UPDATE GROUP_MEMBER
+		SET PROFILE_IMG = #{profileImg},
+		PROFILE_THUMB = #{profileThumb},
+		PROFILE_MSG = #{profileMsg}
+		WHERE GROUP_NO = #{groupNo}
+		AND MEMBER_NO = #{memberNo}
+	</update>
 </mapper>
 	

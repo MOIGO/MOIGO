@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.moigo.groups.model.dao.GroupsDao;
+import com.kh.moigo.groups.model.vo.GroupMember;
 
 @Service
 public class GroupsServiceImpl implements GroupsService {
@@ -21,6 +22,11 @@ public class GroupsServiceImpl implements GroupsService {
 	@Override
 	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
 		return groupDao.searchGroupMemberList(searchMap);
+	}
+
+	@Override
+	public int updateGroupMember(GroupMember groupMember) {
+		return groupDao.updateGroupMember(groupMember);
 	}
 
 }

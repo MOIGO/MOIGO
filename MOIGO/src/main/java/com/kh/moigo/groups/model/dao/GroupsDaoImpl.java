@@ -8,6 +8,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.moigo.groups.model.vo.GroupMember;
+
 @Repository
 public class GroupsDaoImpl implements GroupsDao {
 	
@@ -24,5 +26,9 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
 	}
 
+	@Override
+	public int updateGroupMember(GroupMember groupMember) {
+		return sqlSession.update("groups.updateGroupMember", groupMember);
+	}
 
 }
