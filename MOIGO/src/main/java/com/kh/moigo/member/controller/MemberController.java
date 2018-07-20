@@ -36,7 +36,6 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
-	
 	// 암호화?
 	// 비밀번호 확인
 	@ResponseBody
