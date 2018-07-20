@@ -11,7 +11,7 @@ public interface MemberService {
 	
 	int insertMember(Member member, List<String> interestList);
 
-	int updateMember(Member member);
+	int updateMember(Member member, List<String> interestList);
 	
 	int checkIdDuplicate(String memberEmail);
 
