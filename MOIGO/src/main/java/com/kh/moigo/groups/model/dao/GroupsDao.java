@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostWithMem;
 
 public interface GroupsDao {
 
@@ -15,5 +16,5 @@ public interface GroupsDao {
 	
 	int selectPostCnt(String groupNo);
 	
-	ArrayList<Post> selectPostList(String groupNo,PageInfo p );
+	ArrayList<PostWithMem> selectPostList(String groupNo,PageInfo p );
 }

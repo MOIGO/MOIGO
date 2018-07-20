@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
-import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostWithMem;
 
 @Controller
 public class GroupController {
@@ -37,7 +37,8 @@ public class GroupController {
 		
 		PageInfo p = new PageInfo(currPage, groupService.selectPostCnt(groupNo),5);
 		
-		ArrayList<Post> list = groupService.selectPostList(groupNo, p);
+		ArrayList<PostWithMem> list = groupService.selectPostList(groupNo, p);
+		
 		
 		Map<String,Object> map = new HashMap<String,Object>();
 		

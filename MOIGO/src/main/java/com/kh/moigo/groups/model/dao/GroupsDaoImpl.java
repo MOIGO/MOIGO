@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostWithMem;
 
 @Repository
 public class GroupsDaoImpl implements GroupsDao {
@@ -44,7 +45,7 @@ public class GroupsDaoImpl implements GroupsDao {
 	}
 
 	@Override
-	public ArrayList<Post> selectPostList(String groupNo, PageInfo p) {
+	public ArrayList<PostWithMem> selectPostList(String groupNo, PageInfo p) {
 			
 		
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -52,7 +53,7 @@ public class GroupsDaoImpl implements GroupsDao {
 		map.put("startRow", p.getStartRow());
 		map.put("endRow", p.getEndRow());
 		
-		return new ArrayList<Post>(sqlSession.selectList("groups.selectPostList",map));
+		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectPostWithMemList",map));
 	}
 
 }

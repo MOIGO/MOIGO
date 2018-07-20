@@ -120,9 +120,11 @@ function setPostList(currentPage){
 		success:function(data){
 			var $Outer= $('<div>');
 			
+			console.log(data.posts);
+			
 			/*profile Element  */
 			var $profileWrapper = $('<div>');
-			var $profileImg = 			
+			//var $profileImg = 			
 			
 			
 			/*content Element  */
@@ -130,9 +132,6 @@ function setPostList(currentPage){
 			
 			/*reply Element  */
 			var $replyWrapper = $('<div>');
-			
-			var
-			
 			
 			$('#postDiv').append($Outer);
 			

@@ -11,6 +11,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.dao.GroupsDao;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostWithMem;
 
 @Service
 public class GroupsServiceImpl implements GroupsService {
@@ -34,7 +35,7 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 	@Override
-	public ArrayList<Post> selectPostList(String groupNo, PageInfo p) {
+	public ArrayList<PostWithMem> selectPostList(String groupNo, PageInfo p) {
 		
 		return groupDao.selectPostList(groupNo, p);
 	}
