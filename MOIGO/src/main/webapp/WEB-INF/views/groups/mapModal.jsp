@@ -87,6 +87,7 @@ $(function(){
 		$('#placeListDiv').css("display","none");
 		$('#placeKeyword').val("");
 		toEditTarget=undefined;
+		
 	});
 });
 
