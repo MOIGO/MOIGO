@@ -61,4 +61,9 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updateGroupMember(groupMember);
 	}
 
+	@Override
+	public int deleteGroup(String groupNo) {
+		return groupDao.deleteGroup(groupNo);
+	}
+
 }

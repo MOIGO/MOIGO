@@ -118,7 +118,7 @@
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
 	</select>
 
-	<!-- 혜진 -->
+	<!-- ===================================================================================================== 혜진 -->
 	
 	<resultMap type="groupMember" id="groupMemberResultMap">
 		<result property="memberNo" column="MEMBER_NO"/>
@@ -155,5 +155,9 @@
 		WHERE GROUP_NO = #{groupNo}
 		AND MEMBER_NO = #{memberNo}
 	</update>
+	
+	<!-- <delete id="deleteGroup">
+		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
+	</delete> -->
 </mapper>
 	

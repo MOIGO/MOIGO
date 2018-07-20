@@ -72,5 +72,10 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updateGroupMember", groupMember);
 	}
 
+	@Override
+	public int deleteGroup(String groupNo) {
+		return sqlSession.delete("groups.deleteGroup", groupNo);
+	}
+
 
 }

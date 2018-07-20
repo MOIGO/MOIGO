@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
@@ -88,6 +88,7 @@ public class GroupController {
 	
 	// ------------------------------------------------------------------ 혜진
 	
+	// 멤버 
 	@RequestMapping("/groups/groupMember.gp")
 	public String goGroupMember(@RequestParam String groupNo, Model model){
 		
@@ -178,17 +179,29 @@ public class GroupController {
 		return "redirect:/groups/groupMember.gp?groupNo="+ groupMember.getGroupNo();
 	}
 	
-	
+	// 일정
 	@RequestMapping(value="/groups/groupSchedule.gp", method=RequestMethod.POST)
 	public String groupSchedule(){
 		
 		return "groups/groupSchedule";
 	}
 	
+	// 모임설정
 	@RequestMapping("/groups/groupSetting.gp")
-	public String groupSetting(){
+	public String goGroupSetting(){
 		
 		return "groups/groupSetting";
+	}
+	
+	@RequestMapping("/groups/deleteGroup.gp")
+	public String deleteGroup(@RequestParam String groupNo, Model model){
+		
+		int result;
+		// result = groupService.deleteGroup(groupNo);
+		
+		model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
+		
+		return "common/msg";
 	}
 
 }

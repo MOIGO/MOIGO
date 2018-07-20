@@ -369,8 +369,8 @@
                     </div>
                      
                      <div class="modal-footer gs_modal_footer">
-                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
-                     <button type="button" class="btn btn-danger btn-sm" id="groupDelConfirmBtn">삭제하기</button>
+	                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+	                     <button type="button" class="btn btn-danger btn-sm" id="groupDelConfirmBtn">삭제하기</button>
                      </div>
                      
                   </div>
@@ -528,6 +528,10 @@ $(function() {
           keyboard: false
        });
    });
+   
+   $("#groupDelConfirmBtn").on("click", function() {
+	   location.href = "${root}/groups/deleteGroup.gp?groupNo=${param.groupNo}";
+	});
 
 });
 
