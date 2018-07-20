@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
+<c:set var="postList" value="${requestScope.list}"></c:set>
+<c:set var="pageInfo" value="${requestScope.pageInfo}"></c:set>
 <html>
 <head>
 <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootStrap/bootstrap.min.css">
@@ -37,7 +39,7 @@
 </head>
 
 <body>
-
+	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 
 	<div class="container">
@@ -52,7 +54,10 @@
 			<div class="col-7">
 				<div class="col">
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
-					<input type="hidden" name="memberNo" value="A001" />
+					<input type="hidden" name="memberNo" value="${m.memberNo}" />
+					<div id="postDiv" class="test">
+						
+					</div>
 				</div>
 				<div class="col">
 					
@@ -75,18 +80,20 @@
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLongTitle">글쓰기</h5>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close" onclick="destroySummerNote();">
+						aria-label="Close" onclick="destroyPostEditModal();">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<div id="summernote"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal" onclick="destroySummerNote();">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+					<div class="modal-body">
+						<div id="summernote"></div>
+					</div>
+					
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal" onclick="destroyPostEditModal();">취소</button>
+						<button type="button" class="btn btn-primary" onclick="submitPost()">확인</button>
+						
+					</div>
 			</div>
 		</div>
 	</div>
@@ -96,10 +103,80 @@
 
 <script>
 
-function destroySummerNote(){
+$(function(){
+	setPostList(1);
+});
+
+function deleteAllPost(){
+	
+}
+
+
+function setPostList(currentPage){
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
+		data:{groupNo:"G001",currPage:currentPage},
+		dataType:"json",
+		success:function(data){
+			var $Outer= $('<div>');
+			
+			console.log(data.posts);
+			
+			/*profile Element  */
+			var $profileWrapper = $('<div>');
+			//var $profileImg = 			
+			
+			
+			/*content Element  */
+			var $contentWrapper = $('<div>');
+			
+			/*reply Element  */
+			var $replyWrapper = $('<div>');
+			
+			$('#postDiv').append($Outer);
+			
+			
+		},
+		error:function(){
+		
+		}
+		
+	});
+	
+}
+
+function submitPost(){
+	
+	$('input[name=noteContent]').val($('#summernote').summernote('code'));
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/addPost.gp",
+		data:{groupNo:"G001",memberNo:"M001",content:"<p>안녕하세요!!</p>",isNotice:"N"},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("글 등록 성공!");
+			}else
+				alert("글 등록 실패!");
+			
+			deleteAllPost();
+			setPostList();
+			destroyPostEditModal();
+		},
+		error:function(){
+			alert("글 등록 도중 에러가 생겼습니다.");
+			destroyPostEditModal();
+		}
+		
+	});
+
+}
+
+function destroyPostEditModal(){
 	
 	if($('#summernote').length>0){
-		
+		 $('#postEdit').modal("hide");
 		$('#summernote').summernote('reset');
 		$('#summernote').summernote('destroy');
 	}
@@ -141,7 +218,7 @@ function createSummerNote(){
 	});
 }
 
-function toggleMapModal(editObj){
+function toggleMapModal(){
 	 $('#insertMap').modal("toggle");
      $('#insertMap').on("shown.bs.modal",makeMap());
 }

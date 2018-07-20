@@ -1,5 +1,7 @@
 package com.kh.moigo.groups.controller;
 
+
+import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -19,10 +21,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
+import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.GroupMember;
+
 
 @Controller
 public class GroupController {
@@ -36,10 +43,47 @@ public class GroupController {
 		return "groups/groupMain";
 	}
 	
-	@RequestMapping("/groups/createGroup.do")
-	public String groupCreate(){
+	
+	//그룹 메인 들어갈때 글 가져오기
+	@RequestMapping("/groups/getPostList.gp")
+	@ResponseBody
+	public Map<String,Object> getPostList(@RequestParam String groupNo, @RequestParam int currPage,Model model){
 		
-		return "groups/createGroup";
+		PageInfo p = new PageInfo(currPage, groupService.selectPostCnt(groupNo),5);
+		
+		ArrayList<PostWithMem> list = groupService.selectPostList(groupNo, p);
+		
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("posts", list);
+		map.put("pageInfo", p);
+		
+		return map;
+	}
+	
+	@RequestMapping("/groups/setGroupMain.gp")
+	public String setGroupMain(@RequestParam String groupNo,Model model){
+	
+		return "groups/groupMain";
+	}
+	
+	
+	//글 쓰기
+	@RequestMapping("/groups/addPost.gp")
+	@ResponseBody
+	public Map <String,Object> addPost(	@RequestParam String groupNo,
+							@RequestParam String memberNo,
+							@RequestParam String content,
+							@RequestParam String isNotice,
+							Model model)
+	{
+		//Post p = new Post(groupNo,memberNo,content,isNotice);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		//map.put("result", groupService.addPost(p));
+		
+		return map;
 	}
 	
 	// ------------------------------------------------------------------ 혜진
