@@ -23,12 +23,6 @@ public class MemberServiceImpl implements MemberService {
 
 
 	@Override
-	public int updateMember(Member member) {
-		return memberDao.updateMember(member);
-	}
-
-
-	@Override
 	public int checkIdDuplicate(String memberEmail) {
 		return memberDao.checkIdDuplicate(memberEmail);
 	}
@@ -101,6 +95,33 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public int updateMember(Member member, List<String> interestList) {
+		int result =memberDao.updateMember(member);
+		int res;
+			
+		String memberNo= member.getMemberNo();
+			if(result>0){
+				if (interestList.size() > 0) {
+					 res= memberDao.deleteMemberInterest(memberNo);
+						
+					for (String interest : interestList) {
+						HashMap<String, String> hmap = new HashMap<>();
+	
+						hmap.put("memberNo", member.getMemberNo());
+						hmap.put("interest", interest);
+	
+						res = memberDao.insertMemberInterest(hmap);
+					}
+				}else{
+					res= memberDao.deleteMemberInterest(memberNo);
+				}
+			}
+		
+		
+		return result;
+	}
+
+	}
 
 
-}

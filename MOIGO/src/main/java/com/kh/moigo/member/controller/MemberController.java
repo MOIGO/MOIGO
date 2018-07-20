@@ -196,26 +196,27 @@ public class MemberController {
 		return "mypage/profile";
 	}
 	
-	
-		@RequestMapping("/member/memberUpdate.do")
-		public String memberUpdate(HttpSession session, Member mm,
-					@RequestParam (value = "interest", required = false,	defaultValue = "") List<String> interestList){
-				
-			
-			Member member = (Member) session.getAttribute("m");
+	//멤버 업뎃
+	@RequestMapping("/member/memberUpdate.do")
+	public String memberUpdate(HttpSession session, Member mm,
+			@RequestParam(value = "interest", required = false, defaultValue = "") List<String> interestList) {
 
-			member.setMemberAddress(mm.getMemberAddress());
-			member.setMemberBirth(mm.getMemberBirth());
-			member.setMemberName(mm.getMemberName());
+		Member member = (Member) session.getAttribute("m");
 
-			int result = memberService.updateMember(member);
-		
-			if(result>0) System.out.println("회원정보 수정 성공");
-			else System.out.println("회원정보 수정 실패");
-			
-			return "redirect:/";
-		}
-	
+		member.setMemberAddress(mm.getMemberAddress());
+		member.setMemberBirth(mm.getMemberBirth());
+		member.setMemberName(mm.getMemberName());
+
+		int result = memberService.updateMember(member, interestList);
+
+		if (result > 0)
+			System.out.println("회원정보 수정 성공");
+		else
+			System.out.println("회원정보 수정 실패");
+
+		return "redirect:/mypage/profile.do";
+	}
+
 	// 회원탈퇴
 	@RequestMapping("/mypage/withdrawalEnd.do")
 	public String withdrawalEnd(HttpSession session, @RequestParam String contentW ){
