@@ -85,7 +85,7 @@
 	</div>
  </div>
  
- <form id="groupNoForm" method="post">
+ <form id="groupNoForm">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
  </form>
 

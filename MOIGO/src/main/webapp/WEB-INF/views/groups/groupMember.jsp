@@ -347,16 +347,16 @@ input:-webkit-autofill:active {
 				</button>
 			</div>
 			
-			<c:url var="updateGroupMember" value="${root}/groups/updateGroupMember.gp">
-				<c:param name="groupNo" value="${param.groupNo}"/>
+			<c:url var="updateGroupMember" value="/groups/updateGroupMember.gp" >
+				<c:param name="groupNo" value="${param.groupNo}" />
 				<c:param name="memberNo" value="${loginGroupMember.memberNo}"/>
 			</c:url>
 			
 			<div class="modal-body gm_modal_body">
-				<form id="profileForm" action="${updateGroupMember}" enctype="multipart/form-data">
+				<form id="profileForm" method="POST" action="${updateGroupMember}" enctype="multipart/form-data">
 					<img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
-					<input type="hidden" name="resizeProfile" id="resizeProfile"/>
-					<input type="file" class="profile_upload_inp" name="uploadProfile" id="profileChangeInp" accept="image/*" />
+					<input type="hidden" name="resizeProfile" id="resizeProfile" />
+					<input type="file" class="profile_upload_inp" name="uploadProfile" id="profileChangeInp" accept="image/*"/>
 					<div class="profile_upload_btn" id="profileChangeBtn"></div>
 					<div class="form-group">
 						<label id="profileLbl" for="profileMsg">
@@ -365,7 +365,7 @@ input:-webkit-autofill:active {
 							 / 
 						 	<span id="msgMaxLength">30</span>
 						</label>
-						<textarea class="form-control gm_inp" name="uploadMsg" id="profileMsg" draggable="false" maxlength="30" rows="1" placeholder="최대 30자까지 입력 가능합니다.">${loginGroupMember.profileMsg}</textarea>
+						<textarea class="form-control gm_inp" name="profileMsg" id="profileMsg" draggable="false" maxlength="30" rows="1" placeholder="최대 30자까지 입력 가능합니다.">${loginGroupMember.profileMsg}</textarea>
 					</div>
 				</form>
 			</div>
@@ -389,23 +389,17 @@ input:-webkit-autofill:active {
 			</div>
 
 			<div class="modal-body gm_modal_body" id="profileUploadBody">
-				<form>
-					<input type="file" class="profile_upload_inp"
-						id="profileUploadInp" accept="image/*" /> <label
-						id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대
-						10MB까지 업로드 가능합니다.</label>
-					<div class="profile_upload_btn" id="profileUploadBtn"></div>
-					<div id="profileUploadCropper">
-						<img id="cropperImg" />
-					</div>
-				</form>
+				<input type="file" class="profile_upload_inp" id="profileUploadInp" accept="image/*" /> 
+				<label id="profileUploadLbl" for="profileUploadBtn">이미지파일은 최대 10MB까지 업로드 가능합니다.</label>
+				<div class="profile_upload_btn" id="profileUploadBtn"></div>
+				<div id="profileUploadCropper">
+					<img id="cropperImg" />
+				</div>
 			</div>
 
 			<div class="modal-footer gm_modal_footer">
-				<button type="button" id="profileUploadCloseBtn"
-					class="btn btn-danger">취소</button>
-				<button type="button" id="profileUploadConfirmBtn"
-					class="btn btn-dark">확인</button>
+				<button type="button" id="profileUploadCloseBtn" class="btn btn-danger">취소</button>
+				<button type="button" id="profileUploadConfirmBtn" class="btn btn-dark">확인</button>
 			</div>
 
 		</div>
@@ -422,7 +416,6 @@ input:-webkit-autofill:active {
 	 
 	 /* 상태메시지 실시간 글자수 색깔 변경 */
 	 function countColorChange() {
-		
 		if ($("#profileMsg").val().length == 30)
 			$("#msgLengthCnt").css("color", "red");
 		else if ($("#profileMsg").val().length > 14)
@@ -475,7 +468,6 @@ input:-webkit-autofill:active {
 			$("#profileChangeInp").click();
 		});
 
-		var endFile = "";
 		var cropperImg = "";
 		
 		/* 프로필 사진 업로드부분의 파일이 변경됐을 경우 발생하는 이벤트 */
@@ -484,9 +476,7 @@ input:-webkit-autofill:active {
 			// cropper.js 사용시 이미지를 갱신해주려면 이전 이미지 파일을 destroy 해줘야 함
 			$("#cropperImg").cropper("destroy");
 			var reader = new FileReader();
-			
-			/* 파일 writer 찾아보자! */
-			
+		
 			var ext = $(this).val().split(".").pop().toLowerCase();
 
 			if (ext.length > 0) {
@@ -497,15 +487,13 @@ input:-webkit-autofill:active {
 						$("#profileUploadModal").toggle();
 
 					// src는 local resource 경로를 읽지 못하므로 filereader를 사용
-					endFile = $(this)[0].files[0];
-					console.log(endFile);
-					reader.readAsDataURL(endFile);
+					console.log($(this)[0].files[0]);
+					reader.readAsDataURL($(this)[0].files[0]);
 					reader.onload = function() {
 
 						var $cropperImg = $("#cropperImg");
-						$cropperImg.attr("src",
-								reader.result);
-
+						$cropperImg.attr("src", reader.result);
+						/* cropper.js의 초기 option setting*/
 						$cropperImg.cropper({
 							aspectRatio : 1 / 1,
 							viewMode : 1,
@@ -549,14 +537,14 @@ input:-webkit-autofill:active {
 				   31자로 인식하는 현상을 잡아주기 위해 내용을 갱신해줌*/
 				$("#msgLengthCnt").text(30);
 			}
-			/* 실시간 글자수에 따라서 글자색을 변경해줌 */
 			else 
 				countColorChange();
 		});
 		
 		/* 프로필 modal의 확인 버튼을 누르면 발생하는 이벤트 */
 		$("#profileConfirmBtn").click(function() {
-			
+			$("#resizeProfile").val(cropperImg);
+			$("#profileForm").submit();
 		});
 
 	});
