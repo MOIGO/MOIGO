@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.kh.moigo.admin.model.vo.Accuse" alias="accuse"/>
+		<typeAlias type="com.kh.moigo.admin.model.vo.MemberDetail" alias="memberDetail"/>	
+		<typeAlias type="com.kh.moigo.admin.model.vo.GroupDetail" alias="groupDetail"/>					
+		<typeAlias type="com.kh.moigo.admin.model.vo.MemPerGroup" alias="memPerGroup"/>		
+		<typeAlias type="com.kh.moigo.admin.model.vo.GrpMember" alias="grpMember"/>		
+		<typeAlias type="com.kh.moigo.admin.model.vo.TopFive" alias="acusseTop5"/>													
+													
+		<typeAlias type="com.kh.moigo.groups.model.vo.Files" alias="files"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.Groups" alias="groups"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.GroupMember" alias="groupMember"/>
+		<typeAlias type="com.kh.moigo.member.model.vo.Member" alias="member"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.Post" alias="post"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.Schedule" alias="schedule"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostReply" alias="postReply"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostWithMem" alias="postWithMem"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostReplyWithMem" alias="postReplyWithMem"/>
+	</typeAliases>
+	
+	<!-- <typeHandlers>
+		해당패키지의 모든 TypeHandler구현클래스를 등록함
+		<package name="com.kh.spring.common.typehandler"/>
+	</typeHandlers> -->
+
+	
+</configuration>
