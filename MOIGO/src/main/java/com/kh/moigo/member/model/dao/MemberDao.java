@@ -1,6 +1,7 @@
 package com.kh.moigo.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.kh.moigo.member.model.vo.Member;
 
@@ -20,6 +21,10 @@ public interface MemberDao {
 	int deleteMember(String memberNo);
 
 	int insertDropout(HashMap<String, String> hmap);
+
+	int insertMemberInterest(HashMap<String, String> hmap);
+
+	List<String> selectInterestList(String memberNo);
 
 
 }
