@@ -2,6 +2,9 @@ package com.kh.moigo.admin.model.vo;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.kh.moigo.member.model.vo.JsonDateSerializer;
+
 
 public class Accuse implements java.io.Serializable {
 
@@ -99,7 +102,7 @@ public void setContent(String content) {
 }
 
 
-
+@JsonSerialize(using=JsonDateSerializer.class)
 public Date getAccuseDate() {
 	return accuseDate;
 }

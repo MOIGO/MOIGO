@@ -14,7 +14,6 @@ public interface AccuseDao {
 	int selectAccuseListCnt();
 	List<Map<String, Object>> selectAccuseListPaging(PageInfo pi);
 	Member selectMember(String id);
-	List<Map<String, Object>> selectAccuse(String id);
 	List<Map<String, Object>> selectmemberList();
 	MemberDetail memDetail(String id);
 	List<Map<String, Object>> memPerGroup(String id);
@@ -23,5 +22,10 @@ public interface AccuseDao {
 	List<Map<String, Object>> grpPerMem(String id);
 	List<Map<String, Object>> atop5memberList();
 	List<Map<String, Object>> atop5groupList();
+	
+	List<Map<String, Object>> selectAccuse(String id);
+	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);
+	//int selectAccuseListCnt(String id);
+	List<Map<String, Object>> selectAccuse2(String id);
 
 }

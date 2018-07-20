@@ -17,7 +17,7 @@ public interface AccuseService {
 	int selectAccuseListCnt();
 	List<Map<String, Object>> selectAccuseListPaging(PageInfo pi);
 	Member selectMember(String id);
-	List<Map<String, Object>> selectAccuse(String id);
+
 	List<Map<String, Object>> selectmemberList();
 	List<Map<String, Object>> memPerGroup(String id);
 	MemberDetail memDetail(String id);
@@ -26,6 +26,12 @@ public interface AccuseService {
 	List<Map<String, Object>> grpPerMem(String id); //그룹에 가입한 멤버 정보 불러오기
 	List<Map<String, Object>> atop5memberList(); //accuse top 5 member
 	List<Map<String, Object>> atop5groupList();  //accuse top 5 group
+	
+	
+	List<Map<String, Object>> selectAccuse(String id);
+	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);//ajax 페이징 포기해서 나중으로 넘겼음	
+	//int selectAccuseListCnt(String id); //그 회원의 신고 갯수 
+	List<Map<String, Object>> selectAccuse2(String id);
 
 	
 

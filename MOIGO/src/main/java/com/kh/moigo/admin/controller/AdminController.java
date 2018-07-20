@@ -178,29 +178,77 @@ public class AdminController {
 	
 	
 	/**
-	모달 창을 누른 뒤에 멤버 정보와 상세 신고목록 확인 가능	 
+	모달 창을 누른 뒤에 멤버 정보와 상세 신고목록 확인 가능  ajax	페이징 어려워서 포기
 	 */
+//	@RequestMapping(value="mrDetail.ad", method=RequestMethod.GET)
+//	public @ResponseBody Object mrDetail(@RequestParam String id, @RequestParam(defaultValue="1") int currentPage) throws Exception{
+//		List<Object> mrdList= new ArrayList<Object>();
+//		// -- 페이지 처리 코드 부분 -- //
+//		int startPage; // 한번에 표시될 게시글들의 시작 페이지
+//		int endPage;  // 한번에 표시될 게시글들의 마지막 페이지
+//		int maxPage;   // 전체 페이지의 마지막 페이지 
+//		int limit=5;       // 한 페이지당 게시글 수
+//		int listCount = as.selectAccuseListCnt(id);			
+//		System.out.println("총 게시글 수 : "+listCount);							
+//		maxPage = (int)((double)listCount / limit + 0.9);
+//		System.out.println("maxPage"+maxPage);
+//		System.out.println("maxPage"+limit);
+//		startPage = (((int)((double)currentPage / limit + 0.9)) - 1) * limit + 1;
+//		endPage= startPage + limit - 1;			
+//		if( maxPage < endPage){
+//			endPage = maxPage;
+//		}				
+//		System.out.println("limit갑이 왜 변했지?"+limit);
+//		int startRow = ((currentPage-1)*limit)+1;
+//		int endRow = startRow+(limit-1);
+//
+//		System.out.println(startRow);
+//		System.out.println(endRow);			
+//		// 페이지 관련 변수 전달용 VO 생성
+//		PageInfo pi
+//		= new PageInfo(currentPage, listCount, 10, startPage, endPage, maxPage,startRow,endRow,id);
+//		System.out.println("List구하기 전"+pi);
+//
+//		MemberDetail md = as.memDetail(id);
+//		mrdList.add(md);
+//		
+//		//List<Map<String, Object>> a = as.selectAccuse(id);
+//		List<Map<String, Object>> a = as.selectAccusePaging(pi);
+//		
+//		mrdList.add(a);
+//		mrdList.add(pi);
+//
+//		System.out.println("list:"+mrdList);
+//
+//		return mrdList;
+//	
+//	}
+	
 	@RequestMapping(value="mrDetail.ad", method=RequestMethod.GET)
-	public @ResponseBody Object mrDetail(@RequestParam String id, HttpServletResponse res) throws Exception{
+	public @ResponseBody Object mrDetail(@RequestParam String id) throws Exception{
 		List<Object> mrdList= new ArrayList<Object>();
-		//System.out.println("아이디 넣기"+id);
-		
-		//System.out.println(m);
-		//res.setContentType("application/json; charset=UTF-8");	
-		
-		Member m = as.selectMember(id);
-		mrdList.add(m);
-		
-		List<Map<String, Object>> a = as.selectAccuse(id);
-		
-		
+		MemberDetail md = as.memDetail(id);
+		mrdList.add(md);		
+		List<Map<String, Object>> a = as.selectAccuse(id);		
 		mrdList.add(a);
 		System.out.println("list:"+mrdList);
-
 		return mrdList;
 	
 	}
 	
+	
+	@RequestMapping(value="gpDetail.ad", method=RequestMethod.GET)
+	public @ResponseBody Object gpDetail(@RequestParam String grpId) throws Exception{
+		String id = grpId;
+		List<Object> gpdList= new ArrayList<Object>();
+		GroupDetail gd = as.grpDetail(id);
+		gpdList.add(gd);		
+		List<Map<String, Object>> a = as.selectAccuse2(id);		
+		gpdList.add(a);
+		System.out.println("list:"+gpdList);
+		return gpdList;
+	
+	}
 	
 	/*@RequestMapping(value="sendMessage.ad", method=RequestMethod.GET)
 	public String adminSendMessage(@RequestParam("email") String recipientName,@RequestParam("messageText") String messageText, HttpServletResponse res) throws Exception{

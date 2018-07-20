@@ -15,6 +15,11 @@
     margin-right: auto;
     width: 10px;
 }
+	#modalAccuseList{
+	height: 450px;
+	width: 100%;
+	overflow: scroll;
+	}
 </style>
 </head>
 <body>
@@ -130,10 +135,10 @@
 	        </tr>
 	      </thead>
 	       <c:forEach items="${mtop5}" var="mblack">
-	      <tbody id="myTable">
+	      <tbody id="myMemberTop5Table">
 	      
 	     
-	        <tr>
+	        <tr onclick="moveTest()">
 	          <td>${mblack.rNum}</td>
 	          <td>${mblack.targetMember}</td>
 	          <td>${mblack.aCount}</td>
@@ -163,14 +168,14 @@
 	        </tr>
 	      </thead>
 	      <c:forEach items="${gtop5}" var="gblack">
-	      <tbody id="myTable">
+	      <tbody id="myGroupTop5Table">
 	      
 	     
 	        <tr>
 	          <td>${gblack.rNum}</td>
 	          <td>${gblack.targetGroup}</td>
 	          <td>${gblack.aCount}</td>
-	          <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${mblack.targetGroup}" class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
+	          <td><button type="button" data-target="#myGroupModal" data-toggle="modal" data-id="${gblack.targetGroup}" class="btn btn-outline-info btn-sm identifyingClass2">관리</button></td>
 	        </tr>
 	   	   </c:forEach> 
 	   	 </table>
@@ -208,48 +213,77 @@
 			    <li><button type="button" class="btn btn-outline-light" a href="#tab3" data-toggle="tab">Message</button></li>
 		   </ul>
 		  </div>
-
 						<div class="tab-content">
 							<div class="tab-pane active" id="tab1">
 								<br>
 								<form action="" method="get">
 									<fieldset class="form-group">
-									<legend> 회원 정보 </legend>
-									<div class="form-group row">
-										
-										<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-										<div class="col-sm-10">
-											<input type="email" class="form-control" id="inputEmail3" readonly>
+										<legend> 회원 정보 </legend>
+										<div class="form-group row">
+											<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+											<div class="col-sm-10">
+												<input type="email" class="form-control" id="inputEmail3"
+													readonly>
+											</div>
 										</div>
-									</div>
-									<div class="form-group row">
-										<label for="inputName" class="col-sm-2 col-form-label">Name</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control"
-												id="inputName"  readonly>
+										<div class="form-group row">
+											<label for="inputName" class="col-sm-2 col-form-label">Name</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputName"
+													readonly>
+											</div>
 										</div>
-									</div>
-									<div class="form-group row">
-										<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control"
-												id="inputAddress"  readonly>
+										<div class="form-group row">
+											<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputAddress"
+													readonly>
+											</div>
 										</div>
-									</div>
-									<div class="form-group row">
-										<label for="inputAddress" class="col-sm-2 col-form-label">생년월일</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control"
-												id="inputAddress"  readonly>
+										<div class="form-group row">
+											<label for="inputBirth" class="col-sm-2 col-form-label">BirthD</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputBirth"
+													readonly>
+											</div>
 										</div>
-									</div>
-									
-										
+										<div class="form-group row">
+											<label for="inputEnrollDate" class="col-sm-2 col-form-label">EnrollD</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputEnrollDate"
+													readonly>
+											</div>
+										</div>
+
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Activity</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Post</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Post</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputPost" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">Reply</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Reply</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputReply" readonly>
+												</div>
+											</div>
+										</div>
 									</fieldset>
-									
+
 									<div class="form-group row">
 										<div class="col-sm-12  text-center">
-											<button type="submit" class="btn btn-outline-info"> 회원 탈퇴</button>
+											<button type="submit" class="btn btn-outline-info">
+												회원 탈퇴</button>
 										</div>
 									</div>
 								</form>
@@ -260,19 +294,20 @@
 							<div class="tab-pane" id="tab2">
 								<div class="container-fluid">
 									<div class="row">
-										<table class="table table-hover table-sm">
-											<thead class="thead-light">
-												<tr>
-													<th>신고내용</th>
-													<th>신고자</th>
-													<th>신고날짜</th>
-												</tr>
-											</thead>
-											<tbody id="myTable" class="input_accuse_list">
-
-
-											</tbody>
-										</table>
+										<div id="modalAccuseList">
+										 <input class=" form-control col-sm-12 col-xs-8" id="mAccuseInput" type="text" placeholder="Search.."> <!-- search -->
+											<table class="table table-hover table-sm text-center">
+												<thead class="thead-light">
+													<tr>
+														<th>신고내용</th>
+														<th>신고자</th>
+														<th>신고날짜</th>
+													</tr>
+												</thead>
+												<tbody id="mAccuseTable" class="input_accuse_list">
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -290,7 +325,7 @@
 											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
 									</div>
 									<div class="text-center">
-										<button type="submit" class="btn btn-success">Send
+										<button type="submit" class="btn btn-outline-success">Send
 											message</button>
 									</div>
 								</form>
@@ -312,7 +347,199 @@
 
 
 
+<div class="modal fade" id="myGroupModal">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+				<div class="modal-body">
+				
+					<div class="tabbable">
+						<!-- Only required for left/right tabs -->
+						<div class="btn-group ">
+							<ul class="nav nav-tabs">
+								<li><button type="button"
+										class="btn btn-outline-light active" a href="#tab4"
+										data-toggle="tab">Group Info</button></li>
+								<li><button type="button" class="btn btn-outline-light" 
+										a href="#tab5" data-toggle="tab">Report Bin</button></li>
+								<li><button type="button" class="btn btn-outline-light" 
+										a href="#tab6" data-toggle="tab">Message</button></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab4">
+								<br>
+								<form action="" method="get">
+									<fieldset class="form-group">
+										<legend> 그룹 정보 </legend>
+										<div class="form-group row">
+											<label for="inputGname" class="col-sm-2 col-form-label">Name</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGname"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputGmsg" class="col-sm-2 col-form-label">Message</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGmsg"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputGaddress" class="col-sm-2 col-form-label">Address</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGaddress"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputMaxMem" class="col-sm-2 col-form-label">maxM</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputMaxMem"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputGenrollDate" class="col-sm-2 col-form-label">EnrollD</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGenrollDate"
+													readonly>
+											</div>
+										</div>
 
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Status</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Grade</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Grade</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inputGgc" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">State</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">State</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputReply" readonly>
+												</div>
+											</div>
+										</div>
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Inhibition</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Age</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Age</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputPost" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">Gender</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Gender</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputReply" readonly>
+												</div>
+											</div>
+										</div>
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Activity</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Post</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Post</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputPost" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">Reply</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Reply</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputReply" readonly>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+
+									<div class="form-group row">
+										<div class="col-sm-12  text-center">
+											<button type="submit" class="btn btn-outline-info">
+												그룹 탈퇴</button>
+										</div>
+									</div>
+								</form>
+							</div>
+
+
+
+							<div class="tab-pane" id="tab5">
+								<div class="container-fluid">
+									<div class="row">
+										<div id="modalAccuseList">
+											<table class="table table-hover table-sm">
+												<thead class="thead-light">
+													<tr>
+														<th>신고내용</th>
+														<th>신고자</th>
+														<th>신고날짜</th>
+													</tr>
+												</thead>
+												<tbody id="mAccuseTable" class="input_accuse_list">
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab6">
+								<form action="${pageContext.request.contextPath}/sendMessage.ad"
+									method="get">
+									<div class="form-group">
+										<label for="recipient-name" class="col-form-label">Recipient:</label>
+										<input type="text" class="form-control" id="recipientName"
+											name="email">
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Message:</label>
+										<textarea class="form-control" id="messageText"
+											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-outline-success">Send
+											message</button>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
 
 
 
@@ -329,8 +556,7 @@
 <script>
 $(document).ready(function(){
 	$(".identifyingClass").click(function () {
-		var id = $(this).data('id');
-	        	
+		var id = $(this).data('id');	
 	        $.ajax({
 	            url: "${pageContext.request.contextPath}/mrDetail.ad",
 	            type:'get',
@@ -341,42 +567,86 @@ $(document).ready(function(){
 		            $("#inputEmail3").val(data[0].memberEmail);
 		            $("#inputName").val(data[0].memberName);
 		            $("#inputAddress").val(data[0].memberAddress);
-
+		            $("#inputBirth").val(data[0].memberBirth);
+		            $("#inputEnrollDate").val(data[0].enrollDate);
+		            $("#inlineFormInputPost").val(data[0].postCount);
+					$("#inlineFormInputReply").val(data[0].replyCount);
+		            
 		            $("#recipientName").val(data[0].memberEmail);
 		            console.log(data[1].length);
-		            
+		            $('.input_accuse_list').empty();
 		            for(var i in data[1]){
 		            	console.log(i);
-		            	var str ='<tr>'+
-								'<td>'+data[1][i].content+'</td>' +
- 								' <td>'+data[1][i].targetMember+'</td>' +
- 								' <td>'+data[1][i].accuseDate+'</td>' +
-								' </tr>';
+		            	var str ='<tr onclick="move('+data[1][i].accuseNo+')">'+
+									'<td>'+data[1][i].content+'</td>' +
+	 								'<td>'+data[1][i].reporter+'</td>' +
+	 								'<td>'+data[1][i].accuseDate+'</td>' +
+								'</tr>';
 		            	 $('.input_accuse_list').append(str);
-		            }
-	              
+		            }		          		           
 	            }
-	        });
-	        	
-	            
-	           
-	});
-	    
+	        });	           
+		}); //함수 끝
 	
-	
-  $("#myInput").on("keyup", function() {
+		
+		$(".identifyingClass2").click(function () {
+			var grpId =$(this).data('id');
+		        alert(grpId); 
+		        	
+		        $.ajax({
+		            url: "${pageContext.request.contextPath}/gpDetail.ad",
+		            type:'get',
+		            data: {grpId:grpId},
+		            dataType:"json",
+		            success:function(data){	
+		            	
+			            $("#inputGname").val(data[0].groupName);
+			            $("#inputGmsg").val(data[0].groupMsg);
+			            $("#inputMaxMem").val(data[0].maxMember);
+			            $("#inputGenrollDate").val(data[0].enrollDate);
+						$("#inputGgc").val(data[0].groupGradeCode);
+						$("#inputGsc").val(data[0].groupStateCode);
+						$("#inputGaddress").val(data[0].groupAddress);
+						$("#inputGsc").val(data[0].minAge);
+						$("#inputGsc").val(data[0].maxAge);
+						$("#inputGsc").val(data[0].groupGender);
+						
+						
+			            $("#recipientName").val(data[0].memberEmail);
+			            
+			            $('.input_accuse_list').empty();
+			            for(var i in data[1]){
+			            	console.log(i);
+			            	var str ='<tr onclick="move('+data[1][i].accuseNo+')">'+
+										'<td>'+data[1][i].content+'</td>' +
+		 								'<td>'+data[1][i].reporter+'</td>' +
+		 								'<td>'+data[1][i].accuseDate+'</td>' +
+									'</tr>';
+			            	 $('.input_accuse_list').append(str);
+			            }		          		           
+		            }
+		        });	           
+			}); //함수 끝
+   $("#myInput").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#myTable tr").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
-  });
-  
-  
-  
-  
-});
+  });   
+   $("#mAccuseInput").on("keyup", function() {
+	    var value = $(this).val().toLowerCase();
+	    $("#mAccuseTable tr").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	  }); 
+}); //시작 이벤트 끝
 
+$(document).ready(function(){
 	
+	});
+	
+
+
 
 /*  function adminSideClick(e){
     $('.sidenav').toggle('slow');
@@ -385,5 +655,9 @@ $(document).ready(function(){
   }*/
 </script>
 
+
+<script>
+
+</script>
 </body>
 </html>

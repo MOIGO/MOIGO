@@ -4,8 +4,10 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.kh.moigo.member.model.vo.Member;
 
+@JsonAutoDetect
 public class MemberDetail extends Member implements java.io.Serializable{
 	/**
 	 * 
@@ -69,8 +71,12 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	public void setAccuseCount(int accuseCount) {
 		this.accuseCount = accuseCount;
 	}
+	@Override
+	public String toString() {
+		return "MemberDetail [enrollGroup=" + enrollGroup + ", postCount=" + postCount + ", replyCount=" + replyCount
+				+ ", accuseCount=" + accuseCount + ", toString()=" + super.toString() + "]";
+	}
 
-	
 	
 	
 	

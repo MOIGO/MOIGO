@@ -9,7 +9,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> 
 <script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <script src="${root}/resources/js/common/fontfaceobserver.js"></script>

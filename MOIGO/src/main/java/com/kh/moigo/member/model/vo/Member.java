@@ -2,6 +2,8 @@ package com.kh.moigo.member.model.vo;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 public class Member implements java.io.Serializable{
 
    private static final long serialVersionUID = 3443464769294864530L;
@@ -65,6 +67,9 @@ public class Member implements java.io.Serializable{
    public void setMemberAddress(String memberAddress) {
       this.memberAddress = memberAddress;
    }
+   
+
+   @JsonSerialize(using=JsonDateSerializer.class)
    public Date getMemberBirth() {
       return memberBirth;
    }
@@ -77,6 +82,8 @@ public class Member implements java.io.Serializable{
    public void setMemberGender(String memberGender) {
       this.memberGender = memberGender;
    }
+   
+   @JsonSerialize(using=JsonDateSerializer.class)
    public Date getEnrollDate() {
       return enrollDate;
    }

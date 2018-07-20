@@ -97,5 +97,28 @@ public class AccuseServiceImpl implements AccuseService {
 		return ad.atop5groupList();
 	}
 
+	@Override
+	public List<Map<String, Object>> selectAccuse2(String id) {
+		// TODO Auto-generated method stub
+		return ad.selectAccuse2(id);
+	}
+
+
+
+
+
+
+//	@Override
+//	public List<Map<String, Object>> selectAccusePaging(PageInfo pi) {
+//		// TODO Auto-generated method stub
+//		return ad.selectAccusePaging(pi);
+//	}
+//
+//	@Override
+//	public int selectAccuseListCnt(String id) {
+//		System.out.println("신고카운트 서비스");
+//		return ad.selectAccuseListCnt(id);
+//	}
+
 
 }
