@@ -6,9 +6,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/member/signUp_custom.css?ver=0">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
@@ -17,8 +17,10 @@
 <title>Insert title here</title>
  <style>
 	input:DISABLED {
-		background-color : lightgray;
+		background-color : #e9ecef;
 	}
+	select:DISABLED {
+	background-color : #e9ecef;}
     </style>
 
 </head>
@@ -43,6 +45,7 @@
                         <input type="text" class="col-md-9 col-8  join_form_control " id="joinCode" placeholder="인증번호" disabled>
                         <button class="col-md-3  col-4  join_form_control btn_sign"  type="button" id="btn_joinCode" disabled>확인</button>
                         <span id="codeChkMsg"></span>
+                        <span id="timer"></span>
                     </div>
                     <div class="form-group col-md-12 col-12 row no_margin" >
                         <div class="row no_margin letter_space_join " >비밀번호</div>
@@ -113,8 +116,9 @@
 
                     <div class="form-group col-md-12 col-12 row no_margin">
                             <div class="row  col-12 no_margin letter_space_join no_padding" >성별</div>
-                       <input type="radio" name="memberGender" id="male" class="inp_gender" value="M"><label for="male" id="label_m" class="col-md-6 col-6"> 남자</label>
-                        <input type="radio"name="memberGender" id="femail" class="inp_gender"  value="F"><label for="femail" id="label_w" class="col-md-6 col-6">여자</label>
+	                       <input type="radio" name="memberGender" id="male" class="inp_gender" value="M"><label for="male" id="label_m" class="col-md-6 col-6"> 남자</label>
+	                        <input type="radio"name="memberGender" id="femail" class="inp_gender"  value="F"><label for="femail" id="label_w" class="col-md-6 col-6">여자</label>
+                    		<span id="genderChkMsg"></span>
                     </div>
     
                         <hr style=" background: #dddfe4;">
@@ -139,38 +143,30 @@
                     </div>
                     
                     <div class="form-group col-md-12 col-12 row no_margin">
-                        <button class="  collapsed col-md-12 col-12 join_form_control btn_addInfo row no_margin" data-toggle="collapse" data-target="#activity_area" type="button">활동지역 </button>
+                        <button class="  collapsed col-md-12 col-12 join_form_control btn_addInfo row no_margin" data-toggle="collapse" data-target="#activity_area" type="button">관심지역 </button>
                         <div id="activity_area"  class="col-md-12 col-12 collapse row no_margin" style="border: 0.5px solid #ccc; padding:10px;">
-                            <select name="cityName" id="cityName" class="col-md-6 col-12 join_form_controla">
-                                <option disabled  selected>시, 도 선택</option>
-                                <option value="11" class="foreach">서울특별시</option>
-                                <option value="26" class="foreach">부산광역시</option>
-                                <option value="27" class="foreach">대구광역시</option>
-                                <option value="28" class="foreach">인천광역시</option>
-                                <option value="29" class="foreach">광주광역시</option>
-                                <option value="30" class="foreach">대전광역시</option>
-                                <option value="31" class="foreach">울산광역시</option>
-                                <option value="36" class="foreach">세종특별자치시</option>
-                                <option value="41" class="foreach">경기도</option>
-                                <option value="42" class="foreach">강원도</option>
-                                <option value="43" class="foreach">충청북도</option>
-                                <option value="44" class="foreach">충청남도</option>
-                                <option value="45" class="foreach">전라북도</option>
-                                <option value="46" class="foreach">전라남도</option>
-                                <option value="47" class="foreach">경상북도</option>
-                                <option value="48" class="foreach">경상남도</option>
-                                <option value="50" class="foreach">제주특별자치도</option>
-                                <option value="61">지역무관</option>
-                            </select>
+                            
+                            <select class="col-12 join_form_controla condition_region" id="conditionRegionLarge">
+                                 <option value="regionNone">- 시도 -</option>
+                           </select>
+                            
+                            <select class="col-12 join_form_controla condition_region" id="conditionRegionMedium">
+	                             <option value="regionNone">- 시군구 -</option>
+	                             <option value="">전체</option>
+                          	</select>
+                            
+                          	<select class="col-12 join_form_controla condition_region" id="conditionRegionSmall">
+	                             <option value="regionNone">- 읍면동 -</option>
+	                             <option value="">전체</option>
+                          	</select>
 
-                        
-                            <select name="districtName" id="districtName" class="col-md-6 col-12 join_form_controla">
-                                    <option disabled value="" selected>구, 군 선택</option>
-                                    <option value="a" class="foreach">a</option>
-                                  	<option value="b" class="foreach">b</option>
-                            </select>
+							<div class="col-12">
+	                             <input class="" type="checkbox" id="regionNone">
+	                             <label class="" for="regionNone">지역 무관</label>
+							</div>
 
-							<input type="hidden" id="memberAddress" name="memberAddress" val="">                            
+
+							<input type="hidden" id="memberAddress" name="memberAddress" value="">                            
                         </div>
                     </div>
 
@@ -188,8 +184,153 @@
 
     <script>
     
+    $('#activity_area').on('click',function(){
+	  	var L = $('#conditionRegionLarge').val();
+	    var M = $('#conditionRegionMedium').val();
+	    var S = $('#conditionRegionSmall').val();
+	 
+	   	var str="";
+	   	
+	      if($('#regionNone').is(":checked")){
+	    	  str="지역무관";
+	      }
+	      else{
+	    	   str = L+" "+M+" "+S;
+	      }
+   	   	 $('#memberAddress').val(str.replace(/regionNone/gi," ").trim()); 
+	   
+   	   	 console.log($('#memberAddress').val() );
+	});
+    
+$(function(){
+         
+ 
+	
+	// 행정구역 list를 가져오기 위한 ajax 부분
+      $.ajax({
+         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+               +'&domain=http://127.0.0.1:8080&attrFilter=ctprvn_cd:between:11,50&size=17',
+           type:'GET',
+           dataType:'jsonp',
+           async: false,
+           success:function(data){
+           
+       	   var features =  data.response.result.featureCollection.features;
+            var regionLarges = [];
+           
+            for(var i=0 ; i < features.length; i++){
+               regionLarges[i] = features[i].properties.ctp_kor_nm;
+               $("#conditionRegionLarge").append("<option value="+regionLarges[i]+">"+regionLarges[i]+"</option>");
+            }
+              
+              },error:function(data){
+                 console.log("에러입니다"); 
+           }
+        });
+   
+		var lRegion = "";
+		$("#conditionRegionLarge").change(function() {
+			lRegion = $(this).val();
+			$("#conditionRegionMedium").children().not(":lt(2)").remove();
+			$("#conditionRegionSmall").children().not(":lt(2)").remove();
+			if(lRegion != 'regionNone'){
+				$("#conditionRegionMedium").prop("disabled", false)
+				$.ajax({
+			         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIGG_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+			               +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion +'&size=100',
+			           type:'GET',
+			           dataType:'jsonp',
+			           async: false,
+			           success:function(data){
+			           
+			            var features =  data.response.result.featureCollection.features;
+			            var regionMediums = [];
+			           
+			            for(var i=0 ; i < features.length; i++){
+			               regionMediums[i] = features[i].properties.sig_kor_nm;
+			               $("#conditionRegionMedium").append("<option value="+regionMediums[i]+">"+regionMediums[i]+"</option>");
+			            }
+			              
+			        },error:function(data){
+			             console.log("에러입니다"); 
+			        }
+			   });
+			}else if(lRegion == 'regionNone'){
+				$("#conditionRegionMedium").prop("disabled", true);  
+				$("#conditionRegionSmall").prop("disabled", true);  
+			}
+		});
+		
+		$("#conditionRegionMedium").change(function() {
+			
+			var mRegion = $(this).val();
+			$("#conditionRegionSmall").children().not(":lt(2)").remove();
+			if(mRegion == ''){
+				$("#conditionRegionSmall").prop("disabled", true);  
+				$("#conditionRegionSmall").val("regionNone").prop("selected", true);			
+			}
+			else if(mRegion != 'regionNone'){
+				$("#conditionRegionSmall").prop("disabled", false);  
+				$.ajax({
+			         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+			               +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion + " " + mRegion +'&size=100',
+			           type:'GET',
+			           dataType:'jsonp',
+			           async: false,
+			           success:function(data){
+	
+			            var features =  data.response.result.featureCollection.features;
+			            var regionSmalls = [];
+			           
+			            for(var i=0 ; i < features.length; i++){
+			               regionSmalls[i] = features[i].properties.emd_kor_nm;
+			               $("#conditionRegionSmall").append("<option value="+regionSmalls[i]+">"+regionSmalls[i]+"</option>");
+			            }
+			              
+			        },error:function(data){
+			             console.log("에러입니다"); 
+			        }
+			   });
+			}
+			else
+				$("#conditionRegionSmall").prop("disabled", true);  
+			
+		});
+		
+		
+   
+	   // 지역무관을 선택했을 경우 발생하는 이벤트
+	   $("#regionNone").change(function() {
+	      if($(this).is(":checked")){
+	         $(".condition_region").prop("disabled", true);         
+	         $(".condition_region").val("regionNone").prop("selected", true);
+	      }
+	      else{
+	         $(".condition_region").prop("disabled", false);
+	      }
+	   });
+	    
+    
+});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* 회원가입 췌키아웃 */
     var chkId= false;
-    var chkNum = false;
+    var chkNum = true;  //false 로 변경 할것 ㅎ 인증 받으려면
     var chkPwd = false;
     var chkPwd2 = false;
     var chkName = false;
@@ -198,6 +339,8 @@
     
         // 성별 체크
         $('input[type="radio"][name="memberGender"]').click(function(){
+        	
+        	 $('#genderChkMsg').html('OK!').addClass('okChk').removeClass('noChk');
         	chkGender=true;
             if($(this).val()=='M'){
                 $('#label_m').addClass('label_border');
@@ -276,11 +419,10 @@
 				data : {userEmail : userEmail },
 				dataType : "json",
 				success : function(data){
-						alert(data.msg);
+						/* alert(data.msg); */
 						joinCode=data.joinCode;
-						$('#joinCode').attr('disabled',false);
-						$('#btn_joinCode').attr('disabled',false);
-						
+						$('#joinCode, #btn_joinCode').attr('disabled',false);
+						$('#codeChkMsg').html('인증번호가 발송되었습니다. 메일을 확인해주세요').addClass('okChk').removeClass('noChk');
 				}, error : function(error,msg){
 					
 				}
@@ -291,13 +433,11 @@
         	var cn = $('#joinCode').val();
         	
         	if(cn==joinCode){
-        		alert('인증성공')
-        		chkNum=true;
         		$('#btn_joinCode, #joinCode').attr('disabled',true);
         		$('#codeChkMsg').html('인증완료').addClass('okChk').removeClass('noChk');
+        		chkNum=true;
         	}
         	else{
-        		alert('인증실패');
         		$('#codeChkMsg').html('인증실패').addClass('noChk').removeClass('okChk');
         		chkNum=false;
         	}
@@ -379,27 +519,18 @@
       $('#signUpForm').on('keyup blur change',function(){
     	 /*  console.log(chkId +" / " + chkNum +" / " +chkPwd +" / " +chkPwd2 +" / "+ chkName +" / " +chkBirth +" / " +chkGender +" / "); */
     	 
+    	 
     	  if(chkId==true && chkNum==true && chkPwd==true && chkPwd2==true && chkName==true && chkBirth==true && chkGender==true){
       		  $('#btn_signUp').attr('disabled',false);
     	  }else{
+    		  
      	  		$('#btn_signUp').attr('disabled',true);
      	  }
       });
       
      
       
-      /* ㄴㄴㄴ */
-    /*   $('#btn_signUp').on('click',function(){
-      	var cName = $('#cityName').val();
-     	var dName = $('#districtName').val();
-     		$('#memberAddress').val(cName + " " + dName);
-     		
-    	  	
-     		if(cName !=null && dName==null){
-     			alert('구 군선택도 ㄱㄱ');
-     			return false;
-     		}
-      }); */
+
   
 
     </script>

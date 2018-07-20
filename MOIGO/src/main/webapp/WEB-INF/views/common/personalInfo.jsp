@@ -5,7 +5,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
 <title>개인정보 취급방침</title>
 <style>
 /* 메인 */ 
@@ -15,7 +14,11 @@
     font-size: 18px;
 }
 
-#personalInfo{
+.cursorPo{
+	cursor: pointer;
+}
+
+#pi{
     border: 1px solid lightgray;
     padding: 30px;
 }
@@ -24,11 +27,11 @@
     color: mediumblue;
 }
 
-a{
-    color: mediumblue;
+.picontent{
+    color: mediumblue !important;
 }
-a:hover{
-    text-decoration: none;
+.picontent:hover{
+    text-decoration: none !important;
 }
 
 .infoFontSize{
@@ -38,6 +41,7 @@ a:hover{
 .left{
     margin-left: 10px;
 }
+
 </style>
 </head>
 <body>
@@ -46,15 +50,19 @@ a:hover{
 	<hr>
     <div class="container" id="footerCategory">
         <div class="row">
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>서비스소개</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>개인정보 취급방침</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>이용안내</b></div>
-            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center"><b>연락처 및 지도</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="serviceInfo2">서비스소개</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="personalInfo2" style="color:skyblue;">개인정보 취급 방침</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="useGuide2">이용안내</b></div>
+            <div class="col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
+            <b class="cursorPo" id="maps2">연락처 및 지도</b></div>
         </div>
     </div>
     <hr>
     <br>
-    <div class="container" id="personalInfo">
+    <div class="container" id="pi">
         <br>
         <h3>개인정보 취급방침</h3>
         <br>
@@ -66,20 +74,20 @@ a:hover{
         <br>회사는 개인정보 처리방침을 홈페이지 첫 화면에 공개함으로써 회원님이 언제나 용이하게 보실 수 있도록 조치하고 있습니다.
         <br>단, 본 개인정보 처리방침은 정부의 법령 및 지침의 변경, 또는 보다 나은 서비스의 제공을 위하여 그 내용이 변경될 수 있으니, 회원님들께서는 홈페이지 방문 시 수시로 그 내용을 확인하여 주시기 바라며, 회사는 개인정보처리방침을 개정하는 경우 웹사이트 공지사항(또는 개별공지)을 통하여 공지할 것입니다.
         </p>
-        <br> <p class="infoFontSize">[목차]</p> <br>
-        0. <a href="#zero">개인정보 수집에 대한 동의</a><br>
-        1. <a href="#one">개인정보의 수집 및 이용 목적</a><br>
-        2. <a href="#two">개인정보의 보유 및 이용기간</a><br>
-        3. <a href="#three">개인정보의 파기절차 및 방법</a><br>
-        4. <a href="#four">개인정보의 제3자 제공 및 공유</a><br>
-        5. <a href="#five">개인정보의 처리 위탁</a><br>
-        6. <a href="#six">회원의 권리와 그 행사방법</a><br>
-        7. <a href="#seven">회원의 의무</a><br>
-        8. <a href="#eight">링크사이트</a><br>
-        9. <a href="#nine">개인정보 자동수집 장치(쿠키 등)의 설치, 운영 및 그 거부에 관한 사항</a><br>
-        10. <a href="#ten">개인정보의 기술적/관리적 보호 대책</a><br>
-        11. <a href="#eleven">개인정보보호책임자</a><br>
-        12. <a href="#twelve">개인정보처리방침의 개정과 그 공지</a><br><hr>
+        <br><p class="infoFontSize">[목차]</p> <br>&nbsp;&nbsp;
+        0. <a class="picontent" href="#zero">개인정보 수집에 대한 동의</a><br>&nbsp;&nbsp;
+        1. <a class="picontent" href="#one">개인정보의 수집 및 이용 목적</a><br>&nbsp;&nbsp;
+        2. <a class="picontent" href="#two">개인정보의 보유 및 이용기간</a><br>&nbsp;&nbsp;
+        3. <a class="picontent" href="#three">개인정보의 파기절차 및 방법</a><br>&nbsp;&nbsp;
+        4. <a class="picontent" href="#four">개인정보의 제3자 제공 및 공유</a><br>&nbsp;&nbsp;
+        5. <a class="picontent" href="#five">개인정보의 처리 위탁</a><br>&nbsp;&nbsp;
+        6. <a class="picontent" href="#six">회원의 권리와 그 행사방법</a><br>&nbsp;&nbsp;
+        7. <a class="picontent" href="#seven">회원의 의무</a><br>&nbsp;&nbsp;
+        8. <a class="picontent" href="#eight">링크사이트</a><br>&nbsp;&nbsp;
+        9. <a class="picontent" href="#nine">개인정보 자동수집 장치(쿠키 등)의 설치, 운영 및 그 거부에 관한 사항</a><br>
+        10. <a class="picontent" href="#ten">개인정보의 기술적/관리적 보호 대책</a><br>
+        11. <a class="picontent" href="#eleven">개인정보보호책임자</a><br>
+        12. <a class="picontent" href="#twelve">개인정보처리방침의 개정과 그 공지</a><br><hr>
         
         <p class="bluecolor" id="zero">0. 개인정보 수집에 대한 동의</p>
             <p class="infoFontSize left">회사는 이용자들이 회사의 개인정보 취급방침 또는 이용약관의 내용에 대하여 「<b>동의</b>」버튼 또는 「<b>취소</b>」버튼을 클릭할 수 있는 절차를 마련하여, 「<b>동의</b>」버튼을 클릭하면 개인정보 수집에 대해 동의한 것으로 봅니다.</p>
@@ -257,4 +265,9 @@ a:hover{
     <br><br><br>
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
+<script>
+	function pageScroll(label){
+		console.log(label);
+	}
+</script>
 </html>

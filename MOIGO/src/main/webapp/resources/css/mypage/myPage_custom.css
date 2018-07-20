@@ -9,11 +9,18 @@
     height: 40px;
     display: block;
     padding: 6px 12px;
-    font-size: 14px;
+    font-size: 16px;
     color: #555;
     background-color: #fff;
      border: 1px solid #ccc; 
     border-radius: 4px;
+    font-size:14px;
+}
+
+.profile_text_control{
+    height: 40px;
+    line-height: 40px; 
+    font-size: 14px;
 }
 
 /* 선업ㅅ는거? */
@@ -30,11 +37,15 @@
 }
 
 .title_profile{
+	font-size: 14px;
     text-align: left;
      height: 40px;
     line-height: 40px; 
     font-weight: bold;
     letter-spacing:-1px !important;
+}
+.content_profile{
+	font-size: 16px;
 }
 
 .profile_wrap{
@@ -84,6 +95,18 @@
     font-weight: 300;
     border-radius: 4px;
     float: right;
+    cursor: pointer;
+}
+
+.btn_profile2{
+    color: #fff;
+    border: none;
+     margin-top: auto;
+    background: none;
+    background-color: #00b7ee;
+    font-size: 14px;
+    font-weight: 300;
+    border-radius: 4px;
     cursor: pointer;
 }
 .no_margin{

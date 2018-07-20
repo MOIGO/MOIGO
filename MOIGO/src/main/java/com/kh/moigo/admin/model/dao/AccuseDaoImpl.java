@@ -20,34 +20,34 @@ public class AccuseDaoImpl implements AccuseDao {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 
-	@Override
+	@Override //단순 신고 불러오기
 	public List<Map<String, Object>> selectAccuseList() {
 		System.out.println("신고 dao");
 		return sqlSession.selectList("accuse.selectAccuseList");
 	}
 
-	@Override
+	@Override //paging 관련 신고갯수 부르기
 	public int selectAccuseListCnt() {
 		// TODO Auto-generated method stub
-		System.out.println("신고카운트 dao");
+		//System.out.println("신고카운트 dao");
 		int result =sqlSession.selectOne("accuse.selectAccuseListCnt");
-		System.out.println("result" +result);
+		//System.out.println("result" +result);
 		return sqlSession.selectOne("accuse.selectAccuseListCnt");
 	}
 
-	@Override
+	@Override //paging 추가된 신고 리스트 불러오기.
 	public List<Map<String, Object>> selectAccuseListPaging(PageInfo pi) {
-		System.out.println("신고 dao");
+		//System.out.println("신고 dao");
 		return sqlSession.selectList("accuse.selectAccuseListPaging",pi);
 	}
 
-	@Override
+	@Override //memberlist 부르기
 	public Member selectMember(String id) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("member.selectOne",id);
 	}
 
-	@Override
+	@Override //신고
 	public List<Map<String, Object>> selectAccuse(String id) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("accuse.selectList",id);
@@ -59,19 +59,19 @@ public class AccuseDaoImpl implements AccuseDao {
 		return sqlSession.selectList("member.selectMemberList");
 	}
 
-	@Override
+	@Override //멤버 한 사람의 다양한 정보 불러오기
 	public MemberDetail memDetail(String id) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("memberDetail.memDetail",id);
 	}
 
-	@Override
+	@Override //멤버 한 사람의 가입 그룹 불러오기
 	public List<Map<String, Object>> memPerGroup(String id) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("memberDetail.memPerGroup",id);
+		return sqlSession.selectList("memPerGroup.memPerGroup",id);
 	}
 
-	@Override
+	@Override //그룹 하나의 여러 정보 불러오기
 	public GroupDetail grpDetail(String id) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("groupDetail.grpDetail",id);
@@ -81,6 +81,24 @@ public class AccuseDaoImpl implements AccuseDao {
 	public List<Map<String, Object>> selectgroupList() {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("groups.selectGroupList");
+	}
+
+	@Override
+	public List<Map<String, Object>> grpPerMem(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("grpMember.grpMember",id);
+	}
+
+	@Override
+	public List<Map<String, Object>> atop5memberList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("acusseTop5.atop5memberList");
+	}
+
+	@Override
+	public List<Map<String, Object>> atop5groupList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("acusseTop5.atop5groupList");
 	}
 	
 

@@ -14,33 +14,20 @@ import com.kh.moigo.member.model.vo.Member;
 public interface AccuseService {
 
 	List<Map<String, Object>> selectAccuseList();
-
-
 	int selectAccuseListCnt();
-
-
 	List<Map<String, Object>> selectAccuseListPaging(PageInfo pi);
-
-
 	Member selectMember(String id);
-
-
 	List<Map<String, Object>> selectAccuse(String id);
-
-
 	List<Map<String, Object>> selectmemberList();
-
-
 	List<Map<String, Object>> memPerGroup(String id);
-
-
 	MemberDetail memDetail(String id);
-
-
 	GroupDetail grpDetail(String id);
-
-
 	List<Map<String, Object>> selectgroupList();
+	List<Map<String, Object>> grpPerMem(String id); //그룹에 가입한 멤버 정보 불러오기
+	List<Map<String, Object>> atop5memberList(); //accuse top 5 member
+	List<Map<String, Object>> atop5groupList();  //accuse top 5 group
+
+	
 
 	
 }
