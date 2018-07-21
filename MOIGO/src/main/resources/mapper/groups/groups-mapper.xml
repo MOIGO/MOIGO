@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="groups">
+
 	<resultMap type="groups" id="groupsResultMap">
 		<id property="groupNo" column="GROUP_NO"/>
 		<result property="groupName" column="GROUP_NAME"/>
@@ -18,8 +19,133 @@
 		<result property="groupGender" column="GROUP_GENDER"/>
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
-	<select id="selectGroupList" resultMap="groupsResultMap">
-	SELECT * FROM GROUPS
+	
+	<resultMap type="post" id="postResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="isNotice" column="IS_NOTICE"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+	</resultMap>
+	
+	<resultMap type="files" id="filesResultMap">
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
+		<result property="fileNewName" column="FILE_NEW_NAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="groupNo" column="SUBMIT_DATE"/>
+		<result property="filePath" column="GROUP_NO"/>
+		<result property="groupNo" column="MEMBER_NO"/>
+		<result property="filePath" column="FILE_DATE"/>
+		<result property="isImage" column="IS_IMAGE"/>
+	</resultMap>
+	
+	<resultMap type="postReply" id="postReplyResultMap">
+		<id property="replyNo" column="REPLY_NO"/>
+		<result property="postNo" column="POST_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="content" column="CONTENT"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+	</resultMap>
+
+	<resultMap type="postWithMem" id="postWithMemResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="isNotice" column="IS_NOTICE"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+		<collection property="postReplyWithMem" column="POST_NO" ofType="postReplyWithMem" select="selectReplyForPost"/>
+		<collection property="files" column="POST_NO" ofType="files" select="selectFilesForPost"/><!--여기서부터!!  -->
+	</resultMap>
+
+	<resultMap type="postReplyWithMem" id="postReplyWithMemResultMap">
+		<id property="replyNo" column="REPLY_NO"/>
+		<result property="postNo" column="POST_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="content" column="CONTENT"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+	</resultMap>
+	
+	
+	<select id="selectMemberForPostReply" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
+		WHERE MEMBER_NO=#{memberNo}
 	</select>
+	
+	
+	<select id="selectOneGroupMember" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
+		WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	<select id="selectFilesForPost" resultMap="filesResultMap">
+		SELECT FILE_NO,FILE_ORIGIN_NAME,FILE_NEW_NAME,FILE_PATH FROM FILES 
+		JOIN POSTFILES USING(FILE_NO)
+		JOIN POST USING(POST_NO)
+		WHERE POST_NO=#{postNo}
+	</select>
+	
+	
+	<select id="selectGroupList" resultMap="groupsResultMap">
+		SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
+	</select>
+	
+	
+	<insert id="addPost" parameterType="hashmap">
+		INSERT INTO POST VALUES(SEQ_POST.NEXTVAL,#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
+	</insert>
+	
+	<select id="selectPostList" resultType="post" resultMap="postResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo})
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="selectPostWithMemList" resultType="postWithMem" resultMap="postWithMemResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo})
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="selectReplyForPost" resultMap="postReplyWithMemResultMap" >
+		SELECT * FROM POST_REPLY WHERE POST_NO = #{postNo}
+	</select>
+	
+	
+	<select id="selectPostCnt" resultType="_int">
+		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
+	</select>
+
+	<!-- 혜진 -->
+	
+	<resultMap type="groupMember" id="groupMemberResultMap">
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="profileImg" column="PROFILE_IMG"/>
+		<result property="profileThumb" column="PROFILE_THUMB"/>
+		<result property="profileMsg" column="PROFILE_MSG"/>
+		<result property="memberGradeCode" column="MEMBER_GRADE_CODE"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<select id="selectGroupMemberList" resultMap="groupMemberResultMap">
+		SELECT GM.*, M.MEMBER_NAME
+		FROM GROUP_MEMBER GM, MEMBER M 
+		WHERE GM.MEMBER_NO = M.MEMBER_NO
+		AND GROUP_NO = #{groupNo}
+		ORDER BY 6 DESC, 7
+	</select>
+	
+	<select id="searchGroupMemberList" parameterType="hashmap" resultMap="groupMemberResultMap">
+		SELECT GM.*, M.MEMBER_NAME
+		FROM GROUP_MEMBER GM, MEMBER M 
+		WHERE GM.MEMBER_NO = M.MEMBER_NO
+		AND GROUP_NO = #{groupNo}
+		AND M.MEMBER_NAME LIKE #{searchName}||'%'
+		ORDER BY 6 DESC, 7
+	</select>
+	
 </mapper>
 	

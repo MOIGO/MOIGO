@@ -1,6 +1,6 @@
-package com.kh.moigo.post.model.vo;
-
+package com.kh.moigo.groups.model.vo;
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Post implements java.io.Serializable{
 
@@ -13,6 +13,22 @@ public class Post implements java.io.Serializable{
 	private String content;
 	private String delflag;
 	private Date submitDate;
+	
+	public Post(String postNo, String groupNo, String memberNo, String isNotice, String content, String delflag,
+			Date submitDate) {
+		super();
+		this.postNo = postNo;
+		this.groupNo = groupNo;
+		this.memberNo = memberNo;
+		this.isNotice = isNotice;
+		this.content = content;
+		this.delflag = delflag;
+		this.submitDate = submitDate;
+	}
+	public Post() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public String getPostNo() {
 		return postNo;
 	}
@@ -37,11 +53,11 @@ public class Post implements java.io.Serializable{
 	public void setIsNotice(String isNotice) {
 		this.isNotice = isNotice;
 	}
-	public String getPostContent() {
+	public String getContent() {
 		return content;
 	}
-	public void setPostContent(String postContent) {
-		this.content = postContent;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	public String getDelflag() {
 		return delflag;
@@ -59,11 +75,11 @@ public class Post implements java.io.Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((delflag == null) ? 0 : delflag.hashCode());
 		result = prime * result + ((groupNo == null) ? 0 : groupNo.hashCode());
 		result = prime * result + ((isNotice == null) ? 0 : isNotice.hashCode());
 		result = prime * result + ((memberNo == null) ? 0 : memberNo.hashCode());
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((postNo == null) ? 0 : postNo.hashCode());
 		result = prime * result + ((submitDate == null) ? 0 : submitDate.hashCode());
 		return result;
@@ -77,6 +93,11 @@ public class Post implements java.io.Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Post other = (Post) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
 		if (delflag == null) {
 			if (other.delflag != null)
 				return false;
@@ -97,11 +118,6 @@ public class Post implements java.io.Serializable{
 				return false;
 		} else if (!memberNo.equals(other.memberNo))
 			return false;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
 		if (postNo == null) {
 			if (other.postNo != null)
 				return false;
@@ -117,23 +133,9 @@ public class Post implements java.io.Serializable{
 	@Override
 	public String toString() {
 		return "Post [postNo=" + postNo + ", groupNo=" + groupNo + ", memberNo=" + memberNo + ", isNotice=" + isNotice
-				+ ", postContent=" + content + ", delflag=" + delflag + ", submitDate=" + submitDate + "]";
+				+ ", content=" + content + ", delflag=" + delflag + ", submitDate=" + submitDate + "]";
 	}
-	public Post(String postNo, String groupNo, String memberNo, String isNotice, String postContent, String delflag,
-			Date submitDate) {
-		super();
-		this.postNo = postNo;
-		this.groupNo = groupNo;
-		this.memberNo = memberNo;
-		this.isNotice = isNotice;
-		this.content = postContent;
-		this.delflag = delflag;
-		this.submitDate = submitDate;
-	}
-	public Post() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
 	
 	
 }

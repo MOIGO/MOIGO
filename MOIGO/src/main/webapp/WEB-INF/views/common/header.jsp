@@ -134,7 +134,7 @@ body {
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 search">
 		<form action="${pageContext.request.contextPath}/search/searchList.do">
 			<div class="input-group" id="search-input">
-				<input type="text" class="form-control" name="keyword" placeholder="모임검색" size="50px">
+				<input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="모임검색" size="50px">
 				<span class="input-group-btn">
 					<button class="btn btn-info" type="button" onclick="submit()">검색</button>
 				</span>
@@ -153,11 +153,9 @@ body {
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/common/test.do">테스트</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 멤버</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSetting.do">모임 설정</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
@@ -211,6 +209,11 @@ body {
 		  </ul>
 		</div>
 	</nav>
+	
+	<!-- 테스트 -->
+	<c:set var="m" value="${sessionScope.m}"></c:set>
+	<!-- 테스트 -->
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -223,6 +226,8 @@ body {
 	<script>
 		
 		$(function() {
+			
+			console.log("${m}");
 			
 			/* 
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 

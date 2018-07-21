@@ -1,4 +1,4 @@
-package com.kh.moigo.post.model.vo;
+package com.kh.moigo.groups.model.vo;
 
 import java.sql.Date;
 

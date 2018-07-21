@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="memberDetail">
+	<resultMap type="memberDetail" id="memberDetailResultMap">
+		<id property="memberNo" column="MEMBER_NO" />
+		<result property="memberEmail" column="MEMBER_EMAIL" />
+		<result property="memberPwd" column="MEMBER_PWD" />
+		<result property="memberName" column="MEMBER_NAME" />
+		<result property="memberAddress" column="MEMBER_ADDRESS" />
+		<result property="memberBirth" column="MEMBER_BIRTH" />
+		<result property="memberGender" column="MEMBER_GENDER" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="enrollGroup" column="ENROLL_GR" />
+		<result property="postCount" column="POST_COUNT" />
+		<result property="replyCount" column="REPLY_COUNT" />
+		<result property="accuseCount" column="ACCUSE_COUNT" />
+	</resultMap>
+
+	<select id="memDetail" parameterType="string" resultMap="memberDetailResultMap">
+		SELECT MEMBER_NO,
+		MEMBER_EMAIL,MEMBER_NAME,MEMBER_BIRTH,MEMBER_GENDER,ENROLL_DATE,
+		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE MEMBER_NO = M.MEMBER_NO)
+		ENROLL_GR,
+		(SELECT COUNT(*) FROM POST WHERE MEMBER_NO = M.MEMBER_NO) POST_COUNT,
+		(SELECT COUNT(*) FROM POST_REPLY WHERE MEMBER_NO = M.MEMBER_NO) REPLY_COUNT
+		FROM MEMBER M
+		WHERE MEMBER_NO = #{id}
+	</select>
+
+
+
+
+</mapper>

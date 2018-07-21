@@ -14,6 +14,19 @@
 	.bolder_text{
 		font-weight: bolder;
 	}
+	
+	.group_list:hover {
+		cursor: pointer;
+	}
+	
+	#groupSetting {
+		cursor : default;
+	}
+	
+	#groupSetting:hover {
+		cursor : pointer;
+	}
+	
 </style>
 </head>
 
@@ -60,21 +73,48 @@
 	<br />
 	<div>
 		<ul class="list-group">
-			<li class="list-group-item"><i class="fas fa-book mr-2"></i><span>전체글</span></li>
-			<li class="list-group-item"><i class="far fa-images mr-2"></i><span>사진첩</span></li>
-			<li class="list-group-item"><i class="far fa-calendar-alt mr-2"></i><span>일정</span></li>
-			<li class="list-group-item"><i class="fas fa-users mr-2"></i><span>멤버</span></li>		
+			<li class="list-group-item group_list"><i class="fas fa-book mr-2"></i><span>전체글</span></li>
+			<li class="list-group-item group_list"><i class="far fa-images mr-2"></i><span>사진첩</span></li>
+			<li class="list-group-item group_list"><i class="far fa-calendar-alt mr-2"></i><span>일정</span></li>
+			<li class="list-group-item group_list"><i class="fas fa-users mr-2"></i><span>멤버</span></li>				
 		</ul>
 	</div>
 	<hr />
 	<div class="d-flex justify-content-end">
-		<i class="fas fa-cog"></i><span>그룹 설정</span>
+		<i class="fas fa-cog"></i><span id="groupSetting">그룹 설정</span>
 	</div>
  </div>
+ 
+ <form id="groupNoForm">
+ 	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
+ </form>
+
 </body>
 
 <script>
 
+$(function() {
+
+	/* 각 메뉴로 이동하는 메소드 */
+	$(".group_list").on("click", function() {
+		var groupMenu = $(this).text();
+		
+		if(groupMenu == '전체글')
+			alert("전체글!");
+		else if(groupMenu == '사진첩')
+			alert("사진첩");
+		else if(groupMenu == '일정')
+			$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
+		else
+			$("#groupNoForm").attr("action", "${root}/groups/groupMember.gp").submit();
+		
+	});
+	
+	$("#groupSetting").on("click", function() {
+		$("#groupNoForm").attr("action", "${root}/groups/groupSetting.gp").submit();
+	});
+});
+	
 </script>
 
 </html>
