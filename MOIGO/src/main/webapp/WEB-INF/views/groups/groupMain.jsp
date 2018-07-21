@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-<c:set var="postList" value="${requestScope.list}"></c:set>
-<c:set var="pageInfo" value="${requestScope.pageInfo}"></c:set>
+<c:set var="root" value="${pageContext.request.contextPath}" />
 <html>
 <head>
 <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootStrap/bootstrap.min.css">
@@ -31,9 +30,33 @@
 	font-weight: bolder;
 }
 
-.writePost {
+.postProfileImg{
+	width:50px;
+	height:50px;
+}
+body {
+	background: #EDEFF2;
+}
+
+#postDiv  * {
+	background:white;
 	
 }
+
+#postDiv {
+box-shadow: 2px 2px grey;
+}
+
+.postBorder{
+	border: 2px solid 
+}
+
+.replyProfileImg{
+	width:40px;
+	height:40px;
+	
+}
+
 </style>
 
 </head>
@@ -55,7 +78,7 @@
 				<div class="col">
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
-					<div id="postDiv" class="test">
+					<div id="postDiv" class="">
 						
 					</div>
 				</div>
@@ -118,23 +141,24 @@ function setPostList(currentPage){
 		data:{groupNo:"G001",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-			var $Outer= $('<div>');
+			var $postOuter= $('<div class="p-3 postOuter">');
 			
-			console.log(data.posts);
+			console.log(data);
 			
-			/*profile Element  */
-			var $profileWrapper = $('<div>');
-			//var $profileImg = 			
+			for(var i = 0; i <data.posts.length;++i){
 			
-			
+				var $postOuter= $('<div class="p-3 postOuter test">');
+				$postOuter.append(makeProfile(data.posts[i]));
+				$postOuter.append(makeContent(data.posts[i]));
+				$postOuter.append(makeReply(data.posts[i].postReplyWithMem))
+				$('#postDiv').append($postOuter);
+			}
+
 			/*content Element  */
-			var $contentWrapper = $('<div>');
+			
 			
 			/*reply Element  */
 			var $replyWrapper = $('<div>');
-			
-			$('#postDiv').append($Outer);
-			
 			
 		},
 		error:function(){
@@ -142,6 +166,128 @@ function setPostList(currentPage){
 		}
 		
 	});
+	
+}
+
+function makeReply(replyList){
+	var $replyWrapper =  $('<div class="p-3 replyWrapper bg-light"> ');
+	
+	for(var i =0;i< replyList.length;++i){
+		$replyWrapper.append(makeProfile(replyList[i]));	
+	}
+	
+	return $replyWrapper;
+}
+
+function makeContent(post){
+	var $contentWrapper = $('<div class="p-3 postContent">');
+	
+	$contentWrapper.append(post.content);
+	
+	return $contentWrapper;
+}
+
+function makeProfile(obj){
+	/*profile Element  */
+	
+	var $profileWrapper = $('<div class="d-flex  align-items-center mt-2 mr-auto">');
+	
+	var $profileImgWrapper;
+	
+	var $profileImg;
+	
+	if(typeof(obj.replyNo)=='undefined'){
+		$profileImgWrapper = $('<div class="">');
+		if(obj.groupMember.profileImg!=null)
+			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+		else
+			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
+	}
+	else{
+		$profileImgWrapper = $('<div class="align-self-start">');
+		if(obj.groupMember.profileImg!=null)
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+		else
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
+	}
+	
+	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
+	var $userDataWrapper =$("<div class='d-flex'>");
+	var $userName =$("<span class='mr-4 ' style='overflow:hidden;text-overflow:ellipsis; font-weight:bold'>").text(obj.groupMember.memberName);
+	var $userMsg = $("<span class='w-50 text-muted' style='overflow:hidden;text-overflow:ellipsis;'>").text(obj.groupMember.profileMsg);
+	var $replyContent;
+	
+	if(typeof(obj.postNo)!='undefined'){
+		$replyContent = $("<div class='d-inline-flex replyContent '>"); 
+		$replyContent.append(obj.content);
+	}
+	
+	
+	var $upLoadDateWrapper=$('<div class="d-flex">');
+	var $dropDownWrapper=$('<div >')
+	let now = new Date(obj.submitDate);
+	
+	var $upLoadWrapper  = $("<span>").text(	now.getMonth()+"월"+" "+now.getDate()+"일");
+	
+	$upLoadDateWrapper.append($upLoadWrapper);
+	
+	$userDataWrapper.append($userName);
+	$userDataWrapper.append($userMsg);
+	
+	$profileAndDate.append($userDataWrapper);
+	
+	if(typeof(obj.replyNo)!='undefined'){
+		$profileAndDate.append($replyContent);
+		console.log(obj.replyNo);
+	}
+	
+	$profileAndDate.append($upLoadDateWrapper);
+	
+	$profileImgWrapper.append($profileImg);
+	$profileWrapper.append($profileImgWrapper);
+	$profileWrapper.append($profileAndDate);
+	if(typeof(obj.replyNo)!='undefined')
+		$profileWrapper.append(makeDropDown(false));
+	else
+		$profileWrapper.append(makeDropDown(true));
+	return $profileWrapper;
+}
+
+
+
+
+function makeDropDown(isPost,num){
+	$dropDownWrapper =$("<div class='d-flex'>");
+	
+	var $dropDown =$('<div class="dropdown">');
+	var $dropDownBtn=$('<button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>');
+	var $dropDownMenu=$('<div class="dropdown-menu">');
+	
+	var $dropDownItem1
+	var $dropDownItem2
+	
+	if(isPost){
+		$dropDownItem1=$("<a class='dropdown-item'>글 수정</a>");
+		$dropDownItem2=$("<a class='dropdown-item'>공지 등록</a>");
+		var $dropDownItem3=$("<a class='dropdown-item'>삭제하기</a>");
+		var $dropDownItem4=$("<a class='dropdown-item'>신고하기</a>");
+		$dropDownMenu.append($dropDownItem1);
+		$dropDownMenu.append($dropDownItem2);
+		$dropDownMenu.append($dropDownItem3);
+		$dropDownMenu.append($dropDownItem4);
+		
+	}else{
+		$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
+		$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
+		$dropDownMenu.append($dropDownItem1);
+		$dropDownMenu.append($dropDownItem2);
+	}
+	
+	$dropDown.append($dropDownBtn);
+	$dropDown.append($dropDownMenu);
+	$dropDownWrapper.append($dropDown);
+	
+	return $dropDownWrapper;
 	
 }
 

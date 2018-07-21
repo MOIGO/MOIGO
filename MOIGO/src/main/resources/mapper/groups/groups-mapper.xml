@@ -76,8 +76,10 @@
 	
 	
 	<select id="selectOneGroupMember" resultMap="groupMemberResultMap">
-		SELECT * FROM GROUP_MEMBER
-		WHERE MEMBER_NO = #{memberNo}
+		SELECT GROUP_MEMBER.*,MEMBER_NAME 
+		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
+		WHERE GROUP_MEMBER.MEMBER_NO=#{memberNo}
+		
 	</select>
 	
 	<select id="selectFilesForPost" resultMap="filesResultMap">
