@@ -22,4 +22,5 @@ public interface GroupsService {
 	List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap);
 	int deletePost(String postNo);
 	int deleteReply(String replyNo);
+	int updatePost(Post post);
 }

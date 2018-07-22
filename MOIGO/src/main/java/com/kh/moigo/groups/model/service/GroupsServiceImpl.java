@@ -69,4 +69,10 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.deleteReply(replyNo);
 	}
 
+	@Override
+	public int updatePost(Post post) {
+		
+		return groupDao.updatePost(post);
+	}
+
 }

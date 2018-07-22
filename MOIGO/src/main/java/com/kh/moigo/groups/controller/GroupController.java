@@ -83,11 +83,23 @@ public class GroupController {
 	//글 삭제
 	@RequestMapping("/groups/deletePost.gp")
 	@ResponseBody
-	public Map <String,Object> deletePostPost(@RequestParam String postNo)
+	public Map <String,Object> deletePost(@RequestParam String postNo)
 	{
 		Map <String,Object> map = new HashMap<String, Object>();
 		
 		map.put("result", groupService.deletePost(postNo));
+		
+		return map;
+	}	
+	
+	//글 수정
+	@RequestMapping("/groups/updatePost.gp")
+	@ResponseBody
+	public Map <String,Object>updatePost(Post post)
+	{
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", groupService.updatePost(post));
 		
 		return map;
 	}	

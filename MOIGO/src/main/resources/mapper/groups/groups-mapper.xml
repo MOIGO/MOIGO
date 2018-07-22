@@ -106,6 +106,13 @@
 		WHERE POST_NO=#{postNo}
 	</delete>
 	
+	<!--글 수정  -->
+	<update id="updatePost" parameterType="post">
+		UPDATE POST
+		SET CONTENT=#{content}
+		WHERE POST_NO=#{postNo}
+	</update>
+	
 	<!--댓글 등록  -->
 	<insert id="insertReply" parameterType="postReply">
 		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)

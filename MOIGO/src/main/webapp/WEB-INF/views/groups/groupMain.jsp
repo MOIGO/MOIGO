@@ -118,7 +118,7 @@ background: #EDEFF2;
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal" onclick="destroyPostEditModal();">취소</button>
-						<button type="button" class="btn btn-primary" onclick="submitPost()">확인</button>
+						<button type="button" class="btn btn-primary" onclick="editOrSubmit()">확인</button>
 					</div>
 			</div>
 		</div>
@@ -295,7 +295,7 @@ function makeDropDown(isPost,num){
 		$dropDownMenu.append($dropDownItem4);
 		
 		$dropDownItem1.on("click",function(){
-			updatePost(num);
+			prepareUpdatePost(num);
 		});
 		
 		
@@ -323,7 +323,7 @@ function makeDropDown(isPost,num){
 	
 }
 
-function updatePost(num){
+function prepareUpdatePost(num){
 	toEditContent = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 	$('#postEdit').modal('toggle');
 	createSummerNote();
@@ -339,12 +339,35 @@ function updatePost(num){
 	}
 }
 
+function updatePost(num,postContent){
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/updatePost.gp",
+		data:{postNo:num,content:postContent},
+		dataType:"json",
+		success:function(data){
+			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
+			if(data.result>0){
+				$temp.children().remove();
+				console.log(postContent);
+				$temp.append(postContent);
+				alert("글 수정 성공!");
+			}else
+				alert("댓글 삭제 실패!");
+			
+		},
+		error:function(){
+			alert("댓글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
 function restoreMapEvent(obj){
 	
 	 $(obj).find('[name=editBtn]').on("click",function(){
 		toEditTarget=obj;
 		
-		$('#placeKeyword').val($(obj).find('.place_name'));
+		$('#placeKeyword').val($(obj).find('.place_name').text());
 		editMap();
 	});
 	
@@ -368,8 +391,6 @@ function restoreMapEvent(obj){
 
 
 function deleteReply(num){
-	
-	
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/deleteReply.gp",
@@ -412,6 +433,20 @@ function deletePost(num){
 		}
 		
 	});
+}
+
+function editOrSubmit(){
+	if(typeof(toEditContent)!='undefined'){
+		updatePost($(toEditContent).siblings('.profileWrapper').find('input').val(),
+				$('#summernote').summernote('code'));
+		destroyPostEditModal();
+		
+		toEditContent=undefined;
+	}else{
+		submitPost();
+	}
+	
+	
 }
 
 function submitPost(){

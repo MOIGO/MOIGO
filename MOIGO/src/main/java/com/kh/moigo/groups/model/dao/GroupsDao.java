@@ -32,4 +32,7 @@ public interface GroupsDao {
 	int deleteReply(String replyNo);
 
 
+	int updatePost(Post post);
+
+
 }
