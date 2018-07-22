@@ -57,4 +57,16 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.insertReply(r);
 	}
 
+	@Override
+	public int deletePost(String postNo) {
+		
+		return groupDao.deletePost(postNo);
+	}
+
+	@Override
+	public int deleteReply(String replyNo) {
+		
+		return groupDao.deleteReply(replyNo);
+	}
+
 }

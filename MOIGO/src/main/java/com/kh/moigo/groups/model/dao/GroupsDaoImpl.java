@@ -70,4 +70,16 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.insert("groups.insertReply",r);
 	}
 
+	@Override
+	public int deletePost(String postNo) {
+		
+		return sqlSession.delete("groups.deletePost",postNo);
+	}
+
+	@Override
+	public int deleteReply(String replyNo) {
+		
+		return sqlSession.delete("groups.deleteReply",replyNo);
+	}
+
 }

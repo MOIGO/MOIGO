@@ -26,4 +26,10 @@ public interface GroupsDao {
 	int insertReply(PostReply r);
 
 
+	int deletePost(String postNo);
+
+
+	int deleteReply(String replyNo);
+
+
 }

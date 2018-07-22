@@ -72,7 +72,7 @@ public class GroupController {
 	//글 쓰기
 	@RequestMapping("/groups/insertPost.gp")
 	@ResponseBody
-	public Map <String,Object> addPost(Post post)
+	public Map <String,Object> insertPost(Post post)
 	{
 		Map <String,Object> map = new HashMap<String, Object>();
 		map.put("result", groupService.insertPost(post));
@@ -80,18 +80,42 @@ public class GroupController {
 		return map;
 	}
 	
-	//글 쓰기
-		@RequestMapping("/groups/insertReply.gp")
-		@ResponseBody
-		public Map <String,Object> addPost(PostReply postReply)
-		{
-			
-			System.out.println(postReply);
-			Map <String,Object> map = new HashMap<String, Object>();
-			map.put("result", groupService.insertReply(postReply));
-			
-			return map;
-		}
+	//글 삭제
+	@RequestMapping("/groups/deletePost.gp")
+	@ResponseBody
+	public Map <String,Object> deletePostPost(@RequestParam String postNo)
+	{
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", groupService.deletePost(postNo));
+		
+		return map;
+	}	
+	
+	//댓글 쓰기
+	@RequestMapping("/groups/insertReply.gp")
+	@ResponseBody
+	public Map <String,Object> insertReply(PostReply postReply)
+	{
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		map.put("result", groupService.insertReply(postReply));
+		
+		return map;
+	}
+		
+	//댓글 삭제
+	@RequestMapping("/groups/deleteReply.gp")
+	@ResponseBody
+	public Map <String,Object> deleteReply(String replyNo)
+	{
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		map.put("result", groupService.deleteReply(replyNo));
+		
+		return map;
+	}
+	
 	
 	// ------------------------------------------------------------------ 혜진
 	

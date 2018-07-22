@@ -55,7 +55,10 @@ background: #EDEFF2;
 .replyProfileImg{
 	width:40px;
 	height:40px;
-	
+}
+
+.dropdown-item:hover{
+	cursor:pointer;
 }
 
 </style>
@@ -147,7 +150,6 @@ function setPostList(currentPage){
 			for(var i = 0; i <data.posts.length;++i){
 				
 				var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
-				$postOuter.append($("<input>").attr("type","hidden").val(data.posts[i].postNo));
 				$postOuter.append(makeProfile(data.posts[i]));
 				$postOuter.append(makeContent(data.posts[i]));
 				$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
@@ -217,6 +219,7 @@ function makeProfile(obj){
 			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
+		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.postNo));
 	}
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
@@ -224,6 +227,7 @@ function makeProfile(obj){
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
+		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.replyNo));
 	}
 	
 	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
@@ -261,9 +265,9 @@ function makeProfile(obj){
 	$profileWrapper.append($profileImgWrapper);
 	$profileWrapper.append($profileAndDate);
 	if(typeof(obj.replyNo)!='undefined')
-		$profileWrapper.append(makeDropDown(false));
+		$profileWrapper.append(makeDropDown(false,obj.replyNo));
 	else
-		$profileWrapper.append(makeDropDown(true));
+		$profileWrapper.append(makeDropDown(true,obj.postNo));
 	return $profileWrapper;
 }
 
@@ -281,20 +285,29 @@ function makeDropDown(isPost,num){
 	var $dropDownItem2
 	
 	if(isPost){
-		$dropDownItem1=$("<a class='dropdown-item'>글 수정</a>");
-		$dropDownItem2=$("<a class='dropdown-item'>공지 등록</a>");
-		var $dropDownItem3=$("<a class='dropdown-item'>삭제하기</a>");
+		$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
+		$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
+		var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
 		var $dropDownItem4=$("<a class='dropdown-item'>신고하기</a>");
 		$dropDownMenu.append($dropDownItem1);
 		$dropDownMenu.append($dropDownItem2);
 		$dropDownMenu.append($dropDownItem3);
 		$dropDownMenu.append($dropDownItem4);
 		
+		
+		$dropDownItem3.on("click",function(){
+			deletePost(num);
+		});
+		
 	}else{
 		$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
 		$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
 		$dropDownMenu.append($dropDownItem1);
 		$dropDownMenu.append($dropDownItem2);
+		
+		$dropDownItem2.on("click",function(){
+			deleteReply(num);
+		});
 	}
 	
 	$dropDown.append($dropDownBtn);
@@ -305,12 +318,60 @@ function makeDropDown(isPost,num){
 	
 }
 
-function submitPost(){
+function deleteReply(num){
 	
-	console.log($('#summernote').summernote('code'));
+	
 	
 	$.ajax({
-		url:"${pageContext.request.contextPath}/groups/submitPost.gp",
+		url:"${pageContext.request.contextPath}/groups/deleteReply.gp",
+		data:{replyNo:num},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("댓글 삭제 성공!");
+				$('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").remove();
+			}else
+				alert("댓글 삭제 실패!");
+			
+		},
+		error:function(){
+			alert("댓글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function deletePost(num){
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/deletePost.gp",
+		data:{postNo:num},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("글 삭제 성공!");
+			}else
+				alert("글 삭제 실패!");
+			
+			deleteAllPost();
+			setPostList(1);
+		},
+		error:function(){
+			alert("글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function submitPost(){
+	
+	if(!checkLogin())
+		return ;  
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
 		data:{groupNo:"G001",memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
@@ -333,8 +394,19 @@ function submitPost(){
 
 }
 
+function checkLogin(){
+	if('${m.memberNo}'=='')
+	{
+		alert("로그인 해주세요");
+		return false;
+	}else
+		return true;
+}
+
 function submitReply(postNo,obj){
-	console.log(obj.val());
+	
+	if(!checkLogin())
+		return ;  
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
@@ -356,8 +428,7 @@ function submitReply(postNo,obj){
 		}
 		
 	});
-	
-	
+
 }
 
 function destroyPostEditModal(){
