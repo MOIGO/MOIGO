@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 
 @Repository
@@ -28,7 +29,7 @@ public class GroupsDaoImpl implements GroupsDao {
 
 	@Override
 
-	public int addPost(Post p) {
+	public int insertPost(Post p) {
 		
 		Map<String,String> map = new HashMap<String, String>();
 		
@@ -38,7 +39,7 @@ public class GroupsDaoImpl implements GroupsDao {
 		map.put("isNotice", p.getIsNotice());
 		
 		
-		return sqlSession.insert("groups.addPost",map);
+		return sqlSession.insert("groups.insertPost",map);
 	}
 
 	@Override
@@ -61,6 +62,30 @@ public class GroupsDaoImpl implements GroupsDao {
 
 	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
 		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
+	}
+
+	@Override
+	public int insertReply(PostReply r) {
+		
+		return sqlSession.insert("groups.insertReply",r);
+	}
+
+	@Override
+	public int deletePost(String postNo) {
+		
+		return sqlSession.delete("groups.deletePost",postNo);
+	}
+
+	@Override
+	public int deleteReply(String replyNo) {
+		
+		return sqlSession.delete("groups.deleteReply",replyNo);
+	}
+
+	@Override
+	public int updatePost(Post post) {
+		
+		return sqlSession.update("groups.updatePost",post);
 	}
 
 }

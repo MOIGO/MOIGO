@@ -1,9 +1,8 @@
 package com.kh.moigo.groups.controller;
 
 
-import java.util.ArrayList;
 import java.awt.image.BufferedImage;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
-import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.GroupMember;
+import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostReply;
+import com.kh.moigo.groups.model.vo.PostWithMem;
 
 
 @Controller
@@ -37,13 +37,19 @@ public class GroupController {
 		return "groups/groupMain";
 	}
 	
+	@RequestMapping("/groups/createGroup.gp")
+	public String createGroup(){
+		
+		return "groups/createGroup";
+	}
+	
 	
 	//그룹 메인 들어갈때 글 가져오기
 	@RequestMapping("/groups/getPostList.gp")
 	@ResponseBody
 	public Map<String,Object> getPostList(@RequestParam String groupNo, @RequestParam int currPage,Model model){
 		
-		PageInfo p = new PageInfo(currPage, groupService.selectPostCnt(groupNo),5);
+		PageInfo p = new PageInfo(currPage, groupService.selectPostCnt(groupNo),7);
 		
 		ArrayList<PostWithMem> list = groupService.selectPostList(groupNo, p);
 		
@@ -64,21 +70,64 @@ public class GroupController {
 	
 	
 	//글 쓰기
-	@RequestMapping("/groups/addPost.gp")
+	@RequestMapping("/groups/insertPost.gp")
 	@ResponseBody
-	public Map <String,Object> addPost(	@RequestParam String groupNo,
-							@RequestParam String memberNo,
-							@RequestParam String content,
-							@RequestParam String isNotice,
-							Model model)
+	public Map <String,Object> insertPost(Post post)
 	{
-		//Post p = new Post(groupNo,memberNo,content,isNotice);
-		
 		Map <String,Object> map = new HashMap<String, Object>();
-		//map.put("result", groupService.addPost(p));
+		map.put("result", groupService.insertPost(post));
 		
 		return map;
 	}
+	
+	//글 삭제
+	@RequestMapping("/groups/deletePost.gp")
+	@ResponseBody
+	public Map <String,Object> deletePost(@RequestParam String postNo)
+	{
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", groupService.deletePost(postNo));
+		
+		return map;
+	}	
+	
+	//글 수정
+	@RequestMapping("/groups/updatePost.gp")
+	@ResponseBody
+	public Map <String,Object>updatePost(Post post)
+	{
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", groupService.updatePost(post));
+		
+		return map;
+	}	
+	
+	//댓글 쓰기
+	@RequestMapping("/groups/insertReply.gp")
+	@ResponseBody
+	public Map <String,Object> insertReply(PostReply postReply)
+	{
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		map.put("result", groupService.insertReply(postReply));
+		
+		return map;
+	}
+		
+	//댓글 삭제
+	@RequestMapping("/groups/deleteReply.gp")
+	@ResponseBody
+	public Map <String,Object> deleteReply(String replyNo)
+	{
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		map.put("result", groupService.deleteReply(replyNo));
+		
+		return map;
+	}
+	
 	
 	// ------------------------------------------------------------------ 혜진
 	
