@@ -38,17 +38,18 @@ body {
 	background: #EDEFF2;
 }
 
-#postDiv  * {
+#postDiv ,.profileWrapper,.contentWrapper,.postOuter {
 	background:white;
 	
 }
 
 #postDiv {
-box-shadow: 2px 2px grey;
+
+background: #EDEFF2;
 }
 
-.postBorder{
-	border: 2px solid 
+.postBorder{ 
+	box-shadow: 2px 2px grey; 
 }
 
 .replyProfileImg{
@@ -115,7 +116,6 @@ box-shadow: 2px 2px grey;
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal" onclick="destroyPostEditModal();">취소</button>
 						<button type="button" class="btn btn-primary" onclick="submitPost()">확인</button>
-						
 					</div>
 			</div>
 		</div>
@@ -131,7 +131,7 @@ $(function(){
 });
 
 function deleteAllPost(){
-	
+	$('#postDiv').children().remove();
 }
 
 
@@ -141,31 +141,46 @@ function setPostList(currentPage){
 		data:{groupNo:"G001",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-			var $postOuter= $('<div class="p-3 postOuter">');
-			
+
 			console.log(data);
 			
 			for(var i = 0; i <data.posts.length;++i){
-			
-				var $postOuter= $('<div class="p-3 postOuter test">');
+				
+				var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
+				$postOuter.append($("<input>").attr("type","hidden").val(data.posts[i].postNo));
 				$postOuter.append(makeProfile(data.posts[i]));
 				$postOuter.append(makeContent(data.posts[i]));
-				$postOuter.append(makeReply(data.posts[i].postReplyWithMem))
+				$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
+				$postOuter.append(makeSubmitReply(data.posts[i].postNo));
 				$('#postDiv').append($postOuter);
 			}
 
-			/*content Element  */
-			
-			
-			/*reply Element  */
-			var $replyWrapper = $('<div>');
-			
 		},
 		error:function(){
-		
+			console.log("ajax오류");
 		}
 		
 	});
+	
+}
+
+function makeSubmitReply(postNo){
+	var $inputWrapper =$('<div>');
+	var $inputGroup = $('<div class="input-group">');
+	var $input = $('<input class="form-control" type="text" placeholder="댓글을 남겨주세요!">');
+	var $inputButton = $("<span class='input-group-btn'></span>").append($("<button class='btn btn-secondary' type='button'>등록</button>").on("click",function(){
+		submitReply(postNo, $input);
+	}));
+	
+	
+	
+	
+	$inputGroup.append($input);
+	$inputGroup.append($inputButton);
+	$inputWrapper.append($inputGroup);
+	
+	return $inputWrapper;
+	
 	
 }
 
@@ -180,7 +195,7 @@ function makeReply(replyList){
 }
 
 function makeContent(post){
-	var $contentWrapper = $('<div class="p-3 postContent">');
+	var $contentWrapper = $('<div class="p-3 contentWrapper">');
 	
 	$contentWrapper.append(post.content);
 	
@@ -190,7 +205,7 @@ function makeContent(post){
 function makeProfile(obj){
 	/*profile Element  */
 	
-	var $profileWrapper = $('<div class="d-flex  align-items-center mt-2 mr-auto">');
+	var $profileWrapper = $('<div class="d-flex align-items-center mt-2 mr-auto profileWrapper">');
 	
 	var $profileImgWrapper;
 	
@@ -238,7 +253,6 @@ function makeProfile(obj){
 	
 	if(typeof(obj.replyNo)!='undefined'){
 		$profileAndDate.append($replyContent);
-		console.log(obj.replyNo);
 	}
 	
 	$profileAndDate.append($upLoadDateWrapper);
@@ -293,11 +307,11 @@ function makeDropDown(isPost,num){
 
 function submitPost(){
 	
-	$('input[name=noteContent]').val($('#summernote').summernote('code'));
+	console.log($('#summernote').summernote('code'));
 	
 	$.ajax({
-		url:"${pageContext.request.contextPath}/groups/addPost.gp",
-		data:{groupNo:"G001",memberNo:"M001",content:"<p>안녕하세요!!</p>",isNotice:"N"},
+		url:"${pageContext.request.contextPath}/groups/submitPost.gp",
+		data:{groupNo:"G001",memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
 			
@@ -307,7 +321,7 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList();
+			setPostList(1);
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -317,6 +331,33 @@ function submitPost(){
 		
 	});
 
+}
+
+function submitReply(postNo,obj){
+	console.log(obj.val());
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
+		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val()},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("댓글 등록 성공!");
+			}else
+				alert("댓글 등록 실패!");
+			
+			deleteAllPost();
+			setPostList(1);
+			
+		},
+		error:function(){
+			alert("글 등록 도중 에러가 생겼습니다.");
+		}
+		
+	});
+	
+	
 }
 
 function destroyPostEditModal(){

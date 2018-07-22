@@ -95,8 +95,12 @@
 	</select>
 	
 	
-	<insert id="addPost" parameterType="hashmap">
+	<insert id="insertPost" parameterType="hashmap">
 		INSERT INTO POST VALUES(SEQ_POST.NEXTVAL,#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
+	</insert>
+	
+	<insert id="insertReply" parameterType="postReply">
+		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)
 	</insert>
 	
 	<select id="selectPostList" resultType="post" resultMap="postResultMap">

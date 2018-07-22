@@ -11,6 +11,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.dao.GroupsDao;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 
 @Service
@@ -25,9 +26,9 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 	@Override
-	public int addPost(Post p) {
+	public int insertPost(Post p) {
 	
-		int result = groupDao.addPost(p);
+		int result = groupDao.insertPost(p);
 		
 		if(result==0) throw new GroupsExeption();
 		
@@ -48,6 +49,12 @@ public class GroupsServiceImpl implements GroupsService {
 	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
 		return groupDao.searchGroupMemberList(searchMap);
 
+	}
+
+	@Override
+	public int insertReply(PostReply r) {
+		
+		return groupDao.insertReply(r);
 	}
 
 }

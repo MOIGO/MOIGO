@@ -184,7 +184,6 @@ function displayPlaces(places) {
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker();
 
-    console.log(toEditTarget);
     
     for ( var i=0; i<places.length; i++ ) {
     	
@@ -334,7 +333,7 @@ function addMapOnSummerNote(marker,place){
 			+'</div></div>'); */
 			
 			
-	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false">');	
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="alert();">');
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');
