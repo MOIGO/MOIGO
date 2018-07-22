@@ -98,6 +98,7 @@ var infowindow_for_Modal = new daum.maps.InfoWindow({zIndex:1}); //인포 윈도
 var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
 
 var toEditTarget;
+var toEditContent;
 
 function makeMap(){
 	
@@ -342,8 +343,8 @@ function addMapOnSummerNote(marker,place){
 	var $col10RowCol1 =$('<div class="col-12 map_address place_name">'+place.place_name+'</div>');
 	var $col10RowCol2 =$('<div class="col-12 map_address address_name">'+place.address_name+'</div>');
 	var $btnWrapper = $('<div class="map_btn_wrapper float-right">');
-	var $btn_edit =$('<button class="btn btn-primary mr-3 test" >수정</button>');
-	var $btn_del =$('<button class="btn btn-info test">삭제</button>');
+	var $btn_edit =$('<button class="btn btn-primary mr-3" name="editBtn">수정</button>');
+	var $btn_del =$('<button class="btn btn-info" name="delBtn">삭제</button>');
 	
 	$btnWrapper.append($btn_edit);
 	$btnWrapper.append($btn_del);

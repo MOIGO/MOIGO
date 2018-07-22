@@ -294,6 +294,11 @@ function makeDropDown(isPost,num){
 		$dropDownMenu.append($dropDownItem3);
 		$dropDownMenu.append($dropDownItem4);
 		
+		$dropDownItem1.on("click",function(){
+			updatePost(num);
+		});
+		
+		
 		
 		$dropDownItem3.on("click",function(){
 			deletePost(num);
@@ -317,6 +322,50 @@ function makeDropDown(isPost,num){
 	return $dropDownWrapper;
 	
 }
+
+function updatePost(num){
+	toEditContent = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
+	$('#postEdit').modal('toggle');
+	createSummerNote();
+	
+	var $temp = $($(toEditContent).html());
+
+	$('#summernote').summernote('code',$temp);
+	
+	
+	
+	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
+		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
+	}
+}
+
+function restoreMapEvent(obj){
+	
+	 $(obj).find('[name=editBtn]').on("click",function(){
+		toEditTarget=obj;
+		
+		$('#placeKeyword').val($(obj).find('.place_name'));
+		editMap();
+	});
+	
+	$(obj).find('[name=delBtn]').on("click",function(){
+		deleteMap($(obj));
+	});
+	
+	$(obj).on('mouseover',function(){
+		$(obj).css('border','3px solid #00bfff');
+		
+		$(obj).find('.map_btn_wrapper').css("visibility","visible");
+		
+		
+	}).on('mouseout',function(){
+		
+		$(obj).css('border','3px solid black');
+		
+		$(obj).find('.map_btn_wrapper').css("visibility","hidden");
+	});
+}
+
 
 function deleteReply(num){
 	
@@ -474,6 +523,7 @@ function createSummerNote(){
 		     insertmap: insertMap
 		  }
 	});
+	
 }
 
 function toggleMapModal(){
