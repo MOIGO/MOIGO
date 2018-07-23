@@ -313,11 +313,11 @@ function makeDropDown(isPost,num){
 }
 
 function addReplyEditForm(num){
-	var $temp = $('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").find(".replyContent");
-	$temp.css("background","red");
-	var originContent = $temp.text();
-	$temp.text("");
-	$temp.append(makeEditReply(num,originContent));
+	toEditContent = $('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").find(".replyContent");
+	
+	var originContent = $(toEditContent).text();
+	$(toEditContent).text("");
+	$(toEditContent).append(makeEditReply(num,originContent));
 	
 }
 
@@ -345,18 +345,14 @@ function updateReply(num,newContent,originContent){
 		dataType:"json",
 		success:function(data){
 			
-			console.log()
-			
-			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
-			console.log($('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper').length);
-			$temp.css("background","blue");
 			if(data.result>0){
 			
-				$temp.text(newContent);
-				
+				$(toEditContent).text(newContent);
+				toEditContent=undefined;
 				alert("글 수정 성공!");
+				
 			}else{
-				$temp.text(originContent);
+				$(toEditContent).text(originContent);
 				alert("댓글 삭제 실패!");
 			}
 			
@@ -382,8 +378,8 @@ function makeEditReply(num,originContent){
 	});
 	
 	var $cancleBtn = $('<button class="btn btn-info btn-sm">취소</button>').on("click",function(){
-		var $temp = $('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").find(".replyContent");
-		$temp.text(originContent);
+		toEditContent=undefined;
+		$(toEditContent).text(originContent);
 		$editWrapper.remove();
 	});
 	
