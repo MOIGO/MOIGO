@@ -15,6 +15,7 @@ import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.PostReply;
 
 @Service
 public class GroupsServiceImpl implements GroupsService {
@@ -24,9 +25,9 @@ public class GroupsServiceImpl implements GroupsService {
 
 
 	@Override
-	public int addPost(Post p) {
+	public int insertPost(Post p) {
 	
-		int result = groupDao.addPost(p);
+		int result = groupDao.insertPost(p);
 		
 		if(result==0) throw new GroupsExeption();
 		
@@ -42,6 +43,30 @@ public class GroupsServiceImpl implements GroupsService {
 	@Override
 	public int selectPostCnt(String groupNo) {	
 		return groupDao.selectPostCnt(groupNo);
+	}
+	
+	@Override
+	public int insertReply(PostReply r) {
+		
+		return groupDao.insertReply(r);
+	}
+
+	@Override
+	public int deletePost(String postNo) {
+		
+		return groupDao.deletePost(postNo);
+	}
+
+	@Override
+	public int deleteReply(String replyNo) {
+		
+		return groupDao.deleteReply(replyNo);
+	}
+
+	@Override
+	public int updatePost(Post post) {
+		
+		return groupDao.updatePost(post);
 	}
 	
 	//--------------------------------------------------------------------- 혜진

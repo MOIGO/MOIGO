@@ -11,14 +11,18 @@ import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.PostReply;
 
 public interface GroupsService {
 
-	int addPost(Post p);
-	
+	int insertPost(Post p);
+	int insertReply(PostReply r);
 	ArrayList<PostWithMem> selectPostList(String groupNo,PageInfo p);
 	
 	int selectPostCnt(String groupNo);
+	int deletePost(String postNo);
+	int deleteReply(String replyNo);
+	int updatePost(Post post);
 
 	//--------------------------------------------------------------------------- 혜진
 	

@@ -32,10 +32,7 @@
 			   (TO_CHAR(#{memberBirth},'RRRR/MM/DD')), #{memberGender}, DEFAULT, 'N')
 	</insert>
 	
-	<insert id="insertMemberInterest" parameterType="hashmap">
-			INSERT INTO MEMBER_INTEREST VALUES(#{memberNo},#{interest,jdbcType=VARCHAR})
-	</insert>
-	
+
 	<update id="updateMemberPwd" parameterType="hashmap">
 		UPDATE MEMBER SET MEMBER_PWD = #{memberPwd} WHERE MEMBER_EMAIL=#{memberEmail}
 	</update>
@@ -44,14 +41,7 @@
 		UPDATE MEMBER SET DELFLAG = 'Y' WHERE MEMBER_NO=#{memberNo}
 	</update>
 	
-	<insert id="insertDropout" parameterType="hashmap">
-		INSERT INTO DROPOUT VALUES(#{memberNo}, #{contentW}) 
-	</insert>
-	<select id= "selectInterestList" resultType="string">
-		SELECT INTEREST_BIG_CODE
-		FROM MEMBER_INTEREST 
-		WHERE MEMBER_NO=#{memberNo}
-	</select>
+	
 	
 	<update id="updateMember" parameterType="member">
 		UPDATE MEMBER 
@@ -60,5 +50,28 @@
 			MEMBER_BIRTH=#{memberBirth}
 		WHERE MEMBER_NO=#{memberNo}
 	</update>  
+	
+	
+	
+	<!--  관심사 ㅎ -->
+	<delete id="deleteMemberInterest" parameterType="string">
+		DELETE MEMBER_INTEREST WHERE  MEMBER_NO=#{memberNo}
+	</delete>
+	
+	<select id= "selectInterestList" resultType="string">
+		SELECT INTEREST_BIG_CODE
+		FROM MEMBER_INTEREST 
+		WHERE MEMBER_NO=#{memberNo}
+	</select>
+	
+	<insert id="insertMemberInterest" parameterType="hashmap">
+			INSERT INTO MEMBER_INTEREST VALUES(#{memberNo},#{interest,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 탈퇴사유 -->
+	<insert id="insertDropout" parameterType="hashmap">
+		INSERT INTO DROPOUT VALUES(#{memberNo}, #{contentW}) 
+	</insert>
+	
 </mapper>
 

@@ -26,5 +26,7 @@ public interface MemberDao {
 
 	List<String> selectInterestList(String memberNo);
 
+	int deleteMemberInterest(String memberNo);
+
 
 }
