@@ -29,7 +29,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.GroupMember;
-
+  
 
 @Controller
 public class GroupController {
