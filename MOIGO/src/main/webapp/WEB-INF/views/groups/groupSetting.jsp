@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:import url="/WEB-INF/views/common/header.jsp"/>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+<c:set var="group" value="${requestScope.group}"/>
 <html>
 <head>
 <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
@@ -243,13 +245,17 @@
                
                
                <!-- 가입 조건 관리 -->
-                <form action="">
+               	<c:url var="updateGroupCondition" value="/groups/updateGroupCondition.gp" >
+					<c:param name="groupNo" value="${param.groupNo}" />
+				</c:url>
+               
+                <form id="updateGroupConditionForm" action="${updateGroupCondition}" method="POST">
                    
                    <!-- 성별 -->
                    <ul class="list-group" id="conditionList"> 
                      <li class="list-group-item gs_list_group">
                         <span class="setting_tit">성별</span>
-                        <select class="float_right list_common condition_font_size" id="conditionGender">
+                        <select class="float_right list_common condition_font_size" name="groupGender" id="conditionGender">
                         <option selected value="N">제한없음</option>
                         <option value="M">남성</option>
                         <option value="F">여성</option>
@@ -261,17 +267,23 @@
                         <span class="setting_tit">나이</span>
                         <span class="float_right age_wrap">
                            <span class="age_txt condition_font_size">최대나이</span>
-                        <select class="list_common condition_font_size" id="conditionMaxAge">
+                        <select class="list_common condition_font_size" name="maxAge" id="conditionMaxAge">
                            <option selected value="-1">제한없음</option>
-                           <c:set var="nowYear" value="2018"></c:set>
+                           <c:set var="now" value="<%= new java.util.Date()%>" />
+                           <fmt:formatDate var="nowYear" value="${now}" pattern="yyyy"/>
                            <c:forEach var="i" begin="1918" end="${nowYear}">
                               <option value="${nowYear - i + 1918}">${nowYear - i + 1918}년생</option>
                            </c:forEach>
                         </select>                     
                            <span class="age_txt condition_font_size">-</span>
                         <span class="age_txt condition_font_size">최소나이</span>
-                           <select class="list_common condition_font_size" id="conditionMinAge">
+                           <select class="list_common condition_font_size" name="minAge" id="conditionMinAge">
                            <option selected value="-1">제한없음</option>
+                           <c:set var="now" value="<%= new java.util.Date()%>" />
+                           <fmt:formatDate var="nowYear" value="${now}" pattern="yyyy"/>
+                           <c:forEach var="i" begin="1918" end="${nowYear}">
+                              <option value="${nowYear - i + 1918}">${nowYear - i + 1918}년생</option>
+                           </c:forEach>
                         </select>
                         </span>
                      </li>
@@ -280,6 +292,7 @@
                       <li class="list-group-item gs_list_group">
                         <span class="setting_tit">지역</span>
                         <span class="float_right region_wrap">
+                        	<input type="hidden" id="regionFull" name="groupAddress"/>
                            <select class="list_common condition_font_size condition_region" id="conditionRegionLarge">
                                  <option value="regionNone">- 시도 -</option>
                            </select>
@@ -308,7 +321,7 @@
                         <span class="float_right max_member_wrap">
                            <span class="max_member_txt condition_font_size" id="minMember">1</span>                           
                            <span class="max_member_txt condition_font_size">/</span>
-                           <input type="text" class="gs_inp form-control condition_font_size" id="maxMemberInp" maxlength="2"/>
+                           <input type="text" class="gs_inp form-control condition_font_size" name="maxMember" id="maxMemberInp" maxlength="2"/>
                            <span class="max_member_txt condition_font_size">(최대 멤버수는 50명 입니다.)</span>
                         </span>
                      </li>
@@ -409,9 +422,11 @@ function goSettingBack() {
 
 $(function() {
 
+	console.log("${group}");
+	
    /* 모임 관리 */
    $("#groupUpdateBtn").on("click", function() {
-      alert("모임 관리 버튼 확인!");
+	   location.href = "${root}/groups/updateGroupDefault.gp?groupNo=${param.groupNo}";
    });
    
    /* 가입 조건 관리 */
@@ -422,9 +437,19 @@ $(function() {
       $("#conditionList").css("display", "block");
       $("#conditionFooter").css("display", "block");
       
+      $("#conditionGender").val("${group.groupGender}").prop("selected", true);
+      $("#conditionMaxAge").val("${group.maxAge}").prop("selected", true);
+      $("#conditionMinAge").val("${group.minAge}").prop("selected", true);
+      $("#maxMemberInp").val("${group.maxMember}");
+      if("${group.groupAddress}" == ""){
+    	  $("#regionNone").prop("checked", true);
+    	  $(".condition_region").prop("disabled", true);         
+          $(".condition_region").val("regionNone").prop("selected", true);
+      }
+      
       // 행정구역 list를 가져오기 위한 ajax 부분
       $.ajax({
-         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+			url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
                +'&domain=http://127.0.0.1:8080&attrFilter=ctprvn_cd:between:11,50&size=17',
            type:'GET',
            dataType:'jsonp',
@@ -446,6 +471,7 @@ $(function() {
    });
    
       var lRegion = "";
+      
       $("#conditionRegionLarge").change(function() {
          lRegion = $(this).val();
          $("#conditionRegionMedium").children().not(":lt(2)").remove();
@@ -508,8 +534,6 @@ $(function() {
             $("#conditionRegionSmall").prop("disabled", false);  
       });
       
-      
-   
    // 지역무관을 선택했을 경우 발생하는 이벤트
    $("#regionNone").change(function() {
       if($(this).is(":checked")){
@@ -529,6 +553,41 @@ $(function() {
             $(this).val("");         
       }
    });
+   
+	// 가입 조건 확인 버튼을 눌렀을 때 발생하는 이벤트
+	$("#conditionConfirmBtn").click(function() {
+		
+		// 지역무관 체크박스의 체크여부 판별
+		if(!$("#regionNone").is(":checked")){
+			
+			var rLarge = $("#conditionRegionLarge").val();
+			var rMedium = $("#conditionRegionMedium").val();
+			var rSmall = $("#conditionRegionSmall").val();
+			
+			var regionFull = "";
+			
+			// 지역 라벨을 선택했을 경우 alert로 다시 선택하라고 알려줌
+			if(rLarge == "regionNone" || rMedium == "regionNone" || rMedium != "전체" && rSmall == "regionNone")
+				alert("지역을 다시 선택해주세요.");
+			
+			// 지역을 한 String으로 담기 위해서 구분
+			if(rLarge != "regionNone")
+				regionFull = rLarge;
+			if (rMedium != "전체" && rMedium != "regionNone")
+				regionFull += " " + rMedium;
+			if(rSmall != "전체" && rSmall != "regionNone")
+				regionFull += " " + rSmall;		
+			
+			// 지역이 존재하는 경우만 submit으로 보낼 수 있도록 if로 판별
+			if(regionFull.length != 0){
+				$("#regionFull").val(regionFull);
+				$("#updateGroupConditionForm").submit();
+			}
+		}
+		else{
+			$("#updateGroupConditionForm").submit();
+		}
+	});
 
    /* 멤버 설정 관리 */
    $("#groupMemberManageBtn").on("click", function() {

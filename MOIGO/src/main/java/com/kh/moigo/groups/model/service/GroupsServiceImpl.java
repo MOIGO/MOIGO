@@ -11,7 +11,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.dao.GroupsDao;
 
 import com.kh.moigo.groups.model.vo.GroupMember;
-
+import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
@@ -89,6 +89,11 @@ public class GroupsServiceImpl implements GroupsService {
 	@Override
 	public int deleteGroup(String groupNo) {
 		return groupDao.deleteGroup(groupNo);
+	}
+
+	@Override
+	public Groups selectOneGroup(String groupNo) {
+		return groupDao.selectOneGroup(groupNo);
 	}
 
 }

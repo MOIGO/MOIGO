@@ -16,6 +16,7 @@ import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 
 import com.kh.moigo.groups.model.vo.GroupMember;
+import com.kh.moigo.groups.model.vo.Groups;
 
 @Repository
 public class GroupsDaoImpl implements GroupsDao {
@@ -99,6 +100,11 @@ public class GroupsDaoImpl implements GroupsDao {
 	@Override
 	public int deleteGroup(String groupNo) {
 		return sqlSession.delete("groups.deleteGroup", groupNo);
+	}
+
+	@Override
+	public Groups selectOneGroup(String groupNo) {
+		return sqlSession.selectOne("groups.selectOneGroup", groupNo);
 	}
 	
 }

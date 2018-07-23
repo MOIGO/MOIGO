@@ -185,6 +185,12 @@
 		AND MEMBER_NO = #{memberNo}
 	</update>
 	
+	<select id="selectOneGroup" resultMap="groupsResultMap">
+		SELECT *
+		FROM GROUPS
+		WHERE GROUP_NO = #{groupNo}
+	</select>
+	
 	<!-- <delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
 	</delete> -->

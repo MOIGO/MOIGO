@@ -30,7 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
 import com.kh.moigo.groups.model.vo.GroupMember;
-
+import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
@@ -241,9 +241,24 @@ public class GroupController {
 	
 	// 모임설정
 	@RequestMapping("/groups/groupSetting.gp")
-	public String goGroupSetting(){
+	public String goGroupSetting(@RequestParam String groupNo, Model model){
+		
+		Groups group = groupService.selectOneGroup(groupNo);
+		
+		model.addAttribute("group", group);
 		
 		return "groups/groupSetting";
+	}
+	
+	@RequestMapping("/groups/updateGroupDefault.gp")
+	public String updateGroupDefault(@RequestParam String groupNo, Model model){
+		
+		Groups group = groupService.selectOneGroup(groupNo);
+		
+		model.addAttribute("group", group);
+		
+		return "groups/createGroup";
+		
 	}
 	
 	@RequestMapping("/groups/deleteGroup.gp")

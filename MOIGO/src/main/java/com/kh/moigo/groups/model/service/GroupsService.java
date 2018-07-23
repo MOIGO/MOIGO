@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.moigo.groups.model.vo.GroupMember;
-
+import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
@@ -33,5 +33,7 @@ public interface GroupsService {
 	int updateGroupMember(GroupMember groupMember);
 
 	int deleteGroup(String groupNo);
+	
+	Groups selectOneGroup(String groupNo);
 
 }

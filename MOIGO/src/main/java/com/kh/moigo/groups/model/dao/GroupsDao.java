@@ -10,6 +10,7 @@ import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 
 import com.kh.moigo.groups.model.vo.GroupMember;
+import com.kh.moigo.groups.model.vo.Groups;
 
 public interface GroupsDao {
 
@@ -36,5 +37,7 @@ public interface GroupsDao {
 	int updateGroupMember(GroupMember groupMember);
 
 	int deleteGroup(String groupNo);
+
+	Groups selectOneGroup(String groupNo);
 
 }
