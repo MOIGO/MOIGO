@@ -10,11 +10,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="${root}/resources/js/jquery-3.3.1.min.js"></script>
-	<!-- bootstrap version 4 -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> 
+<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
+<script src="${root}/resources/js/common/fontfaceobserver.js"></script>
+<link rel="stylesheet" href="${root}/resources/css/bootstrap/bootstrap.min.css"> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+<script src="${root}/resources/js/bootstrap/bootstrap.min.js" ></script>	
 
 
 
@@ -50,7 +51,7 @@
                             <a href="${pageContext.request.contextPath}/adminGroup.ad">Groups</a>
                         </li>
                         <li>
-                            <a href="#">Members</a>
+                            <a href="${pageContext.request.contextPath}/adminMember.ad">Members</a>
                         </li>
                     </ul>
                 </li>

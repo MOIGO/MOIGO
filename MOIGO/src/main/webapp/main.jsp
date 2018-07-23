@@ -5,14 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script>
+<%-- <script src="${root}/resources/js/common/jquery-3.3.1.min.js"></script> --%>
 <title>모이고 홈페이지</title>
 <style>
-/* 메인 */
+/* 메인 */ 
 .carousel-inner img { 
   margin: auto;
 }
-
+ 
 .mainGroup{
 	display: inline-block;
 	width: 200px;
@@ -35,6 +35,21 @@
 	color: black;
 	font-size: 18px;
 }
+
+@media all and (max-width: 1200px){
+	
+	/* #carouselExampleIndicators1 {
+		position: absolute;
+		width: 1200px;
+	}
+	.carousel {
+		position: absolute;
+	}
+	.mainGroup test ani {
+		position: absolute;
+		width: 300px;
+	} */
+}
 </style>
 </head>
 <body>
@@ -44,7 +59,7 @@
 	<br>
 	<!-- 케러셀 부분(광고 또는 안내배너) -->
 	<div class="container">
-	<div id="carouselExampleIndicators" class="carousel slide test" data-ride="carousel">
+	<div id="carouselExampleIndicators" class="carousel slide proq" data-ride="carousel">
 		<ol class="carousel-indicators">
 			<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
 			<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -90,7 +105,7 @@
 	<div class="d-flex justify-content-center"><b>내가 가입한 모입</b></div>
 <br><br>
 	<div class="container">
-			<div class="container d-flex justify-content-center">
+			<div class="container d-flex justify-content-center jgroup">
 				<div class="mainGroup test d-flex justify-content-center align-items-center ani plusGroup" style="background-color:skyblue;">
 							<a href="#" class="plusGroup"><img id="plus"
 										src="resources/images/main/plus.png"
@@ -208,7 +223,7 @@
 		<!-- 주제별 테마 -->
 		<div class="d-flex justify-content-center"><b>주제별 테마</b></div>
 	<br><br>
-		<div class="container d-flex justify-content-center">
+		<div class="container d-flex justify-content-center topic">
 			<div class="mainGroup test d-flex justify-content-center align-items-center theme ani">
 				<img src="resources/images/main/lifestyle.jpeg" 
 					style="width: 100%; height:100%; vertical-align: middle; position:relative; opacity: 0.7;"/>
@@ -236,7 +251,7 @@
 			</div>&nbsp;&nbsp;
 		</div>
 	<br>
-		<div class="container d-flex justify-content-center">
+		<div class="container d-flex justify-content-center topic">
 			<div class="mainGroup test d-flex justify-content-center align-items-center theme ani">
 				<img src="resources/images/main/play.jpg" 
 					style="width: 100%; height:100%; vertical-align: middle; position:relative; opacity: 0.7;"/>
