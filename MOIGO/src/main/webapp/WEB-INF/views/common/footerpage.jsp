@@ -104,18 +104,47 @@
 }
 
 /* 지도 페이지 */
-/* #mapdiv{
-	display: none;
-} */
 
 .textc{
     text-align: center;
 }
 
+/* .mapHeight{
+	height: 400px;
+} */
+
 
 </style>
 </head>
-<body>
+<body onload="test()">
+<script>
+ function test(){
+	
+		if('${selected}' == 'ma'){
+		$('#map').css("height","400px");
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new daum.maps.LatLng(37.498960, 127.032940), // 지도의 중심좌표
+	        level: 1 // 지도의 확대 레벨
+	    };
+
+		var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+		// 마커가 표시될 위치입니다 
+		var markerPosition  = new daum.maps.LatLng(37.498960, 127.032940); 
+
+		// 마커를 생성합니다
+		var marker = new daum.maps.Marker({
+	  	  position: markerPosition
+		});
+
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
+
+		}
+}
+</script>
+
 <c:import url="/WEB-INF/views/common/header.jsp"/>
 <!-- // 바디부분 // -->
 	<hr>
@@ -504,6 +533,7 @@
 		<c:otherwise>
 			<script>
 				$('#maps').css('color','skyblue');
+				
 			</script>
 			<div class="container" id="mapdiv">
 		</c:otherwise>
@@ -578,6 +608,7 @@
 		$('#useGuide').css("color","skyblue");
 		$('#maps').css("color","black");
 	});
+	
 	$('#maps').on('click',function(){
 		$('#map').css("height","400px");
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
