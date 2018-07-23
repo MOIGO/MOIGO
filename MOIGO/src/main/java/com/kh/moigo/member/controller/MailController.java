@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,9 @@ public class MailController {
 	  private JavaMailSender mailSender;
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	private BCryptPasswordEncoder bcryptPasswordEncoder;	
 	
 	
 	// 인증번호 이메일 전송
@@ -93,8 +97,13 @@ public class MailController {
 			if (member.getMemberName().equals(findName)) {
 				result = 0;
 
+				
 				String newPwd = getRamdomPassword(8);
-				memberService.updateMemberPwd(findEmail, newPwd);
+				
+				String encodedPassword=bcryptPasswordEncoder.encode(newPwd);
+				
+				
+				memberService.updateMemberPwd(findEmail, encodedPassword);
 				msg = "임시 비밀번호 전송, 메일 확인해주세요";
 
 				String setfrom = "moigogo1234@gmail.com";
@@ -102,7 +111,7 @@ public class MailController {
 				String title = "모이고 임시 비밀번호 발급안내"; // 제목
 				String content = "";
 
-				content = findName+"님의 임시 비밀번호는  <b>[ " + newPwd + " ]</b> 확인 후 변경해주세요.";
+				content = findName+"님의 임시 비밀번호는  <b>[ " + newPwd + " ]</b> 입니다.";
 
 				try {
 					MimeMessage message = mailSender.createMimeMessage();

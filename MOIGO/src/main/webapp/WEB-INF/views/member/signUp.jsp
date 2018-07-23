@@ -26,6 +26,9 @@
 	}
 	select:DISABLED {
 	background-color : #e9ecef;}
+    
+    
+    
     </style>
 
 </head>
@@ -45,6 +48,7 @@
                         <span id="idChkMsg"></span>
                         
                     </div>
+                    
                     <div class="form-group col-md-12 col-sm-12 row no_margin">
                         <div class="row  col-12 no_margin letter_space_join no_padding" >이메일인증</div>
                         <input type="text" class="col-md-9 col-8  join_form_control " id="joinCode" placeholder="인증번호" disabled>
@@ -347,7 +351,7 @@ $(function(){
     
     /* 회원가입 췌키아웃 */
     var chkId= false;
-    var chkNum = false;  //false 로 변경 할것 ㅎ 인증 받으려면
+    var chkNum = true;  //false 로 변경 할것 ㅎ 인증 받으려면
     var chkPwd = false;
     var chkPwd2 = false;
     var chkName = false;
@@ -403,7 +407,7 @@ $(function(){
 						if(regexp.test(id)){
 			        		chkId=true;
 							$('#btnEmail').attr('disabled',false);
-							$('#idChkMsg').html('사용 가능한 아이디').addClass('okChk').removeClass('noChk');
+							$('#idChkMsg').html('사용 가능한 이메일 (인증 필수)').addClass('okChk').removeClass('noChk');
 			
 			        	}else{
 			        		chkId=false;
@@ -414,7 +418,7 @@ $(function(){
 					}else{
 						chkId=false;
 		        		$('#btnEmail, #joinCode').attr('disabled',true);
-		        		$('#idChkMsg').html('이미 사용 중인 아이디').addClass('noChk').removeClass('okChk');
+		        		$('#idChkMsg').html('이미 사용 중인 이메일').addClass('noChk').removeClass('okChk');
 					}
 					
 				}, error : function(error,msg){
@@ -439,7 +443,7 @@ $(function(){
 						/* alert(data.msg); */
 						joinCode=data.joinCode;
 						$('#joinCode, #btn_joinCode').attr('disabled',false);
-						$('#codeChkMsg').html('인증번호가 발송되었습니다. 메일을 확인해주세요').addClass('okChk').removeClass('noChk');
+						$('#codeChkMsg').html('인증번호를 발송했습니다.<br>인증번호가 오지 않으면 입력하신 정보가 정확한지 확인하여 주세요.').addClass('okChk').removeClass('noChk');
 				}, error : function(error,msg){
 					
 				}
@@ -467,7 +471,7 @@ $(function(){
         	
         	if(!regexp.test(pwd)){
         		chkPwd=false;
-        		$('#pwdChkMsg').html('영문자/숫자 포함 8~16자').addClass('noChk').removeClass('okChk');
+        		$('#pwdChkMsg').html('영문자/숫자 혼용 8~16자').addClass('noChk').removeClass('okChk');
 
         	}else{
         		chkPwd=true;
