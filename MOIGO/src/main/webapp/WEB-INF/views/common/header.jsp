@@ -127,6 +127,11 @@ body {
 #dropdown-Menu{
 	color: white;
 }
+
+#memName{
+	margin-top: 10px;
+	color: white;
+}
 </style>
 
 </head>
@@ -159,21 +164,29 @@ body {
 		<div class="col-md-2 col-lg-2"></div>
 		<div class="col-md-3 col-lg-3" id="login">
 			<div class="row">
-			<a href="#" data-toggle="modal" data-target='#Login_Modal'
-				id="login-slide-link">로그인</a>
-				&nbsp;&nbsp;	
+			<c:choose>
+			<c:when test="${m eq null}" >
+				<a href="#" data-toggle="modal" data-target='#Login_Modal'
+					id="login-slide-link">로그인</a>
+					&nbsp;&nbsp;
+			</c:when>
+			<c:otherwise>
+				<p id="memName">[${m.memberName}]님이 접속하셨습니다.</p>
+			</c:otherwise>
+			</c:choose>
+			<c:if test ="${m ne null}">
 			<div class="dropdown">
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="myMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/common/test.do">테스트</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
 				  </div>
+			</c:if>	  
 		</div>
 		</div>
 		

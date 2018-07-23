@@ -14,7 +14,7 @@ public class MainController {
 		return "common/footerpage";
 	}
 	
-	@RequestMapping("/common/serviceInfo.ft")
+	/*@RequestMapping("/common/serviceInfo.ft")
 	public String serviceInfo(){
 		return "common/serviceInfo";
 	}
@@ -32,6 +32,13 @@ public class MainController {
 	@RequestMapping("/common/maps.ft")
 	public String maps(){
 		return "common/maps";
+	}*/
+	
+	@RequestMapping("/common/qna.ft")
+	public String qnaBoard(){
+		
+		
+		return "common/footerpage";
 	}
 	
 	
