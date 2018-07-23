@@ -7,8 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet"
-   href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=7">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -23,18 +22,13 @@
                      <div class="row">
                         <div class="col-sm-6">
                            <div class="inner-search">
-                              <input type="text" placeholder="모임검색" autocomplete="off"
-                                 onkeyup="if(event.keyCode==13) submit();" name="keyword"
-                                 id="keyword" class="form-control" value="${keyword }" /> <span
-                                 class="search-btn"> <img alt="searchIcon"
-                                 src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png"
-                                 onclick="submit();">
+                              <input type="text" placeholder="모임검색" autocomplete="off" onkeyup="if(event.keyCode==13) submit();" name="keyword" id="keyword" class="form-control" value="${keyword }" /> 
+                              <span class="search-btn"> <img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();">
                               </span>
                            </div>
                         </div>
                         <div class="map-btn">
-                           <img alt="mapButton"
-                              src="${pageContext.request.contextPath }/resources/images/search/mapBtn.png">
+                           <img alt="mapButton" src="${pageContext.request.contextPath }/resources/images/search/mapBtn.png">
                         </div>
                      </div>
                   </div>
@@ -77,9 +71,8 @@
                   ${listCount }개</div>
                <div class="col-sm-4 count-sort" id="sort-inner">
                   <select class="sort" name="sort" id="sort" onchange="submit()">
-                     <option value="최신순">최신순</option>
-                     <option value="조회순">조회순</option>
-                     <option value="멤버순">멤버순</option>
+                     <option>최신순</option>
+                     <option>멤버순</option>
                   </select>
                </div>
             </div>
@@ -88,7 +81,7 @@
                   <div class="content-context">
                      <div class="moigo-item list-item align-left">
                         <div class="moigo-item-overlay"></div>
-                        <div class="header-bg"></div>
+                        <div class="header-bg" style="background-image: url('${group.groupPicture}');"></div>
                         <div class="header-text-container">
                            <div class="header-text">
                               <div class="title-wrap">
@@ -111,8 +104,7 @@
       </div>
    </form>
    <div id="map"></div>
-   <script type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d862551bbf9771ee59207808ec1876ca&libraries=services,clusterer,drawing"></script>
+   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d862551bbf9771ee59207808ec1876ca&libraries=services,clusterer,drawing"></script>
    <script>
       var keyword = $('#keyword').val();
       var place = $('#place').val();
