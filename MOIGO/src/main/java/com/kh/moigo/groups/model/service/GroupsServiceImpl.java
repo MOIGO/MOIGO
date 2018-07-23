@@ -44,7 +44,7 @@ public class GroupsServiceImpl implements GroupsService {
 	public int selectPostCnt(String groupNo) {
 		
 		return groupDao.selectPostCnt(groupNo);
-
+	}
 	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
 		return groupDao.searchGroupMemberList(searchMap);
 

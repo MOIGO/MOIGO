@@ -18,6 +18,8 @@
 		<typeAlias type="com.kh.moigo.groups.model.vo.PostReply" alias="postReply"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.PostWithMem" alias="postWithMem"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.PostReplyWithMem" alias="postReplyWithMem"/>
+		
+		<typeAlias type="com.kh.moigo.member.model.vo.MypageGroup" alias="mypageGroup"/>
 	</typeAliases>
 	
 	<!-- <typeHandlers>
