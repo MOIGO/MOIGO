@@ -35,4 +35,7 @@ public interface GroupsDao {
 	int updatePost(Post post);
 
 
+	int updateReply(PostReply postReply);
+
+
 }

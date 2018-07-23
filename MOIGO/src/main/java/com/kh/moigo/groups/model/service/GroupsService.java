@@ -23,4 +23,5 @@ public interface GroupsService {
 	int deletePost(String postNo);
 	int deleteReply(String replyNo);
 	int updatePost(Post post);
+	int updateReply(PostReply postReply);
 }

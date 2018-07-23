@@ -146,8 +146,13 @@
 	<select id="selectPostCnt" resultType="_int">
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
 	</select>
-
-
+	
+	<!--댓글 수정  -->
+	<update id="updateReply" parameterType="postReply">
+		UPDATE POST_REPLY
+		SET CONTENT=#{content}
+		WHERE REPLY_NO=#{replyNo}
+	</update>
 
 
 	<!-- 혜진 -->

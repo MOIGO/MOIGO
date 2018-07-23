@@ -75,4 +75,10 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updatePost(post);
 	}
 
+	@Override
+	public int updateReply(PostReply postReply) {
+		
+		return groupDao.updateReply(postReply);
+	}
+
 }
