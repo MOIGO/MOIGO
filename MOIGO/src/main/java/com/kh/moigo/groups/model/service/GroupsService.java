@@ -26,8 +26,6 @@ public interface GroupsService {
 	int updatePost(Post post);
 	int updateReply(PostReply postReply);
 
-	int updatePost(Post post);
-
 	//--------------------------------------------------------------------------- 혜진
 	
 	List<Map<String, String>> selectGroupMemberList(String groupNo);
