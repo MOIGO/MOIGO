@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.moigo.member.model.dao.MemberDao;
 import com.kh.moigo.member.model.vo.Member;
+import com.kh.moigo.member.model.vo.MypageGroup;
 
 
 @Service
@@ -120,6 +121,25 @@ public class MemberServiceImpl implements MemberService {
 		
 		
 		return result;
+	}
+
+
+//	@Override
+//	public List<MypageGroup> selectJoinGroup(String memberNo) {
+//		return memberDao.selectJoinGroup(memberNo);
+//	}
+
+
+	@Override
+	public List<MypageGroup> selectGroupList(String memberNo, String gType) {
+		HashMap<String, String> hmap = new HashMap<>();
+
+		hmap.put("memberNo", memberNo);
+		hmap.put("gType", gType);
+
+		 List<MypageGroup> list = memberDao.selectGroupList(hmap);
+		
+		return list;
 	}
 
 	}

@@ -1,11 +1,19 @@
 package com.kh.moigo.groups.controller;
 
-
+import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
 import com.kh.moigo.groups.model.vo.GroupMember;
@@ -24,7 +34,6 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
-
 
 @Controller
 public class GroupController {
@@ -149,6 +158,7 @@ public class GroupController {
 	
 	// ------------------------------------------------------------------ 혜진
 	
+	// 멤버 
 	@RequestMapping("/groups/groupMember.gp")
 	public String goGroupMember(@RequestParam String groupNo, Model model){
 		
@@ -175,33 +185,108 @@ public class GroupController {
 	}
 	
 	@RequestMapping(value="/groups/updateGroupMember.gp", method=RequestMethod.POST)
-	public String uploadGroupMember(GroupMember groupMember, @RequestParam MultipartFile uploadProfile, @RequestParam String resizeProfile, Model model) {
+	public String updateGroupMember(GroupMember groupMember, @RequestParam MultipartFile uploadProfile, @RequestParam String resizeProfile, 
+									HttpServletRequest request, Model model){
 		
-		// 1. dataUrl 방식으로 받아온 resizeProfile을 파일로 저장하기
-		BufferedImage image = null;
+		String profileThumb = "";
+		String profileImg = "";
 		
-		String[] base64Arr = resizeProfile.split(",");
-		byte[] imageByte =  Base64.decodeBase64(base64Arr[1]);
+		try{		
+			// 1. dataUrl 방식으로 받아온 resizeProfile이 NULL이 아니라면 파일로 저장하기
+			if(!resizeProfile.isEmpty()){
+				BufferedImage resizeImage = null;
+				
+				// image/png;base64 부분을 버리기 위해서 split으로 나눔
+				String[] base64Arr = resizeProfile.split(",");
+				// base64 형식의 데이터를 byte로 복호화
+				byte[] imageByte =  Base64.decodeBase64(base64Arr[1]);
+				
+				ByteArrayInputStream bais = new ByteArrayInputStream(imageByte);
+				// ByteArrayInputStream으로 복호화한 byte 파일을 imageIO로 읽어옴
+				resizeImage = ImageIO.read(bais);
+				bais.close();
+				
+				// 프로필 이미지를 저장할 경로
+				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/profiles/" + groupMember.getGroupNo());
+				
+				// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+				File dir = new File(saveDir);
+				
+				if(!dir.exists())
+					dir.mkdirs();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+				profileThumb = "thumb_" + groupMember.getMemberNo() + "_" + sdf.format(new Date(System.currentTimeMillis())) + ".png";
+				
+				File thumbFile = new File(saveDir + "/" + profileThumb);
+				
+				ImageIO.write(resizeImage, "png", thumbFile);	
+				
+				// 2. upload한 file을 rename, 경로 저장하기
+				String fileName = uploadProfile.getOriginalFilename();
+				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+				
+				profileImg = "img_" + groupMember.getMemberNo() + "_" + sdf.format(new Date(System.currentTimeMillis())) + "." + ext;
+				
+				uploadProfile.transferTo(new File(saveDir +"/"+ profileImg));
+				
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		
-		// 2. upload한 file을 rename, 경로 저장하기
 		// 3. groupMember에 담아서 update하기
+		groupMember.setProfileImg(profileImg);
+		groupMember.setProfileThumb(profileThumb);
+		
+		int result;
+		result = groupService.updateGroupMember(groupMember);
 		
 		// 만약 upload한 이미지가 기존 이미지랑 다르다면 삭제? -> 이름 포맷에 날짜 넣기
 		
 		return "redirect:/groups/groupMember.gp?groupNo="+ groupMember.getGroupNo();
 	}
 	
-	
+	// 일정
 	@RequestMapping(value="/groups/groupSchedule.gp", method=RequestMethod.POST)
 	public String groupSchedule(){
 		
 		return "groups/groupSchedule";
 	}
 	
+	// 모임설정
 	@RequestMapping("/groups/groupSetting.gp")
-	public String groupSetting(){
+	public String goGroupSetting(@RequestParam String groupNo, Model model){
+		
+		Groups group = groupService.selectOneGroup(groupNo);
+		
+		model.addAttribute("group", group);
 		
 		return "groups/groupSetting";
+	}
+	
+	@RequestMapping("/groups/updateGroupDefault.gp")
+	public String updateGroupDefault(@RequestParam String groupNo, Model model){
+		
+		Groups group = groupService.selectOneGroup(groupNo);
+		
+		model.addAttribute("group", group);
+		
+		return "groups/createGroup";
+		
+	}
+	
+	@RequestMapping("/groups/deleteGroup.gp")
+	public String deleteGroup(@RequestParam String groupNo, Model model){
+		
+		int result;
+		// result = groupService.deleteGroup(groupNo);
+		
+		model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
+		
+		return "common/msg";
 	}
 
 }

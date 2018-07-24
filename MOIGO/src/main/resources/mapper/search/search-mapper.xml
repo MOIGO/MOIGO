@@ -24,7 +24,8 @@
 	</select>
 	
 	<select id="selectList" resultMap="groupsResultMap" parameterType="string">
-		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' ORDER BY ENROLL_DATE DESC
+		<!-- SELECT * FROM (SELECT ROWNUM RNUM, PAGING.* FROM (SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' ORDER BY ENROLL_DATE DESC) PAGING)WHERE RNUM BETWEEN 1 AND 12 AND GROUP_ADDRESS IS NOT NULL; -->
+		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS IS NOT NULL ORDER BY ENROLL_DATE DESC
 	</select>
 	
 	<select id="detailListCount" resultType="_int" parameterType="hashmap">
@@ -32,18 +33,8 @@
 	</select>
 	
 	<select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
-		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
-		<choose>
-			<!-- <when test="#{sort} == 최신순">
-				
-			</when>
-			<when test="#{sort} == 멤버순">
-				
-			</when> -->
-			<otherwise>
-				ORDER BY ENROLL_DATE DESC
-			</otherwise>
-		</choose>
+		<!-- SELECT * FROM (SELECT ROWNUM RNUM, PAGING.* FROM (SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' ORDER BY ENROLL_DATE DESC) PAGING)WHERE RNUM BETWEEN 1 AND #{limit} -->
+		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND GROUP_ADDRESS IS NOT NULL ORDER BY ENROLL_DATE DESC
 	</select>
 	<select id="getAddressList" resultMap="groupsResultMap" parameterType="hashmap" resultType="Groups">
 		SELECT GROUP_ADDRESS FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'

@@ -60,7 +60,7 @@
 			<artifactId>cglib</artifactId>
 			<version>2.2</version>
 		</dependency>
-
+ 
 		<!-- Java Mail API -->
 		<dependency>
 			<groupId>org.springframework</groupId>

@@ -1,6 +1,5 @@
 package com.kh.moigo.groups.model.dao;
 
-
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -16,19 +15,17 @@ import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 
+import com.kh.moigo.groups.model.vo.GroupMember;
+import com.kh.moigo.groups.model.vo.Groups;
+
 @Repository
 public class GroupsDaoImpl implements GroupsDao {
 	
 	@Autowired
 	SqlSessionTemplate sqlSession;
 
+	
 	@Override
-	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
-		return sqlSession.selectList("groups.selectGroupMemberList", groupNo);
-	}
-
-	@Override
-
 	public int insertPost(Post p) {
 		
 		Map<String,String> map = new HashMap<String, String>();
@@ -37,7 +34,6 @@ public class GroupsDaoImpl implements GroupsDao {
 		map.put("memberNo", p.getMemberNo());;
 		map.put("postContent", p.getContent());
 		map.put("isNotice", p.getIsNotice());
-		
 		
 		return sqlSession.insert("groups.insertPost",map);
 	}
@@ -59,11 +55,7 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectPostWithMemList",map));
 	}
-
-	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
-		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
-	}
-
+	
 	@Override
 	public int insertReply(PostReply r) {
 		
@@ -88,10 +80,39 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updatePost",post);
 	}
 
+
 	@Override
 	public int updateReply(PostReply postReply) {
 		
 		return sqlSession.update("groups.updateReply",postReply);
+	}
+
+
+	//------------------------------------------------------------------------- 혜진
+	
+	@Override
+	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
+		return sqlSession.selectList("groups.selectGroupMemberList", groupNo);
+	}
+	
+	@Override
+	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
+	}
+
+	@Override
+	public int updateGroupMember(GroupMember groupMember) {
+		return sqlSession.update("groups.updateGroupMember", groupMember);
+	}
+
+	@Override
+	public int deleteGroup(String groupNo) {
+		return sqlSession.delete("groups.deleteGroup", groupNo);
+	}
+
+	@Override
+	public Groups selectOneGroup(String groupNo) {
+		return sqlSession.selectOne("groups.selectOneGroup", groupNo);
 	}
 
 }

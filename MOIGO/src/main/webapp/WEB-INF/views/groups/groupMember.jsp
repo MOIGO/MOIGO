@@ -297,9 +297,9 @@ input:-webkit-autofill:active {
 									<c:if test="${groupMember.profileImg eq null and groupMember.profileThumb eq null}">
 										<img id="listImg" class="rounded-circle" src="${root}/resources/images/common/img_profile.png">
 									</c:if>
-									<%-- <c:if test="${groupMember.profileThumb ne null}">
-										<img id="listImg" class="rounded-circle" src="${root}/resources/images/common/img_profile.png">
-									</c:if> --%>
+									<c:if test="${groupMember.profileThumb ne null}">
+										<img id="listImg" class="rounded-circle" src="${root}/resources/images/profiles/${groupMember.groupNo}/${groupMember.profileThumb}">
+									</c:if>
 									<span class="list_inner" <c:if test="${groupMember.profileMsg eq null}">style="padding-top: 12px;"</c:if>>
 										<span class="list_txt" id="listName">${groupMember.memberName}</span>
 										<c:if test="${groupMember.profileMsg ne null}">
@@ -354,7 +354,12 @@ input:-webkit-autofill:active {
 			
 			<div class="modal-body gm_modal_body">
 				<form id="profileForm" method="POST" action="${updateGroupMember}" enctype="multipart/form-data">
-					<img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
+					<c:if test="${loginGroupMember.profileThumb eq null}">
+						<img class="rounded-circle" id="profileImg" src="${root}/resources/images/common/img_profile.png">
+					</c:if>
+					<c:if test="${loginGroupMember.profileThumb ne null}">
+						<img class="rounded-circle" id="profileImg" src="${root}/resources/images/profiles/${loginGroupMember.groupNo}/${loginGroupMember.profileThumb}">
+					</c:if>
 					<input type="hidden" name="resizeProfile" id="resizeProfile" />
 					<input type="file" class="profile_upload_inp" name="uploadProfile" id="profileChangeInp" accept="image/*"/>
 					<div class="profile_upload_btn" id="profileChangeBtn"></div>
@@ -425,8 +430,6 @@ input:-webkit-autofill:active {
 	}
 
 	$(function() {
-
-		console.log("searchMember : ${searchMemberList}");
 		
 		var normalmemberLogin = "${loginGroupMember.memberGradeCode}";
 		/* 
@@ -493,7 +496,7 @@ input:-webkit-autofill:active {
 
 						var $cropperImg = $("#cropperImg");
 						$cropperImg.attr("src", reader.result);
-						/* cropper.js의 초기 option setting*/
+						/* cropper.js의 초기 option setting */
 						$cropperImg.cropper({
 							aspectRatio : 1 / 1,
 							viewMode : 1,
@@ -511,8 +514,6 @@ input:-webkit-autofill:active {
 						});
 						
 					};
-
-					$(this).val("");
 				}
 			}
 		});
