@@ -67,14 +67,15 @@
 <body>
 	
 	<c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-	<form action="${root}/groups/createGroup.gp">
+	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp">
+	<input type="hidden" name="memberNo" value="${m.memberNo}" />
 	<div class="container">
 		<div class="make_cover">
 			
 				<div class="form-group">
 					<label for="inpGrpName" id="labGroupName" class="labTitle">밴드 이름</label>
-					<div class="input-group input-group-lg">
-						<input type="text" id="inpGrpName" name="inpGrpName" placeholder="밴드 이름 입력" class="form-control "/>
+					<div class="input-group input-group-lg" ㄱ>
+						<input type="text" id="inpGrpName" name="groupName" placeholder="밴드 이름 입력" class="form-control " required/>
 					</div>
 				</div>
 			
@@ -85,7 +86,7 @@
 		<div class="row cover_select">
 			<div class="col-5  m-auto">
 				<img class="mainCover img-thumbnail" src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" />
-				<input type="hidden" value="" name="groupImgSrc" id="inpCoverImg"/>
+				<input type="hidden" value="" name="groupPicture" id="inpCoverImg"/>
 			</div>
 			<div class="col-7 cover_list ">
 				<div class="list_head d-flex flex-row ">
@@ -143,16 +144,16 @@
 			<div class="col-12 constraints">
 				<div class=" d-flex flex-row  justify-content-around">
 					<div class="form-check form-check-inline ">
-					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="private">
+					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="private" required>
 					  <label class="form-check-label" for="openSetting1"><strong>비공개 모임</strong><br><span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span></label>
 					</div>
 			
 					<div class="form-check form-check-inline ">
-					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="protedted">
+					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="protedted" required>
 					  <label class="form-check-label" for="openSetting2"><strong>모임명 공개 모임</strong><br> <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수 있습니다.</span><br></label>
 					</div>
 					<div class="form-check form-check-inline">
-					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="public">
+					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="public" required>
 					 	 <label class="form-check-label" for="openSetting3"><strong>공개 모임</strong><br><span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span></label>
 					</div>
 			
@@ -174,10 +175,9 @@
 		<div class="collapse" id="divRestrict">
 		  <div class="card card-body">
 		    	
-		    	
 		    		<div class="form-group">
 					    <label for="genderSelect" class="bolder_text">성별 제약</label>
-					    <select class="form-control" id="genderSelect" name="gender_select">
+					    <select class="form-control" id="genderSelect" name="groupGender">
 					      	<option value="N">무관</option>
 					     	<option value="M">남</option>
 					     	<option value="F">여</option>
@@ -188,18 +188,14 @@
 						<div class="col-5 mt-1">
 							<div class="form-group">
 							    <label for="min_ageSelect" class="bolder_text">최소 나이</label>
-							    <select class="form-control" id="min_ageSelect" name="minAge">
-							    	
-							    </select>
+							    <select class="form-control" id="min_ageSelect" name="minAge"></select>
 							</div>
 						</div>
 						<span class="col-1 mt-5"> 부터 </span>
 						<div class="col-5 mt-1">
 							<div class="form-group">
 							    <label for="max_ageSelect" class="bolder_text">최대 나이</label>
-							    <select class="form-control" id="max_ageSelect" name="maxAge">
-							    	
-							    </select>
+							    <select class="form-control" id="max_ageSelect" name="maxAge"></select>
 							</div>
 						</div>
 						<span class="col-1 mt-5"> 까지 </span>
@@ -233,7 +229,10 @@
 									</div>
 								</div>
 							</div>
+							
+							<input type="hidden" id="fullAddress" name="groupAddress" value="서울특별시 강남구 신사동" />
 						</div>
+						
 						<div class="col-2 mt-5">
 							<div class="form-check form-check-inline">
 							  <input class="form-check-input" type="checkbox" id="districtDefault" value="N">
@@ -250,72 +249,76 @@
 										<span class="input-group-text bg-primary" id="basic-addon1">1 / </span>
 								</div>
 								
-								<input type="number" class="form-control" id="maxNumber" name="max_number" min="1" value="1" max="100"/>
+								<input type="number" class="form-control" id="maxNumber" name="maxMember" min="1" value="1" max="100"/>
 								
 								<div class="input-group-append">
 									<span class="input-group-text" id="basic-addon1">명/최대(50 명)</span>
 								</div>
 							</div>
 						</div>
-						<div class="col-2 mt-4">
-							
-						</div>
 					</div>
 					
+					
+					<div class="row mt-3">
+						<div class="col-12">
+							<label class="bolder_text">가입신청 받기</label>
+						</div>
+						<div class="col-12">
+							<div class="form-check">
+							  <input class="form-check-input" type="checkbox" id="allowSignup" value="N">
+							  <label class="form-check-label" for="allowSignup">※멤버 가입 시 리더가 승인하지 않습니다.초대 받은 멤버가 바로 가입할 수 있습니다.</label>
+							</div>
+						</div>
+					</div>
 		  </div>
 		</div>
 	</div> <!--distric container end  -->
 	<div class="container mt-5">
 		
-			
-		<label class="labTitle">추가정보 (선택)</label>
+		<label class="labTitle">관심 분야(선택)</label>
 		<button class="btn btn-primary btn-sm"  data-toggle="collapse" data-target="#interestCategory"  type="button" >관심분야 </button>
-			
-		
-		
+
 		<div class="collapse" id="interestCategory">
 			  <div class="card card-body ">
-				
-        		<div class="form-check form-check-inline">
-                 <input type="checkbox"id="f1" class="form-check-input"name="interest" value="B001"> 
-                 <label class="form-check-label" for="f1">라이프스타일</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f2" class="form-check-input"name="interest" value="B002"> <label class="form-check-label" for="f2">영어/외국어</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f3" class="form-check-input"name="interest" value="B003"> <label class="form-check-label" for="f3">컴퓨터</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f4" class="form-check-input"name="interest" value="B004"> <label class="form-check-label" for="f4">디자인/미술</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f5" class="form-check-input"name="interest" value="B005"> <label class="form-check-label" for="f5">취업</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f6" class="form-check-input"name="interest" value="B006"> <label class="form-check-label" for="f6">음악/공연</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f7" class="form-check-input"name="interest" value="B007"> <label class="form-check-label" for="f7">스포츠</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f8" class="form-check-input"name="interest" value="B008"> <label class="form-check-label" for="f8">뷰티/미용</label>
-                 </div>
-                 <div class="form-check form-check-inline">
-                 <input type="checkbox"id="f9" class="form-check-input"name="interest" value="B009"> <label class="form-check-label" for="f9">게임</label>
-                 </div>
-		             
+				<div class="d-flex">
+	        		 <div class="form-check form-check-inline">
+	                	<input type="checkbox"id="f1" class="form-check-input"name="interestBigCode" value="B001"> <label class="form-check-label" for="f1">라이프스타일</label>
+	                 </div>
+	                 
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f2" class="form-check-input"name="interestBigCode" value="B002"> <label class="form-check-label" for="f2">영어/외국어</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f3" class="form-check-input"name="interestBigCode" value="B003"> <label class="form-check-label" for="f3">컴퓨터</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f4" class="form-check-input"name="interestBigCode" value="B004"> <label class="form-check-label" for="f4">디자인/미술</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f5" class="form-check-input"name="interestBigCode" value="B005"> <label class="form-check-label" for="f5">취업</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f6" class="form-check-input"name="interestBigCode" value="B006"> <label class="form-check-label" for="f6">음악/공연</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f7" class="form-check-input"name="interestBigCode" value="B007"> <label class="form-check-label" for="f7">스포츠</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f8" class="form-check-input"name="interestBigCode" value="B008"> <label class="form-check-label" for="f8">뷰티/미용</label>
+	                 </div>
+	                 <div class="form-check form-check-inline">
+	                 	<input type="checkbox"id="f9" class="form-check-input"name="interestBigCode" value="B009"> <label class="form-check-label" for="f9">게임</label>
+	                 </div>
+		       	</div>      
 		        </div>
 	   		</div>
 		</div>
 	
-	
-	
-	
+
 	<div class="container mt-4">
 		<div class="d-flex justify-content-center">
-				<button type="reset" class="btn btn-secondary btn-lg mr-4 button_sizing">취소하기</button>
-				<button type="submit" class="btn btn-primary btn-lg button_sizing">완료</button>		
+			<button type="reset" class="btn btn-secondary btn-lg mr-4 button_sizing">취소하기</button>
+			<button type="submit" class="btn btn-primary btn-lg button_sizing">완료</button>		
 		</div>		
 	</div>
 </form>
@@ -391,7 +394,31 @@
 		}
 	}
 	
+	$('#allowSignup').change(function(){
+		
+		if($('#allowSignup').is(":checked")){
+			$('#allowSignup').siblings('label').text("※멤버 가입 시 리더의 승인이 필요합니다.")
+		}else{
+			$('#allowSignup').siblings('label').text("※멤버 가입 시 리더가 승인하지 않습니다.초대 받은 멤버가 바로 가입할 수 있습니다.")
+		}
+		
+	});
 	
+	  $('input[name="interestBigCode"]').click(function(){
+          var sum =0;
+
+          $('input[name="interestBigCode"]').each(function(i){
+              if($('input[name="interestBigCode"]').eq(i).prop("checked")){
+                  sum++;
+              }
+          });
+
+          if(sum>3){
+              alert('3개까지 선택 가능합니다');
+              $(this).prop("checked",false);
+
+          }
+      });
 	
 	
 </script>

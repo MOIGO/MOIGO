@@ -39,11 +39,20 @@ public class GroupController {
 	}
 	
 	@RequestMapping("/groups/createGroup.gp")
-	public String createGroup(Groups group){
-		  
+	public String createGroup(){
+		
 		return "groups/createGroup";
 	}
-	
+	@RequestMapping("/groups/createGroupEnd.gp")
+	public String createGroupEnd(Groups group, @RequestParam(value = "interestBigCode", required = false,	defaultValue = "") List<String> interestBigCodeList)
+	{
+		System.out.println("여기 들어옴!");
+		System.out.println(group);
+		System.out.println(interestBigCodeList.size());
+			
+		return "groups/groupMain";
+		
+	}
 	
 	//그룹 메인 들어갈때 글 가져오기
 	@RequestMapping("/groups/getPostList.gp")
