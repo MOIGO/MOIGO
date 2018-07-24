@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
 import com.kh.moigo.groups.model.vo.GroupMember;
+import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
@@ -38,8 +39,8 @@ public class GroupController {
 	}
 	
 	@RequestMapping("/groups/createGroup.gp")
-	public String createGroup(){
-		
+	public String createGroup(Groups group){
+		  
 		return "groups/createGroup";
 	}
 	

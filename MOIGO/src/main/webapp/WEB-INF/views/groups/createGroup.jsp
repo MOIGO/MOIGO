@@ -53,6 +53,11 @@
 	font-size:2em;
 }
 
+.btn_radioPos{
+	position: relative;
+	top:30px;
+}
+
 </style>
 
 
@@ -62,17 +67,17 @@
 <body>
 	
 	<c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-
+	<form action="${root}/groups/createGroup.gp">
 	<div class="container">
 		<div class="make_cover">
-			<form action="">
+			
 				<div class="form-group">
 					<label for="inpGrpName" id="labGroupName" class="labTitle">밴드 이름</label>
 					<div class="input-group input-group-lg">
 						<input type="text" id="inpGrpName" name="inpGrpName" placeholder="밴드 이름 입력" class="form-control "/>
 					</div>
 				</div>
-			</form>
+			
 		</div>
 	</div><!--make band name container end  -->
 	
@@ -80,6 +85,7 @@
 		<div class="row cover_select">
 			<div class="col-5  m-auto">
 				<img class="mainCover img-thumbnail" src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" />
+				<input type="hidden" value="" name="groupImgSrc" id="inpCoverImg"/>
 			</div>
 			<div class="col-7 cover_list ">
 				<div class="list_head d-flex flex-row ">
@@ -136,20 +142,18 @@
 			</div>
 			<div class="col-12 constraints">
 				<div class=" d-flex flex-row  justify-content-around">
-					<div class="custom-control custom-radio w-25">
-					  <input type="radio" id="customRadio1" name="openSetting" class="custom-control-input mt-4" value="private">
-					  <label class="custom-control-label bolder_text" for="customRadio1">비공개 모임</label><br>
-					  <span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span>
+					<div class="form-check form-check-inline ">
+					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="private">
+					  <label class="form-check-label" for="openSetting1"><strong>비공개 모임</strong><br><span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span></label>
 					</div>
-					<div class="custom-control custom-radio w-25">
-					  <input type="radio" id="customRadio2" name="openSetting" class="custom-control-input mt-4" value="protedted">
-					  <label class="custom-control-label bolder_text" for="customRadio2">모임명 공개 모임</label><br>
-					   <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수 있습니다.</span>
+			
+					<div class="form-check form-check-inline ">
+					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="protedted">
+					  <label class="form-check-label" for="openSetting2"><strong>모임명 공개 모임</strong><br> <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수 있습니다.</span><br></label>
 					</div>
-					<div class="custom-control custom-radio w-25">
-					  <input type="radio" id="customRadio3" name="openSetting" class="custom-control-input mt-4" value="public">
-					  <label class="custom-control-label bolder_text " for="customRadio3">공개 모임</label><br>
-					   <span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span>
+					<div class="form-check form-check-inline">
+					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="public">
+					 	 <label class="form-check-label" for="openSetting3"><strong>공개 모임</strong><br><span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span></label>
 					</div>
 			
 				</div>
@@ -163,13 +167,13 @@
 	<div class="container mt-5">
 		 
 		 <label class="labTitle">밴드 제약 설정(선택)</label>
-		 <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#divRestrict" aria-expanded="false" aria-controls="collapseExample">
+		 <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#divRestrict">
 		   	펼치기
 		  </button>
 		
 		<div class="collapse" id="divRestrict">
 		  <div class="card card-body">
-		    	<form action="">
+		    	
 		    	
 		    		<div class="form-group">
 					    <label for="genderSelect" class="bolder_text">성별 제약</label>
@@ -184,9 +188,8 @@
 						<div class="col-5 mt-1">
 							<div class="form-group">
 							    <label for="min_ageSelect" class="bolder_text">최소 나이</label>
-							    <select class="form-control" id="min_ageSelect" name="create_age_select">
-							    	<option value="N">무관</option>
-							      	<option value="1991">1991</option>
+							    <select class="form-control" id="min_ageSelect" name="minAge">
+							    	
 							    </select>
 							</div>
 						</div>
@@ -194,9 +197,8 @@
 						<div class="col-5 mt-1">
 							<div class="form-group">
 							    <label for="max_ageSelect" class="bolder_text">최대 나이</label>
-							    <select class="form-control" id="max_ageSelect" name="create_age_select">
-							    	<option value="N">무관</option>
-							      	<option value="1991">1991</option>
+							    <select class="form-control" id="max_ageSelect" name="maxAge">
+							    	
 							    </select>
 							</div>
 						</div>
@@ -226,7 +228,7 @@
 									<div class="form-group">
 									    <label for="create_borough_select" class="bolder_text">동</label>
 									    <select class="form-control" id="create_borough_select" name="create_borough_select">
-									    	<option value="N">강남구</option>
+									    	<option value="N">신사동</option>
 									    </select>
 									</div>
 								</div>
@@ -244,9 +246,14 @@
 						<div class="col">
 						<label for="maxNumber" class="bolder_text">최대 인원 수</label>
 							<div class="input-group">
+								<div class="input-group-prepend">
+										<span class="input-group-text bg-primary" id="basic-addon1">1 / </span>
+								</div>
+								
 								<input type="number" class="form-control" id="maxNumber" name="max_number" min="1" value="1" max="100"/>
+								
 								<div class="input-group-append">
-									<span class="input-group-text" id="basic-addon1">명/최대(100 명)</span>
+									<span class="input-group-text" id="basic-addon1">명/최대(50 명)</span>
 								</div>
 							</div>
 						</div>
@@ -254,17 +261,64 @@
 							
 						</div>
 					</div>
-		    	</form>
+					
 		  </div>
 		</div>
 	</div> <!--distric container end  -->
+	<div class="container mt-5">
+		
+			
+		<label class="labTitle">추가정보 (선택)</label>
+		<button class="btn btn-primary btn-sm"  data-toggle="collapse" data-target="#interestCategory"  type="button" >관심분야 </button>
+			
+		
+		
+		<div class="collapse" id="interestCategory">
+			  <div class="card card-body ">
+				
+        		<div class="form-check form-check-inline">
+                 <input type="checkbox"id="f1" class="form-check-input"name="interest" value="B001"> 
+                 <label class="form-check-label" for="f1">라이프스타일</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f2" class="form-check-input"name="interest" value="B002"> <label class="form-check-label" for="f2">영어/외국어</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f3" class="form-check-input"name="interest" value="B003"> <label class="form-check-label" for="f3">컴퓨터</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f4" class="form-check-input"name="interest" value="B004"> <label class="form-check-label" for="f4">디자인/미술</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f5" class="form-check-input"name="interest" value="B005"> <label class="form-check-label" for="f5">취업</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f6" class="form-check-input"name="interest" value="B006"> <label class="form-check-label" for="f6">음악/공연</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f7" class="form-check-input"name="interest" value="B007"> <label class="form-check-label" for="f7">스포츠</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f8" class="form-check-input"name="interest" value="B008"> <label class="form-check-label" for="f8">뷰티/미용</label>
+                 </div>
+                 <div class="form-check form-check-inline">
+                 <input type="checkbox"id="f9" class="form-check-input"name="interest" value="B009"> <label class="form-check-label" for="f9">게임</label>
+                 </div>
+		             
+		        </div>
+	   		</div>
+		</div>
+	
+	
+	
+	
 	<div class="container mt-4">
 		<div class="d-flex justify-content-center">
 				<button type="reset" class="btn btn-secondary btn-lg mr-4 button_sizing">취소하기</button>
 				<button type="submit" class="btn btn-primary btn-lg button_sizing">완료</button>		
 		</div>		
 	</div>
-
+</form>
 </body>
 
 <script>
@@ -272,12 +326,40 @@
 	var cover_curr_page =0;
 	
 	$(function(){
+		var imgNum = Math.floor(Math.random()*6);
+		
+		setMainCover($("[class*='cover_set_0'] > img").eq(imgNum));
+		
 		var cover_imgs = $("[class*='cover_set'] > img").css("cursor","pointer");
 		
 		$(cover_imgs).on("click",function(){
 			setMainCover(this);
 		});
+		
+		setSelectYears($('#min_ageSelect'),100);
+		setSelectYears($('#max_ageSelect'),100);
+		
+		$('#maxNumber').change(function(){
+			if($(this).val()>100)
+				$(this).val(100);
+			else if($(this).val()<1)
+				$(this).val(1);
+		});
 	});
+	
+	
+	
+	function setSelectYears(selectObj,years){
+		
+		 var n =new Date().getFullYear();
+		 
+		console.log(selectObj);
+		 $(selectObj).append($("<option>").val(-1).text('무관'));	 
+		 for(var i=0 ;i<years;++i){
+			 $(selectObj).append($("<option>").val(n-i).text(n-i));	 
+		 }
+	}
+	
 	
 	function setMainCover(imgObj){
 		
@@ -286,6 +368,7 @@
 		$(imgObj).parent().append("<i class='fas fa-check coverMask'></i>")
 		
 		$("img[class*=mainCover]").attr("src",$(imgObj).attr("src"));
+		$("#inpCoverImg").val($(imgObj).attr("src"));
 	}
 	
 	function nextPicList(pageDirection){
