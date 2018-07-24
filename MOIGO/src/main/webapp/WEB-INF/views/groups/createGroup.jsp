@@ -73,7 +73,7 @@
 <body>
 	
 	<c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp">
+	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp" method="post" enctype="multipart/form-data"">
 	<input type="hidden" name="memberNo" value="${m.memberNo}" />
 	<div class="container">
 		<div class="make_cover">
@@ -83,7 +83,7 @@
 				<div class="input-group input-group-lg">
 					<input type="text" id="inpGrpName" name="groupName" placeholder="밴드 이름 입력" class="form-control " required/>
 				</div>
-				<input type="file" class="profile_upload_inp" id="coverUploadInp" accept="image/*" /> 
+				<input type="file" class="profile_upload_inp" name="groupImage" id="coverUploadInp" accept="image/*" /> 
 			</div>
 			
 		</div>
@@ -93,7 +93,7 @@
 		<div class="row cover_select">
 			<div class="col-5  m-auto">
 				<img class="mainCover img-thumbnail" src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" />
-				<input type="hidden" value="" name="groupImage" id="inpCoverImg"/>
+				<input type="hidden" value="groupPicture" id="inpCoverImg"/>
 			</div>
 			<div class="col-7 cover_list ">
 				<div class="list_head d-flex flex-row ">
@@ -151,16 +151,16 @@
 			<div class="col-12 constraints">
 				<div class=" d-flex flex-row  justify-content-around">
 					<div class="form-check form-check-inline ">
-					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="private" required>
+					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="PRIVATE" required>
 					  <label class="form-check-label" for="openSetting1"><strong>비공개 모임</strong><br><span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span></label>
 					</div>
 			
 					<div class="form-check form-check-inline ">
-					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="protedted" required>
+					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="PROTECTED" required>
 					  <label class="form-check-label" for="openSetting2"><strong>모임명 공개 모임</strong><br> <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수 있습니다.</span><br></label>
 					</div>
 					<div class="form-check form-check-inline">
-					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="public" required>
+					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="PUBLIC" required>
 					 	 <label class="form-check-label" for="openSetting3"><strong>공개 모임</strong><br><span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span></label>
 					</div>
 			

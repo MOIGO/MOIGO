@@ -28,7 +28,7 @@ public class GroupsDaoImpl implements GroupsDao {
 	@Override
 	public int createGroup(Groups group) {
 		
-		return sqlSession.selectOne("groups.insertGroup", group);
+		return sqlSession.insert("groups.insertGroup", group);
 	}
 
 	@Override

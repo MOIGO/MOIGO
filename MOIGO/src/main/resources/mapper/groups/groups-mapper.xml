@@ -158,18 +158,18 @@
 	<!--그룹 등록  -->
 	<insert id="insertGroup" parameterType="groups">
 		
-		<selectKey keyProperty="GROUP_NO" resultType="string" order="AFTER">
+		<selectKey keyProperty="groupNo" resultType="string" order="AFTER" >
 			SELECT 'G'||TO_CHAR(SEQ_GROUP.CURRVAL,'FM000') FROM DUAL
 		</selectKey>
 	
 		INSERT INTO GROUPS VALUES('G'||TO_CHAR(SEQ_GROUP.NEXTVAL,'FM000'),
-		#{groupName},#{groupMsg},#{groupAddress},DEFAULT,DEFAULT,#{maxMember},DEFAULT,#{interestBigCode},
+		#{groupName},#{groupMsg},#{groupPicture},#{groupAddress},DEFAULT,DEFAULT,#{maxMember},DEFAULT,#{interestBigCode},
 		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
 	</insert>
 	
 	<update id="updateGroupCover" parameterType="groups">
 		UPDATE GROUPS
-		SET GROUP_PICTURE = #{coverImg}
+		SET GROUP_PICTURE = #{groupPicture}
 		WHERE GROUP_NO=#{groupNo}
 	</update>
 

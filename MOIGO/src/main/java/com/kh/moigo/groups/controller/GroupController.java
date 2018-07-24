@@ -52,11 +52,14 @@ public class GroupController {
 		
 		return "groups/createGroup";
 	}
-	@RequestMapping("/groups/createGroupEnd.gp")
+	
+	@RequestMapping(value="/groups/createGroupEnd.gp", method=RequestMethod.POST)
 	public String createGroupEnd(Groups group,@RequestParam MultipartFile groupImage,HttpServletRequest request)
 	{
-		String coverImg = "";
+		String groupPicture = "";
 		String profileImg = "";
+
+		System.out.println(group);
 		
 		int result =  groupService.createGroup(group);
 		
@@ -73,18 +76,16 @@ public class GroupController {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 			
-			coverImg = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis())) + ".png";
+			groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
 			
-			/*File thumbFile = new File(saveDir + "/" + profileThumb);
-			
-			
+		
 			// 2. upload한 file을 rename, 경로 저장하기
 			String fileName = groupImage.getOriginalFilename();
 			String ext = fileName.substring(fileName.lastIndexOf(".")+1);
 			
-			profileImg = "img_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis())) + "." + ext;
-			*/
-			groupImage.transferTo(new File(saveDir +"/"+ coverImg));
+			groupPicture = groupPicture + "." + ext;
+			
+			groupImage.transferTo(new File(saveDir +"/"+ groupPicture));
 				
 			
 		}
@@ -93,11 +94,10 @@ public class GroupController {
 		}
 		
 		// 3. groupMember에 담아서 update하기
-		group.setGroupPicture(profileImg);
+		group.setGroupPicture(groupPicture);
 		
 		result = groupService.updateGroupImg(group);
 		
-		// 만약 upload한 이미지가 기존 이미지랑 다르다면 삭제? -> 이름 포맷에 날짜 넣기
 		
 		return "redirect:/groups/groupMember.gp?groupNo="+ group.getGroupNo();
 		
