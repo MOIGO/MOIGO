@@ -1,6 +1,7 @@
 package com.kh.moigo.admin.model.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +102,24 @@ public class AccuseServiceImpl implements AccuseService {
 	public List<Map<String, Object>> selectAccuse2(String id) {
 		// TODO Auto-generated method stub
 		return ad.selectAccuse2(id);
+	}
+
+	@Override
+	public ArrayList countGender() {
+		// TODO Auto-generated method stub
+		return ad.countGender();
+	}
+
+	@Override
+	public List<Map<String, Object>> countAddress() {
+		// TODO Auto-generated method stub
+		return ad.countAddress();
+	}
+
+	@Override
+	public List<Map<String, Object>> countMinterest() {
+		// TODO Auto-generated method stub
+		return ad.countMinterest();
 	}
 
 

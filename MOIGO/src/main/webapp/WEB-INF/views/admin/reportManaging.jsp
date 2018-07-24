@@ -280,13 +280,14 @@
 										</div>
 									</fieldset>
 
-									<div class="form-group row">
+									
+								</form>
+								<div class="form-group row">
 										<div class="col-sm-12  text-center">
-											<button type="submit" class="btn btn-outline-info">
+											<button type="button" id="memDelSubmit"class="btn btn-outline-info">
 												회원 탈퇴</button>
 										</div>
-									</div>
-								</form>
+								</div>
 							</div>
 
 
@@ -555,6 +556,10 @@
 
 <script>
 $(document).ready(function(){
+	
+	
+	
+	
 	$(".identifyingClass").click(function () {
 		var id = $(this).data('id');	
 	        $.ajax({
@@ -625,6 +630,8 @@ $(document).ready(function(){
 		            }
 		        });	           
 			}); //함수 끝
+			
+			
    $("#myInput").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#myTable tr").filter(function() {
@@ -637,10 +644,33 @@ $(document).ready(function(){
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });
 	  }); 
+   
+   $("#memDelSubmit").click(function() {
+	  	 var id ="안녕";
+	  	  $.ajax({
+	            url: "${pageContext.request.contextPath}/memDelete.ad",
+	            type:'get',
+	            data: {id:id},
+	            dataType:"json",
+	            success:function(data){	
+	            	alert(data);
+	            },error:function(request,status,error){
+	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	            }
+	  	  
+
+
+	  	  });
+
+	    
+	}); 
+   
+   
+   
 }); //시작 이벤트 끝
 
 $(document).ready(function(){
-	
+
 	});
 	
 

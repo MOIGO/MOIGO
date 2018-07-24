@@ -52,9 +52,7 @@ public class AdminController {
 	
 	}
 	@RequestMapping("adminMember.ad")
-	public String adminMember(Model model){
-		
-		
+	public String adminMember(Model model){		
 		List<Map<String,Object>> memberListnotPaging = as.selectmemberList();
 		System.out.println(memberListnotPaging);
 		
@@ -82,6 +80,16 @@ public class AdminController {
 	
 	@RequestMapping("adminAnalytics.ad")
 	public String adminAnalytics(Model model){
+		ArrayList genderCount = as.countGender();
+		List<Map<String,Object>> addressCount = as.countAddress();
+		List<Map<String,Object>> minterestCount = as.countMinterest();
+
+		
+		System.out.println("genderCount"+genderCount);
+		model.addAttribute("addressCount",addressCount);
+		model.addAttribute("genderCount",genderCount);
+		model.addAttribute("minterestCount",minterestCount);
+
 		model.addAttribute("pageName","Analytics");
 		return "admin/analystics";
 	
@@ -303,5 +311,17 @@ public class AdminController {
 
 		return grpList;	
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="memDelete.ad", method=RequestMethod.GET)
+	public Object memDelete(@RequestParam String id) throws Exception{
+		List<Object> List= new ArrayList<Object>();
+	
+		String pid = id;
+		List.add(pid);
+		System.out.println("여기로 들어오나요?"+id);
+		return List;	
+	}
+	
 	
 }

@@ -14,7 +14,6 @@
 		<result property="maxMember" column="MAX_MEMBER" />
 		<result property="enrollDate" column="ENROLL_DATE" />
 		<result property="interestBigCode" column="INTEREST_BIG_CODE" />
-		<result property="interestSmallCode" column="INTEREST_SMALL_CODE" />
 		<result property="allowSignup" column="ALLOW_SIGNUP" />
 		<result property="minAge" column="MIN_AGE" />
 		<result property="maxAge" column="MAX_AGE" />

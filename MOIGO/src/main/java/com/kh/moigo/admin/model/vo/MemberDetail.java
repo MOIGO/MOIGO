@@ -20,15 +20,37 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	private int postCount;
 	private int replyCount;
 	private int accuseCount;
-	
+	private int genderCount;
+	private String metrocity;
+	private int addressCount;
+	private int minterestCount;
+
 	//private List<Map<String, Object>> memPerGroup;
 	
 	
 	
 	
+	public int getMinterestCount() {
+		return minterestCount;
+	}
+	public void setMinterestCount(int minterestCount) {
+		this.minterestCount = minterestCount;
+	}
 	public MemberDetail() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public String getMetrocity() {
+		return metrocity;
+	}
+	public void setMetrocity(String metrocity) {
+		this.metrocity = metrocity;
+	}
+	public int getAddressCount() {
+		return addressCount;
+	}
+	public void setAddressCount(int addressCount) {
+		this.addressCount = addressCount;
 	}
 	public MemberDetail(String memberNo, String memberEmail, String memberPwd, String memberName, String memberAddress,
 			Date memberBirth, String memberGender, Date enrollDate, String delflag,int enrollGroup, int postCount, int replyCount, int accuseCount) {
@@ -75,6 +97,12 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	public String toString() {
 		return "MemberDetail [enrollGroup=" + enrollGroup + ", postCount=" + postCount + ", replyCount=" + replyCount
 				+ ", accuseCount=" + accuseCount + ", toString()=" + super.toString() + "]";
+	}
+	public int getGenderCount() {
+		return genderCount;
+	}
+	public void setGenderCount(int genderCount) {
+		this.genderCount = genderCount;
 	}
 
 	

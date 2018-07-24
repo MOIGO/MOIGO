@@ -1,6 +1,7 @@
 package com.kh.moigo.admin.model.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,12 @@ public interface AccuseService {
 	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);//ajax 페이징 포기해서 나중으로 넘겼음	
 	//int selectAccuseListCnt(String id); //그 회원의 신고 갯수 
 	List<Map<String, Object>> selectAccuse2(String id);
+	
+	//이하 analytics 
+	ArrayList countGender();
+	List<Map<String, Object>> countAddress();
+	List<Map<String, Object>> countMinterest();
+	
 
 	
 

@@ -1,6 +1,7 @@
 package com.kh.moigo.admin.model.dao;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +107,25 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("accuse.selectTGList",id);
 	}
+
+	@Override
+	public ArrayList countGender() {
+		// TODO Auto-generated method stub
+		return (ArrayList) sqlSession.selectList("memberDetail.genderCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countAddress() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.addressCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countMinterest() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.minterestCount");
+	}
+	
 	
 	
 //	@Override //신고

@@ -17,14 +17,9 @@ public class MemberController {
 	MemberService memberService;
 	
 	@RequestMapping("/member/memberDetail.do")
-	public String memberDetail(@RequestParam("memberNo") String memberNo ,Model model){
-		
-		
-		Member m = memberService.selectOne(memberNo);
-		
-		model.addAttribute("m",m);
-		
-		
+	public String memberDetail(@RequestParam("memberNo") String memberNo ,Model model){		
+		Member m = memberService.selectOne(memberNo);		
+		model.addAttribute("m",m);		
 		return "home";
 	}
 	

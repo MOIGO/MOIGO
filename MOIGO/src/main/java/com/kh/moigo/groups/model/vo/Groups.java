@@ -15,7 +15,6 @@ public class Groups implements java.io.Serializable{
 	private int maxMember;
 	private Date enrollDate;
 	private String interestBigCode;
-	private String interestSmallCode;
 	private String allowSignup;
 	private int minAge;
 	private int maxAge;
@@ -75,12 +74,7 @@ public class Groups implements java.io.Serializable{
 	public void setInterestBigCode(String interestBigCode) {
 		this.interestBigCode = interestBigCode;
 	}
-	public String getInterestSmallCode() {
-		return interestSmallCode;
-	}
-	public void setInterestSmallCode(String interestSmallCode) {
-		this.interestSmallCode = interestSmallCode;
-	}
+
 	public String getAllowSignup() {
 		return allowSignup;
 	}
@@ -125,7 +119,6 @@ public class Groups implements java.io.Serializable{
 		result = prime * result + ((groupPicture == null) ? 0 : groupPicture.hashCode());
 		result = prime * result + ((groupStateCode == null) ? 0 : groupStateCode.hashCode());
 		result = prime * result + ((interestBigCode == null) ? 0 : interestBigCode.hashCode());
-		result = prime * result + ((interestSmallCode == null) ? 0 : interestSmallCode.hashCode());
 		result = prime * result + maxAge;
 		result = prime * result + maxMember;
 		result = prime * result + minAge;
@@ -191,11 +184,6 @@ public class Groups implements java.io.Serializable{
 				return false;
 		} else if (!interestBigCode.equals(other.interestBigCode))
 			return false;
-		if (interestSmallCode == null) {
-			if (other.interestSmallCode != null)
-				return false;
-		} else if (!interestSmallCode.equals(other.interestSmallCode))
-			return false;
 		if (maxAge != other.maxAge)
 			return false;
 		if (maxMember != other.maxMember)
@@ -214,11 +202,11 @@ public class Groups implements java.io.Serializable{
 		return "Groups [groupNo=" + groupNo + ", groupName=" + groupName + ", groupMsg=" + groupMsg + ", groupPicture="
 				+ groupPicture + ", groupGradeCode=" + groupGradeCode + ", groupStateCode=" + groupStateCode
 				+ ", maxMember=" + maxMember + ", enrollDate=" + enrollDate + ", interestBigCode=" + interestBigCode
-				+ ", interestSmallCode=" + interestSmallCode + ", allowSignup=" + allowSignup + ", minAge=" + minAge
+				+ ", allowSignup=" + allowSignup + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", groupGender=" + groupGender + ", openSetting=" + openSetting + "]";
 	}
 	public Groups(String groupNo, String groupName, String groupMsg, String groupPicture, String groupAddress, String groupGradeCode,
-			String groupStateCode, int maxMember, Date enrollDate, String interestBigCode, String interestSmallCode,
+			String groupStateCode, int maxMember, Date enrollDate, String interestBigCode,
 			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting) {
 		super();
 		this.groupNo = groupNo;
@@ -231,7 +219,6 @@ public class Groups implements java.io.Serializable{
 		this.maxMember = maxMember;
 		this.enrollDate = enrollDate;
 		this.interestBigCode = interestBigCode;
-		this.interestSmallCode = interestSmallCode;
 		this.allowSignup = allowSignup;
 		this.minAge = minAge;
 		this.maxAge = maxAge;

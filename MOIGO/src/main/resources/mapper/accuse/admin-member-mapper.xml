@@ -15,6 +15,11 @@
 		<result property="postCount" column="POST_COUNT" />
 		<result property="replyCount" column="REPLY_COUNT" />
 		<result property="accuseCount" column="ACCUSE_COUNT" />
+		<result property="genderCount" column="GENDER_RATE"/>
+		<result property="metrocity" column="METROCITY"/>
+		<result property="addressCount" column="ADDRESS_RATE"/>
+		<result property="minterestCount" column="MINTEREST"/>
+		
 	</resultMap>
 
 	<select id="memDetail" parameterType="string" resultMap="memberDetailResultMap">
@@ -26,9 +31,21 @@
 		FROM MEMBER M
 		WHERE MEMBER_NO = #{id}
 	</select>
-
-
-
+	<select id="genderCount" resultMap="memberDetailResultMap" >
+		select count(*) gender_rate from member group by member_gender		
+	</select>
+	
+	<select id="addressCount" resultMap="memberDetailResultMap" >
+		select substr(MEMBER_ADDRESS,1,(instr(MEMBER_ADDRESS,' ')-1)) METROCITY, count(*) address_rate 
+		from member 
+		group by substr(MEMBER_ADDRESS,1,(instr(MEMBER_ADDRESS,' ')-1))
+		order by address_rate desc
+	</select>
+	
+	<select id="minterestCount" resultMap="memberDetailResultMap" >
+		SELECT interest_big_code,COUNT(*) MINTEREST FROM MEMBER_INTEREST 
+		GROUP BY interest_big_code ORDER BY MINTEREST DESC
+	</select>
 
 
 </mapper>

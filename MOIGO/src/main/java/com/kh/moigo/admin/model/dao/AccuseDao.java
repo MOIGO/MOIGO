@@ -1,6 +1,7 @@
 package com.kh.moigo.admin.model.dao;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.kh.moigo.admin.model.vo.GroupDetail;
@@ -27,5 +28,10 @@ public interface AccuseDao {
 	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);
 	//int selectAccuseListCnt(String id);
 	List<Map<String, Object>> selectAccuse2(String id);
+	
+	
+	ArrayList countGender();
+	List<Map<String, Object>> countAddress();
+	List<Map<String, Object>> countMinterest();
 
 }
