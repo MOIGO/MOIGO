@@ -23,6 +23,18 @@ public class GroupsServiceImpl implements GroupsService {
 	@Autowired
 	private GroupsDao groupDao;
 
+	
+	@Override
+	public int createGroup(Groups group) {
+		
+		return groupDao.createGroup(group);
+	}
+	
+	@Override
+	public int updateGroupImg(Groups group) {
+		
+		return groupDao.updateGroupImg(group);
+	}
 
 	@Override
 	public int insertPost(Post p) {
@@ -101,5 +113,9 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.updateReply(postReply);
 	}
+
+	
+
+	
 
 }

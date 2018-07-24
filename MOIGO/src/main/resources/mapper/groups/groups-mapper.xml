@@ -7,12 +7,12 @@
 		<result property="groupName" column="GROUP_NAME"/>
 		<result property="groupMsg" column="GROUP_MSG"/>
 		<result property="groupPicture" column="GROUP_PICTURE"/>
+		<result property="groupAddress" column="GROUP_ADDRESS"/>
 		<result property="groupGradeCode" column="GROUP_GRADE_CODE"/>
 		<result property="groupStateCode" column="GROUP_STATE_CODE"/>
 		<result property="maxMember" column="MAX_MEMBER"/>
 		<result property="enrollDate" column="ENROLL_DATE"/>
 		<result property="interestBigCode" column="INTEREST_BIG_CODE"/>
-		<result property="interestSmallCode" column="INTEREST_SMALL_CODE"/>
 		<result property="allowSignup" column="ALLOW_SIGNUP"/>
 		<result property="minAge" column="MIN_AGE"/>
 		<result property="maxAge" column="MAX_AGE"/>
@@ -154,7 +154,24 @@
 		SET CONTENT=#{content}
 		WHERE REPLY_NO=#{replyNo}
 	</update>
-
+	
+	<!--그룹 등록  -->
+	<insert id="insertGroup" parameterType="groups">
+		
+		<selectKey keyProperty="GROUP_NO" resultType="string" order="AFTER">
+			SELECT 'G'||TO_CHAR(SEQ_GROUP.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO GROUPS VALUES('G'||TO_CHAR(SEQ_GROUP.NEXTVAL,'FM000'),
+		#{groupName},#{groupMsg},#{groupAddress},DEFAULT,DEFAULT,#{maxMember},DEFAULT,#{interestBigCode},
+		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
+	</insert>
+	
+	<update id="updateGroupCover" parameterType="groups">
+		UPDATE GROUPS
+		SET GROUP_PICTURE = #{coverImg}
+		WHERE GROUP_NO=#{groupNo}
+	</update>
 
 	<!-- 혜진 -->
 
