@@ -35,6 +35,13 @@
          outline: none !important;
    }
    
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+}
+   
    /* 설정 공통 부분 */
    .gs_footer {
          background: white;
@@ -87,7 +94,7 @@
    .list_common{
          margin-top: 7px;
          padding: 2px 0px 2px 0px;
-         width : 100px;
+         width : 110px;
          letter-spacing: -1px;
    }
    
@@ -141,6 +148,24 @@
          font-weight: bold;
    }
    
+   .gm_join_wrap{
+   		margin-top : 2px;
+   		padding : 0px;
+   }
+   
+   .gm_join_inner{
+   		margin-right: 0px;
+   }
+   
+   .gm_join_inp {
+   		margin-right: 0px !important;
+   }
+   
+   .gm_join_lbl {
+   		padding-left: 0px;
+   		padding-bottom : 2px;
+   }
+   
    #conditionFooter {
          display: none;
          text-align : center;
@@ -171,6 +196,61 @@
       vertical-align:text-bottom;
       font-size: 24px; 
    }
+   
+   .gs_member_a {
+		color : black;
+   }
+   
+   .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+   		color : #007BFF;
+   }
+   
+   .gs_member_content {
+   		margin-top : 5px;
+   }
+   
+.list-group-item {
+	padding-left: 13px;
+	padding-right: 13px;
+}
+
+#listImg {
+	width: 50px;
+	height: 50px;
+}
+
+.list_wrap {
+	width: 100%;
+	height: 50px;
+}
+
+.list_txt {
+	display: inline-block;
+	vertical-align: bottom;
+	padding-left: 5px;
+	padding-top: 13px;
+	height: 100%;
+	margin: 0px;
+	/* border: 1px solid black; */
+}
+
+#listName {
+	font-family: 'nanum-barun-gothic-bold', sans-serif;
+	font-size: 1.1em;
+}
+
+.badge:hover {
+	cursor: default;
+}
+
+#groupLeader {
+	float: right;
+	margin-top: 12px;
+	margin-left: 6px;
+	padding: 7px 7px 5px 6px;
+	font-family: 'nanum-barun-gothic-bold', sans-serif;
+	font-size: 1em;
+}
    
    /* 모임 삭제 모달 부분 */
     .gs_modal_header {
@@ -245,9 +325,9 @@
                
                
                <!-- 가입 조건 관리 -->
-               	<c:url var="updateGroupCondition" value="/groups/updateGroupCondition.gp" >
-					<c:param name="groupNo" value="${param.groupNo}" />
-				</c:url>
+                  <c:url var="updateGroupCondition" value="/groups/updateGroupCondition.gp" >
+               		<c:param name="groupNo" value="${param.groupNo}" />
+            		</c:url>
                
                 <form id="updateGroupConditionForm" action="${updateGroupCondition}" method="POST">
                    
@@ -279,11 +359,6 @@
                         <span class="age_txt condition_font_size">최소나이</span>
                            <select class="list_common condition_font_size" name="minAge" id="conditionMinAge">
                            <option selected value="-1">제한없음</option>
-                           <c:set var="now" value="<%= new java.util.Date()%>" />
-                           <fmt:formatDate var="nowYear" value="${now}" pattern="yyyy"/>
-                           <c:forEach var="i" begin="1918" end="${nowYear}">
-                              <option value="${nowYear - i + 1918}">${nowYear - i + 1918}년생</option>
-                           </c:forEach>
                         </select>
                         </span>
                      </li>
@@ -292,7 +367,7 @@
                       <li class="list-group-item gs_list_group">
                         <span class="setting_tit">지역</span>
                         <span class="float_right region_wrap">
-                        	<input type="hidden" id="regionFull" name="groupAddress"/>
+                           <input type="hidden" id="regionFull" name="groupAddress"/>
                            <select class="list_common condition_font_size condition_region" id="conditionRegionLarge">
                                  <option value="regionNone">- 시도 -</option>
                            </select>
@@ -316,13 +391,27 @@
                      </li>
                      
                    <!-- 최대 멤버수 -->
-                      <li class="list-group-item gs_list_group">
+                   	 <li class="list-group-item gs_list_group">
                         <span class="setting_tit">최대 멤버수</span>
                         <span class="float_right max_member_wrap">
                            <span class="max_member_txt condition_font_size" id="minMember">1</span>                           
                            <span class="max_member_txt condition_font_size">/</span>
                            <input type="text" class="gs_inp form-control condition_font_size" name="maxMember" id="maxMemberInp" maxlength="2"/>
                            <span class="max_member_txt condition_font_size">(최대 멤버수는 50명 입니다.)</span>
+                        </span>
+                     </li>
+                     
+                     <li class="list-group-item gs_list_group">
+                     	<span class="setting_tit">가입 신청 받기</span>
+                     	<span class="float_right gm_join_wrap">
+	                     	<span class="gm_join_inner form-check form-check-inline">
+							  <input class="form-check-input gm_join_inp" type="radio" name="allowSignup" value="Y" checked="checked">
+							  <label class="form-check-label condition_font_size gm_join_lbl">예</label>
+							</span>
+							<span class="gm_join_inner form-check form-check-inline">
+							  <input class="form-check-input gm_join_inp" type="radio" name="allowSignup" value="N">
+							  <label class="form-check-label condition_font_size gm_join_lbl">아니오</label>
+							</span>
                         </span>
                      </li>
                   </ul>
@@ -339,7 +428,7 @@
                                 
                   <!-- 멤버 검색 부분 -->
                   <div class="input-group mb-3">
-                     <input type="text" class="form-control gm_inp" placeholder="멤버 검색">
+                     <input type="text" class="form-control gm_inp" id="gmSearchInp" placeholder="멤버 검색">
                      <div class="input-group-append">
                         <button class="btn btn-outline-secondary gm_search_btn" type="button">
                            <ion-icon id="searchBtn" name="search"></ion-icon>
@@ -349,18 +438,21 @@
                   
                   <!-- 멤버 설정 부분 -->
                <nav>
-                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                   <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab">멤버등급</a>
-                   <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab">리더위임</a>
-                   <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab">멤버탈퇴</a>
-                   <a class="nav-item nav-link" id="nav-contact2-tab" data-toggle="tab" href="#nav-contact2" role="tab">가입승인</a>
+                 <div class="nav nav-tabs" id="groupMemberSettingTab" role="tablist">
+                   <a class="nav-item nav-link active gs_member_a" id="groupMemberGrade" data-toggle="tab" href="#groupMemberSettingContent" role="tab">멤버등급</a>
+                   <a class="nav-item nav-link gs_member_a" id="leaderDelegation" data-toggle="tab" href="#groupMemberSettingContent" role="tab">리더위임</a>
+                   <a class="nav-item nav-link gs_member_a" id="groupMemberWithdraw" data-toggle="tab" href="#groupMemberSettingContent" role="tab">멤버탈퇴</a>
+                   <a class="nav-item nav-link gs_member_a" id="groupJoinApprove" data-toggle="tab" href="#groupMemberSettingContent" role="tab">가입승인</a>
                  </div>
                </nav>
-               <div class="tab-content" id="nav-tabContent">
-                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel">멤버등급</div>
-                 <div class="tab-pane fade" id="nav-profile" role="tabpanel">리더위임</div>
-                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" >멤버탈퇴</div>
-                 <div class="tab-pane fade" id="nav-contact2" role="tabpanel" >가입승인</div>
+               <div class="tab-content" id="groupMemberSettingContent">
+                 <div class="tab-pane fade show active gs_member_content" id="groupMemberSettingContent" role="tabpanel">
+                 	
+                 	<!-- 멤버 리스트 부분 -->
+					<ul class="list-group gs_member_ul">
+				
+					</ul>
+                 </div>
                </div>
                   
                </div>
@@ -420,13 +512,17 @@ function goSettingBack() {
    };
 }
 
+function searchGroupMember() {
+	
+}
+
 $(function() {
 
-	console.log("${group}");
-	
+   console.log("${group}");
+   
    /* 모임 관리 */
    $("#groupUpdateBtn").on("click", function() {
-	   location.href = "${root}/groups/updateGroupDefault.gp?groupNo=${param.groupNo}";
+      location.href = "${root}/groups/updateGroupDefault.gp?groupNo=${param.groupNo}";
    });
    
    /* 가입 조건 관리 */
@@ -439,17 +535,30 @@ $(function() {
       
       $("#conditionGender").val("${group.groupGender}").prop("selected", true);
       $("#conditionMaxAge").val("${group.maxAge}").prop("selected", true);
+      var minAgeRange = "${nowYear-100}";
+      if("${group.maxAge}" != -1)
+    	  minAgeRange = "${group.maxAge}";
+      
+      for(var i="${nowYear}"; i >= minAgeRange; i--){
+    	  $("#conditionMinAge").append("<option value="+ i +">" + i + "년생</option>");
+      }
+      
       $("#conditionMinAge").val("${group.minAge}").prop("selected", true);
       $("#maxMemberInp").val("${group.maxMember}");
+      if($(".gm_join_inp").is("${group.allowSignup}"))
+    	  $(this).prop("checked", true);
+      
       if("${group.groupAddress}" == ""){
-    	  $("#regionNone").prop("checked", true);
-    	  $(".condition_region").prop("disabled", true);         
+         $("#regionNone").prop("checked", true);
+         $(".condition_region").prop("disabled", true);         
           $(".condition_region").val("regionNone").prop("selected", true);
       }
       
+      var regions = "${group.groupAddress}".split(" ");
+      
       // 행정구역 list를 가져오기 위한 ajax 부분
       $.ajax({
-			url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+         url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIDO_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
                +'&domain=http://127.0.0.1:8080&attrFilter=ctprvn_cd:between:11,50&size=17',
            type:'GET',
            dataType:'jsonp',
@@ -460,8 +569,11 @@ $(function() {
             var regionLarges = [];
            
             for(var i=0 ; i < features.length; i++){
+	            var selected = "";
+	            if(regions[0].length > 0)
+	            	selected = "selected";
                regionLarges[i] = features[i].properties.ctp_kor_nm;
-               $("#conditionRegionLarge").append("<option value="+regionLarges[i]+">"+regionLarges[i]+"</option>");
+               $("#conditionRegionLarge").append("<option value="+regionLarges[i] + " "+ selected +">"+regionLarges[i]+"</option>");
             }
               
               },error:function(data){
@@ -469,6 +581,14 @@ $(function() {
            }
         });
    });
+   
+   // 최대 나이를 선택했을 때 최소 나이의 범위를 지정해주는 이벤트
+   	$("#conditionMaxAge").change(function() {
+		$("#conditionMinAge").children().not(":lt(1)").remove();
+		for(var i="${nowYear}"; i >= $(this).val(); i--){
+	    	  $("#conditionMinAge").append("<option value="+ i +">" + i + "년생</option>");
+	     }
+	});
    
       var lRegion = "";
       
@@ -554,48 +674,101 @@ $(function() {
       }
    });
    
-	// 가입 조건 확인 버튼을 눌렀을 때 발생하는 이벤트
-	$("#conditionConfirmBtn").click(function() {
-		
-		// 지역무관 체크박스의 체크여부 판별
-		if(!$("#regionNone").is(":checked")){
-			
-			var rLarge = $("#conditionRegionLarge").val();
-			var rMedium = $("#conditionRegionMedium").val();
-			var rSmall = $("#conditionRegionSmall").val();
-			
-			var regionFull = "";
-			
-			// 지역 라벨을 선택했을 경우 alert로 다시 선택하라고 알려줌
-			if(rLarge == "regionNone" || rMedium == "regionNone" || rMedium != "전체" && rSmall == "regionNone")
-				alert("지역을 다시 선택해주세요.");
-			
-			// 지역을 한 String으로 담기 위해서 구분
-			if(rLarge != "regionNone")
-				regionFull = rLarge;
-			if (rMedium != "전체" && rMedium != "regionNone")
-				regionFull += " " + rMedium;
-			if(rSmall != "전체" && rSmall != "regionNone")
-				regionFull += " " + rSmall;		
-			
-			// 지역이 존재하는 경우만 submit으로 보낼 수 있도록 if로 판별
-			if(regionFull.length != 0){
-				$("#regionFull").val(regionFull);
-				$("#updateGroupConditionForm").submit();
-			}
-		}
-		else{
-			$("#updateGroupConditionForm").submit();
-		}
-	});
+   // 가입 조건 확인 버튼을 눌렀을 때 발생하는 이벤트
+   $("#conditionConfirmBtn").click(function() {
+      
+      // 지역무관 체크박스의 체크여부 판별
+      if(!$("#regionNone").is(":checked")){
+         
+         var rLarge = $("#conditionRegionLarge").val();
+         var rMedium = $("#conditionRegionMedium").val();
+         var rSmall = $("#conditionRegionSmall").val();
+         
+         var regionFull = "";
+         
+         // 지역 라벨을 선택했을 경우 alert로 다시 선택하라고 알려줌
+         if(rLarge == "regionNone" || rMedium == "regionNone" || rMedium != "전체" && rSmall == "regionNone")
+            alert("지역을 다시 선택해주세요.");
+         
+         // 지역을 한 String으로 담기 위해서 구분
+         if(rLarge != "regionNone")
+            regionFull = rLarge;
+         if (rMedium != "전체" && rMedium != "regionNone")
+            regionFull += " " + rMedium;
+         if(rSmall != "전체" && rSmall != "regionNone")
+            regionFull += " " + rSmall;      
+         
+         // 지역이 존재하는 경우만 submit으로 보낼 수 있도록 if로 판별
+         if(regionFull.length != 0){
+            $("#regionFull").val(regionFull);
+            $("#updateGroupConditionForm").submit();
+         }
+      }
+      else{
+         $("#updateGroupConditionForm").submit();
+      }
+   });
 
    /* 멤버 설정 관리 */
    $("#groupMemberManageBtn").on("click", function() {
-     goSettingBack();
-     $(".group_tit").text("멤버 설정 관리");
+      goSettingBack();
+      $(".group_tit").text("멤버 설정 관리");
       $("#settingList").css("display", "none");
       $("#memberSearchWrap").css("display", "block");
+      $.ajax({
+		url : "${root}/groups/goGroupMemberSetting.gp",
+		data : {groupNo : "${param.groupNo}"},
+		dataType : "json",
+		success : function(data) {
+			var groupMember = data.groupMember;
+			
+			for(var i=0; i < groupMember.length; i++){
+				var append = "<li class='list-group-item'><div class='list_wrap'>";
+				
+				var profileImg = "<img id='listImg' class='rounded-circle' ";
+				if(groupMember[i].profileThumb == null)
+					profileImg += "src='${root}/resources/images/common/img_profile.png'>";
+				else
+					profileImg += "src='${root}/resources/images/profiles/${group.groupNo}/"+ groupMember[i].profileThumb +"'>";
+				
+				var groupMemberName = "<span class='list_txt' id='listName'>"+ groupMember[i].memberName +"</span>";
+				
+				var memberGrade = "";
+				if(groupMember[i].memberGradeCode == 3)
+					memberGrade = "<span class='badge badge-primary' id='groupLeader'>모임장</span>";
+				else if(groupMember[i].memberGradeCode == 2)
+					memberGrade = "<span class='badge badge-success' id='groupLeader'>운영진</span>";
+					
+				append += profileImg + groupMemberName + memberGrade + "</div></li>";
+				
+				$(".gs_member_ul").append(append);
+			}
+			
+		},
+		error : function() {
+			console.log("멤버설정 멤버리스트 가져오기 오류");
+		}
+	});
    });
+   
+   /* 검색부분의 border 부분을 수정 */
+	$("#gmSearchInp").on("focus", function() {
+		$(".gm_search_btn").css("border-color", "#343A40");
+	}).on("focusout", function() {
+		$(".gm_search_btn").css("border-color", "#6C757D");
+	}).on("keyup", function(event) {
+		/* enterkey를 눌렀을 때 발생하는 event */
+		if (event.keyCode == 13)
+			searchGroupMember();
+	});
+   
+	$(".gm_search_btn").click(function() {
+		searchGroupMember();
+	});
+	
+	$(".gs_member_a").click(function() {
+		alert($(this).attr("id"));
+	});
    
    /* 모임 삭제 */
    $("#groupDeleteBtn").on("click", function() {

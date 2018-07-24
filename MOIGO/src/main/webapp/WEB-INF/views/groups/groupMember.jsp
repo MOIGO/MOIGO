@@ -300,7 +300,7 @@ input:-webkit-autofill:active {
 									<c:if test="${groupMember.profileThumb ne null}">
 										<img id="listImg" class="rounded-circle" src="${root}/resources/images/profiles/${groupMember.groupNo}/${groupMember.profileThumb}">
 									</c:if>
-									<span class="list_inner" <c:if test="${groupMember.profileMsg eq null}">style="padding-top: 12px;"</c:if>>
+									<span class="list_inner" <c:if test="${groupMember.profileMsg eq null}">style="padding-top: 13px;"</c:if>>
 										<span class="list_txt" id="listName">${groupMember.memberName}</span>
 										<c:if test="${groupMember.profileMsg ne null}">
 											<span class="list_txt" id="listMsg">${groupMember.profileMsg}</span>
@@ -359,9 +359,11 @@ input:-webkit-autofill:active {
 					</c:if>
 					<c:if test="${loginGroupMember.profileThumb ne null}">
 						<img class="rounded-circle" id="profileImg" src="${root}/resources/images/profiles/${loginGroupMember.groupNo}/${loginGroupMember.profileThumb}">
+						<input type="hidden" name="profileImg" value="${loginGroupMember.profileImg}"/>
+						<input type="hidden" name="profileThumb" value="${loginGroupMember.profileThumb}"/>
 					</c:if>
 					<input type="hidden" name="resizeProfile" id="resizeProfile" />
-					<input type="file" class="profile_upload_inp" name="uploadProfile" id="profileChangeInp" accept="image/*"/>
+					<input type="file" class="profile_upload_inp" name="uploadProfile" id="profileChangeInp"  accept="image/*"/>
 					<div class="profile_upload_btn" id="profileChangeBtn"></div>
 					<div class="form-group">
 						<label id="profileLbl" for="profileMsg">
@@ -468,11 +470,26 @@ input:-webkit-autofill:active {
 
 		/* 프로필 사진 업로드 버튼 이미지 커스텀 */
 		$("#profileChangeBtn").on("click", function() {
+			$(".profile_upload_inp").val("");
 			$("#profileChangeInp").click();
 		});
-
-		var cropperImg = "";
 		
+		var cropperImg = "";
+		// 프로필 파일을 업로드 했지만 확인을 누르지 않고 취소했을때 발생하는 이벤트
+		$(".gm_close").click(function(){
+			if("${loginGroupMember.profileThumb}" != "")
+				$("#profileImg").attr("src", "${root}/resources/images/profiles/${loginGroupMember.groupNo}/${loginGroupMember.profileThumb}");
+			else
+				$("#profileImg").attr("src", "${root}/resources/images/common/img_profile.png");
+			
+			if("${loginGroupMember.profileMsg}" != "")
+				$("#profileMsg").val("${loginGroupMember.profileMsg}");
+			else
+				$("#profileMsg").val("");
+			
+			cropperImg = "";
+		});	
+
 		/* 프로필 사진 업로드부분의 파일이 변경됐을 경우 발생하는 이벤트 */
 		$(".profile_upload_inp").on("change", function() {
 
@@ -490,7 +507,6 @@ input:-webkit-autofill:active {
 						$("#profileUploadModal").toggle();
 
 					// src는 local resource 경로를 읽지 못하므로 filereader를 사용
-					console.log($(this)[0].files[0]);
 					reader.readAsDataURL($(this)[0].files[0]);
 					reader.onload = function() {
 
@@ -512,9 +528,8 @@ input:-webkit-autofill:active {
 							$("#profileImg").attr("src",$cropperImg.cropper("getCroppedCanvas",{width : 150,height : 150}).toDataURL());
 							$("#profileUploadModal").hide();
 						});
-						
 					};
-				}
+				}		
 			}
 		});
 

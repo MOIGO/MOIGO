@@ -26,14 +26,16 @@ public interface GroupsService {
 
 	//--------------------------------------------------------------------------- 혜진
 	
-	List<Map<String, String>> selectGroupMemberList(String groupNo);
-	
-	List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap);
+	List<GroupMember> selectGroupMemberList(String groupNo);
+
+	List<GroupMember> searchGroupMemberList(Map<String, String> searchMap);
   
 	int updateGroupMember(GroupMember groupMember);
 
+	Groups selectOneGroup(String groupNo);
+	
+	int updateGroupCondition(Groups group);
+
 	int deleteGroup(String groupNo);
 	
-	Groups selectOneGroup(String groupNo);
-
 }

@@ -146,7 +146,7 @@ public class GroupController {
 	public String goGroupMember(@RequestParam String groupNo, Model model){
 		
 		//	들어갈 때 그룹에 해당하는 멤버 리스트를 가지고 들어가야 함
-		List<Map<String, String>> groupMemberList = groupService.selectGroupMemberList(groupNo);
+		List<GroupMember> groupMemberList = groupService.selectGroupMemberList(groupNo);
 		
 		model.addAttribute("groupMemberList", groupMemberList);
 		
@@ -160,7 +160,7 @@ public class GroupController {
 		searchMap.put("groupNo", groupNo);
 		searchMap.put("searchName", searchName);
 		
-		List<Map<String, String>> searchGroupMemberList = groupService.searchGroupMemberList(searchMap);
+		List<GroupMember> searchGroupMemberList = groupService.searchGroupMemberList(searchMap);
 		
 		model.addAttribute("searchGroupMemberList", searchGroupMemberList);
 		
@@ -173,6 +173,7 @@ public class GroupController {
 		
 		String profileThumb = "";
 		String profileImg = "";
+		String ext = "";
 		
 		try{		
 			// 1. dataUrl 방식으로 받아온 resizeProfile이 NULL이 아니라면 파일로 저장하기
@@ -208,7 +209,7 @@ public class GroupController {
 				
 				// 2. upload한 file을 rename, 경로 저장하기
 				String fileName = uploadProfile.getOriginalFilename();
-				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+				ext = fileName.substring(fileName.lastIndexOf(".")+1);
 				
 				profileImg = "img_" + groupMember.getMemberNo() + "_" + sdf.format(new Date(System.currentTimeMillis())) + "." + ext;
 				
@@ -221,8 +222,10 @@ public class GroupController {
 		}
 		
 		// 3. groupMember에 담아서 update하기
-		groupMember.setProfileImg(profileImg);
-		groupMember.setProfileThumb(profileThumb);
+		if(!(groupMember.getProfileThumb() != null && ext.isEmpty())){
+			groupMember.setProfileImg(profileImg);
+			groupMember.setProfileThumb(profileThumb);
+		}
 		
 		int result;
 		result = groupService.updateGroupMember(groupMember);
@@ -259,6 +262,28 @@ public class GroupController {
 		
 		return "groups/createGroup";
 		
+	}
+	
+	@RequestMapping("/groups/updateGroupCondition.gp")
+	public String updateGroupCondition(Groups group) {
+		
+		int result;
+		result = groupService.updateGroupCondition(group);
+		
+		return "groups/groupSetting";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/groups/goGroupMemberSetting.gp")
+	public Map<String, Object> goGroupMemberSetting(@RequestParam String groupNo){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<GroupMember> groupMemberList = groupService.selectGroupMemberList(groupNo);
+		
+		map.put("groupMember", groupMemberList);
+		
+		return map;
 	}
 	
 	@RequestMapping("/groups/deleteGroup.gp")
