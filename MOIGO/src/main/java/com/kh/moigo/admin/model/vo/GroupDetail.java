@@ -33,24 +33,15 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public GroupDetail(String groupNo, String groupName, String groupMsg, String groupPicture, String groupAddress,
+			String groupGradeCode, String groupStateCode, int maxMember, Date enrollDate, String interestBigCode,
+			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting, int memNum,
+			String masterEmail) {
+		super(groupNo, groupName, groupMsg, groupPicture, groupAddress, groupGradeCode, groupStateCode, maxMember,
+				enrollDate, interestBigCode, allowSignup, minAge, maxAge, groupGender, openSetting);
+		this.memNum = memNum;
+		this.masterEmail = masterEmail;
+	}
 
 
 
