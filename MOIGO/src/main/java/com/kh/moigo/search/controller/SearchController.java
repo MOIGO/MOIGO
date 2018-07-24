@@ -21,18 +21,18 @@ public class SearchController {
    SearchService searchService;
 
    @RequestMapping("search/searchList.do")
-   public String keywordList(Model model, @RequestParam String keyword) {
+   public String keywordList(Model model,@RequestParam(value="cPage", required=false, defaultValue="1") int cPage, @RequestParam String keyword) {
       if(keyword == null) keyword = "";
+      int limit = 12;
       
       int listCount = searchService.listCount(keyword);
-      List<Groups> list = searchService.selectList(keyword);
+      List<Groups> list = searchService.selectList(keyword, cPage, limit);
       
-      model.addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("list", list);
+      model.addAttribute("limit", limit).addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("list", list);
       return "search/searchList";
    }
-   
    @RequestMapping("search/selectList.do")
-   public String selectList(Model model, @RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory, @RequestParam String sort) {
+   public String selectList(Model model, @RequestParam(value="cPage", required=false, defaultValue="1") int cPage, @RequestParam String keyword, @RequestParam String place, @RequestParam String category, @RequestParam String sort) {
       if(keyword == null) keyword = "";
       if(place == null) place = "";
       String limit = "12";
@@ -41,22 +41,22 @@ public class SearchController {
       
       map.put("keyword", keyword);
       map.put("place", place);
-      map.put("bigCategory", bigCategory);
-      map.put("smallCategory", smallCategory);
+      map.put("category", category);
       map.put("sort", sort);
       map.put("limit", limit);
+      map.put("cPage", String.valueOf(cPage));
       
       int listCount = searchService.detailListCount(map);
       List<Groups> list = searchService.detailSelectList(map);
       
-      model.addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("bigCategory", bigCategory).addAttribute("smallCategory", smallCategory).addAttribute("sort", sort).addAttribute("list", list);
+      model.addAttribute("limit", limit).addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("category", category).addAttribute("sort", sort).addAttribute("list", list);
       
       return "search/searchList";
    }
-   
+
    @ResponseBody
    @RequestMapping("search/getAddress.do")
-   public List<Groups> getAddressList(@RequestParam String keyword, @RequestParam String place, @RequestParam String bigCategory, @RequestParam String smallCategory) {
+   public List<Groups> getAddressList(@RequestParam String keyword, @RequestParam String place, @RequestParam String category) {
       if(keyword == null) keyword = "";
       if(place == null) place = "";
       
@@ -64,8 +64,7 @@ public class SearchController {
       
       map.put("keyword", keyword);
       map.put("place", place);
-      map.put("bigCategory", bigCategory);
-      map.put("smallCategory", smallCategory);
+      map.put("category", category);
       
       List<Groups> list = searchService.getAddressList(map);
       

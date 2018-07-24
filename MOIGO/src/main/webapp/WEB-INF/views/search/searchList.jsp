@@ -7,12 +7,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=7">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=9">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
 <body>
-   <form action="${pageContext.request.contextPath}/search/selectList.do">
+   <form action="${pageContext.request.contextPath}/search/selectList.do" id="left-form">
       <div id="left-wrap">
          <div class="filter default-filter">
             <div class="filter-section default-section">
@@ -22,6 +22,7 @@
                      <div class="row">
                         <div class="col-sm-6">
                            <div class="inner-search">
+                              <input type="hidden" id="cPage" name="cPage" value="${cPage }"/>
                               <input type="text" placeholder="모임검색" autocomplete="off" onkeyup="if(event.keyCode==13) submit();" name="keyword" id="keyword" class="form-control" value="${keyword }" /> 
                               <span class="search-btn"> <img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();">
                               </span>
@@ -50,14 +51,18 @@
                   <div class="col-lg-2 col-md-12 pt-sm pb-sm">카테고리</div>
                   <div class="col-lg-10">
                      <div class="row">
-                        <div class="col-sm-4 gap">
-                           <select name="bigCategory" id="bigCategory" onchange="submit()">
-                              <option>대분류</option>
-                           </select>
-                        </div>
-                        <div class="col-sm-4">
-                           <select name="smallCategory" id="smallCategory" onchange="submit()">
-                              <option>소분류</option>
+                        <div class="col-sm-6 gap">
+                           <select name="category" id="category" onchange="submit()">
+                              <option value="">대분류</option>
+                              <option value="B001">라이프스타일</option>
+                              <option value="B002">영어/외국어</option>
+                              <option value="B003">컴퓨터</option>
+                              <option value="B004">디자인/미술</option>
+                              <option value="B005">취업</option>
+                              <option value="B006">음악/공연</option>
+                              <option value="B007">스포츠</option>
+                              <option value="B008">뷰티/미용</option>
+                              <option value="B009">게임</option>
                            </select>
                         </div>
                      </div>
@@ -67,12 +72,11 @@
          </div>
          <div class="content-meeting">
             <div class="row" style="width: 100%; height: 50px;">
-               <div class="col-sm-4 count-sort" id="listCount">검색결과
-                  ${listCount }개</div>
+               <div class="col-sm-4 count-sort" id="listCount">검색결과 ${listCount }개</div>
                <div class="col-sm-4 count-sort" id="sort-inner">
                   <select class="sort" name="sort" id="sort" onchange="submit()">
-                     <option>최신순</option>
-                     <option>멤버순</option>
+                     <option value="ENROLL_DATE">최신순</option>
+                     <option value="멤버순">멤버순</option>
                   </select>
                </div>
             </div>
@@ -100,6 +104,20 @@
                   </div>
                </div>
             </c:forEach>
+	          <% 
+		          int listCount = Integer.parseInt(String.valueOf(request.getAttribute("listCount")));
+		          int limit = Integer.parseInt(String.valueOf(request.getAttribute("limit")));
+		          
+		          //파라미터 cPage가 null이거나 "" 일 때에는 기본값 1로 세팅함.  
+		          String cPageTemp = request.getParameter("cPage");
+		          int cPage = 1;
+		          try{
+		             cPage = Integer.parseInt(cPageTemp);
+		          } catch(NumberFormatException e){
+		             
+		          }
+	          %>
+        	  <%= com.kh.moigo.search.model.vo.PageBar.getPageBar(listCount, cPage, limit, "selectList.do") %>
          </div>
       </div>
    </form>
@@ -108,8 +126,7 @@
    <script>
       var keyword = $('#keyword').val();
       var place = $('#place').val();
-      var bigCategory = $('#bigCategory').val();
-      var smallCategory = $('#smallCategory').val();
+      var category = $('#category').val();
       var sort = $('#sort').val();
 
       $('.map-btn').click(function() {
@@ -118,8 +135,7 @@
       });
       
       $('#sort').find('option[value="${sort}"]').prop('selected', true);
-      $('#bigCategory').find('option[value="${bigCategory}"]').prop('selected', true);
-      $('#smallCategory').find('option[value="${smallCategory}"]').prop('selected', true);
+      $('#category').find('option[value="${category}"]').prop('selected', true);
       
       var map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
          center : new daum.maps.LatLng(35.180624570993196,
@@ -148,8 +164,7 @@
          data : {
             keyword : keyword,
             place : place,
-            bigCategory : bigCategory,
-            smallCategory : smallCategory
+            category : category
          },
          success : function(listData) {
             var j = 0;

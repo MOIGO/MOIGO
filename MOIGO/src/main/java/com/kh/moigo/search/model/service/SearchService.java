@@ -9,7 +9,7 @@ public interface SearchService {
 
 	int listCount(String keyword);
 
-	List<Groups> selectList(String keyword);
+	List<Groups> selectList(String keyword, int cPage, int limit);
 
 	int detailListCount(Map<String, String> map);
 

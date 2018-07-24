@@ -106,8 +106,8 @@ body {
 .content-meeting {
     background-color: #efefef;
     height: auto;
-    min-height: 79%;
-    max-height: 400%;
+    min-height: 73.3%;
+    max-height: 550%;
     min-width: 100%;
     position: absolute;
 }
@@ -173,16 +173,18 @@ body {
 }
 .header-text {
    height: 100%;
-   margin: 15px;
-   text-align: center;
+    margin: 15px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
 }
-.header-text .tag-wrap {
-   position: absolute;
-    bottom: 0px;
+.title {
+    font-size: 24px;
+    font-weight: 400;
 }
 .moigo-item.align-left .header-text-container {
     max-height: 288px;
-    display: block;
+    display: table;
     color: white;
 }
 .moigo-item .header-text-container {
@@ -214,6 +216,22 @@ body {
 }
 .location {
    margin-bottom: 15px;
+}
+.pageBar-wrap {
+	position: absolute;
+    bottom: -48px;
+    width: 100%;
+    background: #efefef;
+    text-align: center;
+}
+ul.pageBar {
+	position: relative;
+    display: inline-flex;
+}
+.page-Btn {
+	width: 50px;
+    height: 33px;
+    text-align: center;
 }
 @media screen and (min-width: 768px) {
    #left-wrap {
