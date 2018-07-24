@@ -215,7 +215,7 @@
 	</div>
 	<script>
 		$('.plusGroup').on('click',function(){
-			location.href='${pageContext.request.contextPath}/groups/createGroup.do';
+			location.href='${pageContext.request.contextPath}/groups/createGroup.gp';
 		});
 	</script>
 	<br><br>

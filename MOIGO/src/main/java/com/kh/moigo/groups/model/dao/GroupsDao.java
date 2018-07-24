@@ -40,4 +40,7 @@ public interface GroupsDao {
 
 	Groups selectOneGroup(String groupNo);
 
+	int updateReply(PostReply postReply);
+
+
 }

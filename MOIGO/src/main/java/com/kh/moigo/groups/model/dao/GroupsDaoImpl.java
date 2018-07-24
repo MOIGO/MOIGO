@@ -80,6 +80,14 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updatePost",post);
 	}
 
+
+	@Override
+	public int updateReply(PostReply postReply) {
+		
+		return sqlSession.update("groups.updateReply",postReply);
+	}
+
+
 	//------------------------------------------------------------------------- 혜진
 	
 	@Override
@@ -106,5 +114,5 @@ public class GroupsDaoImpl implements GroupsDao {
 	public Groups selectOneGroup(String groupNo) {
 		return sqlSession.selectOne("groups.selectOneGroup", groupNo);
 	}
-	
+
 }

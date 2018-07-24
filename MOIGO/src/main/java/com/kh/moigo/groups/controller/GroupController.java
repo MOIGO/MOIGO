@@ -52,7 +52,16 @@ public class GroupController {
 		
 		return "groups/createGroup";
 	}
-	
+	@RequestMapping("/groups/createGroupEnd.gp")
+	public String createGroupEnd(Groups group, @RequestParam(value = "interestBigCode", required = false,	defaultValue = "") List<String> interestBigCodeList)
+	{
+		System.out.println("여기 들어옴!");
+		System.out.println(group);
+		System.out.println(interestBigCodeList.size());
+			
+		return "groups/groupMain";
+		
+	}
 	
 	//그룹 메인 들어갈때 글 가져오기
 	@RequestMapping("/groups/getPostList.gp")
@@ -119,7 +128,6 @@ public class GroupController {
 	@ResponseBody
 	public Map <String,Object> insertReply(PostReply postReply)
 	{
-		
 		Map <String,Object> map = new HashMap<String, Object>();
 		map.put("result", groupService.insertReply(postReply));
 		
@@ -131,13 +139,22 @@ public class GroupController {
 	@ResponseBody
 	public Map <String,Object> deleteReply(String replyNo)
 	{
-		
 		Map <String,Object> map = new HashMap<String, Object>();
 		map.put("result", groupService.deleteReply(replyNo));
 		
 		return map;
 	}
 	
+	//댓글 수정
+	@RequestMapping("/groups/updateReply.gp")
+	@ResponseBody
+	public Map <String,Object> updateReply(PostReply postReply)
+	{
+		Map <String,Object> map = new HashMap<String, Object>();
+		map.put("result", groupService.updateReply(postReply));
+		
+		return map;
+	}
 	
 	// ------------------------------------------------------------------ 혜진
 	

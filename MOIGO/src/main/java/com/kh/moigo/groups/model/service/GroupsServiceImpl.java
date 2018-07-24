@@ -96,4 +96,10 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.selectOneGroup(groupNo);
 	}
 
+	@Override
+	public int updateReply(PostReply postReply) {
+		
+		return groupDao.updateReply(postReply);
+	}
+
 }

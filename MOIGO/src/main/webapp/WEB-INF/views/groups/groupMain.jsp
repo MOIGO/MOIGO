@@ -166,25 +166,10 @@ function setPostList(currentPage){
 	
 }
 
-function makeSubmitReply(postNo){
-	var $inputWrapper =$('<div>');
-	var $inputGroup = $('<div class="input-group">');
-	var $input = $('<input class="form-control" type="text" placeholder="댓글을 남겨주세요!">');
-	var $inputButton = $("<span class='input-group-btn'></span>").append($("<button class='btn btn-secondary' type='button'>등록</button>").on("click",function(){
-		submitReply(postNo, $input);
-	}));
-	
-	
-	
-	
-	$inputGroup.append($input);
-	$inputGroup.append($inputButton);
-	$inputWrapper.append($inputGroup);
-	
-	return $inputWrapper;
-	
-	
-}
+
+
+
+
 
 function makeReply(replyList){
 	var $replyWrapper =  $('<div class="p-3 replyWrapper bg-light"> ');
@@ -237,7 +222,7 @@ function makeProfile(obj){
 	var $replyContent;
 	
 	if(typeof(obj.postNo)!='undefined'){
-		$replyContent = $("<div class='d-inline-flex replyContent '>"); 
+		$replyContent = $("<div class='d-flex replyContent '>"); 
 		$replyContent.append(obj.content);
 	}
 	
@@ -275,7 +260,7 @@ function makeProfile(obj){
 
 
 function makeDropDown(isPost,num){
-	$dropDownWrapper =$("<div class='d-flex'>");
+	$dropDownWrapper =$("<div>");
 	
 	var $dropDown =$('<div class="dropdown">');
 	var $dropDownBtn=$('<button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>');
@@ -310,6 +295,10 @@ function makeDropDown(isPost,num){
 		$dropDownMenu.append($dropDownItem1);
 		$dropDownMenu.append($dropDownItem2);
 		
+		$dropDownItem1.on("click",function(){
+			addReplyEditForm(num);
+		});
+		
 		$dropDownItem2.on("click",function(){
 			deleteReply(num);
 		});
@@ -322,6 +311,91 @@ function makeDropDown(isPost,num){
 	return $dropDownWrapper;
 	
 }
+
+function addReplyEditForm(num){
+	toEditContent = $('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").find(".replyContent");
+	
+	var originContent = $(toEditContent).text();
+	$(toEditContent).text("");
+	$(toEditContent).append(makeEditReply(num,originContent));
+	
+}
+
+function makeSubmitReply(postNo){
+	var $inputWrapper =$('<div class="d-flex">');
+	var $inputGroup = $('<div class="input-group">');
+	var $input = $('<input class="form-control" type="text" placeholder="댓글을 남겨주세요!">');
+	var $inputButton = $("<span class='input-group-btn'></span>").append($("<button class='btn btn-secondary' type='button'>등록</button>").on("click",function(){
+		submitReply(postNo, $input);
+	}));
+
+	$inputGroup.append($input);
+	$inputGroup.append($inputButton);
+	$inputWrapper.append($inputGroup);
+	
+	return $inputWrapper;
+
+}
+
+function updateReply(num,newContent,originContent){
+
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/updateReply.gp",
+		data:{replyNo:num,content:newContent},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+			
+				$(toEditContent).text(newContent);
+				toEditContent=undefined;
+				alert("글 수정 성공!");
+				
+			}else{
+				$(toEditContent).text(originContent);
+				alert("댓글 삭제 실패!");
+			}
+			
+		},
+		error:function(){
+			alert("댓글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function makeEditReply(num,originContent){
+	
+	var $editWrapper =$('<div class="d-flex">');
+	
+	var $textArea = $('<textarea class="form-control " style="resize:none;" rows="3" cols="35">');
+	
+	var $btnWrapper =$('<div class="d-flex">');
+	
+	var $editBtn = $('<button class="btn btn-primary btn-sm">수정</button>').on("click",function(){
+		updateReply(num,$textArea.val(),originContent);
+		$editWrapper.remove();
+	});
+	
+	var $cancleBtn = $('<button class="btn btn-info btn-sm">취소</button>').on("click",function(){
+		toEditContent=undefined;
+		$(toEditContent).text(originContent);
+		$editWrapper.remove();
+	});
+	
+	
+	$textArea.text(originContent);
+	
+	$btnWrapper.append($editBtn);
+	$btnWrapper.append($cancleBtn);
+	
+	$editWrapper.append($textArea);
+	$editWrapper.append($btnWrapper);
+	
+	return $editWrapper;
+}
+
+
 
 function prepareUpdatePost(num){
 	toEditContent = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
@@ -352,8 +426,7 @@ function updatePost(num,postContent){
 				$temp.append(postContent);
 				alert("글 수정 성공!");
 			}else
-				alert("댓글 삭제 실패!");
-			
+				alert("댓글 삭제 실패!");	
 		},
 		error:function(){
 			alert("댓글 삭제 도중 에러가 생겼습니다.");

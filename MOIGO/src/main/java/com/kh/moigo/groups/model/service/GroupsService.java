@@ -22,6 +22,10 @@ public interface GroupsService {
 	int selectPostCnt(String groupNo);
 	int deletePost(String postNo);
 	int deleteReply(String replyNo);
+
+	int updatePost(Post post);
+	int updateReply(PostReply postReply);
+
 	int updatePost(Post post);
 
 	//--------------------------------------------------------------------------- 혜진

@@ -147,7 +147,19 @@
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
 	</select>
 
+	
+	<!--댓글 수정  -->
+	<update id="updateReply" parameterType="postReply">
+		UPDATE POST_REPLY
+		SET CONTENT=#{content}
+		WHERE REPLY_NO=#{replyNo}
+	</update>
+
+
+	<!-- 혜진 -->
+
 	<!-- ===================================================================================================== 혜진 -->
+
 
 	<resultMap type="groupMember" id="groupMemberResultMap">
 		<result property="memberNo" column="MEMBER_NO"/>
