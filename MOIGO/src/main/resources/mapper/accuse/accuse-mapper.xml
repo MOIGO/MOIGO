@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="accuse">
+	<resultMap id="accuseResultMap" type="accuse">
+		<id column="ACCUSE_NO" property="accuseNo" />
+		<result column="TARGET_MEMBER" property="targetMember" />
+		<result column="TARGET_GROUP" property="targetGroup" />
+		<result column="REPORTER" property="reporter" />
+		<result column="CONTENT" property="content" />
+		<result column="ACCUSE_DATE" property="accuseDate" />
 
-<resultMap type="accuse" id="accuseResultMap">
-<id property="accuseNo" column="ACCUSE_NO"/> 
+	</resultMap>
+	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
+		FROM ACCUSE ORDER BY ACCUSE_NO DESC </select> -->
 
-<result property="targetMember" column="TARGET_MEMBER"/>
-<result property="targetGroup" column="TARGET_GROUP"/>
-<result property="reporter" column="REPORTER"/>
-<result property="content" column="CONTENT"/>
-<result property="accuseDate" column="ACCUSE_DATE"/>
-</resultMap>
-	<!-- <select id="selectAccuseList" resultMap="accuseResultMap">
-		SELECT * FROM ACCUSE ORDER BY ACCUSE_NO DESC
-	</select> -->
-	<select id="selectAccuseListCnt" resultType ="int">
-		SELECT COUNT(*) FROM ACCUSE 
+
+	<select id="selectAccuseListCnt" resultType="_int"> 
+	SELECT COUNT(*) FROM ACCUSE
 	</select>
+
 	<select id="selectAccuseListPaging" resultMap="accuseResultMap">
-	SELECT * FROM (SELECT ROWNUM RNUM, PAGING.* FROM(SELECT * FROM ACCUSE ORDER BY ACCUSE_NO DESC) PAGING) WHERE RNUM BETWEEN #{startRow} AND ${endRow}
+	 SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* FROM(SELECT * FROM ACCUSE ORDER BY
+		ACCUSE_NO DESC) PAGING) WHERE RNUM BETWEEN #{startRow} AND ${endRow}
 	</select>
-	
-	<select id="selectList" resultMap="accuseResultMap" >
-		SELECT * FROM ACCUSE
-		WHERE TARGET_MEMBER = #{id}
-	</select>
-	
-	
-	
+
+	<select id="selectList" resultMap="accuseResultMap">
+	 SELECT * FROM ACCUSE WHERE TARGET_MEMBER = #{id}
+	  </select>
+
+	<delete id="deleteAccuse" parameterType="_int"> 
+	DELETE FROM ACCUSE WHERE TARGET_MEMBER = #{id}
+	</delete>
+	  
+	  
+	  
 </mapper>

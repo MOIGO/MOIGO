@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,13 +75,27 @@ body {
 
 @media(max-width:1000px){
 	.search{
-		display: none;
+		visibility: hidden;
 	}
 }
 
-@media(min-width:767px){
-	.navi{
-	   width: 960px;
+@media(max-width:992px){
+	.navsize{
+	   height: 66px;
+	}
+}
+
+@media(max-width:770px){
+	#login{
+	  display: none;
+	}
+}
+
+
+@media(max-width:748px){
+	.navsize{
+		width: 748px;
+	   height: 66px;
 	}
 }
 
@@ -117,7 +132,7 @@ body {
 </head>
 <body>
 <c:import url="/WEB-INF/views/member/loginModal.jsp"/>
-		
+
 		<!-- // 헤더부분 // -->
 	<div class="container-fluid" id="headerBar">
 		<div class="row">
@@ -152,12 +167,11 @@ body {
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/common/test.do">테스트</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 맴버</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
-					  <a class="dropdown-item" href="#">로그아웃</a>
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
 				  </div>
 		</div>
@@ -172,7 +186,7 @@ body {
 	</script>
 
 	<!-- 헤더 카테고리 부분 -->
-	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary">
+	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary navsize navbar-expand">
 		<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item active">
@@ -209,6 +223,11 @@ body {
 		  </ul>
 		</div>
 	</nav>
+	
+	<!-- 테스트 -->
+	<c:set var="m" value="${sessionScope.m}"></c:set>
+	<!-- 테스트 -->
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -222,15 +241,17 @@ body {
 		
 		$(function() {
 			
+			console.log("${m}");
+			
 			/* 
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 
 			   	스크롤 이벤트가 발생할 때마다 폰트로드를 확인함
 			*/
-			/* var font = new FontFaceObserver('nanum-barun-gothic-regular');
+			var font = new FontFaceObserver('nanum-barun-gothic-regular');
 
 			font.load().then(function () {
 			  document.documentElement.className += " fonts_loaded";
-			}); */
+			}); 
 			
 		});
 		
