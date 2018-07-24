@@ -20,10 +20,10 @@
             <h2>마이페이지</h2>
             <ul class="nav nav-tabs nav-justified" >
                  <li class="nav-item"><a  class="nav-link  letter_space " href="${pageContext.request.contextPath}/mypage/profile.do">회원정보</a></li>
-                <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/changePwd.do"">비밀번호 변경</a></li>
-                <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/openGroup.do">주최모임</a></li>
-                <li class="nav-item"> <a class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/joinGroup.do">참여모임</a></li>
-                <li  class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/waitGroup.do">가입 대기 중</a></li>
+                <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/changePwd.do">비밀번호 변경</a></li>
+                <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/Group.do?gType=open">주최모임</a></li>
+                <li class="nav-item"> <a class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/Group.do?gType=join">참여모임</a></li>
+                <li  class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/Group.do?gType=wait">가입 대기 중</a></li>
                 <li class="nav-item"><a  class="nav-link letter_space active" href="${pageContext.request.contextPath}/mypage/withdrawal.do">회원탈퇴</a></li>
             </ul>
         </div>

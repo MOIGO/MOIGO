@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.moigo.member.model.dao.MemberDao;
 import com.kh.moigo.member.model.vo.Member;
+import com.kh.moigo.member.model.vo.MypageGroup;
 
 
 @Service
@@ -19,12 +20,6 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member selectOneMember(String memberEmail) {
 		return memberDao.selectOneMember(memberEmail);
-	}
-
-
-	@Override
-	public int updateMember(Member member) {
-		return memberDao.updateMember(member);
 	}
 
 
@@ -101,6 +96,52 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public int updateMember(Member member, List<String> interestList) {
+		int result =memberDao.updateMember(member);
+		int res;
+			
+		String memberNo= member.getMemberNo();
+			if(result>0){
+				if (interestList.size() > 0) {
+					 res= memberDao.deleteMemberInterest(memberNo);
+						
+					for (String interest : interestList) {
+						HashMap<String, String> hmap = new HashMap<>();
+	
+						hmap.put("memberNo", member.getMemberNo());
+						hmap.put("interest", interest);
+	
+						res = memberDao.insertMemberInterest(hmap);
+					}
+				}else{
+					res= memberDao.deleteMemberInterest(memberNo);
+				}
+			}
+		
+		
+		return result;
+	}
 
 
-}
+//	@Override
+//	public List<MypageGroup> selectJoinGroup(String memberNo) {
+//		return memberDao.selectJoinGroup(memberNo);
+//	}
+
+
+	@Override
+	public List<MypageGroup> selectGroupList(String memberNo, String gType) {
+		HashMap<String, String> hmap = new HashMap<>();
+
+		hmap.put("memberNo", memberNo);
+		hmap.put("gType", gType);
+
+		 List<MypageGroup> list = memberDao.selectGroupList(hmap);
+		
+		return list;
+	}
+
+	}
+
+

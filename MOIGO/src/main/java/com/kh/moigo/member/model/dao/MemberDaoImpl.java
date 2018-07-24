@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.moigo.member.model.vo.Member;
+import com.kh.moigo.member.model.vo.MypageGroup;
 
 @Repository
 public class MemberDaoImpl implements MemberDao {
@@ -59,6 +60,21 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public List<String> selectInterestList(String memberNo) {
 		return sqlSession.selectList("member.selectInterestList", memberNo);
+	}
+
+	@Override
+	public int deleteMemberInterest(String memberNo) {
+		return sqlSession.delete("member.deleteMemberInterest", memberNo);
+	}
+/*
+	@Override
+	public List<MypageGroup> selectJoinGroup(String memberNo) {
+		return sqlSession.selectList("member.selectJoinGroup", memberNo);
+	}*/
+
+	@Override
+	public List<MypageGroup> selectGroupList(HashMap<String, String> hmap) {
+		return sqlSession.selectList("member.selectGroupList", hmap);
 	}
 
 

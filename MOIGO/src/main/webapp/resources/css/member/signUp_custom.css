@@ -30,13 +30,14 @@
 	background-color: #fff;
 	border: 1px solid #dddfe4;
 }
-
+ 
 input:focus{
-	border-bottom: 1.5px solid #4195f5;
+	border-bottom: 2px solid #4195f5;
+	transition: 0.3s;
 }
-
+ 
 select:focus{
-	border-bottom: 1.5px solid #4195f5;
+	border-bottom: 2px solid #4195f5;
 }
 /* 라디오버튼 */
 .inp_gender {
@@ -58,7 +59,7 @@ select:focus{
 }
 
 .label_border {
-	border: 1px solid #4195f5 !important;
+	border: 2px solid #4195f5 !important;
 	color: #4195f5 !important;
 }
 
@@ -126,7 +127,4 @@ button:ENABLED:hover{
 	font-size:0.8em;
 }
 
-.ff{
-	letter-spacing: -2px;
-}
 

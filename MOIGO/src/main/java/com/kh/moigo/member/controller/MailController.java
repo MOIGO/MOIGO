@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,9 @@ public class MailController {
 	@Autowired
 	MemberService memberService;
 	
+	@Autowired
+	private BCryptPasswordEncoder bcryptPasswordEncoder;	
+	
 	
 	// 인증번호 이메일 전송
 	@ResponseBody
@@ -46,7 +50,7 @@ public class MailController {
 	      String joinCode = String.valueOf(ran);
 	      System.out.println("인증번호:" + joinCode);
 	      
-	      String content="인증번호는   ["+joinCode +"]입니다";
+	      String content="인증번호는  <b>[ "+joinCode +" ] </b>입니다";
 
 	      	
 	      
@@ -58,7 +62,7 @@ public class MailController {
 	      messageHelper.setFrom(setfrom);  // 보내는사람 생략하거나 하면 정상작동을 안함
 	      messageHelper.setTo(tomail);     // 받는사람 이메일
 	      messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
-	      messageHelper.setText(content);  // 메일 내용
+	      messageHelper.setText(content,true);  // 메일 내용
 	     
 	      mailSender.send(message);
 	    } catch(Exception e){
@@ -93,8 +97,13 @@ public class MailController {
 			if (member.getMemberName().equals(findName)) {
 				result = 0;
 
+				
 				String newPwd = getRamdomPassword(8);
-				memberService.updateMemberPwd(findEmail, newPwd);
+				
+				String encodedPassword=bcryptPasswordEncoder.encode(newPwd);
+				
+				
+				memberService.updateMemberPwd(findEmail, encodedPassword);
 				msg = "임시 비밀번호 전송, 메일 확인해주세요";
 
 				String setfrom = "moigogo1234@gmail.com";
@@ -102,7 +111,7 @@ public class MailController {
 				String title = "모이고 임시 비밀번호 발급안내"; // 제목
 				String content = "";
 
-				content = "임시 비밀번호는 [ " + newPwd + " ] 확인 후 변경해주세요.";
+				content = findName+"님의 임시 비밀번호는  <b>[ " + newPwd + " ]</b> 입니다.";
 
 				try {
 					MimeMessage message = mailSender.createMimeMessage();
@@ -111,7 +120,7 @@ public class MailController {
 					messageHelper.setFrom(setfrom); // 보내는사람 생략하거나 하면 정상작동을 안함
 					messageHelper.setTo(tomail); // 받는사람 이메일
 					messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
-					messageHelper.setText(content); // 메일 내용
+					messageHelper.setText(content,true); // 메일 내용
 
 					mailSender.send(message);
 				} catch (Exception e) {

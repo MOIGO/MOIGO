@@ -68,7 +68,7 @@
     </div>
     <hr>
     <br>
-    <div class="container">
+    <div class="container" id="mapp">
         <div class=" justify-content-center textc">
             <br>
             <h3><i class="fas fa-phone-volume" style="font-size: 3ex;"></i>고객센터</h3><br>
@@ -110,6 +110,5 @@
         
         // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
         // marker.setMap(null);    
-        console.log('지도의 중심 좌표는 ' + map.getCenter().toString() +' 입니다.');
 </script>
 </html>

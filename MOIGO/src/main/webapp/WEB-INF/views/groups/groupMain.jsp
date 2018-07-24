@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-<c:set var="postList" value="${requestScope.list}"></c:set>
-<c:set var="pageInfo" value="${requestScope.pageInfo}"></c:set>
+<c:set var="root" value="${pageContext.request.contextPath}" />
 <html>
 <head>
 <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootStrap/bootstrap.min.css">
@@ -31,9 +30,37 @@
 	font-weight: bolder;
 }
 
-.writePost {
+.postProfileImg{
+	width:50px;
+	height:50px;
+}
+body {
+	background: #EDEFF2;
+}
+
+#postDiv ,.profileWrapper,.contentWrapper,.postOuter {
+	background:white;
 	
 }
+
+#postDiv {
+
+background: #EDEFF2;
+}
+
+.postBorder{ 
+	box-shadow: 2px 2px grey; 
+}
+
+.replyProfileImg{
+	width:40px;
+	height:40px;
+}
+
+.dropdown-item:hover{
+	cursor:pointer;
+}
+
 </style>
 
 </head>
@@ -55,7 +82,7 @@
 				<div class="col">
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
-					<div id="postDiv" class="test">
+					<div id="postDiv" class="">
 						
 					</div>
 				</div>
@@ -91,8 +118,7 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal" onclick="destroyPostEditModal();">취소</button>
-						<button type="button" class="btn btn-primary" onclick="submitPost()">확인</button>
-						
+						<button type="button" class="btn btn-primary" onclick="editOrSubmit()">확인</button>
 					</div>
 			</div>
 		</div>
@@ -108,7 +134,7 @@ $(function(){
 });
 
 function deleteAllPost(){
-	
+	$('#postDiv').children().remove();
 }
 
 
@@ -118,40 +144,392 @@ function setPostList(currentPage){
 		data:{groupNo:"G001",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-			var $Outer= $('<div>');
+
+			console.log(data);
 			
-			console.log(data.posts);
-			
-			/*profile Element  */
-			var $profileWrapper = $('<div>');
-			//var $profileImg = 			
-			
-			
-			/*content Element  */
-			var $contentWrapper = $('<div>');
-			
-			/*reply Element  */
-			var $replyWrapper = $('<div>');
-			
-			$('#postDiv').append($Outer);
-			
-			
+			for(var i = 0; i <data.posts.length;++i){
+				
+				var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
+				$postOuter.append(makeProfile(data.posts[i]));
+				$postOuter.append(makeContent(data.posts[i]));
+				$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
+				$postOuter.append(makeSubmitReply(data.posts[i].postNo));
+				$('#postDiv').append($postOuter);
+			}
+
 		},
 		error:function(){
-		
+			console.log("ajax오류");
 		}
 		
 	});
 	
 }
 
-function submitPost(){
+
+
+
+
+
+function makeReply(replyList){
+	var $replyWrapper =  $('<div class="p-3 replyWrapper bg-light"> ');
 	
-	$('input[name=noteContent]').val($('#summernote').summernote('code'));
+	for(var i =0;i< replyList.length;++i){
+		$replyWrapper.append(makeProfile(replyList[i]));	
+	}
+	
+	return $replyWrapper;
+}
+
+function makeContent(post){
+	var $contentWrapper = $('<div class="p-3 contentWrapper">');
+	
+	$contentWrapper.append(post.content);
+	
+	return $contentWrapper;
+}
+
+function makeProfile(obj){
+	/*profile Element  */
+	
+	var $profileWrapper = $('<div class="d-flex align-items-center mt-2 mr-auto profileWrapper">');
+	
+	var $profileImgWrapper;
+	
+	var $profileImg;
+	
+	if(typeof(obj.replyNo)=='undefined'){
+		$profileImgWrapper = $('<div class="">');
+		if(obj.groupMember.profileImg!=null)
+			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+		else
+			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
+		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.postNo));
+	}
+	else{
+		$profileImgWrapper = $('<div class="align-self-start">');
+		if(obj.groupMember.profileImg!=null)
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+		else
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
+		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.replyNo));
+	}
+	
+	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
+	var $userDataWrapper =$("<div class='d-flex'>");
+	var $userName =$("<span class='mr-4 ' style='overflow:hidden;text-overflow:ellipsis; font-weight:bold'>").text(obj.groupMember.memberName);
+	var $userMsg = $("<span class='w-50 text-muted' style='overflow:hidden;text-overflow:ellipsis;'>").text(obj.groupMember.profileMsg);
+	var $replyContent;
+	
+	if(typeof(obj.postNo)!='undefined'){
+		$replyContent = $("<div class='d-flex replyContent '>"); 
+		$replyContent.append(obj.content);
+	}
+	
+	
+	var $upLoadDateWrapper=$('<div class="d-flex">');
+	var $dropDownWrapper=$('<div >')
+	let now = new Date(obj.submitDate);
+	
+	var $upLoadWrapper  = $("<span>").text(	now.getMonth()+"월"+" "+now.getDate()+"일");
+	
+	$upLoadDateWrapper.append($upLoadWrapper);
+	
+	$userDataWrapper.append($userName);
+	$userDataWrapper.append($userMsg);
+	
+	$profileAndDate.append($userDataWrapper);
+	
+	if(typeof(obj.replyNo)!='undefined'){
+		$profileAndDate.append($replyContent);
+	}
+	
+	$profileAndDate.append($upLoadDateWrapper);
+	
+	$profileImgWrapper.append($profileImg);
+	$profileWrapper.append($profileImgWrapper);
+	$profileWrapper.append($profileAndDate);
+	if(typeof(obj.replyNo)!='undefined')
+		$profileWrapper.append(makeDropDown(false,obj.replyNo));
+	else
+		$profileWrapper.append(makeDropDown(true,obj.postNo));
+	return $profileWrapper;
+}
+
+
+
+
+function makeDropDown(isPost,num){
+	$dropDownWrapper =$("<div>");
+	
+	var $dropDown =$('<div class="dropdown">');
+	var $dropDownBtn=$('<button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>');
+	var $dropDownMenu=$('<div class="dropdown-menu">');
+	
+	var $dropDownItem1
+	var $dropDownItem2
+	
+	if(isPost){
+		$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
+		$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
+		var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
+		var $dropDownItem4=$("<a class='dropdown-item'>신고하기</a>");
+		$dropDownMenu.append($dropDownItem1);
+		$dropDownMenu.append($dropDownItem2);
+		$dropDownMenu.append($dropDownItem3);
+		$dropDownMenu.append($dropDownItem4);
+		
+		$dropDownItem1.on("click",function(){
+			prepareUpdatePost(num);
+		});
+		
+		
+		
+		$dropDownItem3.on("click",function(){
+			deletePost(num);
+		});
+		
+	}else{
+		$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
+		$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
+		$dropDownMenu.append($dropDownItem1);
+		$dropDownMenu.append($dropDownItem2);
+		
+		$dropDownItem1.on("click",function(){
+			addReplyEditForm(num);
+		});
+		
+		$dropDownItem2.on("click",function(){
+			deleteReply(num);
+		});
+	}
+	
+	$dropDown.append($dropDownBtn);
+	$dropDown.append($dropDownMenu);
+	$dropDownWrapper.append($dropDown);
+	
+	return $dropDownWrapper;
+	
+}
+
+function addReplyEditForm(num){
+	toEditContent = $('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").find(".replyContent");
+	
+	var originContent = $(toEditContent).text();
+	$(toEditContent).text("");
+	$(toEditContent).append(makeEditReply(num,originContent));
+	
+}
+
+function makeSubmitReply(postNo){
+	var $inputWrapper =$('<div class="d-flex">');
+	var $inputGroup = $('<div class="input-group">');
+	var $input = $('<input class="form-control" type="text" placeholder="댓글을 남겨주세요!">');
+	var $inputButton = $("<span class='input-group-btn'></span>").append($("<button class='btn btn-secondary' type='button'>등록</button>").on("click",function(){
+		submitReply(postNo, $input);
+	}));
+
+	$inputGroup.append($input);
+	$inputGroup.append($inputButton);
+	$inputWrapper.append($inputGroup);
+	
+	return $inputWrapper;
+
+}
+
+function updateReply(num,newContent,originContent){
+
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/updateReply.gp",
+		data:{replyNo:num,content:newContent},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+			
+				$(toEditContent).text(newContent);
+				toEditContent=undefined;
+				alert("글 수정 성공!");
+				
+			}else{
+				$(toEditContent).text(originContent);
+				alert("댓글 삭제 실패!");
+			}
+			
+		},
+		error:function(){
+			alert("댓글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function makeEditReply(num,originContent){
+	
+	var $editWrapper =$('<div class="d-flex">');
+	
+	var $textArea = $('<textarea class="form-control " style="resize:none;" rows="3" cols="35">');
+	
+	var $btnWrapper =$('<div class="d-flex">');
+	
+	var $editBtn = $('<button class="btn btn-primary btn-sm">수정</button>').on("click",function(){
+		updateReply(num,$textArea.val(),originContent);
+		$editWrapper.remove();
+	});
+	
+	var $cancleBtn = $('<button class="btn btn-info btn-sm">취소</button>').on("click",function(){
+		toEditContent=undefined;
+		$(toEditContent).text(originContent);
+		$editWrapper.remove();
+	});
+	
+	
+	$textArea.text(originContent);
+	
+	$btnWrapper.append($editBtn);
+	$btnWrapper.append($cancleBtn);
+	
+	$editWrapper.append($textArea);
+	$editWrapper.append($btnWrapper);
+	
+	return $editWrapper;
+}
+
+
+
+function prepareUpdatePost(num){
+	toEditContent = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
+	$('#postEdit').modal('toggle');
+	createSummerNote();
+	
+	var $temp = $($(toEditContent).html());
+
+	$('#summernote').summernote('code',$temp);
+	
+	
+	
+	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
+		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
+	}
+}
+
+function updatePost(num,postContent){
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/updatePost.gp",
+		data:{postNo:num,content:postContent},
+		dataType:"json",
+		success:function(data){
+			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
+			if(data.result>0){
+				$temp.children().remove();
+				console.log(postContent);
+				$temp.append(postContent);
+				alert("글 수정 성공!");
+			}else
+				alert("댓글 삭제 실패!");	
+		},
+		error:function(){
+			alert("댓글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function restoreMapEvent(obj){
+	
+	 $(obj).find('[name=editBtn]').on("click",function(){
+		toEditTarget=obj;
+		
+		$('#placeKeyword').val($(obj).find('.place_name').text());
+		editMap();
+	});
+	
+	$(obj).find('[name=delBtn]').on("click",function(){
+		deleteMap($(obj));
+	});
+	
+	$(obj).on('mouseover',function(){
+		$(obj).css('border','3px solid #00bfff');
+		
+		$(obj).find('.map_btn_wrapper').css("visibility","visible");
+		
+		
+	}).on('mouseout',function(){
+		
+		$(obj).css('border','3px solid black');
+		
+		$(obj).find('.map_btn_wrapper').css("visibility","hidden");
+	});
+}
+
+
+function deleteReply(num){
 	
 	$.ajax({
-		url:"${pageContext.request.contextPath}/groups/addPost.gp",
-		data:{groupNo:"G001",memberNo:"M001",content:"<p>안녕하세요!!</p>",isNotice:"N"},
+		url:"${pageContext.request.contextPath}/groups/deleteReply.gp",
+		data:{replyNo:num},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("댓글 삭제 성공!");
+				$('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").remove();
+			}else
+				alert("댓글 삭제 실패!");
+			
+		},
+		error:function(){
+			alert("댓글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function deletePost(num){
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/deletePost.gp",
+		data:{postNo:num},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("글 삭제 성공!");
+			}else
+				alert("글 삭제 실패!");
+			
+			deleteAllPost();
+			setPostList(1);
+		},
+		error:function(){
+			alert("글 삭제 도중 에러가 생겼습니다.");
+		}
+		
+	});
+}
+
+function editOrSubmit(){
+	if(typeof(toEditContent)!='undefined'){
+		updatePost($(toEditContent).siblings('.profileWrapper').find('input').val(),
+				$('#summernote').summernote('code'));
+		destroyPostEditModal();
+		
+		toEditContent=undefined;
+	}else{
+		submitPost();
+	}
+	
+	
+}
+
+function submitPost(){
+	
+	if(!checkLogin())
+		return ;  
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
+		data:{groupNo:"G001",memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
 			
@@ -161,12 +539,49 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList();
+			setPostList(1);
 			destroyPostEditModal();
 		},
 		error:function(){
 			alert("글 등록 도중 에러가 생겼습니다.");
 			destroyPostEditModal();
+		}
+		
+	});
+
+}
+
+function checkLogin(){
+	if('${m.memberNo}'=='')
+	{
+		alert("로그인 해주세요");
+		return false;
+	}else
+		return true;
+}
+
+function submitReply(postNo,obj){
+	
+	if(!checkLogin())
+		return ;  
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
+		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val()},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.result>0){
+				alert("댓글 등록 성공!");
+			}else
+				alert("댓글 등록 실패!");
+			
+			deleteAllPost();
+			setPostList(1);
+			
+		},
+		error:function(){
+			alert("글 등록 도중 에러가 생겼습니다.");
 		}
 		
 	});
@@ -216,6 +631,7 @@ function createSummerNote(){
 		     insertmap: insertMap
 		  }
 	});
+	
 }
 
 function toggleMapModal(){

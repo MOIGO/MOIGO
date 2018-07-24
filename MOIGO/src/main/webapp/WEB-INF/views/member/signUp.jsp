@@ -8,19 +8,27 @@
 <head>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/common/fontfaceobserver.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/member/signUp_custom.css?ver=0">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" >
+<link rel="stylesheet" href="${pageContext.request.contextPath}//resources/css/common/fonts.css" media="none" onload="this.media='all';">
 
 <meta charset="UTF-8">
 <title>Insert title here</title>
  <style>
+	 body {
+		font-family:'nanum-barun-gothic-regular', sans-serif;
+		letter-spacing: -1px; 
+	}
 	input:DISABLED {
 		background-color : #e9ecef;
 	}
 	select:DISABLED {
 	background-color : #e9ecef;}
+    
+    
+    
     </style>
 
 </head>
@@ -29,7 +37,7 @@
     <br><br>
     <div class="container " >
         <div class="content_area col-md-5 col-12 " style=" margin:0 auto; float:none"  >
-        	<div class="d-flex justify-content-center "> <img style="width:50%;height:100%;" src="${pageContext.request.contextPath}/resources/images/moigo.png"> </div>
+        	<div class="d-flex justify-content-center "> <a style="text-align:center;" href="${pageContext.request.contextPath}" ><img style="width:50%;height:100%;" src="${pageContext.request.contextPath}/resources/images/moigo.png"> </a> </div>
 				<br>
                 <form action="${pageContext.request.contextPath}/member/signUpEnd.do" id="signUpForm" method="post">
                 <!-- <h5>필수정보</h5> -->
@@ -40,6 +48,7 @@
                         <span id="idChkMsg"></span>
                         
                     </div>
+                    
                     <div class="form-group col-md-12 col-sm-12 row no_margin">
                         <div class="row  col-12 no_margin letter_space_join no_padding" >이메일인증</div>
                         <input type="text" class="col-md-9 col-8  join_form_control " id="joinCode" placeholder="인증번호" disabled>
@@ -147,20 +156,20 @@
                         <div id="activity_area"  class="col-md-12 col-12 collapse row no_margin" style="border: 0.5px solid #ccc; padding:10px;">
                             
                             <select class="col-12 join_form_controla condition_region" id="conditionRegionLarge">
-                                 <option value="regionNone">- 시도 -</option>
+                                 <option value="regionNone">시/도</option>
                            </select>
                             
                             <select class="col-12 join_form_controla condition_region" id="conditionRegionMedium">
-	                             <option value="regionNone">- 시군구 -</option>
+	                             <option value="regionNone">시/군/구 </option>
 	                             <option value="">전체</option>
                           	</select>
                             
                           	<select class="col-12 join_form_controla condition_region" id="conditionRegionSmall">
-	                             <option value="regionNone">- 읍면동 -</option>
+	                             <option value="regionNone"> 읍/면/동</option>
 	                             <option value="">전체</option>
                           	</select>
 
-							<div class="col-12">
+							<div class="col-12 " >
 	                             <input class="" type="checkbox" id="regionNone">
 	                             <label class="" for="regionNone">지역 무관</label>
 							</div>
@@ -176,8 +185,10 @@
                         <button class="col-md-12 col-12 join_form_control btn_sign" type="submit" disabled id="btn_signUp">가입완료 </button>
                     </div>
                    </form>
-                    <span style=" font-size:0.9em;">  ※ 추가정보는 입력하지 않아도 회원가입이 가능합니다.</span>
-
+                   <div class="form-group col-md-12 col-12 row no_margin">
+	                    <span style=" font-size:0.8em;">  ※ 추가정보는 입력하지 않아도 회원가입이 가능합니다. </span>&nbsp;&nbsp;&nbsp;
+	                    <a style="text-align:center; font-size:0.8em;" href="${pageContext.request.contextPath}/" > 홈으로 가기</a>
+					</div>
         </div>
     </div>
     <br><br>
@@ -203,7 +214,17 @@
 	});
     
 $(function(){
-         
+		
+		/* 
+			폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 
+		   	스크롤 이벤트가 발생할 때마다 폰트로드를 확인함
+		*/
+		var font = new FontFaceObserver('nanum-barun-gothic-regular');
+
+		font.load().then(function () {
+		  document.documentElement.className += " fonts_loaded";
+		}); 
+		
  
 	
 	// 행정구역 list를 가져오기 위한 ajax 부분
@@ -386,7 +407,7 @@ $(function(){
 						if(regexp.test(id)){
 			        		chkId=true;
 							$('#btnEmail').attr('disabled',false);
-							$('#idChkMsg').html('사용 가능한 아이디').addClass('okChk').removeClass('noChk');
+							$('#idChkMsg').html('사용 가능한 이메일 (인증 필수)').addClass('okChk').removeClass('noChk');
 			
 			        	}else{
 			        		chkId=false;
@@ -397,7 +418,7 @@ $(function(){
 					}else{
 						chkId=false;
 		        		$('#btnEmail, #joinCode').attr('disabled',true);
-		        		$('#idChkMsg').html('이미 사용 중인 아이디').addClass('noChk').removeClass('okChk');
+		        		$('#idChkMsg').html('이미 사용 중인 이메일').addClass('noChk').removeClass('okChk');
 					}
 					
 				}, error : function(error,msg){
@@ -422,7 +443,7 @@ $(function(){
 						/* alert(data.msg); */
 						joinCode=data.joinCode;
 						$('#joinCode, #btn_joinCode').attr('disabled',false);
-						$('#codeChkMsg').html('인증번호가 발송되었습니다. 메일을 확인해주세요').addClass('okChk').removeClass('noChk');
+						$('#codeChkMsg').html('인증번호를 발송했습니다.<br>인증번호가 오지 않으면 입력하신 정보가 정확한지 확인하여 주세요.').addClass('okChk').removeClass('noChk');
 				}, error : function(error,msg){
 					
 				}
@@ -450,7 +471,7 @@ $(function(){
         	
         	if(!regexp.test(pwd)){
         		chkPwd=false;
-        		$('#pwdChkMsg').html('영문자/숫자 포함 8~16자').addClass('noChk').removeClass('okChk');
+        		$('#pwdChkMsg').html('영문자/숫자 혼용 8~16자').addClass('noChk').removeClass('okChk');
 
         	}else{
         		chkPwd=true;

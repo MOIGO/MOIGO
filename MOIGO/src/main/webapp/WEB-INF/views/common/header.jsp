@@ -75,13 +75,27 @@ body {
 
 @media(max-width:1000px){
 	.search{
-		display: none;
+		visibility: hidden;
 	}
 }
 
-@media(min-width:767px){
-	.navi{
-	   width: 960px;
+@media(max-width:992px){
+	.navsize{
+	   height: 66px;
+	}
+}
+
+@media(max-width:770px){
+	#login{
+	  display: none;
+	}
+}
+
+
+@media(max-width:748px){
+	.navsize{
+		width: 748px;
+	   height: 66px;
 	}
 }
 
@@ -153,6 +167,7 @@ body {
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/common/test.do">테스트</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
@@ -171,7 +186,7 @@ body {
 	</script>
 
 	<!-- 헤더 카테고리 부분 -->
-	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary">
+	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary navsize navbar-expand">
 		<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item active">

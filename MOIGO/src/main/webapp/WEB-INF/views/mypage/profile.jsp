@@ -12,7 +12,11 @@
 <title>Insert title here</title>
 <style>
 select:DISABLED {
-	background-color : #e9ecef;}
+	background-color : #e9ecef;
+	}
+	.ff{
+		height:30px;
+	}
 </style>
 </head>
 <body >
@@ -25,11 +29,11 @@ select:DISABLED {
         <div class="col-md-9" style="float:none; margin:0 auto;">
             <h2>마이페이지</h2>
             <ul class="nav nav-tabs nav-justified " >
-                <li class="nav-item"><a  class="nav-link  letter_space active" href="${pageContext.request.contextPath}/mypage/profile.do">회원정보</a></li>
+               <li class="nav-item"><a  class="nav-link  letter_space active" href="${pageContext.request.contextPath}/mypage/profile.do">회원정보</a></li>
                 <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/changePwd.do">비밀번호 변경</a></li>
-                <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/openGroup.do">주최모임</a></li>
-                <li class="nav-item"> <a class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/joinGroup.do">참여모임</a></li>
-                <li  class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/waitGroup.do">가입 대기 중</a></li>
+                <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/Group.do?gType=open">주최모임</a></li>
+                <li class="nav-item"> <a class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/Group.do?gType=join">참여모임</a></li>
+                <li  class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/Group.do?gType=wait">가입 대기 중</a></li>
                 <li class="nav-item"><a  class="nav-link letter_space " href="${pageContext.request.contextPath}/mypage/withdrawal.do">회원탈퇴</a></li>
             </ul>
         </div>
@@ -135,16 +139,16 @@ select:DISABLED {
                   				<div id="activity_area" class=" col-12 collapse ">
                   					<div class="row">
 				                  		<select class="col-3 join_form_controla condition_region profile_form_control" id="conditionRegionLarge">
-			                                 <option value="regionNone">- 시도 -</option>
+			                                 <option value="regionNone"> 시/도 </option>
 			                           </select>
 			                            
 			                            <select class="col-3 join_form_controla condition_region profile_form_control" id="conditionRegionMedium">
-				                             <option value="regionNone">- 시군구 -</option>
+				                             <option value="regionNone"> 시/군/구</option>
 				                             <option value="">전체</option>
 			                          	</select>
 			                            
 			                          	<select class="col-3 join_form_controla condition_region profile_form_control" id="conditionRegionSmall">
-				                             <option value="regionNone">- 읍면동 -</option>
+				                             <option value="regionNone"> 읍/면/동 </option>
 				                             <option value="">전체</option>
 			                          	</select>
 			                          	
@@ -169,18 +173,36 @@ select:DISABLED {
 	                  					선택안함	
 	                  				</c:if>
 	                  				<c:if test="${ !empty interestList}">
-	                  					<c:forEach items="${interestList }" var="inter">
+	                  					<c:forEach items="${interestList }" var="inter" varStatus="status">
 	                  						<c:choose>
-											    <c:when test="${inter == 'B001'}">라이프스타일</c:when>
-											    <c:when test="${inter == 'B002'}">영어/외국어</c:when>
-											    <c:when test="${inter == 'B003'}">컴퓨터</c:when>
-											    <c:when test="${inter == 'B004'}">디자인/미술</c:when>
-											    <c:when test="${inter == 'B005'}">취업</c:when>
-											    <c:when test="${inter == 'B006'}">음악/공연</c:when>
-											    <c:when test="${inter == 'B007'}">스포츠</c:when>
-											    <c:when test="${inter == 'B008'}">뷰티/미용</c:when>
-											    <c:when test="${inter == 'B009'}">게임</c:when>
-											   </c:choose>
+											    <c:when test="${inter == 'B001'}">라이프스타일 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+											    <c:when test="${inter == 'B002'}">영어/외국어 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+											    <c:when test="${inter == 'B003'}">컴퓨터 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+											    <c:when test="${inter == 'B004'}">디자인/미술 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+											    <c:when test="${inter == 'B005'}">취업 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+											    <c:when test="${inter == 'B006'}">음악/공연
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											     </c:when>
+											    <c:when test="${inter == 'B007'}">스포츠 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+											    <c:when test="${inter == 'B008'}">뷰티/미용
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											     </c:when>
+											    <c:when test="${inter == 'B009'}">게임 
+											    	<c:if test="${not status.last}"><c:out value=", "/></c:if>
+											    </c:when>
+										   </c:choose>
 											   
 	                  					</c:forEach>	
 	                  				</c:if>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -241,7 +263,7 @@ select:DISABLED {
 	      else{
 	    	   str = L+" "+M+" "+S;
 	      }
-   	   	 $('#memberAddress').val(str.replace(/regionNone/gi," ").trim()); 
+   	   	  $('#memberAddress').val(str.replace(/regionNone/gi," ").trim()); 
 	   
    	   	 console.log($('#memberAddress').val() );
 	});
