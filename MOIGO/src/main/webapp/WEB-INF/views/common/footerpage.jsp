@@ -461,14 +461,17 @@
         <div class="row">
             <div class="guideCate justify-content-center" id="qna">
             <h5>자주묻는 질문</h5>
+            <input type="hidden" value="qna" />
             <div class="gage1"></div>
             </div>
             <div class="guideCate justify-content-center" id="guide">
             <h5>이용 관련</h5>
+            <input type="hidden" value="used" />
             <div class="gage2"></div>
             </div>
             <div class="guideCate justify-content-center" id="declare">
             <h5>신고 관련</h5>
+            <input type="hidden" value="tel" />
             <div class="gage3"></div>
             </div>
         </div>
@@ -558,16 +561,16 @@
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
 <script>
-	/* $('.cursorPo').on('click',function(){
+	$('.guideCate').on('click',function(){
 	
-		var select = $(this).siblings('input').val();
+		var select = $(this).children('input').val();
 		alert(select);
-		$.ajax({
+		/* $.ajax({
 		url : "${pageContext.request.contextPath}/common/ajax.ft",
 		data : {selected: }
 		
-		});
-	}); */
+		}); */
+	});
 	
 
 	

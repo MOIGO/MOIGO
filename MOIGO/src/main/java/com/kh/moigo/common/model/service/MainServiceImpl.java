@@ -18,6 +18,6 @@ public class MainServiceImpl implements MainService {
 	public List<QNABoard> qnaList() {
 		return mainDao.qnaList();
 	}
-
-	
+			
+			
 }
