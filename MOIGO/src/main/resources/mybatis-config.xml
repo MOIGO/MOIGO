@@ -16,7 +16,7 @@
 		<typeAlias type="com.kh.moigo.post.model.vo.Post" alias="post"/>
 		<typeAlias type="com.kh.moigo.schedule.model.vo.Schedule" alias="schedule"/>
 		<typeAlias type="com.kh.moigo.post.model.vo.PostReply" alias="postReply"/>
-		<!-- <typeAlias type="com.kh.moigo.common.model.vo.QNABoard" alias="QNABoard"/> -->
+		<typeAlias type="com.kh.moigo.common.model.vo.QNABoard" alias="qna"/>
 	</typeAliases>
 	
 	<!-- <typeHandlers>

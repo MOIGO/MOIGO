@@ -7,7 +7,7 @@ import com.kh.moigo.common.model.vo.QNABoard;
 
 public interface MainService {
 
-	List<QNABoard> qnaList();
+	List<QNABoard> qnaList(String selected);
 
 	
 	

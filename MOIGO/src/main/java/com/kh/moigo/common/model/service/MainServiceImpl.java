@@ -15,8 +15,8 @@ public class MainServiceImpl implements MainService {
 	MainDao mainDao; 
 	
 	@Override
-	public List<QNABoard> qnaList() {
-		return mainDao.qnaList();
+	public List<QNABoard> qnaList(String selected) {
+		return mainDao.qnaList(selected);
 	}
 			
 			

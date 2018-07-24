@@ -478,17 +478,17 @@
         <br>
         <!-- 컬랩스 부분 -->
         <div>
-                <div id="accordion" role="tablist">
+                 <!-- <div id="accordion" role="tablist">
                         <div class="card">
-                          <div class="card-header" role="tab" id="headingOne">
+                          <div class="card-header" role="tab">
                             <h5 class="mb-0">
-                              <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                              <a data-toggle="collapse" href="#collapseOne" aria-expanded="true">
                                 01 사이트에 치명적인 오류나 건의사항이 있어요
                               </a>
                             </h5>
                           </div>
                       
-                          <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                          <div id="collapseOne" class="collapse show" role="tabpanel" data-parent="#accordion">
                             <div class="card-body">
                               없어!! 그냥써라
                             </div>
@@ -496,14 +496,14 @@
                         </div>
                         <br>
                         <div class="card">
-                          <div class="card-header" role="tab" id="headingTwo">
+                          <div class="card-header" role="tab">
                             <h5 class="mb-0">
-                              <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false">
                                 02 부적절한 게시글을 발견했습니다. 어떻게 해야하나요?
                               </a>
                             </h5>
                           </div>
-                          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                          <div id="collapseTwo" class="collapse" role="tabpanel" data-parent="#accordion">
                             <div class="card-body">
                                 없어!! 그냥써라
                             </div>
@@ -524,10 +524,28 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div>  -->
+         <div id="accordion" role="tablist">
+                    <c:forEach var="q" items="${list}">
+                    	<div class="card">
+                          <div class="card-header" role="tab">
+                            <h5 class="mb-0">
+                              <a data-toggle="collapse" href="#${q.boardNo}" aria-expanded="true">
+                                ${q.boardTitle}
+                              </a>
+                            </h5>
+                          </div>
+                      
+                          <div id="${q.boardNo}" class="collapse show" role="tabpanel" data-parent="#accordion">
+                            <div class="card-body">
+                              ${q.boardContent}
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                    </c:forEach> 
+           </div>
         </div>
-    </div>
-    
     <!-- 연락처 및 지도 -->
     <c:choose>
 		<c:when test="${selected ne 'ma'}">
@@ -565,12 +583,53 @@
 	
 		var select = $(this).children('input').val();
 		alert(select);
-		/* $.ajax({
-		url : "${pageContext.request.contextPath}/common/ajax.ft",
-		data : {selected: }
-		
-		}); */
-	});
+		$.ajax({
+		url : "${pageContext.request.contextPath}/common/qna.ft",
+		data : {selected: select},
+		type : "get",
+		success : function(data){
+			var list = data.list;
+			
+			for(var l in list){
+				$('#accordion').append("<div>");
+				
+				var $div= $('<div class="card">');
+				var $div2 = $('<div class="card-header" role="tab">');
+				$div.append($div2);
+				var $h5 = $('<h5 class="mb-0">');
+				$div2.append($h5);
+				var $a = $('<a data-toggle="collapse" href="#${q.boardNo}" aria-expanded="true">');
+				$h5.append($a);
+				$a.append(list[l].boardTitle);
+				
+				
+				
+				$('#accordion').append("</div>");
+				
+				<div class="card">
+                <div class="card-header" role="tab">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" href="#${q.boardNo}" aria-expanded="true">
+                      ${q.boardTitle}
+                    </a>
+                  </h5>
+                </div>
+            
+                <div id="${q.boardNo}" class="collapse show" role="tabpanel" data-parent="#accordion">
+                  <div class="card-body">
+                    ${q.boardContent}
+                  </div>
+                </div>
+              </div>
+              <br>
+			}
+			
+		},
+		error : function(data){
+			console.log("에러 발생!");
+		}
+		});
+	}); 
 	
 
 	

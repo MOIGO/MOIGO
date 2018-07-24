@@ -9,6 +9,6 @@ import com.kh.moigo.common.model.vo.QNABoard;
 @Repository
 public interface MainDao {
 
-	List<QNABoard> qnaList();
+	List<QNABoard> qnaList(String selected);
 	
 }
