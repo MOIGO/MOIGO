@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.moigo.common.model.service.MainService;
 import com.kh.moigo.common.model.vo.QNABoard;
@@ -27,7 +28,9 @@ public class MainController {
 	}
 	
 	@RequestMapping("/common/qna.ft")
+	@ResponseBody
 	public Map<String,Object> qnaBoard(@RequestParam String selected){
+		
 		
 		String qna = "자주묻는 질문";
 		String used = "이용 관련";
@@ -39,7 +42,7 @@ public class MainController {
 			list = mainService.qnaList(qna);
 		}else if(selected.equals("used")) {
 			list = mainService.qnaList(used);
-		}else if(selected.equals("used")) {
+		}else if(selected.equals("tel")) {
 			list = mainService.qnaList(tel);
 		}
 		
