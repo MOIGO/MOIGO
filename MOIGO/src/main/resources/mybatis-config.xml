@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
+
+	<!-- mybatis 설정과 관련된 태그 -->
+	<settings>
+		<!-- null값을 빈칸으로 인식하기 때문에 DB에서 null을 입력하고 싶을 때 설정해주는 부분 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+
 	<typeAliases>
 		<typeAlias type="com.kh.moigo.admin.model.vo.Accuse" alias="accuse"/>
 		<typeAlias type="com.kh.moigo.admin.model.vo.MemberDetail" alias="memberDetail"/>	
@@ -9,14 +16,19 @@
 		<typeAlias type="com.kh.moigo.admin.model.vo.GrpMember" alias="grpMember"/>		
 		<typeAlias type="com.kh.moigo.admin.model.vo.TopFive" alias="acusseTop5"/>													
 													
-		<typeAlias type="com.kh.moigo.post.model.vo.Files" alias="files"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.Files" alias="files"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.Groups" alias="groups"/>
 		<typeAlias type="com.kh.moigo.groups.model.vo.GroupMember" alias="groupMember"/>
 		<typeAlias type="com.kh.moigo.member.model.vo.Member" alias="member"/>
-		<typeAlias type="com.kh.moigo.post.model.vo.Post" alias="post"/>
-		<typeAlias type="com.kh.moigo.schedule.model.vo.Schedule" alias="schedule"/>
-		<typeAlias type="com.kh.moigo.post.model.vo.PostReply" alias="postReply"/>
+
+		<typeAlias type="com.kh.moigo.groups.model.vo.Post" alias="post"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.Schedule" alias="schedule"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostReply" alias="postReply"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostWithMem" alias="postWithMem"/>
+		<typeAlias type="com.kh.moigo.groups.model.vo.PostReplyWithMem" alias="postReplyWithMem"/>
 		<typeAlias type="com.kh.moigo.common.model.vo.QNABoard" alias="qna"/>
+		<typeAlias type="com.kh.moigo.member.model.vo.MypageGroup" alias="mypageGroup"/>
+
 	</typeAliases>
 	
 	<!-- <typeHandlers>

@@ -28,6 +28,11 @@
 		</property>
 	</bean>
 	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	
 	<!-- 2. myBatis(JDBC)설정 : SqlSessionFactory-->
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
 		
@@ -45,7 +50,7 @@
 		<constructor-arg index="0" ref="sqlSessionFactoryBean"/>
 	</bean>
 	
-	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="select*" rollback-for="Exception" read-only="true"/>
 			<tx:method name="checkId*" rollback-for="Exception" read-only="true"/>
@@ -56,12 +61,13 @@
 	</tx:advice>
 	
 	
-	tx aop (메소드 단위) 등록하기 
+	<!-- tx aop (메소드 단위) 등록하기 --> 
+	
 	<aop:config proxy-target-class="true">
-		<aop:pointcut  expression="execution(* com.kh.spring..*ServiceImpl.*(..))" id="serviceMethod"/>
+		<aop:pointcut  expression="execution(* com.kh.moigo..*ServiceImpl.*(..))" id="serviceMethod"/>
 		<aop:advisor advice-ref="txAdvice"  pointcut-ref="serviceMethod"/>
 		
-	</aop:config> -->
+	</aop:config>
 	
     <!-- 메일보내기 -->
 	 <bean id="mailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
