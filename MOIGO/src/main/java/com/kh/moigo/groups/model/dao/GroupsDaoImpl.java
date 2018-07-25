@@ -26,6 +26,18 @@ public class GroupsDaoImpl implements GroupsDao {
 
 	
 	@Override
+	public int createGroup(Groups group) {
+		
+		return sqlSession.insert("groups.insertGroup", group);
+	}
+
+	@Override
+	public int updateGroupImg(Groups group) {
+		
+		return sqlSession.update("groups.updateGroupCover",group);
+	}
+	
+	@Override
 	public int insertPost(Post p) {
 		
 		Map<String,String> map = new HashMap<String, String>();
@@ -114,5 +126,7 @@ public class GroupsDaoImpl implements GroupsDao {
 	public Groups selectOneGroup(String groupNo) {
 		return sqlSession.selectOne("groups.selectOneGroup", groupNo);
 	}
+
+	
 
 }

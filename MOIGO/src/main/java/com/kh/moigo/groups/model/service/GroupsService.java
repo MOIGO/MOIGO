@@ -15,6 +15,9 @@ import com.kh.moigo.groups.model.vo.PostReply;
 
 public interface GroupsService {
 
+	
+	int createGroup(Groups group);
+	int updateGroupImg(Groups group);
 	int insertPost(Post p);
 	int insertReply(PostReply r);
 	ArrayList<PostWithMem> selectPostList(String groupNo,PageInfo p);
@@ -37,5 +40,6 @@ public interface GroupsService {
 	int deleteGroup(String groupNo);
 	
 	Groups selectOneGroup(String groupNo);
+	
 
 }

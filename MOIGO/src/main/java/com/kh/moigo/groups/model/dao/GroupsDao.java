@@ -14,6 +14,10 @@ import com.kh.moigo.groups.model.vo.Groups;
 
 public interface GroupsDao {
 
+	int createGroup(Groups group);
+	
+	int updateGroupImg(Groups group);
+	
 	int insertPost(Post p);
 	
 	int selectPostCnt(String groupNo);
@@ -41,6 +45,10 @@ public interface GroupsDao {
 	Groups selectOneGroup(String groupNo);
 
 	int updateReply(PostReply postReply);
+
+	
+
+	
 
 
 }

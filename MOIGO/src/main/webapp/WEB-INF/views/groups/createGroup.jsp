@@ -57,6 +57,12 @@
 	position: relative;
 	top:30px;
 }
+#coverUploadInp{
+	display:none;
+}
+.addNewImgFileBtn{
+	cursor:pointer;
+}
 
 </style>
 
@@ -67,26 +73,27 @@
 <body>
 	
 	<c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp">
+	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp" method="post" enctype="multipart/form-data"">
 	<input type="hidden" name="memberNo" value="${m.memberNo}" />
 	<div class="container">
 		<div class="make_cover">
 			
-				<div class="form-group">
-					<label for="inpGrpName" id="labGroupName" class="labTitle">밴드 이름</label>
-					<div class="input-group input-group-lg" ㄱ>
-						<input type="text" id="inpGrpName" name="groupName" placeholder="밴드 이름 입력" class="form-control " required/>
-					</div>
+			<div class="form-group">
+				<label for="inpGrpName" id="labGroupName" class="labTitle">밴드 이름</label>
+				<div class="input-group input-group-lg">
+					<input type="text" id="inpGrpName" name="groupName" placeholder="밴드 이름 입력" class="form-control " required/>
 				</div>
+				<input type="file" class="profile_upload_inp" name="groupImage" id="coverUploadInp" accept="image/*" /> 
+			</div>
 			
 		</div>
-	</div><!--make band name container end  -->
+	</div><!--make band name container end-->
 	
 	<div class="container mt-4">
 		<div class="row cover_select">
 			<div class="col-5  m-auto">
 				<img class="mainCover img-thumbnail" src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" />
-				<input type="hidden" value="" name="groupPicture" id="inpCoverImg"/>
+				<input type="hidden" value="groupPicture" id="inpCoverImg"/>
 			</div>
 			<div class="col-7 cover_list ">
 				<div class="list_head d-flex flex-row ">
@@ -114,7 +121,7 @@
 				</div>
 		
 				<div class="row mt-4 cover_lists">
-					<a class="col-3 mb-4"><img src="../resources/images/createGroupDefaultPictures/addNewPicture.jpg" alt="" class="img-fluid"/></a>
+					<a class="col-3 mb-4 addNewImgFileBtn"><img src="../resources/images/createGroupDefaultPictures/addNewPicture.jpg" alt="" class="img-fluid"/></a>
 					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic01.jpg" alt="" class="img-fluid"/></a>
 					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic02.jpg" alt="" class="img-fluid"/></a>
 					<a class="col-3 mb-4 cover_set_0"><img src="../resources/images/createGroupDefaultPictures/defaultPic03.jpg" alt="" class="img-fluid"/></a>
@@ -144,16 +151,16 @@
 			<div class="col-12 constraints">
 				<div class=" d-flex flex-row  justify-content-around">
 					<div class="form-check form-check-inline ">
-					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="private" required>
+					  <input type="radio" id="openSetting1" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="PRIVATE" required>
 					  <label class="form-check-label" for="openSetting1"><strong>비공개 모임</strong><br><span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span></label>
 					</div>
 			
 					<div class="form-check form-check-inline ">
-					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="protedted" required>
+					  <input type="radio" id="openSetting2" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="PROTECTED" required>
 					  <label class="form-check-label" for="openSetting2"><strong>모임명 공개 모임</strong><br> <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수 있습니다.</span><br></label>
 					</div>
 					<div class="form-check form-check-inline">
-					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="public" required>
+					  <input type="radio" id="openSetting3" name="openSetting" class="form-check-input" style="position:relative;top:40px;" value="PUBLIC" required>
 					 	 <label class="form-check-label" for="openSetting3"><strong>공개 모임</strong><br><span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span></label>
 					</div>
 			
@@ -261,55 +268,88 @@
 					
 					<div class="row mt-3">
 						<div class="col-12">
-							<label class="bolder_text">가입신청 받기</label>
+							<label class="bolder_text">가입 신청</label>
 						</div>
 						<div class="col-12">
-							<div class="form-check">
-							  <input class="form-check-input" type="checkbox" id="allowSignup" value="N">
-							  <label class="form-check-label" for="allowSignup">※멤버 가입 시 리더가 승인하지 않습니다.초대 받은 멤버가 바로 가입할 수 있습니다.</label>
+							<div class="form-check form-check-inline">
+							  <input class="form-check-input" type="radio" id="allowSignupY" name="allowSignup" value="Y" checked>
+							   
+							  <label class="form-check-label" for="allowSignup">가입 신청 받기</label>
 							</div>
+							
+							<div class="form-check form-check-inline">
+							  <input class="form-check-input" type="radio" id="allowSignupN" name="allowSignup" value="N">
+							   
+							  <label class="form-check-label" for="allowSignup">자동 가입</label>
+							</div>
+							
+							
+							<span id="allowSignupDesc">※멤버 가입 시 리더의 승인이 필요합니다.</span>
+							
 						</div>
+						
 					</div>
 		  </div>
 		</div>
 	</div> <!--distric container end  -->
 	<div class="container mt-5">
 		
-		<label class="labTitle">관심 분야(선택)</label>
-		<button class="btn btn-primary btn-sm"  data-toggle="collapse" data-target="#interestCategory"  type="button" >관심분야 </button>
+		<label class="labTitle">그룹 분류(선택)</label>
+		<button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#interestCategory"  type="button" >펼치기 </button>
 
 		<div class="collapse" id="interestCategory">
 			  <div class="card card-body ">
-				<div class="d-flex">
-	        		 <div class="form-check form-check-inline">
-	                	<input type="checkbox"id="f1" class="form-check-input"name="interestBigCode" value="B001"> <label class="form-check-label" for="f1">라이프스타일</label>
-	                 </div>
-	                 
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f2" class="form-check-input"name="interestBigCode" value="B002"> <label class="form-check-label" for="f2">영어/외국어</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f3" class="form-check-input"name="interestBigCode" value="B003"> <label class="form-check-label" for="f3">컴퓨터</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f4" class="form-check-input"name="interestBigCode" value="B004"> <label class="form-check-label" for="f4">디자인/미술</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f5" class="form-check-input"name="interestBigCode" value="B005"> <label class="form-check-label" for="f5">취업</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f6" class="form-check-input"name="interestBigCode" value="B006"> <label class="form-check-label" for="f6">음악/공연</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f7" class="form-check-input"name="interestBigCode" value="B007"> <label class="form-check-label" for="f7">스포츠</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f8" class="form-check-input"name="interestBigCode" value="B008"> <label class="form-check-label" for="f8">뷰티/미용</label>
-	                 </div>
-	                 <div class="form-check form-check-inline">
-	                 	<input type="checkbox"id="f9" class="form-check-input"name="interestBigCode" value="B009"> <label class="form-check-label" for="f9">게임</label>
-	                 </div>
-		       	</div>      
+					<div class="row">
+						<div class="col-4">
+		        		 <div class="form-check form-check-inline">
+		                	<input type="radio"id="f1" class="form-check-input"name="interestBigCode" value="B001"> <label class="form-check-label" for="f1">라이프스타일</label>
+		                 </div>
+		                </div>
+		                <div class="col-4">
+		                 <div class="form-check form-check-inline ">
+		                 	<input type="radio"id="f2" class="form-check-input"name="interestBigCode" value="B002"> <label class="form-check-label" for="f2">영어/외국어</label>
+		                 </div>
+		                 </div>
+		                 <div class="col-4">
+		                 <div class="form-check form-check-inline ">
+		                 	<input type="radio"id="f3" class="form-check-input"name="interestBigCode" value="B003"> <label class="form-check-label" for="f3">컴퓨터</label>
+		                 </div>
+		                 </div>
+		            </div>
+		            <div class="row">
+		            	<div class="col-4">
+			                 <div class="form-check form-check-inline">
+			                 	<input type="radio"id="f4" class="form-check-input"name="interestBigCode" value="B004"> <label class="form-check-label" for="f4">디자인/미술</label>
+			                 </div>
+			                 </div>
+			                 <div class="col-4">
+			                 <div class="form-check form-check-inline">
+			                 	<input type="radio"id="f5" class="form-check-input"name="interestBigCode" value="B005"> <label class="form-check-label" for="f5">취업</label>
+			                 </div>
+			                 </div>
+			                 <div class="col-4">
+			                 <div class="form-check form-check-inline">
+			                 	<input type="radio"id="f6" class="form-check-input"name="interestBigCode" value="B006"> <label class="form-check-label" for="f6">음악/공연</label>
+			                 </div>
+		                 </div>
+		            </div>
+		            <div class="row">
+		           	 <div class="col-4">
+		                 <div class="form-check form-check-inline">
+		                 	<input type="radio"id="f7" class="form-check-input"name="interestBigCode" value="B007"> <label class="form-check-label" for="f7">스포츠</label>
+		                 </div>
+		             </div>
+		              <div class="col-4">
+		                 <div class="form-check form-check-inline">
+		                 	<input type="radio"id="f8" class="form-check-input"name="interestBigCode" value="B008"> <label class="form-check-label" for="f8">뷰티/미용</label>
+		                 </div>
+		                 </div>
+		                 <div class="col-4">
+		                 <div class="form-check form-check-inline">
+		                 	<input type="radio"id="f9" class="form-check-input"name="interestBigCode" value="B009"> <label class="form-check-label" for="f9">게임</label>
+		                 </div>
+		                 </div>
+			       	</div>
 		        </div>
 	   		</div>
 		</div>
@@ -394,33 +434,42 @@
 		}
 	}
 	
-	$('#allowSignup').change(function(){
+	$('#allowSignupY').change(function(){
 		
-		if($('#allowSignup').is(":checked")){
-			$('#allowSignup').siblings('label').text("※멤버 가입 시 리더의 승인이 필요합니다.")
-		}else{
-			$('#allowSignup').siblings('label').text("※멤버 가입 시 리더가 승인하지 않습니다.초대 받은 멤버가 바로 가입할 수 있습니다.")
+		if($('#allowSignupY').is(":checked")){
+			$('#allowSignupDesc').text("※멤버 가입 시 리더의 승인이 필요합니다.");
 		}
-		
+	});
+	$('#allowSignupN').change(function(){
+		if($('#allowSignupN').is(":checked")){
+			$('#allowSignupDesc').text("※멤버 가입 시 리더가 승인하지 않습니다.초대 받은 멤버가 바로 가입할 수 있습니다.")
+		}
 	});
 	
-	  $('input[name="interestBigCode"]').click(function(){
-          var sum =0;
-
-          $('input[name="interestBigCode"]').each(function(i){
-              if($('input[name="interestBigCode"]').eq(i).prop("checked")){
-                  sum++;
-              }
-          });
-
-          if(sum>3){
-              alert('3개까지 선택 가능합니다');
-              $(this).prop("checked",false);
-
-          }
-      });
 	
+	$('#coverUploadInp').change(function(){
+		
+		console.log("들어옴");
+		readURL(this);
+	});
 	
+	function readURL(input) {
+		 
+		
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+	 
+	        reader.onload = function (e) {
+	            $('.mainCover').attr('src', e.target.result);
+	        }
+	 
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+	
+	$('.addNewImgFileBtn').on("click",function(){
+		$('#coverUploadInp').click();
+	});
 </script>
 
 </html>

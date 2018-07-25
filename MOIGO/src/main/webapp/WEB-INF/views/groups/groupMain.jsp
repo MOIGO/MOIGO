@@ -75,7 +75,7 @@ background: #EDEFF2;
 
 
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
-            	<c:param name="groupNo" value="G007"/>
+            	<c:param name="groupNo" value="G001"/>
          	</c:import>
 
 			<div class="col-7">
