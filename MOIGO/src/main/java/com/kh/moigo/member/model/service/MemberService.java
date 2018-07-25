@@ -24,6 +24,8 @@ public interface MemberService {
 
 	List<MypageGroup> selectGroupList(String memberNo, String gType);
 
+	int insertFbMember(Member m);
+
 
 	
 }
