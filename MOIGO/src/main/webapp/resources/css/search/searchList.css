@@ -50,7 +50,7 @@ body {
 .inner-search {
    position: relative;
 }
-.filter-section select, .filter-section input {
+.filter-section select, .filter-section input:NOT(.regardlessArea) {
     color: #333;
     border-radius: 0;
     height: 38px;
@@ -83,6 +83,10 @@ body {
    padding-top: 15px;
    padding-bottom: 15px;
 }
+.checkbox-Wrap {
+    font-size: 20px;
+    color: black;
+}
 .map-btn {
    cursor: pointer;
    position: absolute;
@@ -107,7 +111,6 @@ body {
     background-color: #efefef;
     height: auto;
     min-height: 73.3%;
-    max-height: 550%;
     min-width: 100%;
     position: absolute;
 }
@@ -199,13 +202,10 @@ body {
     background-repeat: no-repeat;
     display: table;
 }
-.moigo-item .item-contents.align-left {
-    height: 100px;
-    overflow: inherit;
-}
 .moigo-item .item-contents {
     width: 100%;
-    height: 160px;
+    height: 110px;
+    overflow: inherit;
     background-color: #fff;
     border-top: 1px solid #efefef;
     position: relative;
@@ -214,22 +214,30 @@ body {
     color: #666;
     
 }
+span.maxMember {
+   color: skyblue;
+}
+.searchZero {
+	margin-left: 10px !important;
+    color: red;
+    font-size: 30px;
+}
 .location {
    margin-bottom: 15px;
 }
 .pageBar-wrap {
-	position: absolute;
+   position: absolute;
     bottom: -48px;
     width: 100%;
     background: #efefef;
     text-align: center;
 }
 ul.pageBar {
-	position: relative;
+   position: relative;
     display: inline-flex;
 }
 .page-Btn {
-	width: 50px;
+   width: 50px;
     height: 33px;
     text-align: center;
 }
@@ -279,6 +287,10 @@ ul.pageBar {
    }
 }
 @media screen and (max-width: 576px) {
+	.regardlessArea {
+		margin-left: 20px;
+		margin-top: 10px;
+	}
    .content-meeting > :NTH-CHILD(2) {
       margin-top: 30px;
    }
