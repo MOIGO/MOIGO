@@ -13,7 +13,6 @@
 		<result property="maxMember" column="MAX_MEMBER"/>
 		<result property="enrollDate" column="ENROLL_DATE"/>
 		<result property="interestBigCode" column="INTEREST_BIG_CODE"/>
-		<result property="interestSmallCode" column="INTEREST_SMALL_CODE"/>
 		<result property="allowSignup" column="ALLOW_SIGNUP"/>
 		<result property="minAge" column="MIN_AGE"/>
 		<result property="maxAge" column="MAX_AGE"/>
@@ -147,8 +146,35 @@
 	<select id="selectPostCnt" resultType="_int">
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
 	</select>
+	
+	<!--댓글 수정  -->
+	<update id="updateReply" parameterType="postReply">
+		UPDATE POST_REPLY
+		SET CONTENT=#{content}
+		WHERE REPLY_NO=#{replyNo}
+	</update>
+	
+	<!--그룹 등록  -->
+	<insert id="insertGroup" parameterType="groups">
+		
+		<selectKey keyProperty="groupNo" resultType="string" order="AFTER" >
+			SELECT 'G'||TO_CHAR(SEQ_GROUP.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO GROUPS VALUES('G'||TO_CHAR(SEQ_GROUP.NEXTVAL,'FM000'),
+		#{groupName},#{groupMsg},#{groupPicture},#{groupAddress},DEFAULT,DEFAULT,#{maxMember},DEFAULT,#{interestBigCode},
+		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
+	</insert>
+	
+	<update id="updateGroupCover" parameterType="groups">
+		UPDATE GROUPS
+		SET GROUP_PICTURE = #{groupPicture}
+		WHERE GROUP_NO=#{groupNo}
+	</update>
+
 
 	<!-- ===================================================================================================== 혜진 -->
+
 
 	<resultMap type="groupMember" id="groupMemberResultMap">
 		<result property="memberNo" column="MEMBER_NO"/>

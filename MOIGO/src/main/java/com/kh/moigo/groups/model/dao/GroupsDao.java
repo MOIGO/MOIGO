@@ -14,6 +14,10 @@ import com.kh.moigo.groups.model.vo.Groups;
 
 public interface GroupsDao {
 
+	int createGroup(Groups group);
+	
+	int updateGroupImg(Groups group);
+	
 	int insertPost(Post p);
 	
 	int selectPostCnt(String groupNo);
@@ -27,6 +31,8 @@ public interface GroupsDao {
 	int deleteReply(String replyNo);
 
 	int updatePost(Post post);
+  
+  int updateReply(PostReply postReply);
 
 //-------------------------------------------------------------------------------- 혜진
 	
@@ -41,4 +47,6 @@ public interface GroupsDao {
 	int updateGroupCondition(Groups group);
 
 	int deleteGroup(String groupNo);
+
 }
+

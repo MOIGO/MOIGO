@@ -24,6 +24,17 @@ public class GroupsDaoImpl implements GroupsDao {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 
+	@Override
+	public int createGroup(Groups group) {
+		
+		return sqlSession.insert("groups.insertGroup", group);
+	}
+
+	@Override
+	public int updateGroupImg(Groups group) {
+		
+		return sqlSession.update("groups.updateGroupCover",group);
+	}
 	
 	@Override
 	public int insertPost(Post p) {
@@ -80,6 +91,14 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updatePost",post);
 	}
 
+
+	@Override
+	public int updateReply(PostReply postReply) {
+		
+		return sqlSession.update("groups.updateReply",postReply);
+	}
+
+
 	//------------------------------------------------------------------------- 혜진
 	
 	@Override
@@ -111,5 +130,6 @@ public class GroupsDaoImpl implements GroupsDao {
 	public int updateGroupCondition(Groups group) {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
-	
+
 }
+

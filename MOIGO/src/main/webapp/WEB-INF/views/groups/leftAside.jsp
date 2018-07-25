@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+
 <html>
 <head>
 <%-- 
@@ -31,7 +32,7 @@
 </head>
 
 <body>
-	
+	  
 <div class="col-3">
  	<div class="card">
 		<img class="card-img-top" src="http://via.placeholder.com/300x300"
@@ -46,20 +47,20 @@
 			<div class="row mt-3">
 				<p class="card-text groupDesc">테스트 그룹입니다.</p>
 			</div>
-			<div class="row mt-3 justify-content-start">
-				<div class="col-4 ">
+			<div class="row mt-3 ">
+				<div class="col-6 test">
 					멤버: <span class="group_memNum">6명</span>
 				</div>
-				<div class="col-5">
+				<div class="col-6 text-left test">
 					리더 : <span class="group_leader ">홍길동</span>
 				</div>
 			</div>
 			
-			<div class="row mt-3 justify-content-start">
-				<div class="col-4 ">
+			<div class="row mt-3 ">
+				<div class="col-6 ">
 					멤버: <span class="group_memNum">6명</span>
 				</div>
-				<div class="col-5">
+				<div class="col-6 text-left test">
 					<i class="fas fa-plus-circle"></i> 그룹 초대
 				</div>
 			</div>
@@ -93,8 +94,34 @@
 
 <script>
 
+
+
+function setGroupDesc(groupNo){
+	$.ajax({
+		url:'${root}/groups/getOneGroup.gp',
+		data:{groupNo:groupNo},
+		dataType:"json",
+		success:function(data){
+			var  group = data.group;
+			
+			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
+				$('.card-img-top').attr("src",group.groupPicture);
+			}else{
+				$('.card-img-top').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
+			}
+			$('.groupName').text(group.groupName);
+			$('.groupDesc').text(group.groupMsg);
+			
+		},error:function(dat){
+			
+		}
+	});
+}
+
 $(function() {
 
+	setGroupDesc('${param.groupNo}');
+	
 	/* 각 메뉴로 이동하는 메소드 */
 	$(".group_list").on("click", function() {
 		var groupMenu = $(this).text();
