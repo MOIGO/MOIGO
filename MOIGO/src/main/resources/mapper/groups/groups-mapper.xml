@@ -7,12 +7,12 @@
 		<result property="groupName" column="GROUP_NAME"/>
 		<result property="groupMsg" column="GROUP_MSG"/>
 		<result property="groupPicture" column="GROUP_PICTURE"/>
+		<result property="groupAddress" column="GROUP_ADDRESS"/>
 		<result property="groupGradeCode" column="GROUP_GRADE_CODE"/>
 		<result property="groupStateCode" column="GROUP_STATE_CODE"/>
 		<result property="maxMember" column="MAX_MEMBER"/>
 		<result property="enrollDate" column="ENROLL_DATE"/>
 		<result property="interestBigCode" column="INTEREST_BIG_CODE"/>
-		<result property="interestSmallCode" column="INTEREST_SMALL_CODE"/>
 		<result property="allowSignup" column="ALLOW_SIGNUP"/>
 		<result property="minAge" column="MIN_AGE"/>
 		<result property="maxAge" column="MAX_AGE"/>
@@ -146,8 +146,60 @@
 	<select id="selectPostCnt" resultType="_int">
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
 	</select>
+	
+	<!--댓글 수정  -->
+	<update id="updateReply" parameterType="postReply">
+		UPDATE POST_REPLY
+		SET CONTENT=#{content}
+		WHERE REPLY_NO=#{replyNo}
+	</update>
+	
+	<!--그룹 등록  -->
+	<insert id="insertGroup" parameterType="groups">
+		
+		<selectKey keyProperty="groupNo" resultType="string" order="AFTER" >
+			SELECT 'G'||TO_CHAR(SEQ_GROUP.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO GROUPS VALUES('G'||TO_CHAR(SEQ_GROUP.NEXTVAL,'FM000'),
+		#{groupName},#{groupMsg},#{groupPicture},#{groupAddress},DEFAULT,DEFAULT,#{maxMember},DEFAULT,#{interestBigCode},
+		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
+	</insert>
+	
+	<!--그룹 커버 사진 바꾸기  -->
+	<update id="updateGroupCover" parameterType="groups">
+		UPDATE GROUPS
+		SET GROUP_PICTURE = #{groupPicture}
+		WHERE GROUP_NO=#{groupNo}
+	</update>
+	
+	<!--그룹의 멤버 수 가져오기  -->
+	<select id="selectGrpMemNum" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO =#{groupNo}
+	</select>
+	
+	<!--그룹의 리더 정보 가져오기  -->
+	<select id="selectGroupLeader" resultMap="groupMemberResultMap">
+		SELECT GROUP_MEMBER.*,MEMBER_NAME 
+		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
+		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
+	</select>
+	
+	<!--이 사람이 그룹의 멤버인지 확인하기  -->
+	<select id="checkIsGroupMem" parameterType="groupMember" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
+	</select>
+	
+	<!--그룹 가입하기 -->
+	<insert id="insertGroupMember" parameterType="groupMember">
+		INSERT INTO GROUP_MEMBER VALUES(#{memberNo},#{groupNo},#{profileImg},#{profileThumb},#{profileMsg},#{memberGradeCode})
+	</insert>
+
 
 	<!-- ===================================================================================================== 혜진 -->
+
 
 	<resultMap type="groupMember" id="groupMemberResultMap">
 		<result property="memberNo" column="MEMBER_NO"/>
@@ -191,8 +243,18 @@
 		WHERE GROUP_NO = #{groupNo}
 	</select>
 	
+	<update id="updateGroupCondition">
+		UPDATE GROUPS
+		SET GROUP_GENDER = #{groupGender},
+		MAX_AGE = #{maxAge},
+		MIN_AGE = #{minAge},
+		MAX_MEMBER = #{maxMember},
+		GROUP_ADDRESS = #{groupAddress},
+		ALLOW_SIGNUP = #{allowSignup}
+		WHERE GROUP_NO = #{groupNo}
+	</update>
+	
 	<!-- <delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
 	</delete> -->
 </mapper>
-	

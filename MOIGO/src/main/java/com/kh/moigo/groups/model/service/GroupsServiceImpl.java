@@ -23,6 +23,18 @@ public class GroupsServiceImpl implements GroupsService {
 	@Autowired
 	private GroupsDao groupDao;
 
+	
+	@Override
+	public int createGroup(Groups group) {
+		
+		return groupDao.createGroup(group);
+	}
+	
+	@Override
+	public int updateGroupImg(Groups group) {
+		
+		return groupDao.updateGroupImg(group);
+	}
 
 	@Override
 	public int insertPost(Post p) {
@@ -68,16 +80,45 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.updatePost(post);
 	}
-	
+  
+	@Override
+	public int updateReply(PostReply postReply) {	
+		return groupDao.updateReply(postReply);
+	}
+  
+  	@Override
+	public int selectGrpMemNum(String groupNo) {
+		
+		return groupDao.selectGrpMemNum(groupNo);
+	}
+  	
+  	@Override
+	public GroupMember selectGroupLeader(String groupNo) {
+		
+		return groupDao.selectGroupLeader(groupNo);
+	}
+  	
+  	@Override
+	public int checkIsGroupMem(GroupMember gm) {
+		return groupDao.checkIsGroupMem(gm);
+		
+	}
+  	
+  	@Override
+	public int insertGroupMember(GroupMember gm) {
+		return groupDao.insertGroupMember(gm);
+		
+	}
+  
 	//--------------------------------------------------------------------- 혜진
 	
 	@Override
-	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
+	public List<GroupMember> selectGroupMemberList(String groupNo) {
 		return groupDao.selectGroupMemberList(groupNo);
 	}
 	
 	@Override
-	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+	public List<GroupMember> searchGroupMemberList(Map<String, String> searchMap) {
 		return groupDao.searchGroupMemberList(searchMap);
 	}
 
@@ -95,5 +136,18 @@ public class GroupsServiceImpl implements GroupsService {
 	public Groups selectOneGroup(String groupNo) {
 		return groupDao.selectOneGroup(groupNo);
 	}
+
+	@Override
+	public int updateGroupCondition(Groups group) {
+		return groupDao.updateGroupCondition(group);
+	}
+
+	
+
+	
+
+	
+
+	
 
 }

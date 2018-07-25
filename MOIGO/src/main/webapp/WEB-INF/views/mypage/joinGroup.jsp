@@ -45,8 +45,8 @@
                 <c:if test="${! empty list}">
 	                <c:forEach items="${list }" var="group">
 	                  <div class="groupList_item col-xl-3 col-sm-6 col-12 " >
-	                      <div class="item_content">
-	                      <input type="hidden" value="${group.groupNo }" name="groupNo">
+	                      <div class="item_content" id="${group.groupNo }">
+	                      <%-- <input type="hidden" value="${group.groupNo }" name="groupNo"> --%>
 	                          <div class="header_bg" >
 	                          		<img alt="" src="${pageContext.request.contextPath}/resources/images/moigo.png" style="width:100%; height:100%;">
 	                          </div>
@@ -66,5 +66,14 @@
     </div>
 
     <br><br><br><br><br><br>
+    <script >
+    $(function(){
+    	   $(".item_content").on("click",function(){
+    	      var groupNo = $(this).attr("id");
+    	      alert("그룹번호: " +groupNo);
+    	      /* location.href = "${pageContext.request.contextPath}/board/boardView.do?no="+boardNo; */
+    	   });
+    	});
+    </script>
 </body>
 </html>

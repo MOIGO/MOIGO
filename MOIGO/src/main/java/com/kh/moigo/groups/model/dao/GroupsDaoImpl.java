@@ -24,6 +24,17 @@ public class GroupsDaoImpl implements GroupsDao {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 
+	@Override
+	public int createGroup(Groups group) {
+		
+		return sqlSession.insert("groups.insertGroup", group);
+	}
+
+	@Override
+	public int updateGroupImg(Groups group) {
+		
+		return sqlSession.update("groups.updateGroupCover",group);
+	}
 	
 	@Override
 	public int insertPost(Post p) {
@@ -80,15 +91,48 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updatePost",post);
 	}
 
+
+	@Override
+	public int updateReply(PostReply postReply) {
+		
+		return sqlSession.update("groups.updateReply",postReply);
+	}
+	
+	@Override
+	public int selectGrpMemNum(String groupNo) {
+		
+		return sqlSession.selectOne("groups.selectGrpMemNum",groupNo);
+	}
+	
+	@Override
+	public GroupMember selectGroupLeader(String groupNo) {
+		
+		return sqlSession.selectOne("groups.selectGroupLeader",groupNo);
+	}
+	
+	@Override
+	public int checkIsGroupMem(GroupMember gm) {
+		
+		return sqlSession.selectOne("groups.checkIsGroupMem",gm);
+	}
+	
+	@Override
+	public int insertGroupMember(GroupMember gm) {
+		
+		return sqlSession.insert("groups.insertGroupMember",gm);
+	}
+
+
+
 	//------------------------------------------------------------------------- 혜진
 	
 	@Override
-	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
+	public List<GroupMember> selectGroupMemberList(String groupNo) {
 		return sqlSession.selectList("groups.selectGroupMemberList", groupNo);
 	}
 	
 	@Override
-	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+	public List<GroupMember> searchGroupMemberList(Map<String, String> searchMap) {
 		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
 	}
 
@@ -106,5 +150,18 @@ public class GroupsDaoImpl implements GroupsDao {
 	public Groups selectOneGroup(String groupNo) {
 		return sqlSession.selectOne("groups.selectOneGroup", groupNo);
 	}
+
+	@Override
+	public int updateGroupCondition(Groups group) {
+		return sqlSession.update("groups.updateGroupCondition", group);
+	}
+
+
 	
+
+	
+
+	
+
 }
+

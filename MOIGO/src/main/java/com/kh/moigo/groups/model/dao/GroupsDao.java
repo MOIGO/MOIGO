@@ -14,6 +14,10 @@ import com.kh.moigo.groups.model.vo.Groups;
 
 public interface GroupsDao {
 
+	int createGroup(Groups group);
+	
+	int updateGroupImg(Groups group);
+	
 	int insertPost(Post p);
 	
 	int selectPostCnt(String groupNo);
@@ -27,17 +31,36 @@ public interface GroupsDao {
 	int deleteReply(String replyNo);
 
 	int updatePost(Post post);
+  
+	int updateReply(PostReply postReply);
+  
+	int selectGrpMemNum(String groupNo);
+	
+	GroupMember selectGroupLeader(String groupNo);
+	
+	int checkIsGroupMem(GroupMember gm);
 
+	int insertGroupMember(GroupMember gm);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
-	List<Map<String, String>> selectGroupMemberList(String groupNo);
+	List<GroupMember> selectGroupMemberList(String groupNo);
 	
-	List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap);
+	List<GroupMember> searchGroupMemberList(Map<String, String> searchMap);
 
 	int updateGroupMember(GroupMember groupMember);
 
-	int deleteGroup(String groupNo);
-
 	Groups selectOneGroup(String groupNo);
 
+	int updateGroupCondition(Groups group);
+
+	int deleteGroup(String groupNo);
+
+	
+
+	
+
+	
+
 }
+

@@ -26,10 +26,14 @@
                 </div>
 
                 <div class="modal-body login_modal_body">
-                    
-                    <div class="btn_facebook">   <i class="fab fa-facebook-f" style="margin-right:20px;"></i>페이스북으로 시작하기</div>
-                    <hr style="margin-top:8px; margin-bottom:15px;">
-
+                     <div class="btn_facebook" onclick="fbLoginAction();" >   <i class="fab fa-facebook-f" style="margin-right:20px;" ></i>페이스북으로 시작하기</div>  
+					 <!-- <div class="fb-login-button" data-width="338" data-max-rows="1" data-size="large" data-button-type="login_with" 
+					data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false" ></div> --> 
+   					<div id="result">
+					</div>
+					
+					
+   					<hr style="margin-top:8px; margin-bottom:15px;">
                     <form  id="loginForm">
 	                    <input type="hidden" name="pathName" value="" id="pathName">
 	                    
@@ -106,7 +110,125 @@
         </div>
     </div>
     <!-- 비밀번호 찾기 모달 끝 -->
-  
+     
+
+<script>
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id))
+			return;
+		js = d.createElement(s);
+		js.id = id;
+		js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.8&appId=APPID";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId : '471092039964779',
+			cookie : true,
+			xfbml : true,
+			version : 'v3.0'
+		});
+
+
+		FB.getLoginStatus(function(response) {
+			console.log('statusChangeCallback');
+			console.log(response);
+			/* statusChangeCallback(response); */
+		}); 
+		
+		
+	};
+
+	
+	
+	
+
+	function fbLoginAction() {
+
+		FB.getLoginStatus(function(response) {
+			console.log('statusChangeCallback');
+			console.log(response);
+			/* statusChangeCallback(response); */
+			
+			if (response.status === 'connected') {	
+				console.log('연결 ㅎ');		
+			} else if (response.status === 'not_authorized') {
+				console.log('페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.')	;				
+			} else {
+				FB.login(function(response) {
+					var femail;
+					var fname;
+					var fbirthday;
+					var fgender;
+					
+					var fbname;
+					var accessToken = response.authResponse.accessToken;
+					FB.api('/me?fields=id,name,age_range,birthday,gender,email',function(response) {
+								var fb_data = jQuery.parseJSON(JSON.stringify(response));
+								console.log(fb_data );
+									femail=response.email;
+									fname=response.name;
+									fbirthday=response.birthday;
+									fgender=response.gender;
+									
+									$.ajax({
+										url:"${pageContext.request.contextPath}/member/fbLogin.do",
+										data : {
+											email : femail,
+											name : fname,
+											birthday : fbirthday,
+											gender :fgender
+										},
+										type:"get",
+										success : function(data){
+											if(data.result == -1){
+												alert('페이스북 회원 추가');
+												location.href="${pageContext.request.contextPath}/";
+											}else if (data.result==0){
+												alert('페이스북으로 로그인');
+												location.href="${pageContext.request.contextPath}/";
+											}
+										},
+										error : function(data){
+											console.log("실패");
+										}
+									});
+					}); 
+				}, {scope : 'public_profile, email, user_birthday,user_gender'});  
+			}
+		});
+		
+		
+		
+	}
+
+	/* 
+	function statusChangeCallback(response) {
+		if (response.status === 'connected') {	
+			console.log('연결 ㅎ'+this.femail+ this.fname+ this.fbirthday+ this.fgender);		
+			//
+		} else if (response.status === 'not_authorized') {
+			console.log('페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.')	;				
+		} else {
+			console.log('페이스북에 로그인이 되어있지 않아서, 앱에 로그인 되어있는지 불명확하다.');
+		}
+	}
+	 */
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
 
     
     <script>
@@ -173,5 +295,7 @@
 			}
     	});
     </script>
+    
+ 
 </body>
 </html>
