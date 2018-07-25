@@ -111,7 +111,7 @@ body {
 
 .usercon:hover{
 	cursor: pointer;
-	color: skyblue;
+	color: aqua;
 }
 
 #dropDown{
@@ -132,6 +132,30 @@ body {
 	margin-top: 10px;
 	color: white;
 }
+
+/* effect 18 */
+
+.hovername{
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.hovername:after{
+	margin-top: 10px;
+  content: '' attr(data-hover-label) '';
+  width: 0;
+  overflow: hidden;
+  transition: width .2s ease-out;  
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.hovername:hover:after, .hovername:focus:after{
+  width: 100%; 
+  color: aqua;
 </style>
 
 </head>
@@ -171,7 +195,18 @@ body {
 					&nbsp;&nbsp;
 			</c:when>
 			<c:otherwise>
-				<p id="memName">[${m.memberName}]님이 접속하셨습니다.</p>
+				<span class="hovername" data-hover-label="[${m.memberName}]님이 접속하셨습니다."><p id="memName">[${m.memberName}]님이 접속하셨습니다.</p></span>
+				<!-- <ul class="menu">
+      <li class="menu__item">
+        <a href="#0" class="menu__link hover18" data-hover-label="Home"><span class="menu__label hover18__label">Home</span></a>
+      </li> 
+      <li class="menu__item">
+        <a href="#0" class="menu__link hover18" data-hover-label="About"><span class="menu__label hover18__label">About</span></a>
+      </li> 
+      <li class="menu__item">
+        <a href="#0" class="menu__link hover18" data-hover-label="Contacts"><span class="menu__label hover18__label">Contacts</span></a>
+      </li> 
+    </ul> -->
 			</c:otherwise>
 			</c:choose>
 			<c:if test ="${m ne null}">
