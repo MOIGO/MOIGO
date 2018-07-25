@@ -270,7 +270,7 @@ public class GroupController {
 		int result;
 		result = groupService.updateGroupCondition(group);
 		
-		return "groups/groupSetting";
+		return "redirect:/groups/groupSetting.gp?groupNo=" + group.getGroupNo();
 	}
 	
 	@ResponseBody

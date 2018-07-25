@@ -405,11 +405,11 @@ input:-webkit-autofill:active {
                      	<span class="setting_tit">가입 신청 받기</span>
                      	<span class="float_right gm_join_wrap">
 	                     	<span class="gm_join_inner form-check form-check-inline">
-							  <input class="form-check-input gm_join_inp" type="radio" name="allowSignup" value="Y" checked="checked">
+							  <input class="form-check-input gm_join_inp" type="radio" name="allowSignup" id="joinY" value="Y" checked="checked">
 							  <label class="form-check-label condition_font_size gm_join_lbl">예</label>
 							</span>
 							<span class="gm_join_inner form-check form-check-inline">
-							  <input class="form-check-input gm_join_inp" type="radio" name="allowSignup" value="N">
+							  <input class="form-check-input gm_join_inp" type="radio" name="allowSignup" id="joinN" value="N">
 							  <label class="form-check-label condition_font_size gm_join_lbl">아니오</label>
 							</span>
                         </span>
@@ -512,6 +512,70 @@ function goSettingBack() {
    };
 }
 
+var regions = "${group.groupAddress}".split(" ");
+var regionMedium = regions[1];
+var regionSmall = regions[2];
+
+function mediumRegion(lRegion) {
+	
+	if(regions[1] == "수원시" || regions[1] == "성남시")
+		regionMedium = regions[1] + " " +regions[2];
+	
+	$.ajax({
+        url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIGG_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+              +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion +'&size=100',
+          type:'GET',
+          dataType:'jsonp',
+          async: false,
+          success:function(data){
+           var features =  data.response.result.featureCollection.features;
+           var regionMediums = [];
+          
+           for(var i=0 ; i < features.length; i++){
+        	  var selected = "";
+              regionMediums[i] = features[i].properties.sig_kor_nm;
+              if(regionMedium == regionMediums[i])
+	            	selected = "selected";
+              $("#conditionRegionMedium").append("<option value='"+regionMediums[i] + "' " + selected + ">"+regionMediums[i]+"</option>");
+           }
+             
+       },error:function(data){
+            console.log("에러입니다"); 
+       }
+ 	});
+}
+
+function smallRegion(lmRegion){
+	
+	if(regions[1] == "수원시" || regions[1] == "성남시")
+		regionSmall = regions[3];
+	
+	$.ajax({
+        url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
+              +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lmRegion +'&size=100',
+          type:'GET',
+          dataType:'jsonp',
+          async: false,
+          success:function(data){
+
+           var features =  data.response.result.featureCollection.features;
+           var regionSmalls = [];
+          
+           for(var i=0 ; i < features.length; i++){
+        	  var selected = "";
+              regionSmalls[i] = features[i].properties.emd_kor_nm;
+              if(regionSmall == regionSmalls[i])
+	            	selected = "selected";
+              $("#conditionRegionSmall").append("<option value="+regionSmalls[i]+ " " + selected + ">"+regionSmalls[i]+"</option>");
+           }
+             
+       },error:function(data){
+            console.log("에러입니다"); 
+       }
+  });
+	
+}
+
 function searchGroupMember() {
 	
 }
@@ -519,6 +583,7 @@ function searchGroupMember() {
 $(function() {
 
    console.log("${group}");
+   console.log(regions);
    
    /* 모임 관리 */
    $("#groupUpdateBtn").on("click", function() {
@@ -527,7 +592,7 @@ $(function() {
    
    /* 가입 조건 관리 */
    $("#groupConditionBtn").on("click", function() {
-      goSettingBack();
+	  goSettingBack();
       $(".group_tit").text("가입 조건 관리");
       $("#settingList").css("display", "none");
       $("#conditionList").css("display", "block");
@@ -538,23 +603,16 @@ $(function() {
       var minAgeRange = "${nowYear-100}";
       if("${group.maxAge}" != -1)
     	  minAgeRange = "${group.maxAge}";
-      
       for(var i="${nowYear}"; i >= minAgeRange; i--){
     	  $("#conditionMinAge").append("<option value="+ i +">" + i + "년생</option>");
       }
-      
       $("#conditionMinAge").val("${group.minAge}").prop("selected", true);
-      $("#maxMemberInp").val("${group.maxMember}");
-      if($(".gm_join_inp").is("${group.allowSignup}"))
-    	  $(this).prop("checked", true);
-      
+     
       if("${group.groupAddress}" == ""){
          $("#regionNone").prop("checked", true);
          $(".condition_region").prop("disabled", true);         
           $(".condition_region").val("regionNone").prop("selected", true);
       }
-      
-      var regions = "${group.groupAddress}".split(" ");
       
       // 행정구역 list를 가져오기 위한 ajax 부분
       $.ajax({
@@ -570,16 +628,45 @@ $(function() {
            
             for(var i=0 ; i < features.length; i++){
 	            var selected = "";
-	            if(regions[0].length > 0)
+                regionLarges[i] = features[i].properties.ctp_kor_nm;
+	            if(regions[0] == regionLarges[i])
 	            	selected = "selected";
-               regionLarges[i] = features[i].properties.ctp_kor_nm;
                $("#conditionRegionLarge").append("<option value="+regionLarges[i] + " "+ selected +">"+regionLarges[i]+"</option>");
             }
+            
+            if("${group.groupAddress}" != ""){
+            	if(regions[1] != null)
+             	  	 mediumRegion(regions[0]);   	  
+                else{
+   	          	 mediumRegion(regions[0]);   	  
+   	           	 $("#conditionRegionMedium").val("전체").prop("selected", true);
+   	           	 $("#conditionRegionSmall").prop("disabled", true);  
+   	             $("#conditionRegionSmall").val("regionNone").prop("selected", true);  
+                }
+               
+               if(regions[1] != "수원시" && regions[1] != "성남시"){
+            	   smallRegion(regions[0] + " " + regions[1]);
+               		if(regions[2] == null)
+	               		$("#conditionRegionSmall").val("전체").prop("selected", true); 
+               }
+               else{
+               		smallRegion(regions[0] + " " + regions[1] + " " + regions[2]);            	   
+            	  	if(regions[3] == null)
+               			$("#conditionRegionSmall").val("전체").prop("selected", true);   
+               }
+            }
               
-              },error:function(data){
+           },error:function(data){
                  console.log("에러입니다"); 
            }
         });
+      
+      $("#maxMemberInp").val("${group.maxMember}");
+      if("${group.allowSignup}" == 'Y')
+    	  $("#joinY").prop("checked", true);
+      else
+    	  $("#joinN").prop("checked", true);
+      
    });
    
    // 최대 나이를 선택했을 때 최소 나이의 범위를 지정해주는 이벤트
@@ -596,59 +683,23 @@ $(function() {
          lRegion = $(this).val();
          $("#conditionRegionMedium").children().not(":lt(2)").remove();
          $("#conditionRegionSmall").children().not(":lt(2)").remove();
-         if(lRegion != 'regionNone')
-            $.ajax({
-                  url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIGG_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
-                        +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion +'&size=100',
-                    type:'GET',
-                    dataType:'jsonp',
-                    async: false,
-                    success:function(data){
-                    
-                     var features =  data.response.result.featureCollection.features;
-                     var regionMediums = [];
-                    
-                     for(var i=0 ; i < features.length; i++){
-                        regionMediums[i] = features[i].properties.sig_kor_nm;
-                        $("#conditionRegionMedium").append("<option value="+regionMediums[i]+">"+regionMediums[i]+"</option>");
-                     }
-                       
-                 },error:function(data){
-                      console.log("에러입니다"); 
-                 }
-            });
+         if(lRegion != 'regionNone' && lRegion != "세종특별자치시")
+        	 mediumRegion(lRegion);
       });
       
       $("#conditionRegionMedium").change(function() {
-         
+    	  
+         lRegion = $("#conditionRegionLarge").val();
          var mRegion = $(this).val();
          $("#conditionRegionSmall").children().not(":lt(2)").remove();
+         $("#conditionRegionSmall").val("regionNone").prop("selected", true);
          if(mRegion == '전체'){
             $("#conditionRegionSmall").prop("disabled", true);  
             $("#conditionRegionSmall").val("regionNone").prop("selected", true);         
          }
          else if(mRegion != 'regionNone'){
-            $("#conditionRegionSmall").prop("disabled", false);  
-            $.ajax({
-                  url:'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=D2A9AD49-5624-3245-BB98-EEBB6C10B050'
-                        +'&domain=http://127.0.0.1:8080&attrFilter=full_nm:like:'+ lRegion + " " + mRegion +'&size=100',
-                    type:'GET',
-                    dataType:'jsonp',
-                    async: false,
-                    success:function(data){
-   
-                     var features =  data.response.result.featureCollection.features;
-                     var regionSmalls = [];
-                    
-                     for(var i=0 ; i < features.length; i++){
-                        regionSmalls[i] = features[i].properties.emd_kor_nm;
-                        $("#conditionRegionSmall").append("<option value="+regionSmalls[i]+">"+regionSmalls[i]+"</option>");
-                     }
-                       
-                 },error:function(data){
-                      console.log("에러입니다"); 
-                 }
-            });
+            $("#conditionRegionSmall").prop("disabled", false); 
+            smallRegion(lRegion + " " + mRegion);
          }
          else
             $("#conditionRegionSmall").prop("disabled", false);  
@@ -667,7 +718,6 @@ $(function() {
    // 최대 멤버수는 숫자만 입력하고 인원수를 50명 이상은 알려주는 이벤트
    $('#maxMemberInp').keyup(function(event){
       $(this).val($(this).val().replace(/[^0-9]/g,''));
-      
       if($(this).val() > 50){
             alert("최대 멤버 수는 50명입니다.");
             $(this).val("");         
@@ -676,9 +726,11 @@ $(function() {
    
    // 가입 조건 확인 버튼을 눌렀을 때 발생하는 이벤트
    $("#conditionConfirmBtn").click(function() {
-      
-      // 지역무관 체크박스의 체크여부 판별
-      if(!$("#regionNone").is(":checked")){
+
+      if($('#maxMemberInp').val() == 0)
+    	  alert("최대 멤버 수는 최소 1명 이상입니다.");
+	  // 지역무관 체크박스의 체크여부 판별
+      else if(!$("#regionNone").is(":checked")){
          
          var rLarge = $("#conditionRegionLarge").val();
          var rMedium = $("#conditionRegionMedium").val();
@@ -715,6 +767,7 @@ $(function() {
       $(".group_tit").text("멤버 설정 관리");
       $("#settingList").css("display", "none");
       $("#memberSearchWrap").css("display", "block");
+      $(".gs_member_ul").children().remove();
       $.ajax({
 		url : "${root}/groups/goGroupMemberSetting.gp",
 		data : {groupNo : "${param.groupNo}"},

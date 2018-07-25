@@ -463,7 +463,7 @@ input:-webkit-autofill:active {
 			$('#profileModal').modal({
 				backdrop : 'static',
 				keyboard : false
-			});
+			}).css("margin-left", "20px");
 			
 			countColorChange();
 		});

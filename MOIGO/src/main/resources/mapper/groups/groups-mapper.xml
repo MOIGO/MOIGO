@@ -7,6 +7,7 @@
 		<result property="groupName" column="GROUP_NAME"/>
 		<result property="groupMsg" column="GROUP_MSG"/>
 		<result property="groupPicture" column="GROUP_PICTURE"/>
+		<result property="groupAddress" column="GROUP_ADDRESS"/>
 		<result property="groupGradeCode" column="GROUP_GRADE_CODE"/>
 		<result property="groupStateCode" column="GROUP_STATE_CODE"/>
 		<result property="maxMember" column="MAX_MEMBER"/>
@@ -196,6 +197,7 @@
 		SET GROUP_GENDER = #{groupGender},
 		MAX_AGE = #{maxAge},
 		MIN_AGE = #{minAge},
+		MAX_MEMBER = #{maxMember},
 		GROUP_ADDRESS = #{groupAddress},
 		ALLOW_SIGNUP = #{allowSignup}
 		WHERE GROUP_NO = #{groupNo}
