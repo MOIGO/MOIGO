@@ -195,18 +195,8 @@ body {
 					&nbsp;&nbsp;
 			</c:when>
 			<c:otherwise>
-				<span class="hovername" data-hover-label="[${m.memberName}]님이 접속하셨습니다."><p id="memName">[${m.memberName}]님이 접속하셨습니다.</p></span>
-				<!-- <ul class="menu">
-      <li class="menu__item">
-        <a href="#0" class="menu__link hover18" data-hover-label="Home"><span class="menu__label hover18__label">Home</span></a>
-      </li> 
-      <li class="menu__item">
-        <a href="#0" class="menu__link hover18" data-hover-label="About"><span class="menu__label hover18__label">About</span></a>
-      </li> 
-      <li class="menu__item">
-        <a href="#0" class="menu__link hover18" data-hover-label="Contacts"><span class="menu__label hover18__label">Contacts</span></a>
-      </li> 
-    </ul> -->
+				<span class="hovername" data-hover-label="[${m.memberName}]님이 접속하셨습니다.">
+				<p id="memName">[${m.memberName}]님이 접속하셨습니다.</p></span>
 			</c:otherwise>
 			</c:choose>
 			<c:if test ="${m ne null}">
