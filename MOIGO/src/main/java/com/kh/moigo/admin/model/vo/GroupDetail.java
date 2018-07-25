@@ -13,10 +13,79 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 		
 	private int memNum;
 	private String masterEmail;
+	private int gGradeCount;
+	private String groupGradeName;
+	private String bigInterest;
+	private int ginterestCount;
+	
+	
+	
+	public String getGroupGradeName() {
+		return groupGradeName;
+	}
+
+
+
+
+
+	public void setGroupGradeName(String groupGradeName) {
+		this.groupGradeName = groupGradeName;
+	}
+
+
+
 
 
 	public GroupDetail() {
 
+	}
+
+
+
+
+
+	public int getgGradeCount() {
+		return gGradeCount;
+	}
+
+
+
+
+
+	public void setgGradeCount(int gGradeCount) {
+		this.gGradeCount = gGradeCount;
+	}
+
+
+
+
+
+	public String getBigInterest() {
+		return bigInterest;
+	}
+
+
+
+
+
+	public void setBigInterest(String bigInterest) {
+		this.bigInterest = bigInterest;
+	}
+
+
+
+
+
+	public int getGinterestCount() {
+		return ginterestCount;
+	}
+
+
+
+
+
+	public void setGinterestCount(int ginterestCount) {
+		this.ginterestCount = ginterestCount;
 	}
 
 
@@ -45,17 +114,11 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 
 
 
-
-
 	@Override
 	public String toString() {
 		return "GroupDetail [memNum=" + memNum + ", masterEmail=" + masterEmail + ", toString()=" + super.toString()
 				+ "]";
 	}
-
-
-
-
 
 
 	public String getMasterEmail() {

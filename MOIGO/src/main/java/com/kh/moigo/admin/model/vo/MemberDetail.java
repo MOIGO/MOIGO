@@ -23,6 +23,7 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	private int genderCount;
 	private String metrocity;
 	private int addressCount;
+	private String bigInterest;
 	private int minterestCount;
 
 	//private List<Map<String, Object>> memPerGroup;
@@ -32,6 +33,12 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	
 	public int getMinterestCount() {
 		return minterestCount;
+	}
+	public String getBigInterest() {
+		return bigInterest;
+	}
+	public void setBigInterest(String bigInterest) {
+		this.bigInterest = bigInterest;
 	}
 	public void setMinterestCount(int minterestCount) {
 		this.minterestCount = minterestCount;

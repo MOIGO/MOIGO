@@ -80,16 +80,26 @@ public class AdminController {
 	
 	@RequestMapping("adminAnalytics.ad")
 	public String adminAnalytics(Model model){
+		
+		//member
 		ArrayList genderCount = as.countGender();
 		List<Map<String,Object>> addressCount = as.countAddress();
 		List<Map<String,Object>> minterestCount = as.countMinterest();
 
+		//group
+		List<Map<String,Object>> gGradeCount = as.gGradeCount();
+		List<Map<String,Object>> ginterestCount = as.countGinterest();
+
+		
 		
 		System.out.println("genderCount"+genderCount);
 		model.addAttribute("addressCount",addressCount);
 		model.addAttribute("genderCount",genderCount);
 		model.addAttribute("minterestCount",minterestCount);
-
+		
+		
+		model.addAttribute("gGradeCount",gGradeCount);
+		model.addAttribute("ginterestCount",ginterestCount);
 		model.addAttribute("pageName","Analytics");
 		return "admin/analystics";
 	

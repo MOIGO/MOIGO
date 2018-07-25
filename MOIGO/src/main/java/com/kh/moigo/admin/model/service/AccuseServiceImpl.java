@@ -122,6 +122,18 @@ public class AccuseServiceImpl implements AccuseService {
 		return ad.countMinterest();
 	}
 
+	@Override
+	public List<Map<String, Object>> gGradeCount() {
+		// TODO Auto-generated method stub
+		return ad.gGradeCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> countGinterest() {
+		// TODO Auto-generated method stub
+		return ad.countGinterest();
+	}
+
 
 
 

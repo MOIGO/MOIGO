@@ -45,7 +45,12 @@ tr:hover {
 
 	<c:import url="common/adminSidebar.jsp"></c:import>
 
-	<div class="row"></div>
+	<div class="row">
+	
+	
+	
+	
+	</div>
 	<br>
 
 	<div class="row">
@@ -215,7 +220,7 @@ $(document).ready(function(){
 								'<tr>'+
 		            			'<td>관심사</td>' +
 								'<td>'+data[0].interestBigCode+'</td>' +
-								'<td>'+data[0].interestSmallCode+'</td>' +
+								'<td></td>' +
 								' </tr>'+
 								
 							

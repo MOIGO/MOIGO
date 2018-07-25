@@ -125,6 +125,18 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("memberDetail.minterestCount");
 	}
+
+	@Override
+	public List<Map<String, Object>> gGradeCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.gGradeCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countGinterest() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.ginterestCount");
+	}
 	
 	
 	

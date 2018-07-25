@@ -33,5 +33,7 @@ public interface AccuseDao {
 	ArrayList countGender();
 	List<Map<String, Object>> countAddress();
 	List<Map<String, Object>> countMinterest();
+	List<Map<String, Object>> gGradeCount();
+	List<Map<String, Object>> countGinterest();
 
 }

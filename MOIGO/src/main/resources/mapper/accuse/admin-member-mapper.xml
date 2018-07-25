@@ -19,6 +19,7 @@
 		<result property="metrocity" column="METROCITY"/>
 		<result property="addressCount" column="ADDRESS_RATE"/>
 		<result property="minterestCount" column="MINTEREST"/>
+		<result property="bigInterest" column="INTEREST_BIG_NAME"/>
 		
 	</resultMap>
 
@@ -43,8 +44,10 @@
 	</select>
 	
 	<select id="minterestCount" resultMap="memberDetailResultMap" >
-		SELECT interest_big_code,COUNT(*) MINTEREST FROM MEMBER_INTEREST 
-		GROUP BY interest_big_code ORDER BY MINTEREST DESC
+		SELECT INTEREST_BIG_NAME, COUNT(*) MINTEREST 
+		FROM MEMBER_INTEREST 
+		JOIN INTEREST_BIG USING(interest_big_code)
+		GROUP BY INTEREST_BIG_NAME ORDER BY MINTEREST DESC
 	</select>
 
 
