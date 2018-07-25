@@ -47,12 +47,14 @@ public class GroupController {
 		return "groups/groupMain";
 	}
 	
+	//그룹 만드는 페이지 넘어가기
 	@RequestMapping("/groups/createGroup.gp")
 	public String createGroup(){
 		
 		return "groups/createGroup";
 	}
 	
+	//그룹 만들고 커버파일 있으면 저장하기
 	@RequestMapping(value="/groups/createGroupEnd.gp", method=RequestMethod.POST)
 	public String createGroupEnd(Groups group,@RequestParam MultipartFile groupImage,HttpServletRequest request)
 	{
@@ -63,48 +65,49 @@ public class GroupController {
 		
 		int result =  groupService.createGroup(group);
 		
-		try{		
-			
-			// 프로필 이미지를 저장할 경로
-			String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/GroupCovers/" + group.getGroupNo());
-			
-			// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
-			File dir = new File(saveDir);
-			
-			if(!dir.exists())
-				dir.mkdirs();
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-			
-			groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
-			
-		
-			// 2. upload한 file을 rename, 경로 저장하기
-			String fileName = groupImage.getOriginalFilename();
-			String ext = fileName.substring(fileName.lastIndexOf(".")+1);
-			
-			groupPicture = groupPicture + "." + ext;
-			
-			groupImage.transferTo(new File(saveDir +"/"+ groupPicture));
+		if(groupImage!=null){
+			try{		
+				
+				// 프로필 이미지를 저장할 경로
+				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
+				
+				// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+				File dir = new File(saveDir);
+				
+				if(!dir.exists())
+					dir.mkdirs();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+				groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
 				
 			
+				// 2. upload한 file을 rename, 경로 저장하기
+				String fileName = groupImage.getOriginalFilename();
+				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+				
+				groupPicture = groupPicture + "." + ext;
+				
+				groupImage.transferTo(new File(saveDir +"/"+ groupPicture));
+					
+				
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			// 3. groupMember에 담아서 update하기
+			group.setGroupPicture(groupPicture);
+			
+			result = groupService.updateGroupImg(group);
 		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		// 3. groupMember에 담아서 update하기
-		group.setGroupPicture(groupPicture);
-		
-		result = groupService.updateGroupImg(group);
-		
 		
 		return "redirect:/groups/groupMember.gp?groupNo="+ group.getGroupNo();
 		
 		
 	}
 	
-	//그룹 메인 들어갈때 글 가져오기
+	//그룹 메인에 글 가져오기
 	@RequestMapping("/groups/getPostList.gp")
 	@ResponseBody
 	public Map<String,Object> getPostList(@RequestParam String groupNo, @RequestParam int currPage,Model model){
@@ -118,6 +121,18 @@ public class GroupController {
 		
 		map.put("posts", list);
 		map.put("pageInfo", p);
+		
+		return map;
+	}
+	
+	//그룹 하나의 정보 가져오기
+	@RequestMapping("/groups/getOneGroup.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneGroup(@RequestParam String groupNo){
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("group", groupService.selectOneGroup(groupNo));
 		
 		return map;
 	}
