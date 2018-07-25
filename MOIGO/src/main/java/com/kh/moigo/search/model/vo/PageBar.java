@@ -35,13 +35,13 @@ public class PageBar {
          int i = 1;
          if(cPage == pageNo ){
             pageBar += "<li class='page-item active'>";
-            pageBar += "<a class='page-link pageNo page-Btn' value='"+i+"'>"+pageNo+"</a>";
+            pageBar += "<a class='page-link pageNo page-Btn'>"+pageNo+"</a>";
             pageBar += "</li>";
          } 
          else {
             i++;
             pageBar += "<li class='page-item'>";
-            pageBar += "<a class='page-link pageNo page-Btn' value='"+i+"' href='javascript:fn_paging("+pageNo+")'>"+pageNo+"</a>";
+            pageBar += "<a class='page-link pageNo page-Btn' href='javascript:fn_paging("+pageNo+")'>"+pageNo+"</a>";
             pageBar += "</li>";
          }
          pageNo++;
@@ -64,9 +64,6 @@ public class PageBar {
       //2.스크립트 태그 작성
       //fn_paging함수
       pageBar += "<script>";
-      pageBar += "$('.next').click(function() { $('#cPage').val($('#cPage').val() + 1); });";
-      pageBar += "$('.prev').click(function() { $('#cPage').val($('#cPage').val() - 1); });";
-      pageBar += "$('.pageNo').click(function() { $('#cPage').val($('.pageNo').val()); });";
       pageBar += "function fn_paging(cPage,numPerPage){";
 	  pageBar += "location.href='"+url+"?cPage='+cPage+'&keyword='+$('#keyword').val()+'&place='+$('#place').val()+'&category='+$('#category').val()+'&sort='+$('#sort').val()";
 	  pageBar += "}";

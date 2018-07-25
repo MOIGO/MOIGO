@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=9">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=1">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -22,7 +22,6 @@
                      <div class="row">
                         <div class="col-sm-6">
                            <div class="inner-search">
-                              <input type="hidden" id="cPage" name="cPage" value="${cPage }"/>
                               <input type="text" placeholder="모임검색" autocomplete="off" onkeyup="if(event.keyCode==13) submit();" name="keyword" id="keyword" class="form-control" value="${keyword }" /> 
                               <span class="search-btn"> <img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();">
                               </span>
@@ -44,6 +43,7 @@
                               <span class="search-btn"> <img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();"></span>
                            </div>
                         </div>
+                        <span class="checkbox-Wrap"><label><input class="regardlessArea" name="regardlessArea" type="checkbox" value="지역무관" onclick="submit();"/>&nbsp;지역무관</label></span>
                      </div>
                   </div>
                </div>
@@ -75,11 +75,14 @@
                <div class="col-sm-4 count-sort" id="listCount">검색결과 ${listCount }개</div>
                <div class="col-sm-4 count-sort" id="sort-inner">
                   <select class="sort" name="sort" id="sort" onchange="submit()">
-                     <option value="ENROLL_DATE">최신순</option>
-                     <option value="멤버순">멤버순</option>
+                     <option value="newSort">최신순</option>
+                     <option value="memberSort">멤버순</option>
                   </select>
                </div>
             </div>
+            <c:if test="${listCount == 0 }">
+            	<div class="row searchZero col-sm-12">검색된 모임이 없습니다.</div>
+            </c:if>
             <c:forEach items="${list}" var="group">
                <div class="float-left col-lg-4 col-md-6 col-sm-12 col-xs-12 moigo-item-wrap">
                   <div class="content-context">
@@ -96,28 +99,28 @@
                         <div class="item-contents align-left">
                            <div class="location">${group.groupAddress }</div>
                            <span class="icon-container float-right"> 
-                              <span class="memberIcon"> 0<img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span> 
-                              <span class="commentIcon"> 0<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
+                              <span class="memberCount"> 15/<span class="maxMember">${group.maxMember }</span><img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span> 
+                              <span class="commentCount">0<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
                            </span>
                         </div>
                      </div>
                   </div>
                </div>
             </c:forEach>
-	          <% 
-		          int listCount = Integer.parseInt(String.valueOf(request.getAttribute("listCount")));
-		          int limit = Integer.parseInt(String.valueOf(request.getAttribute("limit")));
-		          
-		          //파라미터 cPage가 null이거나 "" 일 때에는 기본값 1로 세팅함.  
-		          String cPageTemp = request.getParameter("cPage");
-		          int cPage = 1;
-		          try{
-		             cPage = Integer.parseInt(cPageTemp);
-		          } catch(NumberFormatException e){
-		             
-		          }
-	          %>
-        	  <%= com.kh.moigo.search.model.vo.PageBar.getPageBar(listCount, cPage, limit, "selectList.do") %>
+             <% 
+                int listCount = Integer.parseInt(String.valueOf(request.getAttribute("listCount")));
+                int limit = Integer.parseInt(String.valueOf(request.getAttribute("limit")));
+                
+                //파라미터 cPage가 null이거나 "" 일 때에는 기본값 1로 세팅함.  
+                String cPageTemp = request.getParameter("cPage");
+                int cPage = 1;
+                try{
+                   cPage = Integer.parseInt(cPageTemp);
+                } catch(NumberFormatException e){
+                   
+                }
+             %>
+             <%= com.kh.moigo.search.model.vo.PageBar.getPageBar(listCount, cPage, limit, "selectList.do") %>
          </div>
       </div>
    </form>
@@ -126,9 +129,11 @@
    <script>
       var keyword = $('#keyword').val();
       var place = $('#place').val();
-      var category = $('#category').val();
+      var regardlessArea = $('.regardlessArea[value="${regardlessArea}"]').val();
+      var category = $('#category').find('option[value="${category}"]').val();
       var sort = $('#sort').val();
-
+      var groupNo = $('.groupNo').val();
+      
       $('.map-btn').click(function() {
          $('#map').toggle();
          $('#left-wrap').toggleClass('widthHandler');
@@ -136,6 +141,7 @@
       
       $('#sort').find('option[value="${sort}"]').prop('selected', true);
       $('#category').find('option[value="${category}"]').prop('selected', true);
+      $('.regardlessArea[value="${regardlessArea}"]').prop('checked', true);
       
       var map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
          center : new daum.maps.LatLng(35.180624570993196,
@@ -143,8 +149,6 @@
          level : 13
       // 지도의 확대 레벨
       });
-
-      /* console.log('지도의 중심 좌표는 ' + map.getCenter().toString() +' 입니다.'); */
 
       // 마커 클러스터러를 생성합니다
       // 마커 클러스터러를 생성할 때 disableClickZoom 값을 true로 지정하지 않은 경우
@@ -164,6 +168,7 @@
          data : {
             keyword : keyword,
             place : place,
+            regardlessArea : regardlessArea,
             category : category
          },
          success : function(listData) {
