@@ -359,6 +359,23 @@ public class GroupController {
 		return map;
 	}
 	
+	@ResponseBody
+	@RequestMapping("/groups/searchGroupMemberSetting.gp")
+	public Map<String, Object> searchGroupMemberSetting(@RequestParam String groupNo, @RequestParam String searchName){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, String> searchMap = new HashMap<String, String>();
+		searchMap.put("groupNo", groupNo);
+		searchMap.put("searchName", searchName);
+		
+		List<GroupMember> searchGroupMemberList = groupService.searchGroupMemberList(searchMap);
+		
+		map.put("groupMember", searchGroupMemberList);
+		
+		return map;
+	}
+	
 	@RequestMapping("/groups/deleteGroup.gp")
 	public String deleteGroup(@RequestParam String groupNo, Model model){
 		

@@ -292,32 +292,34 @@ input:-webkit-autofill:active {
 					<!-- 멤버 리스트 부분 -->
 					<ul class="list-group">
 							<c:forEach var="groupMember" items="${resultMemberList}">
-							<li class="list-group-item group_member_list_one">
-								<div class="list_wrap">
-									<c:if test="${groupMember.profileImg eq null and groupMember.profileThumb eq null}">
-										<img id="listImg" class="rounded-circle" src="${root}/resources/images/common/img_profile.png">
-									</c:if>
-									<c:if test="${groupMember.profileThumb ne null}">
-										<img id="listImg" class="rounded-circle" src="${root}/resources/images/profiles/${groupMember.groupNo}/${groupMember.profileThumb}">
-									</c:if>
-									<span class="list_inner" <c:if test="${groupMember.profileMsg eq null}">style="padding-top: 13px;"</c:if>>
-										<span class="list_txt" id="listName">${groupMember.memberName}</span>
-										<c:if test="${groupMember.profileMsg ne null}">
-											<span class="list_txt" id="listMsg">${groupMember.profileMsg}</span>
+							<c:if test="${groupMember.memberGradeCode > 0}">
+								<li class="list-group-item group_member_list_one">
+									<div class="list_wrap">
+										<c:if test="${groupMember.profileImg eq null and groupMember.profileThumb eq null}">
+											<img id="listImg" class="rounded-circle" src="${root}/resources/images/common/img_profile.png">
 										</c:if>
-									</span> 
-									<c:if test="${groupMember.memberGradeCode eq 3}">
-										<span class="badge badge-primary" id="groupLeader">모임장</span>
-									</c:if>
-									<c:if test="${groupMember.memberGradeCode eq 2}">
-										<span class="badge badge-success" id="groupLeader">운영진</span>
-									</c:if>
-									<c:if test="${groupMember.memberNo == m.memberNo}">
-										<c:set var="loginGroupMember" value="${groupMember}"/>
-										<ion-icon id="profileBtn" name="create" data-toggle="modal"></ion-icon>
-									</c:if>
-								</div>
-							</li>
+										<c:if test="${groupMember.profileThumb ne null}">
+											<img id="listImg" class="rounded-circle" src="${root}/resources/images/profiles/${groupMember.groupNo}/${groupMember.profileThumb}">
+										</c:if>
+										<span class="list_inner" <c:if test="${groupMember.profileMsg eq null}">style="padding-top: 13px;"</c:if>>
+											<span class="list_txt" id="listName">${groupMember.memberName}</span>
+											<c:if test="${groupMember.profileMsg ne null}">
+												<span class="list_txt" id="listMsg">${groupMember.profileMsg}</span>
+											</c:if>
+										</span> 
+										<c:if test="${groupMember.memberGradeCode eq 3}">
+											<span class="badge badge-primary" id="groupLeader">모임장</span>
+										</c:if>
+										<c:if test="${groupMember.memberGradeCode eq 2}">
+											<span class="badge badge-success" id="groupLeader">운영진</span>
+										</c:if>
+										<c:if test="${groupMember.memberNo == m.memberNo}">
+											<c:set var="loginGroupMember" value="${groupMember}"/>
+											<ion-icon id="profileBtn" name="create" data-toggle="modal"></ion-icon>
+										</c:if>
+									</div>
+								</li>
+							</c:if>
 						</c:forEach>
 					</ul>
 

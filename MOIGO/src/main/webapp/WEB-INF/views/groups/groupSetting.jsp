@@ -197,6 +197,13 @@ input:-webkit-autofill:active {
       font-size: 24px; 
    }
    
+   .search_result_none {
+	padding-top : 135px;
+	height : 300px;
+	text-align: center;
+	color: gray;
+}
+   
    .gs_member_a {
 		color : black;
    }
@@ -212,6 +219,30 @@ input:-webkit-autofill:active {
 .list-group-item {
 	padding-left: 13px;
 	padding-right: 13px;
+}
+
+.gs_check_inp {
+	/* display : none; */
+}
+
+.gs_check_btn {
+	float : left;
+	margin-top : 18px;
+	margin-right : 7px;
+	font-size: 1.2em;
+}
+.gs_unchecked {
+	color : darkgray;
+}
+.gs_unchecked:hover {
+	color : #0078ff;
+	cursor: pointer;
+}
+.gs_checked {
+	color : #0078ff;
+}
+.gs_checked:hover {
+	cursor : pointer;
 }
 
 #listImg {
@@ -442,16 +473,17 @@ input:-webkit-autofill:active {
                    <a class="nav-item nav-link active gs_member_a" id="groupMemberGrade" data-toggle="tab" href="#groupMemberSettingContent" role="tab">멤버등급</a>
                    <a class="nav-item nav-link gs_member_a" id="leaderDelegation" data-toggle="tab" href="#groupMemberSettingContent" role="tab">리더위임</a>
                    <a class="nav-item nav-link gs_member_a" id="groupMemberWithdraw" data-toggle="tab" href="#groupMemberSettingContent" role="tab">멤버탈퇴</a>
-                   <a class="nav-item nav-link gs_member_a" id="groupJoinApprove" data-toggle="tab" href="#groupMemberSettingContent" role="tab">가입승인</a>
+                   <c:if test="${group.allowSignup == 'Y'}">
+	                   <a class="nav-item nav-link gs_member_a" id="groupJoinApprove" data-toggle="tab" href="#groupMemberSettingContent" role="tab">가입승인</a>
+                   </c:if>
                  </div>
                </nav>
                <div class="tab-content" id="groupMemberSettingContent">
                  <div class="tab-pane fade show active gs_member_content" id="groupMemberSettingContent" role="tabpanel">
-                 	
-                 	<!-- 멤버 리스트 부분 -->
-					<ul class="list-group gs_member_ul">
-				
-					</ul>
+                 	<form id="groupMemberSettingForm" action="">
+						<ul class="list-group gs_member_ul">
+						</ul>
+                 	</form>
                  </div>
                </div>
                   
@@ -576,8 +608,104 @@ function smallRegion(lmRegion){
 	
 }
 
+var gmSettingId = "groupMemberGrade";
+
+function getGroupMember(gmSettingId){
+	console.log(gmSettingId);
+	$(".gs_member_ul").children().remove();
+    $.ajax({
+		url : "${root}/groups/goGroupMemberSetting.gp",
+		data : {groupNo : "${param.groupNo}"},
+		dataType : "json",
+		async : false,
+		success : function(data) {
+			var groupMember = data.groupMember;
+			createGroupMemberList(groupMember, gmSettingId);
+		},
+		error : function() {
+			console.log("멤버설정 멤버리스트 가져오기 오류");
+		}
+	});
+}
+
+function createGroupMemberList(groupMember, gmSettingId){
+	
+	for(var i=0; i < groupMember.length; i++){
+		var append = "<li class='list-group-item'><div class='list_wrap'>";
+		
+		var inp = "<input type='checkbox' class='gs_check_inp'>";
+		var checkBtn = "<span class='far fa-check-circle gs_check_btn gs_unchecked'></span>";
+		
+		if(gmSettingId == "groupMemberWithdraw"){
+			inp = "<input type='radio' name='memberNo' class='gs_check_inp' value='" + groupMember[i].memberNo+ "'>";
+			checkBtn = "<span class='far fa-dot-circle gs_check_btn gs_unchecked'></span>";
+		}
+		
+		var profileImg = "<img id='listImg' class='rounded-circle' ";
+		if(groupMember[i].profileThumb == null)
+			profileImg += "src='${root}/resources/images/common/img_profile.png'>";
+		else
+			profileImg += "src='${root}/resources/images/profiles/${group.groupNo}/"+ groupMember[i].profileThumb +"'>";
+		
+		var groupMemberName = "<span class='list_txt' id='listName'>"+ groupMember[i].memberName +"</span>";
+		
+		var memberGrade = "";
+		if(groupMember[i].memberGradeCode == 3)
+			memberGrade = "<span class='badge badge-primary' id='groupLeader'>모임장</span>";
+		else if(groupMember[i].memberGradeCode == 2)
+			memberGrade = "<span class='badge badge-success' id='groupLeader'>운영진</span>";
+			
+		append += inp + checkBtn + profileImg + groupMemberName + memberGrade + "</div></li>";
+		
+		if(gmSettingId != "groupJoinApprove"){
+			if(groupMember[i].memberGradeCode > 0)
+				$(".gs_member_ul").append(append);
+		}else{
+			if(groupMember[i].memberGradeCode == 0)
+				$(".gs_member_ul").append(append);
+		}
+			
+	}
+	
+	$(".gs_check_btn").each(function() {
+		$(this).on("click", function() {
+			$(this).prev().click();
+			if($(this).prev().is(":checked")){
+				$(this).removeClass('far').addClass('fas');
+				$(this).removeClass('gs_unchecked').addClass('gs_checked');
+			}
+			else{
+				$(this).removeClass('fas').addClass('far');
+				$(this).removeClass('gs_checked').addClass('gs_unchecked');
+			}
+		});
+	});
+	
+}
+
 function searchGroupMember() {
 	
+	$(".gs_member_ul").children().remove();
+	$.ajax({
+		url : "${root}/groups/searchGroupMemberSetting.gp",
+		data : {
+			groupNo : "${group.groupNo}",
+			searchName : $("#gmSearchInp").val()
+		},
+		dataType : "json",
+		async : false,
+		success : function(data) {
+			var groupMember = data.groupMember;
+		
+			if(groupMember.length != 0)
+				createGroupMemberList(groupMember, gmSettingId);
+			else
+				$(".gs_member_ul").append("<div class='card search_result_none'>검색 결과가 없습니다.</div>");
+		},
+		error : function() {
+			console.log("멤버설정 멤버리스트 가져오기 오류");
+		}
+	});
 }
 
 $(function() {
@@ -608,10 +736,10 @@ $(function() {
       }
       $("#conditionMinAge").val("${group.minAge}").prop("selected", true);
      
-      if("${group.groupAddress}" == ""){
+      if("${group.groupAddress}" == "지역무관"){
          $("#regionNone").prop("checked", true);
          $(".condition_region").prop("disabled", true);         
-          $(".condition_region").val("regionNone").prop("selected", true);
+         $(".condition_region").val("regionNone").prop("selected", true);
       }
       
       // 행정구역 list를 가져오기 위한 ajax 부분
@@ -634,7 +762,7 @@ $(function() {
                $("#conditionRegionLarge").append("<option value="+regionLarges[i] + " "+ selected +">"+regionLarges[i]+"</option>");
             }
             
-            if("${group.groupAddress}" != ""){
+            if("${group.groupAddress}" != "지역무관"){
             	if(regions[1] != null)
              	  	 mediumRegion(regions[0]);   	  
                 else{
@@ -757,6 +885,7 @@ $(function() {
          }
       }
       else{
+    	 $("#regionFull").val("지역무관");
          $("#updateGroupConditionForm").submit();
       }
    });
@@ -767,41 +896,7 @@ $(function() {
       $(".group_tit").text("멤버 설정 관리");
       $("#settingList").css("display", "none");
       $("#memberSearchWrap").css("display", "block");
-      $(".gs_member_ul").children().remove();
-      $.ajax({
-		url : "${root}/groups/goGroupMemberSetting.gp",
-		data : {groupNo : "${param.groupNo}"},
-		dataType : "json",
-		success : function(data) {
-			var groupMember = data.groupMember;
-			
-			for(var i=0; i < groupMember.length; i++){
-				var append = "<li class='list-group-item'><div class='list_wrap'>";
-				
-				var profileImg = "<img id='listImg' class='rounded-circle' ";
-				if(groupMember[i].profileThumb == null)
-					profileImg += "src='${root}/resources/images/common/img_profile.png'>";
-				else
-					profileImg += "src='${root}/resources/images/profiles/${group.groupNo}/"+ groupMember[i].profileThumb +"'>";
-				
-				var groupMemberName = "<span class='list_txt' id='listName'>"+ groupMember[i].memberName +"</span>";
-				
-				var memberGrade = "";
-				if(groupMember[i].memberGradeCode == 3)
-					memberGrade = "<span class='badge badge-primary' id='groupLeader'>모임장</span>";
-				else if(groupMember[i].memberGradeCode == 2)
-					memberGrade = "<span class='badge badge-success' id='groupLeader'>운영진</span>";
-					
-				append += profileImg + groupMemberName + memberGrade + "</div></li>";
-				
-				$(".gs_member_ul").append(append);
-			}
-			
-		},
-		error : function() {
-			console.log("멤버설정 멤버리스트 가져오기 오류");
-		}
-	});
+      getGroupMember(gmSettingId);
    });
    
    /* 검색부분의 border 부분을 수정 */
@@ -820,7 +915,9 @@ $(function() {
 	});
 	
 	$(".gs_member_a").click(function() {
-		alert($(this).attr("id"));
+		gmSettingId = $(this).attr("id");
+		$("#gmSearchInp").val("");
+		getGroupMember(gmSettingId);
 	});
    
    /* 모임 삭제 */

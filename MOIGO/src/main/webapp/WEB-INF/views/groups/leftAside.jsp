@@ -103,7 +103,6 @@ function setGroupDesc(groupNo){
 		dataType:"json",
 		success:function(data){
 			var  group = data.group;
-			
 			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
 				$('.card-img-top').attr("src",group.groupPicture);
 			}else{
