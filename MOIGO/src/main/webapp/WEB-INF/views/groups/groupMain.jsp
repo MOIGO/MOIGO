@@ -131,7 +131,14 @@ background: #EDEFF2;
 
 $(function(){
 	setPostList(1);
+	setMemberOnlyMenu();
 });
+
+function setMemberOnlyMenu(){
+	
+	
+	
+}
 
 function deleteAllPost(){
 	$('#postDiv').children().remove();

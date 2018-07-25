@@ -97,6 +97,31 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.update("groups.updateReply",postReply);
 	}
+	
+	@Override
+	public int selectGrpMemNum(String groupNo) {
+		
+		return sqlSession.selectOne("groups.selectGrpMemNum",groupNo);
+	}
+	
+	@Override
+	public GroupMember selectGroupLeader(String groupNo) {
+		
+		return sqlSession.selectOne("groups.selectGroupLeader",groupNo);
+	}
+	
+	@Override
+	public int checkIsGroupMem(GroupMember gm) {
+		
+		return sqlSession.selectOne("groups.checkIsGroupMem",gm);
+	}
+	
+	@Override
+	public int insertGroupMember(GroupMember gm) {
+		
+		return sqlSession.insert("groups.insertGroupMember",gm);
+	}
+
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -130,6 +155,13 @@ public class GroupsDaoImpl implements GroupsDao {
 	public int updateGroupCondition(Groups group) {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
+
+
+	
+
+	
+
+	
 
 }
 
