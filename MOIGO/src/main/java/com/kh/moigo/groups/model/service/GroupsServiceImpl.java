@@ -80,16 +80,21 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.updatePost(post);
 	}
+  
+  @Override
+	public int updateReply(PostReply postReply) {	
+		return groupDao.updateReply(postReply);
+	}
 	
 	//--------------------------------------------------------------------- 혜진
 	
 	@Override
-	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
+	public List<GroupMember> selectGroupMemberList(String groupNo) {
 		return groupDao.selectGroupMemberList(groupNo);
 	}
 	
 	@Override
-	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+	public List<GroupMember> searchGroupMemberList(Map<String, String> searchMap) {
 		return groupDao.searchGroupMemberList(searchMap);
 	}
 
@@ -109,13 +114,8 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 	@Override
-	public int updateReply(PostReply postReply) {
-		
-		return groupDao.updateReply(postReply);
+	public int updateGroupCondition(Groups group) {
+		return groupDao.updateGroupCondition(group);
 	}
-
-	
-
-	
 
 }

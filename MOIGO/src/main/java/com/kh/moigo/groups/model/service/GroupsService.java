@@ -25,21 +25,23 @@ public interface GroupsService {
 	int selectPostCnt(String groupNo);
 	int deletePost(String postNo);
 	int deleteReply(String replyNo);
+	int updatePost(Post post);
 
 	int updatePost(Post post);
 	int updateReply(PostReply postReply);
 
 	//--------------------------------------------------------------------------- 혜진
 	
-	List<Map<String, String>> selectGroupMemberList(String groupNo);
-	
-	List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap);
-  
+	List<GroupMember> selectGroupMemberList(String groupNo);
+
+	List<GroupMember> searchGroupMemberList(Map<String, String> searchMap);
+
 	int updateGroupMember(GroupMember groupMember);
 
-	int deleteGroup(String groupNo);
-	
 	Groups selectOneGroup(String groupNo);
 	
+	int updateGroupCondition(Groups group);
+
+	int deleteGroup(String groupNo);
 
 }

@@ -24,7 +24,6 @@ public class GroupsDaoImpl implements GroupsDao {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 
-	
 	@Override
 	public int createGroup(Groups group) {
 		
@@ -103,12 +102,12 @@ public class GroupsDaoImpl implements GroupsDao {
 	//------------------------------------------------------------------------- 혜진
 	
 	@Override
-	public List<Map<String, String>> selectGroupMemberList(String groupNo) {
+	public List<GroupMember> selectGroupMemberList(String groupNo) {
 		return sqlSession.selectList("groups.selectGroupMemberList", groupNo);
 	}
 	
 	@Override
-	public List<Map<String, String>> searchGroupMemberList(Map<String, String> searchMap) {
+	public List<GroupMember> searchGroupMemberList(Map<String, String> searchMap) {
 		return sqlSession.selectList("groups.searchGroupMemberList", searchMap);
 	}
 
@@ -127,6 +126,10 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.selectOne("groups.selectOneGroup", groupNo);
 	}
 
-	
+	@Override
+	public int updateGroupCondition(Groups group) {
+		return sqlSession.update("groups.updateGroupCondition", group);
+	}
 
 }
+

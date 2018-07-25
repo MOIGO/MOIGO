@@ -146,7 +146,6 @@
 	<select id="selectPostCnt" resultType="_int">
 		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
 	</select>
-
 	
 	<!--댓글 수정  -->
 	<update id="updateReply" parameterType="postReply">
@@ -173,7 +172,6 @@
 		WHERE GROUP_NO=#{groupNo}
 	</update>
 
-	<!-- 혜진 -->
 
 	<!-- ===================================================================================================== 혜진 -->
 
@@ -220,8 +218,18 @@
 		WHERE GROUP_NO = #{groupNo}
 	</select>
 	
+	<update id="updateGroupCondition">
+		UPDATE GROUPS
+		SET GROUP_GENDER = #{groupGender},
+		MAX_AGE = #{maxAge},
+		MIN_AGE = #{minAge},
+		MAX_MEMBER = #{maxMember},
+		GROUP_ADDRESS = #{groupAddress},
+		ALLOW_SIGNUP = #{allowSignup}
+		WHERE GROUP_NO = #{groupNo}
+	</update>
+	
 	<!-- <delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
 	</delete> -->
 </mapper>
-	
