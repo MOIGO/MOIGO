@@ -32,8 +32,16 @@ public interface GroupsDao {
 
 	int updatePost(Post post);
   
-  int updateReply(PostReply postReply);
+	int updateReply(PostReply postReply);
+  
+	int selectGrpMemNum(String groupNo);
+	
+	GroupMember selectGroupLeader(String groupNo);
+	
+	int checkIsGroupMem(GroupMember gm);
 
+	int insertGroupMember(GroupMember gm);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	List<GroupMember> selectGroupMemberList(String groupNo);
@@ -47,6 +55,12 @@ public interface GroupsDao {
 	int updateGroupCondition(Groups group);
 
 	int deleteGroup(String groupNo);
+
+	
+
+	
+
+	
 
 }
 

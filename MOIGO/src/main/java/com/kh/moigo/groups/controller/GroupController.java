@@ -122,23 +122,45 @@ public class GroupController {
 		map.put("posts", list);
 		map.put("pageInfo", p);
 		
+		
 		return map;
 	}
 	
-	//그룹 하나의 정보 가져오기
-	@RequestMapping("/groups/getOneGroup.gp")
+	@RequestMapping("/groups/joinGroup.gp")
+	public String joinGroup(@RequestParam String groupNo ,@RequestParam String memberNo,Model model){
+	
+		
+		if((groupService.selectOneGroup(groupNo)).getAllowSignup()=="Y"){
+			groupService.insertGroupMember(new GroupMember(memberNo,groupNo,0));
+		}else{
+			groupService.insertGroupMember(new GroupMember(memberNo,groupNo,1));
+		}
+		
+	
+		
+		model.addAttribute("groupNo",groupNo);
+		
+		return "groups/groupMain";
+				
+	}
+	
+	//LeftAside 데이터 세팅하기
+	@RequestMapping("/groups/selectOneGroup.gp")
 	@ResponseBody
 	public Map<String,Object> selectOneGroup(@RequestParam String groupNo){
 		
 		Map<String,Object> map = new HashMap<String,Object>();
 		
 		map.put("group", groupService.selectOneGroup(groupNo));
+		map.put("grpMemNum", groupService.selectGrpMemNum(groupNo));
+		map.put("grpLeader", groupService.selectGroupLeader(groupNo));
 		
 		return map;
 	}
 	
+	//그룹 메인으로 이동
 	@RequestMapping("/groups/setGroupMain.gp")
-	public String setGroupMain(@RequestParam String groupNo,Model model){
+	public String setGroupMain(@RequestParam String groupNo,Model model,HttpServletRequest request){
 	
 		return "groups/groupMain";
 	}

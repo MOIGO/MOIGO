@@ -41,33 +41,30 @@
 			<div class="row">
 				<h3 class="card-title groupName bolder_text lead">Moigo Official</h3>
 			</div>
-			<div class="row">
-				<button class="btn btn-block">가입하기</button>
+			<div class="row joinBtnWrapper">
+				<button class="btn btn-block" onclick="joinGroup();">가입하기</button>
 			</div>
 			<div class="row mt-3">
 				<p class="card-text groupDesc">테스트 그룹입니다.</p>
 			</div>
-			<div class="row mt-3 ">
+			<div class="row mt-3 notJoined">
 				<div class="col-6 test">
 					멤버: <span class="group_memNum">6명</span>
 				</div>
-				<div class="col-6 text-left test">
+				<div class="col-6 test">
 					리더 : <span class="group_leader ">홍길동</span>
 				</div>
 			</div>
 			
-			<div class="row mt-3 ">
-				<div class="col-6 ">
+			<div class="row mt-3 joined">
+				<div class="col-6 test">
 					멤버: <span class="group_memNum">6명</span>
 				</div>
-				<div class="col-6 text-left test">
+				<div class="col-6  test">
 					<i class="fas fa-plus-circle"></i> 그룹 초대
 				</div>
 			</div>
 			
-			<div class="row">
-				
-			</div>
 			
 		</div>
 	</div>
@@ -86,8 +83,11 @@
 	</div>
  </div>
  
- <form id="groupNoForm">
+ <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
+ 	<c:if test="${m.memberNo ne null }">
+ 		<input type="hidden" name="memberNo" value="${m.memberNo}"/>
+ 	</c:if>
  </form>
 
 </body>
@@ -98,24 +98,47 @@
 
 function setGroupDesc(groupNo){
 	$.ajax({
-		url:'${root}/groups/getOneGroup.gp',
+		url:'${root}/groups/selectOneGroup.gp',
 		data:{groupNo:groupNo},
 		dataType:"json",
 		success:function(data){
 			var  group = data.group;
 			
+			console.log(data);
 			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
 				$('.card-img-top').attr("src",group.groupPicture);
 			}else{
 				$('.card-img-top').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 			}
+			
+			if(data.isMember>0){
+				$('.joinBtnWrapper').css("display","none");
+				$('.joined').css("display","relative");
+				$('.notJoined').css("display","none");
+			}else{
+				$('.joinBtnWrapper').css("display","relative");
+				$('.joined').css("display","none");
+				$('.notJoined').css("display","relative");
+			}
+			
 			$('.groupName').text(group.groupName);
 			$('.groupDesc').text(group.groupMsg);
-			
-		},error:function(dat){
+			$('.group_leader').text(data.grpLeader.memberName);
+			$('.group_memNum').text(data.grpMemNum+" 명");
+		},error:function(data){
 			
 		}
 	});
+}
+
+function joinGroup(){
+	if('${m.memberNo}'!=null){
+		$('#groupNoForm').submit();
+	}else{
+		alert("로그인 해주세요!");
+	}
+	
+	
 }
 
 $(function() {

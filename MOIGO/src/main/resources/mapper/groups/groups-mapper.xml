@@ -166,11 +166,36 @@
 		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
 	</insert>
 	
+	<!--그룹 커버 사진 바꾸기  -->
 	<update id="updateGroupCover" parameterType="groups">
 		UPDATE GROUPS
 		SET GROUP_PICTURE = #{groupPicture}
 		WHERE GROUP_NO=#{groupNo}
 	</update>
+	
+	<!--그룹의 멤버 수 가져오기  -->
+	<select id="selectGrpMemNum" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO =#{groupNo}
+	</select>
+	
+	<!--그룹의 리더 정보 가져오기  -->
+	<select id="selectGroupLeader" resultMap="groupMemberResultMap">
+		SELECT GROUP_MEMBER.*,MEMBER_NAME 
+		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
+		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
+	</select>
+	
+	<!--이 사람이 그룹의 멤버인지 확인하기  -->
+	<select id="checkIsGroupMem" parameterType="groupMember" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
+	</select>
+	
+	<!--그룹 가입하기 -->
+	<insert id="insertGroupMember" parameterType="groupMember">
+		INSERT INTO GROUP_MEMBER VALUES(#{memberNo},#{groupNo},#{profileImg},#{profileThumb},#{profileMsg},#{memberGradeCode})
+	</insert>
 
 
 	<!-- ===================================================================================================== 혜진 -->
