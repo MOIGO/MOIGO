@@ -186,9 +186,9 @@
 		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
 	</select>
 	
-	<!--이 사람이 그룹의 멤버인지 확인하기  -->
-	<select id="checkIsGroupMem" parameterType="groupMember" resultType="_int">
-		SELECT COUNT(*) FROM GROUP_MEMBER
+	<!--그룹 멤버 한명 정보 가져오기  -->
+	<select id="selectOneGrpMem" parameterType="groupMember" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
 		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
 	</select>
 	

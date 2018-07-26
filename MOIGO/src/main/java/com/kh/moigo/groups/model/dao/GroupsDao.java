@@ -38,7 +38,7 @@ public interface GroupsDao {
 	
 	GroupMember selectGroupLeader(String groupNo);
 	
-	int checkIsGroupMem(GroupMember gm);
+	GroupMember selectOneMember(GroupMember gm);
 
 	int insertGroupMember(GroupMember gm);
 	
