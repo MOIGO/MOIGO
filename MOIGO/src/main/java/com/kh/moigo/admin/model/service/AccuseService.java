@@ -40,6 +40,7 @@ public interface AccuseService {
 	List<Map<String, Object>> countMinterest();//--member
 	List<Map<String, Object>> gGradeCount();
 	List<Map<String, Object>> countGinterest();
+	List<Map<String, Object>> countState();
 	
 
 	

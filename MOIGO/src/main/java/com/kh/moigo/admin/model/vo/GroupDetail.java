@@ -15,11 +15,28 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 	private String masterEmail;
 	private int gGradeCount;
 	private String groupGradeName;
+	private String groupStateName;
 	private String bigInterest;
 	private int ginterestCount;
 	
 	
 	
+	public String getGroupStateName() {
+		return groupStateName;
+	}
+
+
+
+
+
+	public void setGroupStateName(String groupStateName) {
+		this.groupStateName = groupStateName;
+	}
+
+
+
+
+
 	public String getGroupGradeName() {
 		return groupGradeName;
 	}

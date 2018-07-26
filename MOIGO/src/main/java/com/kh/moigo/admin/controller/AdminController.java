@@ -89,14 +89,14 @@ public class AdminController {
 		//group
 		List<Map<String,Object>> gGradeCount = as.gGradeCount();
 		List<Map<String,Object>> ginterestCount = as.countGinterest();
-
+		List<Map<String,Object>> groupStateCount = as.countState();
 		
 		
 		System.out.println("genderCount"+genderCount);
 		model.addAttribute("addressCount",addressCount);
 		model.addAttribute("genderCount",genderCount);
 		model.addAttribute("minterestCount",minterestCount);
-		
+		model.addAttribute("groupStateCount",groupStateCount);
 		
 		model.addAttribute("gGradeCount",gGradeCount);
 		model.addAttribute("ginterestCount",ginterestCount);

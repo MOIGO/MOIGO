@@ -35,5 +35,6 @@ public interface AccuseDao {
 	List<Map<String, Object>> countMinterest();
 	List<Map<String, Object>> gGradeCount();
 	List<Map<String, Object>> countGinterest();
+	List<Map<String, Object>> countState();
 
 }
