@@ -23,7 +23,7 @@ public class Groups implements java.io.Serializable{
 	private String openSetting;
 	private int memberCnt;
 	private int postCnt;
-	
+
 	public Groups(String groupNo, String groupName, String groupMsg, String groupAddress, String groupPicture,
 			String groupGradeCode, String groupStateCode, int maxMember, Date enrollDate, String interestBigCode,
 			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting) {
@@ -256,6 +256,9 @@ public class Groups implements java.io.Serializable{
 				+ ", interestBigCode=" + interestBigCode + ", allowSignup=" + allowSignup + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", groupGender=" + groupGender + ", openSetting=" + openSetting + "]";
 	}
+	
+	
+
 	
 	
 
