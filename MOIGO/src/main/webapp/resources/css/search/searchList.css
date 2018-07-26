@@ -9,6 +9,9 @@ body {
    float: right !important;
    top: -15px;
 }
+#map > div > div > div > div > div:HOVER{
+	border: 4px solid white;
+}
 
 *, *:before, *:after {
     -webkit-box-sizing: border-box;
