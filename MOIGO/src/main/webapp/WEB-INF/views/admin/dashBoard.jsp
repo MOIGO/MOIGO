@@ -51,7 +51,7 @@
               title: 'Number'
             },
         	backgroundColor :'transparent',
-            width:650,
+            width:600,
             height:400
             
           };
@@ -94,7 +94,7 @@
               title: 'Number'
             },
         	backgroundColor :'transparent',
-            width:650,
+            width:600,
             height:400
             
           };
@@ -133,7 +133,7 @@
               title: 'Number'
             },
         	backgroundColor :'transparent',
-            width:650,
+            width:600,
             height:400
             
           };
@@ -231,13 +231,13 @@
 
 
 		<div class="row">
-			<div class="col-sm-6" id="chart_div"><!--  for bar chart --></div>
-			<div class="col-sm-6 " id="chart_div2"><!--  for bar chart --></div>
+			<div class="col-lg-6" id="chart_div"><!--  for bar chart --></div>
+			<div class="col-lg-6 " id="chart_div2"><!--  for bar chart --></div>
 
 		</div>
 		<div class="row">
-			<div class="col-sm-6" id="chart_div3"><!--  for bar chart --></div>
-			<div class="col-sm-6 " id="chart_div4"><!--  for bar chart --></div>
+			<div class="col-lg-6" id="chart_div3"><!--  for bar chart --></div>
+			<div class="col-lg-6 " id="chart_div4"><!--  for bar chart --></div>
 
 		</div>
 		<div class="row">
