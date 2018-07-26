@@ -18,9 +18,77 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 	private String groupStateName;
 	private String bigInterest;
 	private int ginterestCount;
+	private int countWgroup;
+	private String enrollD;
+	private int totalGroup;
+	private int todayGroup;
+	private String enrollM;
+	private int grCount;
 	
-	
-	
+	public String getEnrollM() {
+		return enrollM;
+	}
+
+
+
+
+
+	public void setEnrollM(String enrollM) {
+		this.enrollM = enrollM;
+	}
+
+
+
+
+
+	public int getGrCount() {
+		return grCount;
+	}
+
+
+
+
+
+	public void setGrCount(int grCount) {
+		this.grCount = grCount;
+	}
+
+
+
+
+
+	public int getTotalGroup() {
+		return totalGroup;
+	}
+
+
+
+
+
+	public void setTotalGroup(int totalGroup) {
+		this.totalGroup = totalGroup;
+	}
+
+
+
+
+
+	public int getTodayGroup() {
+		return todayGroup;
+	}
+
+
+
+
+
+	public void setTodayGroup(int todayGroup) {
+		this.todayGroup = todayGroup;
+	}
+
+
+
+
+
 	public String getGroupStateName() {
 		return groupStateName;
 	}
@@ -159,6 +227,38 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 
 	public void setMemNum(int memNum) {
 		this.memNum = memNum;
+	}
+
+
+
+
+
+	public int getCountWgroup() {
+		return countWgroup;
+	}
+
+
+
+
+
+	public void setCountWgroup(int countWgroup) {
+		this.countWgroup = countWgroup;
+	}
+
+
+
+
+
+	public String getEnrollD() {
+		return enrollD;
+	}
+
+
+
+
+
+	public void setEnrollD(String enrollD) {
+		this.enrollD = enrollD;
 	}
 	
 	

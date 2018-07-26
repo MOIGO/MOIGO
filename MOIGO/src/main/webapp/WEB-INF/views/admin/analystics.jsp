@@ -377,10 +377,8 @@
 						aria-selected="true">PIE</a></li>
 					<li class="nav-item"><a class="nav-link" id="profile-tab"
 						data-toggle="tab" href="#profile" role="tab"
-						aria-controls="profile" aria-selected="false">GROUP</a></li>
-					<li class="nav-item" id="accuseDiv"><a class="nav-link" id="contact-tab"
-						data-toggle="tab" href="#contact" role="tab"
-						aria-controls="contact" aria-selected="false">ACCUSE</a></li>
+						aria-controls="profile" aria-selected="false">SUMMARY</a></li>
+			
 				</ul>
 			</div>
 			<div class="card-body" >

@@ -140,6 +140,42 @@ public class AccuseServiceImpl implements AccuseService {
 		return ad.countState();
 	}
 
+	@Override
+	public List<Map<String, Object>> weeklyMemEnroll() {
+		// TODO Auto-generated method stub
+		return ad.weeklyMemEnroll();
+	}
+
+	@Override
+	public List<Map<String, Object>> weeklyGrpMake() {
+		// TODO Auto-generated method stub
+		return ad.weeklyGrpMake();
+	}
+
+	@Override
+	public List<Map<String, Object>> memberDashCount() {
+		// TODO Auto-generated method stub
+		return  ad.memberDashCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> groupDashCount() {
+		// TODO Auto-generated method stub
+		return ad.groupDashCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> MemEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return ad.MemEnrollperMonth();
+	}
+
+	@Override
+	public List<Map<String, Object>> GrpEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return ad.GrpEnrollperMonth();
+	}
+
 
 
 

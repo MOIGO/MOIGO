@@ -42,6 +42,14 @@ public interface AccuseService {
 	List<Map<String, Object>> countGinterest();
 	List<Map<String, Object>> countState();
 	
+	//이하 대시보드
+	List<Map<String, Object>> weeklyMemEnroll();
+	List<Map<String, Object>> weeklyGrpMake();
+	List<Map<String, Object>> memberDashCount();
+	List<Map<String, Object>> groupDashCount();
+	List<Map<String, Object>> MemEnrollperMonth();
+	List<Map<String, Object>> GrpEnrollperMonth();
+	
 
 	
 

@@ -20,6 +20,11 @@
 		<result property="addressCount" column="ADDRESS_RATE"/>
 		<result property="minterestCount" column="MINTEREST"/>
 		<result property="bigInterest" column="INTEREST_BIG_NAME"/>
+		<result property="countWmember" column="COUNT_WM" />	
+		<result property="enrollD" column="ENROLL_D" />	
+		<result property="totalMember" column="TOTAL" />	
+		<result property="enrollM" column="ENROLL_M" />	
+		<result property="mmCount" column="MM_COUNT" />	
 		
 	</resultMap>
 
@@ -49,6 +54,33 @@
 		JOIN INTEREST_BIG USING(interest_big_code)
 		GROUP BY INTEREST_BIG_NAME ORDER BY MINTEREST DESC
 	</select>
+	<select id="weeklyMemEnroll" resultMap="memberDetailResultMap" >
+	<![CDATA[
+		SELECT filter.enroll_d, count(MEMBER_EMAIL)  count_wm
+		FROM
+		(SELECT TO_CHAR(SYSDATE - (LEVEL - 1), 'YY/MM/DD')  as enroll_d
+		FROM dual
+		CONNECT BY LEVEL <= 7
+		) filter
+		left JOIN member
+		ON TO_CHAR(member.ENROLL_DATE, 'YY/MM/DD') = filter.enroll_d
+		group by filter.enroll_d
+		order by enroll_d
+		]]>
+	</select>
+	
+	
+	<select id="memberDashCount" resultMap="memberDetailResultMap">
+		SELECT (SELECT COUNT(*) from member) TOTAL,
+		(SELECT COUNT(*) TODAY FROM MEMBER
+		WHERE TO_CHAR(ENROLL_DATE, 'YY/MM/DD') = TO_CHAR(SYSDATE, 'YY/MM/DD')) TODAY
+		FROM DUAL
+	</select>
 
+	<select id="MemEnrollperMonth" resultMap="memberDetailResultMap">
+		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
+		GROUP BY  SUBSTR(enroll_date, 1, 5)
+		order by  SUBSTR(enroll_date, 1, 5)
+	</select>
 
 </mapper>

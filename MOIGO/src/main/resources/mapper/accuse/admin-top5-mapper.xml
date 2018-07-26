@@ -26,7 +26,7 @@
 	
 	<select id="atop5groupList" resultMap="top5ResultMap">
 	<![CDATA[
-		 SELECT * FROM (SELECT ROWNUM RNUM, PAGING.*
+		SELECT * FROM (SELECT ROWNUM RNUM, PAGING.*
  		FROM  (SELECT TARGET_GROUP, 
 		COUNT(*) A_COUNT FROM ACCUSE 
 		WHERE TARGET_GROUP is not null 

@@ -143,6 +143,42 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("groupDetail.stateCount");
 	}
+
+	@Override
+	public List<Map<String, Object>> weeklyMemEnroll() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.weeklyMemEnroll");
+	}
+
+	@Override
+	public List<Map<String, Object>> weeklyGrpMake() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.weeklyMemEnroll");
+	}
+
+	@Override
+	public List<Map<String, Object>> memberDashCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.memberDashCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> groupDashCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.groupDashCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> MemEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.MemEnrollperMonth");
+	}
+
+	@Override
+	public List<Map<String, Object>> GrpEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.GrpEnrollperMonth");
+	}
 	
 	
 	
