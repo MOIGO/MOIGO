@@ -8,15 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +26,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.kh.moigo.member.model.service.MemberService;
 import com.kh.moigo.member.model.vo.Member;
+import com.kh.moigo.member.model.vo.MypageGroup;
 
 @Controller
 @SessionAttributes(value={"m"})
@@ -36,15 +35,21 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
-	// 암호화?
+
+	@Autowired
+	private BCryptPasswordEncoder bcryptPasswordEncoder;	
+	
+	
+	// 암호화 o
 	// 비밀번호 확인
 	@ResponseBody
 	@RequestMapping("/member/checkPwd.do")
 	public Map<String, Object> checkPwd(HttpSession session, @RequestParam String memberPwd){
 		Member member=(Member) session.getAttribute("m");
 		boolean result ;
-		/*if(bcryptPasswordEncoder.matches(password, m.getPassword())){*/
-		if(member.getMemberPwd().equals(memberPwd)){
+
+		if(bcryptPasswordEncoder.matches(memberPwd, member.getMemberPwd())){
+//		if(member.getMemberPwd().equals(memberPwd)){
 			result=true;
 		}else{
 			result=false;
@@ -56,7 +61,7 @@ public class MemberController {
 		return map;
 	}
 	
-	// 암호화?
+	// 암호화 o
 	// 비밀번호 변경
 	@ResponseBody
 	@RequestMapping("/member/changePwd.do")
@@ -65,10 +70,13 @@ public class MemberController {
 		Member member=(Member) session.getAttribute("m");
 		String memberEmail=member.getMemberEmail();
 		
-
+		
+		String rawPassword =memberPwd;
+		String encodedPassword=bcryptPasswordEncoder.encode(memberPwd);
+		
 		Map<String, Object> map = new HashMap<>();
 		
-		boolean result =memberService.updateMemberPwd(memberEmail,memberPwd)==0? false: true;
+		boolean result =memberService.updateMemberPwd(memberEmail,encodedPassword)==0? false: true;
 		
 		
 		map.put("result", result);
@@ -79,7 +87,7 @@ public class MemberController {
 	
 	
 
-	// 암호화?
+	// 암호화 x
 	//	로그인
 	@ResponseBody
 	@RequestMapping(value = "/member/memberLogin.do", method = RequestMethod.POST)
@@ -92,19 +100,30 @@ public class MemberController {
 
 		String msg = "";
 		int result;
+		
 
 		if (m == null) {
 			msg = "존재하지 않은 회원입니다.";
 			result = -1;
 		} else {
-			if (memberPwd.equals(m.getMemberPwd())) {
-				result = 0;
-				msg = "로그인 성공";
-				model.addAttribute("m", m);
-			} else {
-				msg = "회원정보가 일치하지 않습니다.";
-				result = 1;
-			}
+			
+//			if(m.getMemberNo().charAt(0)=='A'){
+//				System.out.println("관리자 로그인");
+//				msg="관리자 로그인";
+//				result = 0;
+//				model.addAttribute("m", m);
+//			}else{
+			
+//				if(bcryptPasswordEncoder.matches(memberPwd, m.getMemberPwd())){
+				if (memberPwd.equals(m.getMemberPwd())) {
+					result = 0;
+					msg = "로그인 성공";
+					model.addAttribute("m", m);
+				} else {
+					msg = "회원정보가 일치하지 않습니다.";
+					result = 1;
+				}
+//			}
 		}
 
 		map.put("msg", msg);
@@ -114,13 +133,17 @@ public class MemberController {
 	}
 	
 	
-	// 암호화?
+	// 암호화 o
 	// 회원가입
 	@RequestMapping(value ="/member/signUpEnd.do", method = RequestMethod.POST)
 	public String signUpEnd(Member member,
 							@RequestParam (value = "interest", required = false,	defaultValue = "") List<String> interestList){
 
-		/*if(member.getMemberAddress().equals("null null")) member.setMemberAddress(null);*/
+
+		String rawPassword = member.getMemberPwd();
+		System.out.println("password 암호화 전 : "+rawPassword);
+		member.setMemberPwd(bcryptPasswordEncoder.encode(rawPassword));
+		System.out.println("password 암호화 후 : "+member.getMemberPwd());
 		
 		System.out.println(interestList);
 		System.out.println(member);
@@ -151,6 +174,7 @@ public class MemberController {
 		map.put("isUsable", isUsable);
 		
 		return map;
+
 	}
 	
 
@@ -236,8 +260,29 @@ public class MemberController {
 	
 	
 	
-	
-	
+
+	// 그룹리스트 뽑아보내 ㅎ
+	@RequestMapping("/mypage/Group.do")
+	public String groupList(HttpSession session, @RequestParam String gType, Model model) {
+
+		Member member = (Member) session.getAttribute("m");
+
+		List<MypageGroup> list = memberService.selectGroupList(member.getMemberNo(), gType);
+
+		String loc = "";
+		if (gType.equals("open"))
+			loc = "mypage/openGroup";
+		else if (gType.equals("join"))
+			loc = "mypage/joinGroup";
+		else if (gType.equals("wait"))
+			loc = "mypage/waitGroup";
+
+		System.out.println("gg 입장 : " + gType);
+
+		model.addAttribute("list", list);
+
+		return loc;
+	}
 	
 	
 	
@@ -253,27 +298,75 @@ public class MemberController {
 		return "mypage/changePwd";
 	}
 
-	// 주최그룹페이지 이동
-	@RequestMapping("/mypage/openGroup.do")
-	public String openGroup(){
-		return "mypage/openGroup";
-	}
-	
-	// 참여그룹페이지 이동
-	@RequestMapping("/mypage/joinGroup.do")
-	public String joinGroup(){
-		return "mypage/joinGroup";
-	}
-	
-	//  가입대기그룹  페이지이동
-	@RequestMapping("/mypage/waitGroup.do")
-	public String waitGroup(){
-		return "mypage/waitGroup";
-	}
 	
 	// 회원가입 페이지 이동
 	@RequestMapping("/member/signUp.do")
 	public String signUp(){
 		return "member/signUp";
 	}
+	
+	
+	
+	
+	
+	//////////////////////////////////////
+	
+	
+	// 페이스북 페이지이동
+		@ResponseBody
+		@RequestMapping("/member/fbLogin.do")
+		public Map<String, Object> faceLogin(Model model,
+								@RequestParam String email,
+								@RequestParam String name,
+								@RequestParam String birthday,
+								@RequestParam String gender){
+			
+			System.out.println("email : " + email);
+			System.out.println("name : " + name);
+			System.out.println("birthday : " + birthday);
+			System.out.println("gender : " + gender);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			
+			String[] strBirth = birthday.split("/");
+			
+			String userYear= strBirth[2];
+			String userMonth= strBirth[0];
+			String userDay= strBirth[1];
+			
+			String mBirth = userYear  +"-"+ userMonth +"-"+ userDay;
+			java.sql.Date memberBirth = java.sql.Date.valueOf(mBirth);
+			
+			
+			String msg;
+			int result;
+			
+			Member me = memberService.selectOneMember(email);
+			
+			if (me == null) {
+				Member mee = new Member();
+				mee.setMemberEmail(email);
+				mee.setMemberBirth(memberBirth);
+				mee.setMemberName(name);
+				mee.setMemberPwd("페이스북 회원");
+				mee.setMemberGender(gender.equals("male")?"M":"F");
+				
+				result=-1;
+				msg = "페이스북 회원 추가";
+				int res =memberService.insertFbMember(mee);
+				Member m = memberService.selectOneMember(mee.getMemberEmail());
+				model.addAttribute("m", m);
+			} else {
+				result = 0;
+				msg = "페이스북 로그인 성공";
+				Member m = memberService.selectOneMember(me.getMemberEmail());
+				model.addAttribute("m", m);
+			}
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("msg", msg);
+			map.put("result", result);
+			return map;
+			
+		}
 }

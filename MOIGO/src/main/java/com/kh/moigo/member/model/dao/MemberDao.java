@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.kh.moigo.member.model.vo.Member;
+import com.kh.moigo.member.model.vo.MypageGroup;
 
 public interface MemberDao {
 
@@ -27,6 +28,10 @@ public interface MemberDao {
 	List<String> selectInterestList(String memberNo);
 
 	int deleteMemberInterest(String memberNo);
+
+	List<MypageGroup> selectGroupList(HashMap<String, String> hmap);
+
+	int insertFbMember(Member m);
 
 
 }

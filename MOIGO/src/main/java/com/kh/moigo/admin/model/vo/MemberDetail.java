@@ -4,8 +4,10 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.kh.moigo.member.model.vo.Member;
 
+@JsonAutoDetect
 public class MemberDetail extends Member implements java.io.Serializable{
 	/**
 	 * 
@@ -18,15 +20,44 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	private int postCount;
 	private int replyCount;
 	private int accuseCount;
-	
+	private int genderCount;
+	private String metrocity;
+	private int addressCount;
+	private String bigInterest;
+	private int minterestCount;
+
 	//private List<Map<String, Object>> memPerGroup;
 	
 	
 	
 	
+	public int getMinterestCount() {
+		return minterestCount;
+	}
+	public String getBigInterest() {
+		return bigInterest;
+	}
+	public void setBigInterest(String bigInterest) {
+		this.bigInterest = bigInterest;
+	}
+	public void setMinterestCount(int minterestCount) {
+		this.minterestCount = minterestCount;
+	}
 	public MemberDetail() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public String getMetrocity() {
+		return metrocity;
+	}
+	public void setMetrocity(String metrocity) {
+		this.metrocity = metrocity;
+	}
+	public int getAddressCount() {
+		return addressCount;
+	}
+	public void setAddressCount(int addressCount) {
+		this.addressCount = addressCount;
 	}
 	public MemberDetail(String memberNo, String memberEmail, String memberPwd, String memberName, String memberAddress,
 			Date memberBirth, String memberGender, Date enrollDate, String delflag,int enrollGroup, int postCount, int replyCount, int accuseCount) {
@@ -69,8 +100,18 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	public void setAccuseCount(int accuseCount) {
 		this.accuseCount = accuseCount;
 	}
+	@Override
+	public String toString() {
+		return "MemberDetail [enrollGroup=" + enrollGroup + ", postCount=" + postCount + ", replyCount=" + replyCount
+				+ ", accuseCount=" + accuseCount + ", toString()=" + super.toString() + "]";
+	}
+	public int getGenderCount() {
+		return genderCount;
+	}
+	public void setGenderCount(int genderCount) {
+		this.genderCount = genderCount;
+	}
 
-	
 	
 	
 	

@@ -45,7 +45,12 @@ tr:hover {
 
 	<c:import url="common/adminSidebar.jsp"></c:import>
 
-	<div class="row"></div>
+	<div class="row">
+	
+	
+	
+	
+	</div>
 	<br>
 
 	<div class="row">
@@ -215,7 +220,7 @@ $(document).ready(function(){
 								'<tr>'+
 		            			'<td>관심사</td>' +
 								'<td>'+data[0].interestBigCode+'</td>' +
-								'<td>'+data[0].interestSmallCode+'</td>' +
+								'<td></td>' +
 								' </tr>'+
 								
 							
@@ -240,17 +245,16 @@ $(document).ready(function(){
 				            	console.log(i);
 				            	var num = i*1+1;
 				            	var idx =data[1][i].memberGradeName.indexOf('(');
-				            	var str ='<tr>'+
-										
-		 								' <td>'+data[1][i].memberName+'</td>' +
-		 							
+				            	var str ='<tr>'+									
+		 								' <td>'+data[1][i].memberName+'</td>' +	 							
 		 								' <td>'+data[1][i].postCount+'</td>' +
 		 								' <td>'+data[1][i].replyCount+'</td>' +
 		 								' <td>'+data[1][i].memberGradeName.substring(0,idx)+'</td>' +
 		 								'<td><button type="button" data-target="#groupModal" data-toggle="modal" data-id="'+data[1][i].groupNo+'" class="btn btn-outline-success btn-sm">보기</button></td>'+
 										'<tr>';
+				            	$('.group_detail_slide2').append(str);
 		            	  }//for문 end
-		            	  $('.group_detail_slide2').append(str);
+		            	  
 	            }//success end
 	        });//ajax end		
 		});//--

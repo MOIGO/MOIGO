@@ -21,8 +21,8 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<Groups> selectList(String keyword) {
-		return searchDao.selectList(keyword);
+	public List<Groups> selectList(String keyword, int cPage, int limit) {
+		return searchDao.selectList(keyword, cPage, limit);
 	}
 
 	@Override

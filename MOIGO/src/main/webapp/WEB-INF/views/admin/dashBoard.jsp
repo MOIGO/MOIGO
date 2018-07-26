@@ -6,8 +6,63 @@
 
 <html>
 <head>
+<script type="text/javascript"	src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawWeeklyMemberEnrollChart);
+      
+      function drawWeeklyMemberEnrollChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Day');
+          data.addColumn('number', 'Member');
+
+          
+          data.addRows([
+            ['0', 0],   
+            ['1', 10],  
+            ['2', 23],  
+            ['3', 17],  
+            ['4', 18],  
+            ['5', 9],
+            ['6', 11]
+          ]);
+
+          var options = {
+        	'title':'Weekly New Member Count',
+  			titleTextStyle:{
+  			fontName:'Poppins',
+  			fontSize: 23
+  			},
+  			legend: 'none',
+  			backgroundColor :'transparent',
+  			fontSize :25,
+  			fontName:'Poppins',	           
+            hAxis: {
+              title: 'Date'
+            },
+            vAxis: {
+              title: 'Number'
+            },
+            backgroundColor: '#f1f8e9',
+            width:600,
+            height:400
+            
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+          chart.draw(data, options);
+        }
+      
+      
+      
+      
+      
+      
+</script>      
 <style type="text/css">
 	.well{
 		margin: 0 auto;
@@ -17,46 +72,56 @@
 </style>
 </head>
 <body>
+	<c:import url="common/reportModal.jsp"></c:import>
 	<c:import url="common/adminSidebar.jsp"></c:import>
     
-    <div class="col-sm-9 body_background">
+    <div class="col-sm-12 body_background">
     <br>
-      <div class="well">
-        <h4>TODAY</h4>
-        <p>${serverTime}</p>
-      </div>
-      
-      
-      <div class="row">
-      	 <div class="card-deck">
-      	 &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;
-		       <div class="card bg-warning">
-		     	   <h4 class="card-title text-center">Card title</h4>
-			      <div class="card-body text-center">
-			        <p class="card-text">Some text inside the second card</p>
-			      </div>
-		    </div>
-		    <div class="card bg-success">
-		   		  <h4 class="card-title text-center">Card title</h4>
-			      <div class="card-body text-center">
-			        <p class="card-text">Some text inside the third card</p>
-			      </div>
-		    </div>
-		    <div class="card bg-danger">
-		   		  <h4 class="card-title text-center">Card title</h4>
-			      <div class="card-body text-center">
-			        <p class="card-text">Some text inside the fourth card</p>
-			      </div>
-		    </div>  
-		    </div>
-      
-      </div>
-      
-      
-      <div class="row">
-        <div class="col-sm-5">
+			<div class="row">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card text-white bg-warning mb-3"
+				style="max-width: 18rem;">
+				<div class="card-header">오늘의 가입자</div>
+				<div class="card-body">
+					<h5 class="card-title">Warning card title</h5>
+					<p class="card-text">Some quick example text to build on the
+						card title and make up the bulk of the card's content.</p>
+				</div>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+				<div class="card-header">오늘의 생성그룹</div>
+				<div class="card-body">
+					<h5 class="card-title">Info card title</h5>
+					<p class="card-text">Some quick example text to build on the
+						card title and make up the bulk of the card's content.</p>
+				</div>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card bg-light mb-3" style="max-width: 18rem;">
+				<div class="card-header">전체 가입자</div>
+				<div class="card-body">
+					<h5 class="card-title">Light card title</h5>
+					<p class="card-text">Some quick example text to build on the
+						card title and make up the bulk of the card's content.</p>
+				</div>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+				<div class="card-header">전체그룹</div>
+				<div class="card-body">
+					<h5 class="card-title">Dark card title</h5>
+					<p class="card-text">Some quick example text to build on the
+						card title and make up the bulk of the card's content.</p>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+        <div class="col-sm-5" id="chart_div" >
            <!--Div that will hold the pie chart-->
-  			  <div id="chart_div"></div>
+  			  <div></div>
     
    			
         </div>
@@ -80,44 +145,10 @@
         </div>
       </div>
     </div>
+    
   </div>
 </div>
-<script type="text/javascript">
 
-      // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
 
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawChart);
-
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-          ['Mushrooms', 3],
-          ['Onions', 1],
-          ['Olives', 1],
-          ['Zucchini', 1],
-          ['Pepperoni', 2]
-        ]);
-
-        // Set chart options
-        var options = {'legend':'none','title':'How Much Pizza I Ate Last Night',
-                       'width':300,
-                       'height':500};
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
-        chart.draw(data, options);
-        chart2.draw(data, options);
-      }
-    </script>
 </body>
 </html>

@@ -75,13 +75,27 @@ body {
 
 @media(max-width:1000px){
 	.search{
-		display: none;
+		visibility: hidden;
 	}
 }
 
-@media(min-width:767px){
-	.navi{
-	   width: 960px;
+@media(max-width:992px){
+	.navsize{
+	   height: 66px;
+	}
+}
+
+@media(max-width:770px){
+	#login{
+	  display: none;
+	}
+}
+
+
+@media(max-width:748px){
+	.navsize{
+		width: 748px;
+	   height: 66px;
 	}
 }
 
@@ -97,7 +111,7 @@ body {
 
 .usercon:hover{
 	cursor: pointer;
-	color: skyblue;
+	color: aqua;
 }
 
 #dropDown{
@@ -113,6 +127,35 @@ body {
 #dropdown-Menu{
 	color: white;
 }
+
+#memName{
+	margin-top: 10px;
+	color: white;
+}
+
+/* effect 18 */
+
+.hovername{
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.hovername:after{
+	margin-top: 10px;
+  content: '' attr(data-hover-label) '';
+  width: 0;
+  overflow: hidden;
+  transition: width .2s ease-out;  
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.hovername:hover:after, .hovername:focus:after{
+  width: 100%; 
+  color: aqua;
 </style>
 
 </head>
@@ -145,21 +188,30 @@ body {
 		<div class="col-md-2 col-lg-2"></div>
 		<div class="col-md-3 col-lg-3" id="login">
 			<div class="row">
-			<a href="#" data-toggle="modal" data-target='#Login_Modal'
-				id="login-slide-link">로그인</a>
-				&nbsp;&nbsp;	
+			<c:choose>
+			<c:when test="${m eq null}" >
+				<a href="#" data-toggle="modal" data-target='#Login_Modal'
+					id="login-slide-link">로그인</a>
+					&nbsp;&nbsp;
+			</c:when>
+			<c:otherwise>
+				<span class="hovername" data-hover-label="[${m.memberName}]님이 접속하셨습니다.">
+				<p id="memName">[${m.memberName}]님이 접속하셨습니다.</p></span>
+			</c:otherwise>
+			</c:choose>
+			<c:if test ="${m ne null}">
 			<div class="dropdown">
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="myMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/common/test.do">테스트</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
 				  </div>
+			</c:if>	  
 		</div>
 		</div>
 		
@@ -172,7 +224,7 @@ body {
 	</script>
 
 	<!-- 헤더 카테고리 부분 -->
-	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary">
+	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary navsize navbar-expand">
 		<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item active">

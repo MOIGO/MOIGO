@@ -41,6 +41,16 @@ public class GroupMember implements Serializable{
 		this.memberName = memberName;
 	}
 	
+	public GroupMember(String memberNo,String groupNo){
+		this.memberNo = memberNo;
+		this.groupNo = groupNo;
+	}
+	
+	public GroupMember(String memberNo, String groupNo, int memberGradeCode) {
+			this.memberNo=memberNo;
+			this.groupNo=groupNo;
+			this.memberGradeCode=memberGradeCode;
+	}
 	public String getMemberNo() {
 		return memberNo;
 	}

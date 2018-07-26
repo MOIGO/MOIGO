@@ -104,18 +104,87 @@
 }
 
 /* 지도 페이지 */
-/* #mapdiv{
-	display: none;
-} */
 
 .textc{
     text-align: center;
 }
 
+/* .mapHeight{
+	height: 400px;
+} */
+
 
 </style>
 </head>
-<body>
+<body onload="test()">
+<script>
+  function test(){
+	
+		if('${selected}' == 'ma'){
+		$('#map').css("height","400px");
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new daum.maps.LatLng(37.498960, 127.032940), // 지도의 중심좌표
+	        level: 1 // 지도의 확대 레벨
+	    };
+
+		var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+		// 마커가 표시될 위치입니다 
+		var markerPosition  = new daum.maps.LatLng(37.498960, 127.032940); 
+
+		// 마커를 생성합니다
+		var marker = new daum.maps.Marker({
+	  	  position: markerPosition
+		});
+
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
+
+		} else if('${selected}' == 'guid'){
+			
+			$('#accordion').children().remove();
+			var select = "qna";
+			$.ajax({
+			url : "${pageContext.request.contextPath}/common/qna.ft",
+			data : {selected: select},
+			type : "get",
+			success : function(data){
+				var list = data.list;
+				
+				for(var l in list){
+					$('#accordion').append("<div>");
+					
+					var $div= $('<div class="card">');
+					var $div2 = $('<div class="card-header" role="tab">');
+					$div.append($div2);
+					var $h5 = $('<h5 class="mb-0">');
+					$div2.append($h5);
+					var $a = $('<a data-toggle="collapse" href="#'+list[l].boardNo+'" aria-expanded="false">');
+					$h5.append($a);
+					$a.append("Q.  "+list[l].boardTitle);
+					var $div3 = $('<div id="'+list[l].boardNo+'" class="collapse" role="tabpanel" data-parent="#accordion">');
+					var $div4 = $('<div class="card-body">');
+					$div3.append($div4);
+					$div4.append("A.  "+list[l].boardContent);
+					
+					$('#accordion').append($div);
+					$('#accordion').append($div3);
+					
+					$('#accordion').append("</div>");
+					$('#accordion').append('<br>');
+				}
+				
+				
+			},
+			error : function(data){
+				console.log("에러 발생!");
+			}
+			});
+		}
+} 
+</script>
+
 <c:import url="/WEB-INF/views/common/header.jsp"/>
 <!-- // 바디부분 // -->
 	<hr>
@@ -432,70 +501,24 @@
         <div class="row">
             <div class="guideCate justify-content-center" id="qna">
             <h5>자주묻는 질문</h5>
+            <input type="hidden" value="qna" />
             <div class="gage1"></div>
             </div>
             <div class="guideCate justify-content-center" id="guide">
             <h5>이용 관련</h5>
+            <input type="hidden" value="used" />
             <div class="gage2"></div>
             </div>
             <div class="guideCate justify-content-center" id="declare">
             <h5>신고 관련</h5>
+            <input type="hidden" value="tel" />
             <div class="gage3"></div>
             </div>
         </div>
         <br>
         <!-- 컬랩스 부분 -->
-        <div>
-                <div id="accordion" role="tablist">
-                        <div class="card">
-                          <div class="card-header" role="tab" id="headingOne">
-                            <h5 class="mb-0">
-                              <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                01 사이트에 치명적인 오류나 건의사항이 있어요
-                              </a>
-                            </h5>
-                          </div>
-                      
-                          <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
-                            <div class="card-body">
-                              없어!! 그냥써라
-                            </div>
-                          </div>
-                        </div>
-                        <br>
-                        <div class="card">
-                          <div class="card-header" role="tab" id="headingTwo">
-                            <h5 class="mb-0">
-                              <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                02 부적절한 게시글을 발견했습니다. 어떻게 해야하나요?
-                              </a>
-                            </h5>
-                          </div>
-                          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
-                            <div class="card-body">
-                                없어!! 그냥써라
-                            </div>
-                          </div>
-                        </div>
-                        <br>
-                        <div class="card">
-                          <div class="card-header" role="tab" id="headingThree">
-                            <h5 class="mb-0">
-                              <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                03 프로필 변경하고 싶어요
-                              </a>
-                            </h5>
-                          </div>
-                          <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
-                            <div class="card-body">
-                                없어!! 그냥써라
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-        </div>
-    </div>
-    
+         <div id="accordion" role="tablist" style="height:300px;"></div>
+     </div>    
     <!-- 연락처 및 지도 -->
     <c:choose>
 		<c:when test="${selected ne 'ma'}">
@@ -509,14 +532,14 @@
 		</c:otherwise>
 	</c:choose>
     
-        <div class=" justify-content-center textc">
+        <div class="justify-content-center textc">
             <br>
             <h3><i class="fas fa-phone-volume" style="font-size: 3ex;"></i>고객센터</h3><br>
             <h4>02-2222-2222</h4>
 		</div>
 		<br><hr><br>
         <div class="textc"><h3>Location</h3></div><br>
-        <div class="textc"><i class="fas fa-map-signs" style="font-size: 7ex;"></i></div><br>
+        <div class="textc"><i class="fas fa-map-signs" style="font-size: 7ex; color:saddlebrown;"></i></div><br>
         <div class="textc"><h4>서울특별시 강남구 테헤란로 14길 6 남도빌딩 3F</h4></div>
     </div>
     <br>
@@ -528,16 +551,48 @@
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
 <script>
-	/* $('.cursorPo').on('click',function(){
+	$('.guideCate').on('click',function(){
 	
-		var select = $(this).siblings('input').val();
-		alert(select);
-		$.ajax({
-		url : "${pageContext.request.contextPath}/common/ajax.ft",
-		data : {selected: }
+		$('#accordion').children().remove();
 		
+		var select = $(this).children('input').val();
+		$.ajax({
+		url : "${pageContext.request.contextPath}/common/qna.ft",
+		data : {selected: select},
+		type : "get",
+		success : function(data){
+			var list = data.list;
+			
+			for(var l in list){
+				$('#accordion').append("<div>");
+				
+				var $div= $('<div class="card">');
+				var $div2 = $('<div class="card-header" role="tab">');
+				$div.append($div2);
+				var $h5 = $('<h5 class="mb-0">');
+				$div2.append($h5);
+				var $a = $('<a data-toggle="collapse" href="#'+list[l].boardNo+'" aria-expanded="false">');
+				$h5.append($a);
+				$a.append("Q.  "+list[l].boardTitle);
+				var $div3 = $('<div id="'+list[l].boardNo+'" class="collapse" role="tabpanel" data-parent="#accordion">');
+				var $div4 = $('<div class="card-body">');
+				$div3.append($div4);
+				$div4.append("A.  "+list[l].boardContent);
+				
+				$('#accordion').append($div);
+				$('#accordion').append($div3);
+				
+				$('#accordion').append("</div>");
+				$('#accordion').append('<br>');
+			}
+			
+			
+		},
+		error : function(data){
+			console.log("에러 발생!");
+		}
 		});
-	}); */
+	}); 
 	
 
 	
@@ -577,7 +632,47 @@
 		$('#personalInfo').css("color","black");
 		$('#useGuide').css("color","skyblue");
 		$('#maps').css("color","black");
+		
+		$('#accordion').children().remove();
+		var select = "qna";
+		$.ajax({
+		url : "${pageContext.request.contextPath}/common/qna.ft",
+		data : {selected: select},
+		type : "get",
+		success : function(data){
+			var list = data.list;
+			
+			for(var l in list){
+				$('#accordion').append("<div>");
+				
+				var $div= $('<div class="card">');
+				var $div2 = $('<div class="card-header" role="tab">');
+				$div.append($div2);
+				var $h5 = $('<h5 class="mb-0">');
+				$div2.append($h5);
+				var $a = $('<a data-toggle="collapse" href="#'+list[l].boardNo+'" aria-expanded="false">');
+				$h5.append($a);
+				$a.append("Q.  "+list[l].boardTitle);
+				var $div3 = $('<div id="'+list[l].boardNo+'" class="collapse" role="tabpanel" data-parent="#accordion">');
+				var $div4 = $('<div class="card-body">');
+				$div3.append($div4);
+				$div4.append("A.  "+list[l].boardContent);
+				
+				$('#accordion').append($div);
+				$('#accordion').append($div3);
+				
+				$('#accordion').append("</div>");
+				$('#accordion').append('<br>');
+			}
+			
+			
+		},
+		error : function(data){
+			console.log("에러 발생!");
+		}
+		});
 	});
+	
 	$('#maps').on('click',function(){
 		$('#map').css("height","400px");
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
