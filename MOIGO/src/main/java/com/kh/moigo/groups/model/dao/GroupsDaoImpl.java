@@ -111,9 +111,9 @@ public class GroupsDaoImpl implements GroupsDao {
 	}
 	
 	@Override
-	public int checkIsGroupMem(GroupMember gm) {
+	public GroupMember selectOneMember(GroupMember gm) {
 		
-		return sqlSession.selectOne("groups.checkIsGroupMem",gm);
+		return sqlSession.selectOne("groups.selectOneGrpMem",gm);
 	}
 	
 	@Override

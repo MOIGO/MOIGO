@@ -35,7 +35,7 @@
 
 </style>
 
-<div id="insertModalWrapper"> 
+<div id="insertMapModalWrapper"> 
 
 <div class="modal" id="insertMap" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalLongTitle"

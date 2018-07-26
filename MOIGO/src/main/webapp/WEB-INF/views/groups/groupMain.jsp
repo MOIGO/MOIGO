@@ -61,6 +61,13 @@ background: #EDEFF2;
 	cursor:pointer;
 }
 
+.font-elipsis{
+	overflow:hidden;
+	text-overflow:ellipsis; 
+	white-space:nowrap;
+
+}
+
 </style>
 
 </head>
@@ -68,6 +75,7 @@ background: #EDEFF2;
 <body>
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" />
 
 	<div class="container">
 
@@ -75,12 +83,15 @@ background: #EDEFF2;
 
 
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
-            	<c:param name="groupNo" value="G001"/>
+            	<c:param name="groupNo" value="${groupNo}"/>
+            	<c:param name="memberGrade" value="${memberGrade}"/>
          	</c:import>
 
 			<div class="col-7">
 				<div class="col">
+				<c:if test="${memberGrade>0}">
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
+				</c:if>
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
 					<div id="postDiv" class="">
 						
@@ -131,14 +142,7 @@ background: #EDEFF2;
 
 $(function(){
 	setPostList(1);
-	setMemberOnlyMenu();
 });
-
-function setMemberOnlyMenu(){
-	
-	
-	
-}
 
 function deleteAllPost(){
 	$('#postDiv').children().remove();
@@ -148,7 +152,7 @@ function deleteAllPost(){
 function setPostList(currentPage){
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
-		data:{groupNo:"G001",currPage:currentPage},
+		data:{groupNo:"${groupNo}",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
 
@@ -224,12 +228,12 @@ function makeProfile(obj){
 	
 	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
 	var $userDataWrapper =$("<div class='d-flex'>");
-	var $userName =$("<span class='mr-4 ' style='overflow:hidden;text-overflow:ellipsis; font-weight:bold'>").text(obj.groupMember.memberName);
-	var $userMsg = $("<span class='w-50 text-muted' style='overflow:hidden;text-overflow:ellipsis;'>").text(obj.groupMember.profileMsg);
+	var $userName =$("<span class='w-25' style='overflow:hidden;text-overflow:ellipsis; font-weight:bold'>").text(obj.groupMember.memberName);
+	var $userMsg = $("<span class='w-75 text-muted font-elipsis'>").text(obj.groupMember.profileMsg);
 	var $replyContent;
 	
 	if(typeof(obj.postNo)!='undefined'){
-		$replyContent = $("<div class='d-flex replyContent '>"); 
+		$replyContent = $("<div class='d-flex replyContent font-elipsis' style='cursor:pointer;' onclick='toggleElipsis(this);'>"); 
 		$replyContent.append(obj.content);
 	}
 	
@@ -263,6 +267,9 @@ function makeProfile(obj){
 	return $profileWrapper;
 }
 
+function toggleElipsis(obj){
+	$(obj).toggleClass("font-elipsis");
+}
 
 
 
@@ -623,6 +630,22 @@ function createSummerNote(){
 		  return button.render();   // return button as jquery object
 		}
 	
+	var insertSchedule = function (context) {
+		  var ui = $.summernote.ui;
+
+		  // create button
+		  var button = ui.button({
+		    contents: '<i class="fas fa-calendar-alt"></i>',
+		    container:false,
+		    tooltip: '일정 삽입',
+		    click: function () {
+		    	toggleScheduleModal();
+		    }
+		  });
+
+		  return button.render();   // return button as jquery object
+		}
+	
 	$('#summernote').summernote({
 		  toolbar: [
 		  	['style', ['bold', 'italic', 'underline', 'clear']],
@@ -631,11 +654,13 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
-		    ['mybutton', ['insertmap']]
+		    ['mybutton', ['insertmap']],
+		    ['myButton',['insertSchedule']]
 		  ],
 
 		  buttons: {
-		     insertmap: insertMap
+		     insertmap: insertMap,
+		     insertSchedule:insertSchedule
 		  }
 	});
 	
@@ -644,6 +669,11 @@ function createSummerNote(){
 function toggleMapModal(){
 	 $('#insertMap').modal("toggle");
      $('#insertMap').on("shown.bs.modal",makeMap());
+}
+
+function toggleScheduleModal(){
+	 $('#insertSchedule').modal("toggle");
+     
 }
 	
 </script>

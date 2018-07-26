@@ -1,12 +1,10 @@
 package com.kh.moigo.groups.controller;
 
-import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
 import com.kh.moigo.groups.model.vo.GroupMember;
@@ -34,6 +30,7 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.member.model.vo.Member;
 
 @Controller
 public class GroupController {
@@ -41,11 +38,30 @@ public class GroupController {
 	@Autowired
 	private GroupsService groupService;
 
-	@RequestMapping("/groups/groupsTest.do")
-	public String groupTest(){
+	@RequestMapping("/groups/groupMain.gp")
+	public String groupMain(@RequestParam(value="groupNo", defaultValue="G001")String groupNo ,HttpServletRequest request,Model model){
+		
+		//세션에서 멤버 가져옴
+		Member m = (Member)(request.getSession().getAttribute("m"));
+		
+		//멤버 널 아니면
+		if(m!=null){
+			//그룹에 있는지 확인하고
+			GroupMember gm = groupService.selectOneMember(new GroupMember(m.getMemberNo(),groupNo));
+			
+			//그룹에 있으면
+			if(gm!=null)
+				model.addAttribute("memberGrade",gm.getMemberGradeCode()); //권한 컬럼을 뷰에 리턴
+			else
+				model.addAttribute("memberGrade",-1); //없으면(가입 안되있으면) -1 리턴
+		}else
+			model.addAttribute("memberGrade",-1);//멤버가 아니어도 -1 리턴
+		
+		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
 		
 		return "groups/groupMain";
 	}
+
 	
 	//그룹 만드는 페이지 넘어가기
 	@RequestMapping("/groups/createGroup.gp")
@@ -60,8 +76,6 @@ public class GroupController {
 	{
 		String groupPicture = "";
 		String profileImg = "";
-
-		System.out.println(group);
 		
 		int result =  groupService.createGroup(group);
 		
@@ -96,15 +110,14 @@ public class GroupController {
 				e.printStackTrace();
 			}
 			
-			// 3. groupMember에 담아서 update하기
+			
 			group.setGroupPicture(groupPicture);
 			
 			result = groupService.updateGroupImg(group);
 		}
 		
-		return "redirect:/groups/groupMember.gp?groupNo="+ group.getGroupNo();
-		
-		
+		return "redirect:/groups/groupMain.gp?groupNo="+ group.getGroupNo();
+
 	}
 	
 	//그룹 메인에 글 가져오기
@@ -126,21 +139,24 @@ public class GroupController {
 		return map;
 	}
 	
+	//그룹 가입하기
 	@RequestMapping("/groups/joinGroup.gp")
-	public String joinGroup(@RequestParam String groupNo ,@RequestParam String memberNo,Model model){
+	public String joinGroup(@RequestParam String groupNo ,HttpServletRequest request,Model model){
 	
 		
-		if((groupService.selectOneGroup(groupNo)).getAllowSignup()=="Y"){
-			groupService.insertGroupMember(new GroupMember(memberNo,groupNo,0));
-		}else{
-			groupService.insertGroupMember(new GroupMember(memberNo,groupNo,1));
+		Member m = (Member)request.getSession().getAttribute("m");
+		if(m!=null){
+		
+			if((groupService.selectOneGroup(groupNo)).getAllowSignup().equals("Y")){
+				System.out.println("여기 들어와야지 그지?");
+				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
+			}else{
+				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
+			}
 		}
-		
-	
-		
 		model.addAttribute("groupNo",groupNo);
-		
-		return "groups/groupMain";
+		model.addAttribute("msg","가입에 성공하셨습니다.");
+		return "groups/joinEnded";
 				
 	}
 	
@@ -158,12 +174,7 @@ public class GroupController {
 		return map;
 	}
 	
-	//그룹 메인으로 이동
-	@RequestMapping("/groups/setGroupMain.gp")
-	public String setGroupMain(@RequestParam String groupNo,Model model,HttpServletRequest request){
 	
-		return "groups/groupMain";
-	}
 	
 	
 	//글 쓰기

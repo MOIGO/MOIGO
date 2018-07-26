@@ -99,8 +99,8 @@ public class GroupsServiceImpl implements GroupsService {
 	}
   	
   	@Override
-	public int checkIsGroupMem(GroupMember gm) {
-		return groupDao.checkIsGroupMem(gm);
+	public GroupMember selectOneMember(GroupMember gm) {
+		return groupDao.selectOneMember(gm);
 		
 	}
   	

@@ -16,7 +16,7 @@
 
 	<select id="selectOneMember" resultMap="memberResultMap" >
 		SELECT * FROM MEMBER
-		WHERE MEMBER_EMAIL = #{memberEmail} AND DELFLAG='N'
+		WHERE MEMBER_EMAIL = #{memberEmail} AND DELFLAG='N'	
 	</select>
 	
 	<select id="checkIdDuplicate" resultType="_int">
