@@ -256,7 +256,7 @@ tr {
 														id="inlineFormInputPost" readonly>
 												</div>
 											</div> 
-											<div class="col-sm-5">
+											<div class="col-sm-5"> 
 												<label class="sr-only" for="inlineFormInputReply">Reply</label>
 												<div class="input-group">
 													<div class="input-group-prepend">
