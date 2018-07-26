@@ -20,6 +20,7 @@
           data.addColumn('string', 'Day');
           data.addColumn('number', 'Member');
 
+          
           data.addRows([
             ['0', 0],   
             ['1', 10],  
