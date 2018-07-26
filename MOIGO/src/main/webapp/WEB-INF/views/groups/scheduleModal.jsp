@@ -39,15 +39,15 @@
 							<div class="row">
 								<div class="col-2"><strong>시작</strong></div>
 								<div class="col-5"><input type="text" id="startDate" class="form-control"/></div>
-								<div class="col-5"><input type="text" id="startTime" class="form-control" /></div>
+								<div class="col-5"><input type="text" id="startTime"  class="form-control" /></div>
 							</div>
 						</div>
 						
 						<div class="mt-2">
 							<div class="row">
 								<div class="col-2"><strong>종료</strong></div>
-								<div class="col-5"><input type="text" id="endDate" class="form-control"/></div>
-								<div class="col-5"><input type="text" id="endTime" class="form-control" /></div>
+								<div class="col-5"><input type="text" id="endDate" placeholder="선택" class="form-control"/></div>
+								<div class="col-5"><input type="text" id="endTime" placeholder="선택"  class="form-control" /></div>
 							</div>
 						</div>
 						</div>
@@ -77,13 +77,35 @@
 				$('#endDate').datepicker("option","minDate",getDate(this));
 			});
 			$('#endDate').on("change",function(){
-				$('#startDate').datepicker("setDate",getDate(this));
+				if($('#endDate').datepicker("getDate")<$('#startDate').datepicker("getDate")){
+					alert("종료 날짜는 시작 날짜 이후여야 합니다 다시 설정해주세요.");
+					$('#endDate').val("");
+					$('#endDate').datepicker("hide");
+				}
 			});
 		
 			
-			$('#startTime').timepicker();
-			$('#startTime').timepicker('setTime',new Date());
+			$('#startTime').timepicker({ timeFormat: "H:i a",lang: {am: '오전', pm: '오후'}});
+			
+			
 			$('#endTime').timepicker();
+			$('#startTime').timepicker('setTime',new Date());
+			
+			$('#startTime').timepicker({"step":30});
+			$('#endTime').timepicker({"step":30});
+			
+			
+			$('#endTime').on("change",function(){
+				
+				if($('#startTime').timepicker('getSecondsFromMidnight')>$('#endTime').timepicker('getSecondsFromMidnight'))
+				{
+					alert("종료 시간은 시작 시간 이후여야 합니다 다시 설정해주세요.");
+					$('#endTime').val("");
+					$('#endTime').timepicker("hide");
+				}
+				
+			});
+	
 		});
 	
 		
@@ -109,9 +131,12 @@
 	 }
 	 
 	 function closeScheduleModal(){
-			
-		 $( "#startDate" ).datepicker( "destroy" );
-		 $( "#endDate" ).datepicker( "destroy" );
+		
+		 $("#startDate").datepicker( "destroy" );
+		 $("#endDate").datepicker( "destroy" );
+		 $("#startTime").datepicker( "remove" );
+		 $("#endTime").datepicker( "remove" );
+		 
 	 }
 
 </script>
