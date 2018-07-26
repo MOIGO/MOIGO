@@ -39,7 +39,7 @@ public class GroupController {
 	private GroupsService groupService;
 
 	@RequestMapping("/groups/groupMain.gp")
-	public String groupMain(@RequestParam(value="groupNo", defaultValue="G002")String groupNo ,HttpServletRequest request,Model model){
+	public String groupMain(@RequestParam(value="groupNo", defaultValue="G001")String groupNo ,HttpServletRequest request,Model model){
 		
 		//세션에서 멤버 가져옴
 		Member m = (Member)(request.getSession().getAttribute("m"));

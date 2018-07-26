@@ -75,6 +75,7 @@ background: #EDEFF2;
 <body>
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" />
 
 	<div class="container">
 
@@ -141,14 +142,7 @@ background: #EDEFF2;
 
 $(function(){
 	setPostList(1);
-	setMemberOnlyMenu();
 });
-
-function setMemberOnlyMenu(){
-	
-	
-	
-}
 
 function deleteAllPost(){
 	$('#postDiv').children().remove();
@@ -274,8 +268,7 @@ function makeProfile(obj){
 }
 
 function toggleElipsis(obj){
-	console.log(obj);
-	$(this).toggleClass("font-elipsis");
+	$(obj).toggleClass("font-elipsis");
 }
 
 
@@ -637,6 +630,22 @@ function createSummerNote(){
 		  return button.render();   // return button as jquery object
 		}
 	
+	var insertSchedule = function (context) {
+		  var ui = $.summernote.ui;
+
+		  // create button
+		  var button = ui.button({
+		    contents: '<i class="fas fa-calendar-alt"></i>',
+		    container:false,
+		    tooltip: '일정 삽입',
+		    click: function () {
+		    	toggleScheduleModal();
+		    }
+		  });
+
+		  return button.render();   // return button as jquery object
+		}
+	
 	$('#summernote').summernote({
 		  toolbar: [
 		  	['style', ['bold', 'italic', 'underline', 'clear']],
@@ -645,11 +654,13 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
-		    ['mybutton', ['insertmap']]
+		    ['mybutton', ['insertmap']],
+		    ['myButton',['insertSchedule']]
 		  ],
 
 		  buttons: {
-		     insertmap: insertMap
+		     insertmap: insertMap,
+		     insertSchedule:insertSchedule
 		  }
 	});
 	
@@ -658,6 +669,11 @@ function createSummerNote(){
 function toggleMapModal(){
 	 $('#insertMap').modal("toggle");
      $('#insertMap').on("shown.bs.modal",makeMap());
+}
+
+function toggleScheduleModal(){
+	 $('#insertSchedule').modal("toggle");
+     
 }
 	
 </script>
