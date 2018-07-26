@@ -11,6 +11,7 @@ public class Groups implements java.io.Serializable{
 	private String groupMsg;
 	private String groupAddress;
 	private String groupPicture;
+	private String groupAddress;
 	private String groupGradeCode;
 	private String groupStateCode;
 	private int maxMember;
@@ -105,6 +106,7 @@ public class Groups implements java.io.Serializable{
 	public void setInterestBigCode(String interestBigCode) {
 		this.interestBigCode = interestBigCode;
 	}
+
 	public String getAllowSignup() {
 		return allowSignup;
 	}
@@ -241,6 +243,7 @@ public class Groups implements java.io.Serializable{
 				+ ", interestBigCode=" + interestBigCode + ", allowSignup=" + allowSignup + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", groupGender=" + groupGender + ", openSetting=" + openSetting + "]";
 	}
+
 	
 	
 

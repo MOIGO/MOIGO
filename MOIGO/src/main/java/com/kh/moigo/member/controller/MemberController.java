@@ -35,6 +35,7 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
+
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;	
 	
@@ -173,6 +174,7 @@ public class MemberController {
 		map.put("isUsable", isUsable);
 		
 		return map;
+
 	}
 	
 
