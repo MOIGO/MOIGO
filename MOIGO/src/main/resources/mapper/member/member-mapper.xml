@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="member">
+
    
    <resultMap type="member" id="memberResultMap">
       <id property="memberNo" column="MEMBER_NO"/>
@@ -40,3 +41,112 @@
       WHERE USERID=#{userId}
    </update>  -->
 </mapper>
+
+	
+	<resultMap type="member" id="memberResultMap">
+		<id property="memberNo" column="MEMBER_NO"/>
+		<result property="memberEmail" column="MEMBER_EMAIL"/>
+		<result property="memberPwd" column="MEMBER_PWD"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+		<result property="memberAddress" column="MEMBER_ADDRESS"/>
+		<result property="memberBirth" column="MEMBER_BIRTH"/>
+		<result property="memberGender" column="MEMBER_GENDER"/>
+		<result property="enrollDate" column="ENROLL_DATE"/>
+	</resultMap>
+	
+
+	<select id="selectOneMember" resultMap="memberResultMap" >
+		SELECT * FROM MEMBER
+		WHERE MEMBER_EMAIL = #{memberEmail} AND DELFLAG='N'
+	</select>
+	
+	<select id="checkIdDuplicate" resultType="_int">
+		SELECT COUNT(*) AS CNT FROM MEMBER WHERE MEMBER_EMAIL = #{memberEmail}  
+	</select>
+	
+ 	<insert id="insertMember" parameterType="member">
+ 		<selectKey keyProperty="memberNo" resultType="string" order="AFTER">
+			SELECT 'M'||TO_CHAR(SEQ_MEMBER.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+		INSERT INTO MEMBER 
+		VALUES('M'||TO_CHAR(SEQ_MEMBER.NEXTVAL,'FM000'),#{memberEmail}, #{memberPwd},#{memberName}, #{memberAddress, jdbcType=VARCHAR},
+			   (TO_CHAR(#{memberBirth},'RRRR/MM/DD')), #{memberGender}, DEFAULT, 'N')
+	</insert>
+	
+
+	<update id="updateMemberPwd" parameterType="hashmap">
+		UPDATE MEMBER SET MEMBER_PWD = #{memberPwd} WHERE MEMBER_EMAIL=#{memberEmail}
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER SET DELFLAG = 'Y' WHERE MEMBER_NO=#{memberNo}
+	</update>
+	
+	
+	
+	<update id="updateMember" parameterType="member">
+		UPDATE MEMBER 
+		SET MEMBER_NAME=#{memberName},
+			MEMBER_ADDRESS=#{memberAddress}, 
+			MEMBER_BIRTH=#{memberBirth}
+		WHERE MEMBER_NO=#{memberNo}
+	</update>  
+	
+	
+	
+	<!--  관심사 ㅎ -->
+	<delete id="deleteMemberInterest" parameterType="string">
+		DELETE MEMBER_INTEREST WHERE  MEMBER_NO=#{memberNo}
+	</delete>
+	
+	<select id= "selectInterestList" resultType="string">
+		SELECT INTEREST_BIG_CODE
+		FROM MEMBER_INTEREST 
+		WHERE MEMBER_NO=#{memberNo}
+	</select>
+	
+	<insert id="insertMemberInterest" parameterType="hashmap">
+			INSERT INTO MEMBER_INTEREST VALUES(#{memberNo},#{interest,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 탈퇴사유 -->
+	<insert id="insertDropout" parameterType="hashmap">
+		INSERT INTO DROPOUT VALUES(#{memberNo}, #{contentW}) 
+	</insert>
+	
+	<!-- 그룹 리스트 -->
+	<resultMap type="mypageGroup" id="mypageGroupMap">
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="groupName" column="GROUP_NAME"/>
+		<result property="groupPicture" column="GROUP_PICTURE"/>
+		<result property="gropuNum" column="CNUM"/>
+	</resultMap>
+	
+	<select id="selectGroupList" parameterType="hashmap" resultMap="mypageGroupMap">
+	SELECT  gm.GROUP_NO, g.GROUP_NAME , g.GROUP_PICTURE , grm.cnum 
+		FROM (SELECT GROUP_NO , count(*) cnum FROM GROUP_MEMBER  GROUP BY GROUP_NO) grm
+		JOIN GROUPS g ON (grm.GROUP_NO = g.GROUP_NO ) 
+		JOIN GROUP_MEMBER gm on (grm.GROUP_NO=gm.GROUP_NO)
+		WHERE MEMBER_NO=#{memberNo} 
+			<if test="gType =='open'">
+					 AND MEMBER_GRADE_CODE IN(3)
+				</if>
+				<if test="gType =='join'">
+					AND MEMBER_GRADE_CODE IN(1,2)
+				</if>
+				<if test="gType =='wait'">
+					 AND MEMBER_GRADE_CODE IN(0)
+				</if>  
+		
+	</select>
+	
+	
+	<!--  페북 -->
+	<insert id="insertFbMember" parameterType="member">
+		INSERT INTO MEMBER 
+		VALUES('M'||TO_CHAR(SEQ_MEMBER.NEXTVAL,'FM000'),#{memberEmail}, #{memberPwd},#{memberName}, #{memberAddress, jdbcType=VARCHAR},
+			   (TO_CHAR(#{memberBirth},'RRRR/MM/DD')), #{memberGender}, DEFAULT, 'N')
+	</insert>
+</mapper>
+
+

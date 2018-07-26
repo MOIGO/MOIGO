@@ -1,25 +1,260 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="groups">
+
 	<resultMap type="groups" id="groupsResultMap">
 		<id property="groupNo" column="GROUP_NO"/>
 		<result property="groupName" column="GROUP_NAME"/>
 		<result property="groupMsg" column="GROUP_MSG"/>
 		<result property="groupPicture" column="GROUP_PICTURE"/>
+		<result property="groupAddress" column="GROUP_ADDRESS"/>
 		<result property="groupGradeCode" column="GROUP_GRADE_CODE"/>
 		<result property="groupStateCode" column="GROUP_STATE_CODE"/>
 		<result property="maxMember" column="MAX_MEMBER"/>
 		<result property="enrollDate" column="ENROLL_DATE"/>
 		<result property="interestBigCode" column="INTEREST_BIG_CODE"/>
-		<result property="interestSmallCode" column="INTEREST_SMALL_CODE"/>
 		<result property="allowSignup" column="ALLOW_SIGNUP"/>
 		<result property="minAge" column="MIN_AGE"/>
 		<result property="maxAge" column="MAX_AGE"/>
 		<result property="groupGender" column="GROUP_GENDER"/>
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
-	<select id="selectGroupList" resultMap="groupsResultMap">
-	SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
-	</select>
-</mapper>
 	
+	<resultMap type="post" id="postResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="isNotice" column="IS_NOTICE"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+	</resultMap>
+	
+	<resultMap type="files" id="filesResultMap">
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
+		<result property="fileNewName" column="FILE_NEW_NAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="groupNo" column="SUBMIT_DATE"/>
+		<result property="filePath" column="GROUP_NO"/>
+		<result property="groupNo" column="MEMBER_NO"/>
+		<result property="filePath" column="FILE_DATE"/>
+		<result property="isImage" column="IS_IMAGE"/>
+	</resultMap>
+	
+	<resultMap type="postReply" id="postReplyResultMap">
+		<id property="replyNo" column="REPLY_NO"/>
+		<result property="postNo" column="POST_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="content" column="CONTENT"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+	</resultMap>
+
+	<resultMap type="postWithMem" id="postWithMemResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="isNotice" column="IS_NOTICE"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+		<collection property="postReplyWithMem" column="POST_NO" ofType="postReplyWithMem" select="selectReplyForPost"/>
+		<collection property="files" column="POST_NO" ofType="files" select="selectFilesForPost"/><!--여기서부터!!  -->
+	</resultMap>
+
+	<resultMap type="postReplyWithMem" id="postReplyWithMemResultMap">
+		<id property="replyNo" column="REPLY_NO"/>
+		<result property="postNo" column="POST_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="content" column="CONTENT"/>
+		<result property="submitDate" column="SUBMIT_DATE"/>
+		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+	</resultMap>
+	
+	<!--댓글에 멤버 정보 세팅  -->
+	<select id="selectMemberForPostReply" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
+		WHERE MEMBER_NO=#{memberNo}
+	</select>
+	
+	<!--그룹 멤버 하나 선택  -->
+	<select id="selectOneGroupMember" resultMap="groupMemberResultMap">
+		SELECT GROUP_MEMBER.*,MEMBER_NAME 
+		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
+		WHERE GROUP_MEMBER.MEMBER_NO=#{memberNo}
+		
+	</select>
+	
+	<!--글에 첨부된 파일들 가져오기  -->
+	<select id="selectFilesForPost" resultMap="filesResultMap">
+		SELECT FILE_NO,FILE_ORIGIN_NAME,FILE_NEW_NAME,FILE_PATH FROM FILES 
+		JOIN POSTFILES USING(FILE_NO)
+		JOIN POST USING(POST_NO)
+		WHERE POST_NO=#{postNo}
+	</select>
+	
+	<!-- 그룹 리스트 가져오기 -->
+	<select id="selectGroupList" resultMap="groupsResultMap">
+		SELECT * FROM GROUPS ORDER BY GROUP_NO DESC
+	</select>
+	
+	<!--글 등록  -->
+	<insert id="insertPost" parameterType="hashmap">
+		INSERT INTO POST VALUES('P'||TO_CHAR(SEQ_POST.NEXTVAL,'FM000'),#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
+	</insert>
+	
+	<!--글 삭제 -->
+	<delete id="deletePost">
+		DELETE FROM POST
+		WHERE POST_NO=#{postNo}
+	</delete>
+	
+	<!--글 수정  -->
+	<update id="updatePost" parameterType="post">
+		UPDATE POST
+		SET CONTENT=#{content}
+		WHERE POST_NO=#{postNo}
+	</update>
+	
+	<!--댓글 등록  -->
+	<insert id="insertReply" parameterType="postReply">
+		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)
+	</insert>
+	
+	<delete id="deleteReply">
+		DELETE FROM POST_REPLY
+		WHERE REPLY_NO=#{replyNo}
+	</delete>
+	
+	<!--글 목록 가져오기(페이징 적용)  -->
+	<select id="selectPostList" resultType="post" resultMap="postResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo})
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<!--글과 글쓴이 가져오기  -->
+	<select id="selectPostWithMemList" resultType="postWithMem" resultMap="postWithMemResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} ORDER BY POST.SUBMIT_DATE DESC)
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<!--댓글 가져오기  -->
+	<select id="selectReplyForPost" resultMap="postReplyWithMemResultMap" >
+		SELECT * FROM POST_REPLY WHERE POST_NO = #{postNo}
+	</select>
+	
+	<!--글 갯수   -->
+	<select id="selectPostCnt" resultType="_int">
+		SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
+	</select>
+	
+	<!--댓글 수정  -->
+	<update id="updateReply" parameterType="postReply">
+		UPDATE POST_REPLY
+		SET CONTENT=#{content}
+		WHERE REPLY_NO=#{replyNo}
+	</update>
+	
+	<!--그룹 등록  -->
+	<insert id="insertGroup" parameterType="groups">
+		
+		<selectKey keyProperty="groupNo" resultType="string" order="AFTER" >
+			SELECT 'G'||TO_CHAR(SEQ_GROUP.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO GROUPS VALUES('G'||TO_CHAR(SEQ_GROUP.NEXTVAL,'FM000'),
+		#{groupName},#{groupMsg},#{groupPicture},#{groupAddress},DEFAULT,DEFAULT,#{maxMember},DEFAULT,#{interestBigCode},
+		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
+	</insert>
+	
+	<!--그룹 커버 사진 바꾸기  -->
+	<update id="updateGroupCover" parameterType="groups">
+		UPDATE GROUPS
+		SET GROUP_PICTURE = #{groupPicture}
+		WHERE GROUP_NO=#{groupNo}
+	</update>
+	
+	<!--그룹의 멤버 수 가져오기  -->
+	<select id="selectGrpMemNum" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO =#{groupNo}
+	</select>
+	
+	<!--그룹의 리더 정보 가져오기  -->
+	<select id="selectGroupLeader" resultMap="groupMemberResultMap">
+		SELECT GROUP_MEMBER.*,MEMBER_NAME 
+		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
+		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
+	</select>
+	
+	<!--이 사람이 그룹의 멤버인지 확인하기  -->
+	<select id="checkIsGroupMem" parameterType="groupMember" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
+	</select>
+	
+	<!--그룹 가입하기 -->
+	<insert id="insertGroupMember" parameterType="groupMember">
+		INSERT INTO GROUP_MEMBER VALUES(#{memberNo},#{groupNo},#{profileImg},#{profileThumb},#{profileMsg},#{memberGradeCode})
+	</insert>
+
+
+	<!-- ===================================================================================================== 혜진 -->
+
+
+	<resultMap type="groupMember" id="groupMemberResultMap">
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="profileImg" column="PROFILE_IMG"/>
+		<result property="profileThumb" column="PROFILE_THUMB"/>
+		<result property="profileMsg" column="PROFILE_MSG"/>
+		<result property="memberGradeCode" column="MEMBER_GRADE_CODE"/>
+		<result property="memberName" column="MEMBER_NAME"/>
+	</resultMap>
+	
+	<select id="selectGroupMemberList" resultMap="groupMemberResultMap">
+		SELECT GM.*, M.MEMBER_NAME
+		FROM GROUP_MEMBER GM, MEMBER M 
+		WHERE GM.MEMBER_NO = M.MEMBER_NO
+		AND GROUP_NO = #{groupNo}
+		ORDER BY 6 DESC, 7
+	</select>
+	
+	<select id="searchGroupMemberList" parameterType="hashmap" resultMap="groupMemberResultMap">
+		SELECT GM.*, M.MEMBER_NAME
+		FROM GROUP_MEMBER GM, MEMBER M 
+		WHERE GM.MEMBER_NO = M.MEMBER_NO
+		AND GROUP_NO = #{groupNo}
+		AND M.MEMBER_NAME LIKE #{searchName}||'%'
+		ORDER BY 6 DESC, 7
+	</select>
+	
+	<update id="updateGroupMember">
+		UPDATE GROUP_MEMBER
+		SET PROFILE_IMG = #{profileImg},
+		PROFILE_THUMB = #{profileThumb},
+		PROFILE_MSG = #{profileMsg}
+		WHERE GROUP_NO = #{groupNo}
+		AND MEMBER_NO = #{memberNo}
+	</update>
+	
+	<select id="selectOneGroup" resultMap="groupsResultMap">
+		SELECT *
+		FROM GROUPS
+		WHERE GROUP_NO = #{groupNo}
+	</select>
+	
+	<update id="updateGroupCondition">
+		UPDATE GROUPS
+		SET GROUP_GENDER = #{groupGender},
+		MAX_AGE = #{maxAge},
+		MIN_AGE = #{minAge},
+		MAX_MEMBER = #{maxMember},
+		GROUP_ADDRESS = #{groupAddress},
+		ALLOW_SIGNUP = #{allowSignup}
+		WHERE GROUP_NO = #{groupNo}
+	</update>
+	
+	<!-- <delete id="deleteGroup">
+		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
+	</delete> -->
+</mapper>

@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="search">
-	<resultMap type="groups" id="groupsResultMap">
-		<id property="groupNo" column="GROUP_NO"/>
-		<result property="groupName" column="GROUP_NAME"/>
-		<result property="groupMsg" column="GROUP_MSG"/>
-		<result property="groupAddress" column="GROUP_ADDRESS"/>
-		<result property="groupPicture" column="GROUP_PICTURE"/>
-		<result property="groupGradeCode" column="GROUP_GRADE_CODE"/>
-		<result property="groupStateCode" column="GROUP_STATE_CODE"/>
-		<result property="maxMember" column="MAX_MEMBER"/>
-		<result property="enrollDate" column="ENROLL_DATE"/>
-		<result property="interestBigCode" column="INTEREST_BIG_CODE"/>
-		<result property="interestSmallCode" column="INTEREST_SMALL_CODE"/>
-		<result property="allowSignup" column="ALLOW_SIGNUP"/>
-		<result property="minAge" column="MIN_AGE"/>
-		<result property="maxAge" column="MAX_AGE"/>
-		<result property="groupGender" column="GROUP_GENDER"/>
-		<result property="openSetting" column="OPEN_SETTING"/>
-	</resultMap>
-	<select id="listCount" resultType="_int" parameterType="string">
-		SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%'
-	</select>
-	
-	<select id="selectList" resultMap="groupsResultMap" parameterType="string">
-		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' ORDER BY ENROLL_DATE DESC
-	</select>
-	
-	<select id="detailListCount" resultType="_int" parameterType="hashmap">
-		SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
-	</select>
-	
-	<select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
-		SELECT * FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
-		<choose>
-			<when test="#{sort} == hits">
-				
-			</when>
-			<when test="#{sort} == member">
-				
-			</when>
-			<otherwise>
-				ORDER BY ENROLL_DATE DESC
-			</otherwise>
-		</choose>
-	</select>
+   <resultMap type="groups" id="groupsResultMap">
+      <id property="groupNo" column="GROUP_NO"/>
+      <result property="groupName" column="GROUP_NAME"/>
+      <result property="groupMsg" column="GROUP_MSG"/>
+      <result property="groupAddress" column="GROUP_ADDRESS"/>
+      <result property="groupPicture" column="GROUP_PICTURE"/>
+      <result property="groupGradeCode" column="GROUP_GRADE_CODE"/>
+      <result property="groupStateCode" column="GROUP_STATE_CODE"/>
+      <result property="maxMember" column="MAX_MEMBER"/>
+      <result property="enrollDate" column="ENROLL_DATE"/>
+      <result property="interestBigCode" column="INTEREST_BIG_CODE"/>
+      <result property="interestSmallCode" column="INTEREST_SMALL_CODE"/>
+      <result property="allowSignup" column="ALLOW_SIGNUP"/>
+      <result property="minAge" column="MIN_AGE"/>
+      <result property="maxAge" column="MAX_AGE"/>
+      <result property="groupGender" column="GROUP_GENDER"/>
+      <result property="openSetting" column="OPEN_SETTING"/>
+   </resultMap>
+   <select id="listCount" resultType="_int" parameterType="string">
+      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
+   </select>
+   
+   <select id="selectList" resultMap="groupsResultMap" parameterType="string">
+      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
+   </select>
+   
+   <select id="detailListCount" resultType="_int" parameterType="hashmap">
+      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
+      <choose>
+      	<when test='regardlessArea != ""'>
+      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%')
+      	</when>
+      	<otherwise>
+      		AND GROUP_ADDRESS NOT LIKE '지역무관'
+      	</otherwise>
+      </choose>
+      <if test='category != ""'>
+      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+      </if>
+   </select>
+   
+   <select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
+      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' 
+      <choose>
+      	<when test='regardlessArea != ""'>
+      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%')
+      	</when>
+      	<otherwise>
+      		AND GROUP_ADDRESS NOT LIKE '지역무관'
+      	</otherwise>
+      </choose>
+      <if test='category != ""'>
+      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+      </if>
+      <choose>
+         <when test='sort == "memberSort"'>
+            
+         </when>
+         <otherwise>ORDER BY ENROLL_DATE DESC</otherwise>
+      </choose>
+   </select>
+   <select id="getAddressList" resultMap="groupsResultMap" parameterType="hashmap" resultType="Groups">
+      SELECT GROUP_ADDRESS FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
+      <choose>
+      </choose>
+      <if test='category != ""'>
+      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+      </if>
+   </select>
+   <select id="postCnt" resultType="_int">
+   	SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
+   </select>
 </mapper>
-	
+   

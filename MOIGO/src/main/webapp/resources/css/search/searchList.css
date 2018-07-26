@@ -1,13 +1,13 @@
 body {
-	overflow-y: hidden; 
-	overflow-x: hidden;
+   overflow-y: hidden; 
+   overflow-x: hidden;
 }
 
 #map {
-	height: 100%;
-	width:40%;
-	float: right !important;
-	top: -15px;
+   height: 100%;
+   width:40%;
+   float: right !important;
+   top: -15px;
 }
 
 *, *:before, *:after {
@@ -23,7 +23,7 @@ body {
     border-bottom: 1px solid #efefef;
 }
 .row select {
-	width: 100%;
+   width: 100%;
 }
 .filter .filter-section, .filter .option-section {
     color: #666;
@@ -48,9 +48,9 @@ body {
     border-top: 1px solid #f2f1f1;
 }
 .inner-search {
-	position: relative;
+   position: relative;
 }
-.filter-section select, .filter-section input {
+.filter-section select, .filter-section input:NOT(.regardlessArea) {
     color: #333;
     border-radius: 0;
     height: 38px;
@@ -61,18 +61,18 @@ body {
     font-size: 14px;
 }
 .inner-search input {
-	padding-right: 30px;
+   padding-right: 30px;
 }
 .form-control {
-	box-shadow: 0 0 0 #000 !important;
+   box-shadow: 0 0 0 #000 !important;
 }
 .search-btn {
-	position: absolute;
-	padding: 5px;
-	top: 0;
-	right: 0;
-	cursor: pointer;
-	display: inline-block;
+   position: absolute;
+   padding: 5px;
+   top: 0;
+   right: 0;
+   cursor: pointer;
+   display: inline-block;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -80,52 +80,58 @@ body {
     transform: translate(0,0);
 }
 .place {
-	padding-top: 15px;
-	padding-bottom: 15px;
+   padding-top: 15px;
+   padding-bottom: 15px;
+}
+.checkbox-Wrap {
+    font-size: 20px;
+    color: black;
 }
 .map-btn {
-	cursor: pointer;
-	position: absolute;
+   cursor: pointer;
+   position: absolute;
     right: 0;
 }
 .widthHandler {
-	width: 100% !important;
+   width: 100% !important;
 }
 #listCount {
-	position: absolute;
-	left: 0;
+   position: absolute;
+   left: 0;
 }
 #sort-inner {
-	position: absolute;
-	right: 0;
+   position: absolute;
+   right: 0;
 }
 .sort {
-	width: 100px;
-	height: 30px;
+   width: 100px;
+   height: 30px;
 }
 .content-meeting {
     background-color: #efefef;
     height: auto;
-    min-height: 79%;
-    max-height: 400%;
+    min-height: 73.3%;
     min-width: 100%;
     position: absolute;
 }
 .count-sort {
-	margin: 10px;
+   margin: 10px;
 }
 .moigo-item-container {
-	max-height: 400%;
-	min-height: 70%;
-	height: auto;
-	
+   max-height: 400%;
+   min-height: 70%;
+   height: auto;
+   
 }
 .moigo-item-wrap {
     padding: 10px;
     overflow: inherit;
 }
 .content-context {
-	cursor: pointer;
+   cursor: pointer;
+}
+.content-context:HOVER {
+   opacity: 0.5;
 }
 .moigo-item-wrap a {
     text-decoration: none;
@@ -145,7 +151,7 @@ body {
     -moz-transition: background-color 2s;
 }
 .moigo-item.align-left .moigo-item-overlay {
-    height: 405px;
+    height: 390px;
 }
 .moigo-item-overlay {
     width: 100%;
@@ -163,27 +169,25 @@ body {
 }
 .moigo-item.align-left .header-bg {
     height: 288px;
-    background: black;
-}
-.moigo-item .header-bg {
     width: 100%;
-    height: 245px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.5;
 }
 .header-text {
-	height: 100%;
-	margin: 15px;
+   height: 100%;
+    margin: 15px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
 }
-.header-text .tag-wrap {
-	position: absolute;
-    bottom: 0px;
+.title {
+    font-size: 24px;
+    font-weight: 400;
 }
 .moigo-item.align-left .header-text-container {
     max-height: 288px;
-    display: block;
+    display: table;
     color: white;
 }
 .moigo-item .header-text-container {
@@ -198,13 +202,10 @@ body {
     background-repeat: no-repeat;
     display: table;
 }
-.moigo-item .item-contents.align-left {
-    height: 120px;
-    overflow: inherit;
-}
 .moigo-item .item-contents {
     width: 100%;
-    height: 160px;
+    height: 110px;
+    overflow: inherit;
     background-color: #fff;
     border-top: 1px solid #efefef;
     position: relative;
@@ -213,62 +214,90 @@ body {
     color: #666;
     
 }
+span.maxMember {
+   color: skyblue;
+}
+.searchZero {
+	margin-left: 10px !important;
+    color: red;
+    font-size: 30px;
+}
 .location {
-	margin-bottom: 15px;
+   margin-bottom: 15px;
+}
+.pageBar-wrap {
+   position: absolute;
+    bottom: -48px;
+    width: 100%;
+    background: #efefef;
+    text-align: center;
+}
+ul.pageBar {
+   position: relative;
+    display: inline-flex;
+}
+.page-Btn {
+   width: 50px;
+    height: 33px;
+    text-align: center;
 }
 @media screen and (min-width: 768px) {
-	#left-wrap {
-		width: 60%;
-		height: 88%;
-		position: fixed;
-		top: 126px;
-		left: 0;
-		bottom: 0;
-		overflow: scroll;
-	}
-	#left-wrap .filter.default-filter {
-		overflow: hidden;
-		position: static;
-		padding-bottom: 0;
-	}
-	#left-wrap .filter {
-		position: fixed;
-		z-index: 11;
-		top: 94px;
-		left: 0;
-		right: 40%;
-		bottom: 0;
-		overflow-y: scroll;
-	    overflow-x: hidden;
-	    padding-bottom: 70px;
-	}
-	.item-contents {
-		height: 80px;
-	}
+   #left-wrap {
+      width: 60%;
+      height: 88%;
+      position: fixed;
+      top: 126px;
+      left: 0;
+      bottom: 0;
+      overflow: scroll;
+   }
+   #left-wrap .filter.default-filter {
+      overflow: hidden;
+      position: static;
+      padding-bottom: 0;
+   }
+   #left-wrap .filter {
+      position: fixed;
+      z-index: 11;
+      top: 94px;
+      left: 0;
+      right: 40%;
+      bottom: 0;
+      overflow-y: scroll;
+       overflow-x: hidden;
+       padding-bottom: 70px;
+   }
+   .item-contents {
+      height: 80px;
+   }
 }
 @media screen and (max-width: 768px) {
-	body {
-		overflow: auto !important;
-	}
-	#map {
-		display: none;
-	}
-	.map-btn {
-		display: none;
-	}
-	
-	.gap {
-		padding-bottom: 15px;
-	}
+   body {
+      overflow: auto !important;
+   }
+   #map {
+      display: none;
+   }
+   .map-btn {
+      display: none;
+   }
+   
+   .gap {
+      padding-bottom: 15px;
+   }
 }
 @media screen and (max-width: 576px) {
-	.content-meeting > :NTH-CHILD(2) {
-		margin-top: 30px;
+	.regardlessArea {
+		margin-left: 20px;
+		margin-top: 10px;
 	}
-	.sort {
-	    margin-top: 30px;
-	    margin-left: 20px;
-	    width: 80% !important;
-	    margin-bottom: 30px;
-	}
+   .content-meeting > :NTH-CHILD(2) {
+      margin-top: 30px;
+   }
+   .sort {
+       margin-top: 30px;
+       margin-left: 20px;
+       width: 80% !important;
+       margin-bottom: 30px;
+   }
 }

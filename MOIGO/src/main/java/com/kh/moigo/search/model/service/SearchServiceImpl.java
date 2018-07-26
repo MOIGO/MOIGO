@@ -21,8 +21,8 @@ public class SearchServiceImpl implements SearchService {
 	}
 
 	@Override
-	public List<Groups> selectList(String keyword) {
-		return searchDao.selectList(keyword);
+	public List<Groups> selectList(String keyword, int cPage, int limit) {
+		return searchDao.selectList(keyword, cPage, limit);
 	}
 
 	@Override
@@ -33,6 +33,11 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public List<Groups> detailSelectList(Map<String, String> map) {
 		return searchDao.detailSelectList(map);
+	}
+
+	@Override
+	public List<Groups> getAddressList(Map<String, String> map) {
+		return searchDao.getAddressList(map);
 	}
 
 

@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,13 +75,27 @@ body {
 
 @media(max-width:1000px){
 	.search{
-		display: none;
+		visibility: hidden;
 	}
 }
 
-@media(min-width:767px){
-	.navi{
-	   width: 960px;
+@media(max-width:992px){
+	.navsize{
+	   height: 66px;
+	}
+}
+
+@media(max-width:770px){
+	#login{
+	  display: none;
+	}
+}
+
+
+@media(max-width:748px){
+	.navsize{
+		width: 748px;
+	   height: 66px;
 	}
 }
 
@@ -96,7 +111,7 @@ body {
 
 .usercon:hover{
 	cursor: pointer;
-	color: skyblue;
+	color: aqua;
 }
 
 #dropDown{
@@ -112,12 +127,41 @@ body {
 #dropdown-Menu{
 	color: white;
 }
+
+#memName{
+	margin-top: 10px;
+	color: white;
+}
+
+/* effect 18 */
+
+.hovername{
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.hovername:after{
+	margin-top: 10px;
+  content: '' attr(data-hover-label) '';
+  width: 0;
+  overflow: hidden;
+  transition: width .2s ease-out;  
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.hovername:hover:after, .hovername:focus:after{
+  width: 100%; 
+  color: aqua;
 </style>
 
 </head>
 <body>
 <c:import url="/WEB-INF/views/member/loginModal.jsp"/>
-		
+
 		<!-- // 헤더부분 // -->
 	<div class="container-fluid" id="headerBar">
 		<div class="row">
@@ -132,21 +176,30 @@ body {
 		<!-- 검색 -->
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 search">
 		<form action="${pageContext.request.contextPath}/search/searchList.do">
-		<div class="input-group" id="search-input">
-				<input type="text" class="form-control" placeholder="검색하세요~" size="50px">
+			<div class="input-group" id="search-input">
+				<input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="모임검색" size="50px">
 				<span class="input-group-btn">
-					<button class="btn btn-info" type="button" onclick="search()">검색</button>
+					<button class="btn btn-info" type="button" onclick="submit()">검색</button>
 				</span>
-		</div>
+			</div>
 		</form>
 		</div>
 		<!-- 로그인 -->
 		<div class="col-md-2 col-lg-2"></div>
 		<div class="col-md-3 col-lg-3" id="login">
 			<div class="row">
-			<a href="#" data-toggle="modal" data-target='#Login_Modal'
-				id="login-slide-link">로그인</a>
-				&nbsp;&nbsp;	
+			<c:choose>
+			<c:when test="${m eq null}" >
+				<a href="#" data-toggle="modal" data-target='#Login_Modal'
+					id="login-slide-link">로그인</a>
+					&nbsp;&nbsp;
+			</c:when>
+			<c:otherwise>
+				<span class="hovername" data-hover-label="[${m.memberName}]님이 접속하셨습니다.">
+				<p id="memName">[${m.memberName}]님이 접속하셨습니다.</p></span>
+			</c:otherwise>
+			</c:choose>
+			<c:if test ="${m ne null}">
 			<div class="dropdown">
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="myMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
@@ -154,12 +207,11 @@ body {
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMember.do">모임 맴버</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupSchedule.do">모임 일정</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
-					  <a class="dropdown-item" href="#">로그아웃</a>
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
 					</div>
 				  </div>
+			</c:if>	  
 		</div>
 		</div>
 		
@@ -169,14 +221,10 @@ body {
 		$('#loginIcon').on('click',function(){
 			$('.usercon').css('color','skyblue');	
 		});
-
-		function search(){
-			alert("검색어를 입력해주세요!");
-		}
 	</script>
 
 	<!-- 헤더 카테고리 부분 -->
-	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary">
+	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary navsize navbar-expand">
 		<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item active">
@@ -213,6 +261,11 @@ body {
 		  </ul>
 		</div>
 	</nav>
+	
+	<!-- 테스트 -->
+	<c:set var="m" value="${sessionScope.m}"></c:set>
+	<!-- 테스트 -->
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -226,15 +279,17 @@ body {
 		
 		$(function() {
 			
+			console.log("${m}");
+			
 			/* 
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 
 			   	스크롤 이벤트가 발생할 때마다 폰트로드를 확인함
 			*/
-			/* var font = new FontFaceObserver('nanum-barun-gothic-regular');
+			var font = new FontFaceObserver('nanum-barun-gothic-regular');
 
 			font.load().then(function () {
 			  document.documentElement.className += " fonts_loaded";
-			}); */
+			}); 
 			
 		});
 		
