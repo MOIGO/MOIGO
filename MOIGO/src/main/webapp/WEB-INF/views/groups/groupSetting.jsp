@@ -206,6 +206,7 @@ input:-webkit-autofill:active {
    
    .gs_member_a {
 		color : black;
+		font-family:'nanum-barun-gothic-bold', sans-serif;
    }
    
    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
@@ -215,19 +216,35 @@ input:-webkit-autofill:active {
    .gs_member_content {
    		margin-top : 5px;
    }
+   #groupMemberSettingBtnWrap{
+    margin-top: 5px;
+    height: 40px;
+   }
+   
+   #gsCheckAllBtn{
+    float : left;
+    margin: 8px 0px 0px 13px;
+	font-size: 1.2em;
+   }
+   
+   #gsCheckAllLbl{
+   	margin-left: 4px;
+    margin-top: 7px;
+    font-size: 0.9em;
+   }
    
 .list-group-item {
 	padding-left: 13px;
 	padding-right: 13px;
 }
 
-.gs_check_inp {
-	/* display : none; */
+.gs_check_inp, #gsCheckAllInp {
+	display: none;
 }
 
 .gs_check_btn {
 	float : left;
-	margin-top : 18px;
+	margin-top : 17px;
 	margin-right : 7px;
 	font-size: 1.2em;
 }
@@ -243,6 +260,13 @@ input:-webkit-autofill:active {
 }
 .gs_checked:hover {
 	cursor : pointer;
+}
+
+.gs_member_btn {
+	float : right;
+	margin-top : 3px;
+	margin-right: 14px;
+	padding : 4px 7px 2px 7px;
 }
 
 #listImg {
@@ -262,7 +286,6 @@ input:-webkit-autofill:active {
 	padding-top: 13px;
 	height: 100%;
 	margin: 0px;
-	/* border: 1px solid black; */
 }
 
 #listName {
@@ -480,14 +503,58 @@ input:-webkit-autofill:active {
                </nav>
                <div class="tab-content" id="groupMemberSettingContent">
                  <div class="tab-pane fade show active gs_member_content" id="groupMemberSettingContent" role="tabpanel">
-                 	<form id="groupMemberSettingForm" action="">
-						<ul class="list-group gs_member_ul">
-						</ul>
-                 	</form>
+               		<div id="groupMemberSettingBtnWrap">
+               			<input type='checkbox' id="gsCheckAllInp">
+					<span class='far fa-check-circle gs_unchecked not_withdraw' id="gsCheckAllBtn"></span>
+					<label id="gsCheckAllLbl" class="not_withdraw" for="gsCheckAllBtn">전체</label>
+               			<button type="button" class="btn btn-dark btn-sm gs_member_btn" data-toggle="modal" id="gsConfirmBtn">확인</button>
+               		</div>
+					<ul class="list-group gs_member_ul">
+					</ul>
                  </div>
                </div>
                   
                </div>
+               
+               <div class="modal" id="groupMemberChangeModal" tabindex="-1" role="dialog" aria-labelledby="groupMemberChangeTitle" aria-hidden="true">
+                 <div class="modal-dialog modal-dialog-centered " role="document" style="width: 400px;">
+                 <div class="modal-content">
+                 
+                    <div class="modal-header gs_modal_header">
+                       <h5 class="modal-title gs_modal_tit" id="groupMemberChangeTitle"></h5>
+                    </div>
+                    
+                    <div class="modal-body gs_modal_body" >
+                    	<div>
+                    	</div>         
+                      	<div class="card gs_modal_member" style="height: 400px;">
+						  <ul class="list-group list-group-flush">
+						    <li class="list-group-item">
+						    	<img src="${root}/resources/images/common/img_profile.png" style="width:35px; height:35px; margin-right:4px; float : left;"/>
+						    	<span class="gs_modal_member_lbl" style="font-family:'nanum-barun-gothic-bold', sans-serif; display: inline-block; padding-top: 7px;">홍길동</span>
+						    	<span class="fas fa-minus-circle" style="float: right; color: red; font-size: 1.2em; margin-top: 8px;"></span>
+						    </li>
+						    <li class="list-group-item">
+						    	<img src="${root}/resources/images/common/img_profile.png" style="width:35px; height:35px; margin-right:4px; float : left;"/>
+						    	<span class="gs_modal_member_lbl" style="font-family:'nanum-barun-gothic-bold', sans-serif; display: inline-block; padding-top: 7px;">홍길동</span>
+						    	<span class="fas fa-minus-circle" style="float: right; color: red; font-size: 1.2em; margin-top: 8px;"></span>
+						    </li>
+						  	<li hidden="hidden"></li>
+						  </ul>
+						</div>
+						<div>
+							테스트 영역입니다.
+						</div>
+                    </div>
+                     
+                     <div class="modal-footer gs_modal_footer">
+                        <button type="button" class="btn btn-primary btn-sm">확인</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                     </div>
+                     
+                  </div>
+               </div>
+            </div>
                
                <!-- 모임 삭제 -->
                <div class="modal" id="groupDeleteModal" tabindex="-1" role="dialog" aria-labelledby="groupDeleteTitle" aria-hidden="true">
@@ -528,11 +595,8 @@ input:-webkit-autofill:active {
 
 <script>
 
-/* 
-   설정에서 브라우저의 뒤로가기 버튼을 눌렀을 때
-   마치 페이지 전환이 되는 것 같은 효과를 주기 위한 메소드
-*/ 
-
+ 
+// 설정에서 브라우저의 뒤로가기 버튼을 눌렀을 때 마치 페이지 전환이 되는 것 같은 효과를 주기 위한 메소드
 function goSettingBack() {
    history.pushState(null, null, location.href);
    window.onpopstate = function() {
@@ -544,10 +608,12 @@ function goSettingBack() {
    };
 }
 
+/* 가입 조건 관리 메소드 */
 var regions = "${group.groupAddress}".split(" ");
 var regionMedium = regions[1];
 var regionSmall = regions[2];
 
+// 시군구를 찾기 위한 ajax
 function mediumRegion(lRegion) {
 	
 	if(regions[1] == "수원시" || regions[1] == "성남시")
@@ -577,6 +643,7 @@ function mediumRegion(lRegion) {
  	});
 }
 
+//읍면동을 찾기 위한 ajax
 function smallRegion(lmRegion){
 	
 	if(regions[1] == "수원시" || regions[1] == "성남시")
@@ -609,6 +676,7 @@ function smallRegion(lmRegion){
 }
 
 var gmSettingId = "groupMemberGrade";
+var groupMember = null;
 
 function getGroupMember(gmSettingId){
 	console.log(gmSettingId);
@@ -619,7 +687,7 @@ function getGroupMember(gmSettingId){
 		dataType : "json",
 		async : false,
 		success : function(data) {
-			var groupMember = data.groupMember;
+			groupMember = data.groupMember;
 			createGroupMemberList(groupMember, gmSettingId);
 		},
 		error : function() {
@@ -628,55 +696,82 @@ function getGroupMember(gmSettingId){
 	});
 }
 
+var usedMemberList = new Map();
+var unusedMemberList = new Map();
+
+function findOneGroupMember(mNo) {
+	var oneMember = null;
+	for(var i=0; i < groupMember.length; i++)
+		if(groupMember[i].memberNo == mNo)
+			oneMember = groupMember[i];
+	
+	return oneMember;
+}
+
+// 멤버설정의 멤버 리스트를 만드는 메소드
 function createGroupMemberList(groupMember, gmSettingId){
 	
 	for(var i=0; i < groupMember.length; i++){
-		var append = "<li class='list-group-item'><div class='list_wrap'>";
 		
-		var inp = "<input type='checkbox' class='gs_check_inp'>";
-		var checkBtn = "<span class='far fa-check-circle gs_check_btn gs_unchecked'></span>";
-		
-		if(gmSettingId == "groupMemberWithdraw"){
-			inp = "<input type='radio' name='memberNo' class='gs_check_inp' value='" + groupMember[i].memberNo+ "'>";
-			checkBtn = "<span class='far fa-dot-circle gs_check_btn gs_unchecked'></span>";
-		}
-		
-		var profileImg = "<img id='listImg' class='rounded-circle' ";
-		if(groupMember[i].profileThumb == null)
-			profileImg += "src='${root}/resources/images/common/img_profile.png'>";
-		else
-			profileImg += "src='${root}/resources/images/profiles/${group.groupNo}/"+ groupMember[i].profileThumb +"'>";
-		
-		var groupMemberName = "<span class='list_txt' id='listName'>"+ groupMember[i].memberName +"</span>";
-		
-		var memberGrade = "";
-		if(groupMember[i].memberGradeCode == 3)
-			memberGrade = "<span class='badge badge-primary' id='groupLeader'>모임장</span>";
-		else if(groupMember[i].memberGradeCode == 2)
-			memberGrade = "<span class='badge badge-success' id='groupLeader'>운영진</span>";
+		usedMemberList.set(groupMember[i].memberNo, groupMember[i]);
+	
+		if(groupMember[i].memberGradeCode != 3){
+			var append = "<li class='list-group-item'><div class='list_wrap'>";
 			
-		append += inp + checkBtn + profileImg + groupMemberName + memberGrade + "</div></li>";
-		
-		if(gmSettingId != "groupJoinApprove"){
-			if(groupMember[i].memberGradeCode > 0)
-				$(".gs_member_ul").append(append);
-		}else{
-			if(groupMember[i].memberGradeCode == 0)
-				$(".gs_member_ul").append(append);
-		}
+			var inp = "<input type='checkbox' class='gs_check_inp' value='" + groupMember[i].memberNo+ "'>";
+			var checkBtn = "<span class='far fa-check-circle gs_check_btn gs_unchecked'></span>";
 			
+			if(gmSettingId == "leaderDelegation"){
+				inp = "<input type='radio' name='memberNo' class='gs_check_inp' value='" + groupMember[i].memberNo+ "'>";
+				checkBtn = "<span class='far fa-dot-circle gs_check_btn gs_unchecked'></span>";
+			}
+			
+			var profileImg = "<img id='listImg' class='rounded-circle' ";
+			if(groupMember[i].profileThumb == null)
+				profileImg += "src='${root}/resources/images/common/img_profile.png'>";
+			else
+				profileImg += "src='${root}/resources/images/profiles/${group.groupNo}/"+ groupMember[i].profileThumb +"'>";
+			
+			var groupMemberName = "<span class='list_txt' id='listName'>"+ groupMember[i].memberName +"</span>";
+			
+			var memberGrade = "";
+			if(groupMember[i].memberGradeCode == 2)
+				memberGrade = "<span class='badge badge-success' id='groupLeader'>운영진</span>";
+		
+			append += inp + checkBtn + profileImg + groupMemberName + memberGrade + "</div></li>";
+					
+			if(gmSettingId != "groupJoinApprove"){
+				if(groupMember[i].memberGradeCode > 0)
+					$(".gs_member_ul").append(append);
+			}else{
+				if(groupMember[i].memberGradeCode == 0)
+					$(".gs_member_ul").append(append);
+			}
+		}	
 	}
+	
+	console.log(usedMemberList);
 	
 	$(".gs_check_btn").each(function() {
 		$(this).on("click", function() {
 			$(this).prev().click();
 			if($(this).prev().is(":checked")){
-				$(this).removeClass('far').addClass('fas');
-				$(this).removeClass('gs_unchecked').addClass('gs_checked');
+				$(this).removeClass('far gs_unchecked').addClass('fas gs_checked');
+				if(gmSettingId == "leaderDelegation")
+					$(".gs_check_btn").not($(this)).removeClass('fas gs_checked').addClass('far gs_unchecked');	
+				console.log(findOneGroupMember($(this).prev().val()));
 			}
 			else{
-				$(this).removeClass('fas').addClass('far');
-				$(this).removeClass('gs_checked').addClass('gs_unchecked');
+				$(this).removeClass('fas gs_checked').addClass('far gs_unchecked');
+			}
+			
+			if($(".gs_check_inp").length == $(".gs_check_inp:checked").length){
+				$("#gsCheckAllInp").prop("checked", true);
+				$("#gsCheckAllBtn").removeClass('far gs_unchecked').addClass('fas gs_checked');
+			}
+			else{
+				$("#gsCheckAllInp").prop("checked", false);
+				$("#gsCheckAllBtn").removeClass('fas gs_checked').addClass('far gs_unchecked');
 			}
 		});
 	});
@@ -696,11 +791,21 @@ function searchGroupMember() {
 		async : false,
 		success : function(data) {
 			var groupMember = data.groupMember;
-		
-			if(groupMember.length != 0)
-				createGroupMemberList(groupMember, gmSettingId);
-			else
+			var memberGradeCnt = 0;
+			
+			for(var i= 0; i < groupMember.length; i++){
+				if(groupMember[i].memberGradeCode != 3){
+					if(groupMember[i].memberGradeCode == 0 && gmSettingId == "groupJoinApprove")
+						memberGradeCnt = 1;
+					else if(groupMember[i].memberGradeCode > 0 && gmSettingId != "groupJoinApprove")
+						memberGradeCnt = 2;
+				}
+			}
+			
+			if(memberGradeCnt == 0 || groupMember.length == 0)
 				$(".gs_member_ul").append("<div class='card search_result_none'>검색 결과가 없습니다.</div>");
+			else
+				createGroupMemberList(groupMember, gmSettingId);
 		},
 		error : function() {
 			console.log("멤버설정 멤버리스트 가져오기 오류");
@@ -709,9 +814,6 @@ function searchGroupMember() {
 }
 
 $(function() {
-
-   console.log("${group}");
-   console.log(regions);
    
    /* 모임 관리 */
    $("#groupUpdateBtn").on("click", function() {
@@ -800,9 +902,8 @@ $(function() {
    // 최대 나이를 선택했을 때 최소 나이의 범위를 지정해주는 이벤트
    	$("#conditionMaxAge").change(function() {
 		$("#conditionMinAge").children().not(":lt(1)").remove();
-		for(var i="${nowYear}"; i >= $(this).val(); i--){
-	    	  $("#conditionMinAge").append("<option value="+ i +">" + i + "년생</option>");
-	     }
+		for(var i="${nowYear}"; i >= $(this).val(); i--)
+	    	$("#conditionMinAge").append("<option value="+ i +">" + i + "년생</option>");
 	});
    
       var lRegion = "";
@@ -914,10 +1015,63 @@ $(function() {
 		searchGroupMember();
 	});
 	
+	$("#gsCheckAllBtn").click(function() {
+		console.log(groupMember);
+		$("#gsCheckAllInp").click();
+		if($(this).prev().is(":checked")){
+			$(this).removeClass('far gs_unchecked').addClass('fas gs_checked');
+			$(".gs_check_btn").prev().prop("checked", true);
+			$(".gs_check_btn").removeClass('far gs_unchecked').addClass('fas gs_checked');
+		}else{
+			$(this).removeClass('fas gs_checked').addClass('far gs_unchecked');
+			$(".gs_check_btn").prev().prop("checked", false);
+			$(".gs_check_btn").removeClass('fas gs_checked').addClass('far gs_unchecked');
+		}
+	});
+	
 	$(".gs_member_a").click(function() {
 		gmSettingId = $(this).attr("id");
 		$("#gmSearchInp").val("");
+		$("#gsCheckAllInp").prop("checked", false);
+		$("#gsCheckAllBtn").removeClass('fas gs_checked').addClass('far gs_unchecked');
 		getGroupMember(gmSettingId);
+		if(gmSettingId == "leaderDelegation"){
+			$(".not_withdraw").css("display", "none");
+			$(".gs_check_btn").first().prev().prop("checked", true);
+			$(".gs_check_btn").first().removeClass('far gs_unchecked').addClass('fas gs_checked');
+		}
+		else{
+			$(".not_withdraw").css("display", "inline-block");						
+		}
+	});
+	
+	// 멤버 설정의 확인 버튼을 눌렀을 때 발생하는 이벤트
+	$("#gsConfirmBtn").on("click", function() {
+		
+		if(gmSettingId == "groupMemberGrade"){
+			$("#groupMemberChangeTitle").text("멤버등급");
+			$(".gs_modal_body").css("height", "600px");
+		}
+		else if(gmSettingId == "leaderDelegation"){
+			$("#groupMemberChangeTitle").text("리더위임");
+			$(".gs_modal_body").css("height", "200px");
+		}
+		else if(gmSettingId == "groupMemberWithdraw"){
+			$("#groupMemberChangeTitle").text("멤버탈퇴");
+			
+		}
+		else {
+			$("#groupMemberChangeTitle").text("가입승인");
+			
+		}
+		
+		if(gmSettingId != "leaderDelegation" && $(".gs_check_inp:checked").length == 0)
+			alert("멤버를 선택하지 않았습니다. 멤버를 선택해 주세요.");
+		else
+			$('#groupMemberChangeModal').modal({
+		          backdrop: 'static',
+		          keyboard: false
+		    });
 	});
    
    /* 모임 삭제 */
