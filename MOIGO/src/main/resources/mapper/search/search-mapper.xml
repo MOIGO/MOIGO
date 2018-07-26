@@ -24,43 +24,49 @@
    </select>
    
    <select id="selectList" resultMap="groupsResultMap" parameterType="string">
-      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
+      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' ORDER BY ENROLL_DATE DESC
    </select>
    
    <select id="detailListCount" resultType="_int" parameterType="hashmap">
       SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
+      <if test='category != ""'>
+      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+      </if>
       <choose>
       	<when test='regardlessArea != ""'>
-      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%')
+      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
       	</when>
       	<otherwise>
       		AND GROUP_ADDRESS NOT LIKE '지역무관'
       	</otherwise>
       </choose>
-      <if test='category != ""'>
-      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
-      </if>
    </select>
    
    <select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
-      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' 
-      <choose>
-      	<when test='regardlessArea != ""'>
-      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%')
-      	</when>
-      	<otherwise>
-      		AND GROUP_ADDRESS NOT LIKE '지역무관'
-      	</otherwise>
-      </choose>
-      <if test='category != ""'>
-      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
-      </if>
-      <choose>
-         <when test='sort == "memberSort"'>
-            
-         </when>
-         <otherwise>ORDER BY ENROLL_DATE DESC</otherwise>
-      </choose>
+      SELECT G.GROUP_NO, G.GROUP_NAME, G.GROUP_PICTURE, G.GROUP_ADDRESS, G.GROUP_GRADE_CODE, G.MAX_MEMBER,G.INTEREST_BIG_CODE, G.ENROLL_DATE , (SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEMBERCNT, (SELECT COUNT(*) FROM POST WHERE GROUP_NO = G.GROUP_NO) POSTCNT
+	      FROM GROUPS G
+	        WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' 
+	          AND GROUP_ADDRESS LIKE '%'||#{place}||'%' 
+      			<if test='category != ""'>
+		      		AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+		        </if>
+			    <choose>
+			    	<when test='regardlessArea != ""'>
+			    		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+			    	</when>
+			    	<otherwise>
+			    		AND GROUP_ADDRESS NOT LIKE '지역무관'
+			    	</otherwise>
+			    </choose>
+			    <choose>
+			       <when test='sort == "memberSort"'>
+			           ORDER BY MEMBERCNT DESC, G.ENROLL_DATE DESC, POSTCNT DESC
+			       </when>
+			       <when test='sort == "postSort"'>
+			           ORDER BY POSTCNT DESC, G.ENROLL_DATE DESC, MEMBERCNT DESC
+			       </when>
+			       <otherwise>ORDER BY G.ENROLL_DATE DESC, MEMBERCNT DESC, POSTCNT DESC</otherwise>
+			    </choose>
    </select>
    <select id="getAddressList" resultMap="groupsResultMap" parameterType="hashmap" resultType="Groups">
       SELECT GROUP_ADDRESS FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
@@ -69,9 +75,6 @@
       <if test='category != ""'>
       	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
       </if>
-   </select>
-   <select id="postCnt" resultType="_int">
-   	SELECT COUNT(*) FROM POST WHERE GROUP_NO = #{groupNo}
    </select>
 </mapper>
    

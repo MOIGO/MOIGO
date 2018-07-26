@@ -55,14 +55,9 @@ public class SearchController {
       int listCount = searchService.detailListCount(map);
       List<Groups> list = searchService.detailSelectList(map);
       
-      List li = new ArrayList<>();
+      List<Integer> postCntList = new ArrayList<>();
       
-      for(int i = 0 ; i < list.size() ; i++) {
-    	  li.add(groupsService.selectPostCnt(list.get(i).getGroupNo()));
-      }
-      System.out.println(li);
-      
-      model.addAttribute("limit", limit).addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("regardlessArea", regardlessArea).addAttribute("category", category).addAttribute("sort", sort).addAttribute("list", list);
+      model.addAttribute("limit", limit).addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("place", place).addAttribute("regardlessArea", regardlessArea).addAttribute("category", category).addAttribute("sort", sort).addAttribute("list", list).addAttribute("postCntList", postCntList);
       
       return "search/searchList";
    }
