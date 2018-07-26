@@ -32,6 +32,10 @@
 			   (TO_CHAR(#{memberBirth},'RRRR/MM/DD')), #{memberGender}, DEFAULT, 'N')
 	</insert>
 	
+	  <select id="selectMemberList" resultMap="memberResultMap" >
+      	SELECT * FROM MEMBER ORDER BY MEMBER_NO DESC
+   		</select>
+	
 
 	<update id="updateMemberPwd" parameterType="hashmap">
 		UPDATE MEMBER SET MEMBER_PWD = #{memberPwd} WHERE MEMBER_EMAIL=#{memberEmail}
