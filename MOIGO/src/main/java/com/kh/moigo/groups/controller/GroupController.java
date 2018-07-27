@@ -173,9 +173,7 @@ public class GroupController {
 		
 		return map;
 	}
-	
-	
-	
+
 	
 	//글 쓰기
 	@RequestMapping("/groups/insertPost.gp")
