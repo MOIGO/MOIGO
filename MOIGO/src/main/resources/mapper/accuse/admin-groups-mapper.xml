@@ -27,6 +27,12 @@
 		<result property="gGradeCount" column="GRADE_COUNT" />			
 		<result property="bigInterest" column="INTEREST_BIG_NAME" />	
 		<result property="ginterestCount" column="GINTEREST" />	
+		<result property="countWgroup" column="COUNT_WG" />	
+		<result property="enrollD" column="ENROLL_D" />	
+		<result property="totalGroup" column="TOTAL" />	
+		<result property="todayGroup" column="TODAY" />	
+		<result property="enrollM" column="ENROLL_M" />	
+		<result property="grCount" column="GR_COUNT" />	
 	</resultMap>
 	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
 		FROM ACCUSE ORDER BY ACCUSE_NO DESC </select> -->
@@ -66,5 +72,32 @@
 		RIGHT JOIN GROUP_STATE USING(GROUP_STATE_CODE)
 		GROUP BY GROUP_STATE_NAME
 		ORDER BY GRADE_COUNT DESC
+	</select>
+	
+	<select id="weeklyMemEnroll" resultMap="groupDetailResultMap">
+	<![CDATA[
+		SELECT filter.enroll_d, count(GROUP_NAME)  count_wg
+		FROM
+		(SELECT TO_CHAR(SYSDATE - (LEVEL - 1), 'YY/MM/DD')  as enroll_d
+		FROM dual
+		CONNECT BY LEVEL <= 7
+		) filter
+		left JOIN groups
+		ON TO_CHAR(groups.ENROLL_DATE, 'YY/MM/DD') = filter.enroll_d
+		group by filter.enroll_d
+		order by enroll_d
+		]]>
+	</select>
+	<select id="groupDashCount" resultMap="groupDetailResultMap">
+		SELECT (SELECT COUNT(*) from GROUPS) TOTAL,
+		(SELECT COUNT(*) TODAY FROM GROUPS
+		WHERE TO_CHAR(ENROLL_DATE, 'YY/MM/DD') = TO_CHAR(SYSDATE, 'YY/MM/DD')) TODAY
+		FROM DUAL
+	</select>
+
+	<select id="GrpEnrollperMonth" resultMap="groupDetailResultMap">
+		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) GR_COUNT FROM GROUPS
+		GROUP BY  SUBSTR(enroll_date, 1, 5)
+		order by  SUBSTR(enroll_date, 1, 5)
 	</select>
 </mapper>

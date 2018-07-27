@@ -14,7 +14,7 @@
 }
 
 .admin_group_table {
-	height: 600px;
+	height: 500px;
 	overflow: scroll;
 }
 
@@ -35,6 +35,7 @@ tr:hover {
 .carousel-inner div {
 	width: 100%;
 	height: 700px;
+	overflow: scroll;
 }
 .carousel-control-prev>span, .carousel-control-next>span {
 	background-color: green;
@@ -54,9 +55,9 @@ tr:hover {
 	<br>
 
 	<div class="row">
-		<div class="col-1"></div>
-		<div class="col-5">
-			<input class="form-control admin_group_search col-5" id="myInput"
+		
+		<div class="col-lg-5">
+			<input class="form-control admin_group_search" id="myInput"
 				type="text" placeholder="Search.."> <br>
 			<div class="admin_group_table ">
 
@@ -89,7 +90,7 @@ tr:hover {
 			</div>
 
 		</div>
-		<div class="col-6">
+		<div class="col-lg-7">
 
 			<div class="collapse text-center" id="targetDiv">
 				<div id="demo" class="carousel slide group_detail" >
@@ -98,7 +99,7 @@ tr:hover {
 					<ul class="carousel-indicators">
 						<li data-target="#demo" data-slide-to="0" class="active"></li>
 						<li data-target="#demo" data-slide-to="1"></li>
-						<li data-target="#demo" data-slide-to="2"></li>
+					
 					</ul>
 
 					<!-- The slideshow -->
@@ -122,9 +123,7 @@ tr:hover {
 								</tbody>
 							</table>
 						</div>
-						<div class="carousel-item">
-							<img src="ny.jpg" alt="New York">
-						</div>
+						
 					</div>
 
 					<!-- Left and right controls -->
@@ -143,12 +142,112 @@ tr:hover {
 
 	</div>
 	</div>
-	<!-- container end-->
+	</div>
+	
 
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+				<div class="modal-body">
+					<div class="tabbable">
+						<!-- Only required for left/right tabs -->
+						<div class="btn-group ">
+							<ul class="nav nav-tabs">
+								<li><button type="button"
+										class="btn btn-outline-light active" a href="#tab1"
+										data-toggle="tab">Member Info</button></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab1">
+								<br>
+								<form action="" method="get">
+									<fieldset class="form-group">
+										<legend> 회원 정보 </legend>
+										<div class="form-group row">
+											<label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+											<div class="col-sm-10">
+												<input type="email" class="form-control" id="inputEmail"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputName" class="col-sm-2 col-form-label">Name</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputName"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputAddress"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputBirth" class="col-sm-2 col-form-label">BirthD</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputBirth"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputEnrollDate" class="col-sm-2 col-form-label">EnrollD</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputEnrollDate"
+													readonly>
+											</div>
+										</div>
+
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Activity</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Post</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Post</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputPost" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">Reply</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Reply</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputReply" readonly>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+	<!-- container end-->
 
 
 	<script>
 $(document).ready(function(){
+		
+		
+	
 	
 	//검색 자바스크립트--
 	$("#myInput").on("keyup", function() {
@@ -192,7 +291,7 @@ $(document).ready(function(){
 								' </tr>'+
 								'<tr>'+
 		            			'<td>그룹지역</td>' +
-								'<td colspan="2">'+data[0].groupPicture+'</td>' +
+								'<td colspan="2">'+data[0].groupAddress+'</td>' +
 								' </tr>'+
 								
 								'<tr>'+
@@ -209,7 +308,7 @@ $(document).ready(function(){
 								' </tr>'+
 								
 								'<tr>'+
-		            			'<td>등급</td>' +
+		            			'<td>최대인원</td>' +
 								'<td colspan="2">'+data[0].maxMember+'</td>' +
 								' </tr>'+
 								'<tr>'+
@@ -219,8 +318,8 @@ $(document).ready(function(){
 								
 								'<tr>'+
 		            			'<td>관심사</td>' +
-								'<td>'+data[0].interestBigCode+'</td>' +
-								'<td></td>' +
+								'<td colspan="2">'+data[0].interestBigCode+'</td>' +
+								
 								' </tr>'+
 								
 							
@@ -242,22 +341,47 @@ $(document).ready(function(){
 		            	 $('.group_detail_slide1').append(str);
 		            	 
 		            	  for(var i in data[1]){
-				            	console.log(i);
-				            	var num = i*1+1;
 				            	var idx =data[1][i].memberGradeName.indexOf('(');
 				            	var str ='<tr>'+									
 		 								' <td>'+data[1][i].memberName+'</td>' +	 							
 		 								' <td>'+data[1][i].postCount+'</td>' +
 		 								' <td>'+data[1][i].replyCount+'</td>' +
 		 								' <td>'+data[1][i].memberGradeName.substring(0,idx)+'</td>' +
-		 								'<td><button type="button" data-target="#groupModal" data-toggle="modal" data-id="'+data[1][i].groupNo+'" class="btn btn-outline-success btn-sm">보기</button></td>'+
+		 								'<td><button type="button" class="btn btn-outline-success btn-sm identifyingClass" data-target="#myModal" data-toggle="modal" data-id="'+data[1][i].memberNo+'" >보기</button></td>'+
 										'<tr>';
 				            	$('.group_detail_slide2').append(str);
+				            	
+				            	$(".identifyingClass").on("click",function () {
+				            		
+				            			var id = $(this).data('id');	
+				            			console.log(id);
+				            		        $.ajax({
+				            		            url: "${pageContext.request.contextPath}/mrDetail.ad",
+				            		            type:'get',
+				            		            data: {id:id},
+				            		            dataType:"json",
+				            		            success:function(data){	
+				            		            	
+				            			            $("#inputEmail").val(data[0].memberEmail);
+				            			            $("#inputName").val(data[0].memberName);
+				            			            $("#inputAddress").val(data[0].memberAddress);
+				            			            $("#inputBirth").val(data[0].memberBirth);
+				            			            $("#inputEnrollDate").val(data[0].enrollDate);
+				            			            $("#inlineFormInputPost").val(data[0].postCount);
+				            						$("#inlineFormInputReply").val(data[0].replyCount);
+				            			            
+				            			                   		           
+				            		            }
+				            		        });	           
+				            			}); //함수 끝
 		            	  }//for문 end
 		            	  
 	            }//success end
 	        });//ajax end		
 		});//--
+		
+		
+		
   
 });
    
@@ -267,6 +391,33 @@ $(document).ready(function(){
     $('.body_background').toggleClass('extended-panel');
 
   }*/
+$(document).ready(function(){
+  
+  $(".identifyingClass").on("click",function () {
+		alert('하이');
+		var id = $(this).data('id');	
+		console.log(id);
+	        $.ajax({
+	            url: "${pageContext.request.contextPath}/mrDetail.ad",
+	            type:'get',
+	            data: {id:id},
+	            dataType:"json",
+	            success:function(data){	
+	            	
+		            $("#inputEmail").val(data[0].memberEmail);
+		            $("#inputName").val(data[0].memberName);
+		            $("#inputAddress").val(data[0].memberAddress);
+		            $("#inputBirth").val(data[0].memberBirth);
+		            $("#inputEnrollDate").val(data[0].enrollDate);
+		            $("#inlineFormInputPost").val(data[0].postCount);
+					$("#inlineFormInputReply").val(data[0].replyCount);
+		            
+		                   		           
+	            }
+	        });	           
+		}); //함수 끝
+		
+});
 </script>
 
 </body>

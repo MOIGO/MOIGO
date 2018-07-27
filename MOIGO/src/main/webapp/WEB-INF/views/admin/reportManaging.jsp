@@ -427,7 +427,7 @@
 														<div class="input-group-text">State</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputReply" readonly>
+														id="inputGsc" readonly>
 												</div>
 											</div>
 										</div>
@@ -482,7 +482,7 @@
 									<div class="form-group row">
 										<div class="col-sm-12  text-center">
 											<button type="submit" class="btn btn-outline-info">
-												그룹 탈퇴</button>
+												그룹 블라인드</button>
 										</div>
 									</div>
 								</form>

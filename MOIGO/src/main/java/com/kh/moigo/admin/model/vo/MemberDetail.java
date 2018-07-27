@@ -25,7 +25,49 @@ public class MemberDetail extends Member implements java.io.Serializable{
 	private int addressCount;
 	private String bigInterest;
 	private int minterestCount;
+	private int countWmember;
+	private int totalMember;
+	private int todayMember;
+	private String enrollM;
+	private int mmCount;
 
+	public String getEnrollM() {
+		return enrollM;
+	}
+	public void setEnrollM(String enrollM) {
+		this.enrollM = enrollM;
+	}
+	public int getMmCount() {
+		return mmCount;
+	}
+	public void setMmCount(int mmCount) {
+		this.mmCount = mmCount;
+	}
+	public int getTotalMember() {
+		return totalMember;
+	}
+	public void setTotalMember(int totalMember) {
+		this.totalMember = totalMember;
+	}
+	public int getTodayMember() {
+		return todayMember;
+	}
+	public void setTodayMember(int todayMember) {
+		this.todayMember = todayMember;
+	}
+	public int getCountWmember() {
+		return countWmember;
+	}
+	public void setCountWmember(int countWmember) {
+		this.countWmember = countWmember;
+	}
+	public String getEnrollD() {
+		return enrollD;
+	}
+	public void setEnrollD(String enrollD) {
+		this.enrollD = enrollD;
+	}
+	private String enrollD;
 	//private List<Map<String, Object>> memPerGroup;
 	
 	

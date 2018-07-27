@@ -30,9 +30,8 @@
 			<div class="modal-body">
 				<form action="/" name="myForm" style="width: 100%">
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="exampleRadios"
-							id="exampleRadios1" value="폭력적 또는 혐오스러운 콘텐츠" onClick="updateList(this.value)"> <label
-							class="form-check-label" for="exampleRadios1"> 폭력적 또는 혐오스러운 콘텐츠 </label>
+						<input class="form-check-input" type="radio" name="exampleRadios"id="exampleRadios1" value="폭력적 또는 혐오스러운 콘텐츠" onClick="updateList(this.value)"> 
+						<label class="form-check-label" for="exampleRadios1"> 폭력적 또는 혐오스러운 콘텐츠 </label>
 					</div>
 
 					<div class="form-check">
@@ -69,7 +68,6 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
 		</div>
 	</div>

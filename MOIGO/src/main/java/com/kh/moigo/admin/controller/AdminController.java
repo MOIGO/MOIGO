@@ -39,6 +39,21 @@ public class AdminController {
 	@RequestMapping("adminHome.ad")
 	public String adminHome(Locale locale,Model model){
 		
+		List<Map<String,Object>> weeklyGrpMake = as.weeklyGrpMake();
+		List<Map<String,Object>> weeklyMemEnroll = as.weeklyMemEnroll();
+		List<Map<String,Object>> MemEnrollperMonth = as.MemEnrollperMonth();
+		List<Map<String,Object>> GrpEnrollperMonth = as.GrpEnrollperMonth();
+		
+		
+		List<Map<String,Object>> memberDashCount = as.memberDashCount();
+		List<Map<String,Object>> groupDashCount = as.groupDashCount();
+		
+		model.addAttribute("memberDashCount",memberDashCount);
+		model.addAttribute("groupDashCount",groupDashCount);
+		model.addAttribute("MemEnrollperMonth",MemEnrollperMonth);
+		model.addAttribute("GrpEnrollperMonth",GrpEnrollperMonth);
+		model.addAttribute("weeklyMemEnroll",weeklyMemEnroll);
+		model.addAttribute("weeklyGrpMake",weeklyGrpMake);
 		model.addAttribute("pageName","DashBoard");
 		return "admin/dashBoard";
 	
