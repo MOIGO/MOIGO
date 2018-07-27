@@ -339,14 +339,15 @@ public class MemberController {
 			String msg;
 			int result;
 			
-			Member me = memberService.selectOneMember(email);
+			Member me = memberService.selectOneMemberF(email);
 			
 			if (me == null) {
+				
 				Member mee = new Member();
 				mee.setMemberEmail(email);
 				mee.setMemberBirth(memberBirth);
 				mee.setMemberName(name);
-				mee.setMemberPwd("페이스북 회원");
+				mee.setMemberPwd("페이스북 로그인");
 				mee.setMemberGender(gender.equals("male")?"M":"F");
 				
 				result=-1;
@@ -355,10 +356,15 @@ public class MemberController {
 				Member m = memberService.selectOneMember(mee.getMemberEmail());
 				model.addAttribute("m", m);
 			} else {
-				result = 0;
-				msg = "페이스북 로그인 성공";
-				Member m = memberService.selectOneMember(me.getMemberEmail());
-				model.addAttribute("m", m);
+				if(me.getDelflag().equals("Y")){
+					msg="이용할 수 없는 페이스북 아이디";
+					result=1;
+				}else{
+					result = 0;
+					msg = "페이스북 로그인";
+					Member m = memberService.selectOneMember(me.getMemberEmail());
+					model.addAttribute("m", m);
+				}
 			}
 
 			Map<String, Object> map = new HashMap<>();

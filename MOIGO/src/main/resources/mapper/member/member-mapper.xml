@@ -19,6 +19,11 @@
 		WHERE MEMBER_EMAIL = #{memberEmail} AND DELFLAG='N'
 	</select>
 	
+	<select id="selectOneMemberF" resultMap="memberResultMap" >
+		SELECT * FROM MEMBER
+		WHERE MEMBER_EMAIL = #{memberEmail} 
+	</select>
+	
 	<select id="checkIdDuplicate" resultType="_int">
 		SELECT COUNT(*) AS CNT FROM MEMBER WHERE MEMBER_EMAIL = #{memberEmail}  
 	</select>
@@ -78,20 +83,22 @@
 		<result property="groupNo" column="GROUP_NO"/>
 		<result property="groupName" column="GROUP_NAME"/>
 		<result property="groupPicture" column="GROUP_PICTURE"/>
-		<result property="gropuNum" column="CNUM"/>
+		<result property="groupGrade" column="GROUP_GRADE_CODE"/>
+		<result property="memberNum" column="MNUM"/>
+		<result property="postNum" column="PNUM"/>
 	</resultMap>
 	
 	<select id="selectGroupList" parameterType="hashmap" resultMap="mypageGroupMap">
-	SELECT  gm.GROUP_NO, g.GROUP_NAME , g.GROUP_PICTURE , grm.cnum 
-		FROM (SELECT GROUP_NO , count(*) cnum FROM GROUP_MEMBER  GROUP BY GROUP_NO) grm
-		JOIN GROUPS g ON (grm.GROUP_NO = g.GROUP_NO ) 
-		JOIN GROUP_MEMBER gm on (grm.GROUP_NO=gm.GROUP_NO)
+		SELECT DISTINCT    gm.GROUP_NO, g.GROUP_NAME , g.GROUP_PICTURE , g.GROUP_GRADE_CODE, grm.mnum,  (SELECT count(*) FROM POST P WHERE P.GROUP_NO = grm.GROUP_NO) pnum
+			FROM (SELECT GROUP_NO , count(*) mnum FROM GROUP_MEMBER  GROUP BY GROUP_NO) grm
+			JOIN GROUPS g ON (grm.GROUP_NO = g.GROUP_NO ) 
+			JOIN GROUP_MEMBER gm on (grm.GROUP_NO=gm.GROUP_NO)
 		WHERE MEMBER_NO=#{memberNo} 
 			<if test="gType =='open'">
 					 AND MEMBER_GRADE_CODE IN(3)
 				</if>
 				<if test="gType =='join'">
-					AND MEMBER_GRADE_CODE IN(1,2)
+					AND MEMBER_GRADE_CODE IN(-2,-1,1,2)
 				</if>
 				<if test="gType =='wait'">
 					 AND MEMBER_GRADE_CODE IN(0)

@@ -208,7 +208,9 @@ body {
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
+					  <%-- <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a> --%>
+					  <a class="dropdown-item" onclick="memberLogout();" style="cursor: pointer;">로그아웃</a>
+					  
 					</div>
 				  </div>
 			</c:if>	  
@@ -266,6 +268,7 @@ body {
 	<c:set var="m" value="${sessionScope.m}"></c:set>
 	<!-- 테스트 -->
 	
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -298,6 +301,26 @@ body {
 			location.href = "#"
 		});
 		
+	</script>
+	
+	<!-- 로그아웃 -->
+	<script>
+
+	
+		function memberLogout(){
+			FB.getLoginStatus(function(response) {
+				console.log('statusChangeCallback');
+				console.log(response);
+			
+				 if (response.status === 'connected') {
+					FB.logout(function(response) { // 사용자 로그 아웃 이후 콜백처리 
+						alert('로그아웃');
+					});
+				 } 
+				location.href="${pageContext.request.contextPath}/member/memberLogout.do";	
+			});
+					
+		}
 	</script>
 </body>
 </html>

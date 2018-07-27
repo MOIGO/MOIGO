@@ -146,6 +146,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.insertFbMember(m);
 	}
 
+
+	@Override
+	public Member selectOneMemberF(String email) {
+		return memberDao.selectOneMemberF(email);
+	}
+
 	}
 
 
