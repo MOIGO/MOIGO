@@ -43,20 +43,24 @@
                 </c:if>
                 <c:if test="${! empty list}">
 	                <c:forEach items="${list }" var="group">
-	                  <div class="groupList_item col-xl-3 col-sm-6 col-12 " >
-	                      <div class="item_content" id="${group.groupNo }">
-	                      <input type="hidden" value="${group.groupNo }" name="groupNo">
-                          		 <div class="header_bg" >
-	                          		<img alt="" src="${pageContext.request.contextPath}/resources/images/moigo.png" style="width:100%; height:100%;">
-	                          </div>
-	                          <div class="body_text_container">
-	                              <div class="body_text">
-	                                  <div class="body_title"><c:out value="${group.groupName }"/> </div>
-	                                  <div class="body_member">멤버 : <c:out value="${group.gropuNum }"/> 명</div>
-	                              </div>
-	                          </div>
-	                      </div>
-	                  </div>
+		                  <div class="groupList_item col-xl-3 col-sm-6 col-12 " >
+			                     <div class="item_content" id="${group.groupNo }">
+			                     <input type="hidden" value="${group.groupNo }" name="groupNo">
+			                         <div class="header_bg" >
+			                          		<img alt="" src="${group.groupPicture }" style="width:100%; height:100%;">
+			                          </div>
+			                         <div class="body_text_container">
+			                             <div class="body_text">
+			                                 <div class="body_title"><c:out value="${group.groupName }"/> <c:out value="${group.groupGrade }"/></div>
+			                                 	<span class="icon-container float-right" style="position:absolute; right:20px; bottom:2px;"> 
+					                              <span class="memberIcon"><c:out value="${group.memberNum }"/> <img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span> 
+					                              <span class="commentIcon"><c:out value="${group.postNum }"/> <img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
+					                           </span>
+					                           
+			                             </div>
+			                         </div>
+			                     </div>
+			                 </div>
 	                 </c:forEach>
                 </c:if>
         	</div>

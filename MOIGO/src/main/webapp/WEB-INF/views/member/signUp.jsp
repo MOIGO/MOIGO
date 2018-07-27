@@ -351,7 +351,7 @@ $(function(){
     
     /* 회원가입 췌키아웃 */
     var chkId= false;
-    var chkNum = true;  //false 로 변경 할것 ㅎ 인증 받으려면
+    var chkNum = false;  //false 로 변경 할것 ㅎ 인증 받으려면
     var chkPwd = false;
     var chkPwd2 = false;
     var chkName = false;

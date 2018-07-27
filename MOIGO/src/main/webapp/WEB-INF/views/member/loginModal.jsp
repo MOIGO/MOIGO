@@ -112,6 +112,8 @@
     <!-- 비밀번호 찾기 모달 끝 -->
      
 
+
+<!-- 페이스북 로그인 스크립트  -->
 <script>
 	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];
@@ -125,7 +127,7 @@
 
 	window.fbAsyncInit = function() {
 		FB.init({
-			appId : '471092039964779',
+			appId : '527787834342986',
 			cookie : true,
 			xfbml : true,
 			version : 'v3.0'
@@ -153,50 +155,15 @@
 			/* statusChangeCallback(response); */
 			
 			if (response.status === 'connected') {	
-				console.log('연결 ㅎ');		
+				FB.logout(function(response) { // 사용자 로그 아웃 이후 콜백처리 
+					alert('다시 시도해주세요');
+					/* location.href="${pageContext.request.contextPath}/"; */
+				});	
+			
 			} else if (response.status === 'not_authorized') {
-				console.log('페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.')	;				
+				fbLogin();
 			} else {
-				FB.login(function(response) {
-					var femail;
-					var fname;
-					var fbirthday;
-					var fgender;
-					
-					var fbname;
-					var accessToken = response.authResponse.accessToken;
-					FB.api('/me?fields=id,name,age_range,birthday,gender,email',function(response) {
-								var fb_data = jQuery.parseJSON(JSON.stringify(response));
-								console.log(fb_data );
-									femail=response.email;
-									fname=response.name;
-									fbirthday=response.birthday;
-									fgender=response.gender;
-									
-									$.ajax({
-										url:"${pageContext.request.contextPath}/member/fbLogin.do",
-										data : {
-											email : femail,
-											name : fname,
-											birthday : fbirthday,
-											gender :fgender
-										},
-										type:"get",
-										success : function(data){
-											if(data.result == -1){
-												alert('페이스북 회원 추가');
-												location.href="${pageContext.request.contextPath}/";
-											}else if (data.result==0){
-												alert('페이스북으로 로그인');
-												location.href="${pageContext.request.contextPath}/";
-											}
-										},
-										error : function(data){
-											console.log("실패");
-										}
-									});
-					}); 
-				}, {scope : 'public_profile, email, user_birthday,user_gender'});  
+				fbLogin(); 
 			}
 		});
 		
@@ -204,6 +171,53 @@
 		
 	}
 
+	
+	function fbLogin(){
+		FB.login(function(response) {
+			var femail;
+			var fname;
+			var fbirthday;
+			var fgender;
+			
+			/* var fbname; */
+			/* var accessToken = response.authResponse.accessToken; */
+			FB.api('/me?fields=id,name,age_range,birthday,gender,email',function(response) {
+						var fb_data = jQuery.parseJSON(JSON.stringify(response));
+						console.log(fb_data );
+							femail=response.email;
+							fname=response.name;
+							fbirthday=response.birthday;
+							fgender=response.gender;
+							
+							$.ajax({
+								url:"${pageContext.request.contextPath}/member/fbLogin.do",
+								data : {
+									email : femail,
+									name : fname,
+									birthday : fbirthday,
+									gender :fgender
+								},
+								type:"get",
+								success : function(data){
+									/* if(data.result == -1){
+										alert('페이스북 회원 추가');
+										location.href="${pageContext.request.contextPath}/";
+									}else if (data.result==0){
+										alert('페이스북 로그인');
+										location.href="${pageContext.request.contextPath}/";
+									}else if (data.result==1){
+										
+									} */
+									alert(data.msg);
+									location.href="${pageContext.request.contextPath}/";
+								},
+								error : function(data){
+									console.log("실패");
+								}
+							});
+			}); 
+		}, {scope : 'public_profile, email, user_birthday,user_gender'});  
+	}
 	/* 
 	function statusChangeCallback(response) {
 		if (response.status === 'connected') {	
@@ -229,9 +243,16 @@
 
 
 
-
+<!-- 일반로그인 스크립트  -->
     
     <script>
+    
+    $('#loginPwd').keypress(function(event){
+        if ( event.which == 13 ) {
+            $('#btn_login').click();
+            return false;
+        }
+   });
     	
     	$('#btn_login').on('click',function(){
 			var loginId = $('#loginId').val();
