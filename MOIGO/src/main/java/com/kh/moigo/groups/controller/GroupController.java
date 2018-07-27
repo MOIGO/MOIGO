@@ -309,7 +309,7 @@ public class GroupController {
 	}
 	
 	// 일정
-	@RequestMapping(value="/groups/groupSchedule.gp", method=RequestMethod.POST)
+	@RequestMapping("/groups/groupSchedule.gp")
 	public String groupSchedule(){
 		
 		return "groups/groupSchedule";
