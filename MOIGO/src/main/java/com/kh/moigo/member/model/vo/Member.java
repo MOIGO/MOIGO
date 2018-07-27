@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class Member implements java.io.Serializable{
 
+
    private static final long serialVersionUID = 3443464769294864530L;
    
    private String memberNo;
@@ -173,9 +174,6 @@ public class Member implements java.io.Serializable{
          return false;
       return true;
    }
-   
-   
-   
-   
-   
+
 }
+

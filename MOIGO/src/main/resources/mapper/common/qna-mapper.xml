@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="qna">
+	
+	<resultMap type="qna" id="qnaBoard">
+		<!-- 가져올 기본 키의 값을 연결시킴(mapping) / 대소문자 구분하지 않음 -->
+		<!-- property : 필드 변수의 이름 -->
+		<!-- column : 데이터 베이스의 결과 컬럼 이름 -->
+		<id property="boardNo" column="BOARD_NO"/>
+		<!-- 가져올 일반 데이터의 값을 연결시킴(mapping) -->
+		<result property="boardTitle" column="BOARD_TITLE"/>
+		<result property="boardContent" column="BOARD_CONTENT"/>
+		<result property="category" column="CONTENT_CATEGORY"/>
+	</resultMap>
+	
+	<select id="qnaList" parameterType="String" resultMap="qnaBoard">
+		SELECT * FROM QNA_BOARD WHERE CONTENT_CATEGORY= #{selected}
+	</select>
+	
+</mapper>

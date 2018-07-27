@@ -31,6 +31,7 @@
 	transform: translateY(-10px);
 	box-shadow: 5px 5px 5px black;
 }
+
 </style>
 </head>
 <body>
@@ -40,13 +41,17 @@
 		<div class="cotainer d-flex justify-content-center">
 			<div class="col-sm-2 col-md-2 col-lg-2"></div>
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">서비스소개</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2 footcate" id="serviceInfo">서비스소개
+						<input type="hidden" value="ser"/></div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">개인정보 취급방침</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2 footcate" id="personalInfo">개인정보 취급방침
+						<input type="hidden" value="per"/></div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">이용안내</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2 footcate" id="useGuide">이용안내
+						<input type="hidden" value="guid"/></div> &nbsp;&nbsp;
 			<div class="d-flex justify-content-center align-items-center footerMenu
-						col-sm-2 col-md-2 col-lg-2">연락처 및 지도</div> &nbsp;&nbsp;
+						col-sm-2 col-md-2 col-lg-2 footcate" id="maps">연락처 및 지도
+						<input type="hidden" value="ma"/></div> &nbsp;&nbsp;
 			<div class="col-sm-2 col-md-2 col-lg-2"></div>
 		</div>
 		<hr>
@@ -59,6 +64,7 @@
 											| 팩스 : 02-2222-2222| E-mail : moigo@moigo.com</p>
 					<p class="col-lg-12">Hosting by (주)코리아센터닷컴</p>
 				</div>
+				
 				<div class="col-sm-3 col-md-3 col-lg-2"></div>
 			</div>
 		</div>
@@ -68,4 +74,13 @@
 	<!-- // 풋터부분 // -->
 	<br><br><br>
 </body>
+<script>
+	$('.footerMenu').on('click',function(){
+		var select = $(this).find('input').val();
+		location.href="${pageContext.request.contextPath}/common/footpage.ft?selected="+select; 
+		
+	});
+	
+	
+</script>
 </html>
