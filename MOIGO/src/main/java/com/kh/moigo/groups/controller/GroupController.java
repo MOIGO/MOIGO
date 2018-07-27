@@ -30,6 +30,7 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
 
 @Controller
@@ -243,6 +244,21 @@ public class GroupController {
 		return map;
 	}
 	
+	//일정 넣기
+	@RequestMapping("/groups/insertSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> insertSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+		
+		System.out.println(schedule);
+		System.out.println(startT);
+		System.out.println(endT);
+		
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		return map;
+	}
+	
 	// ------------------------------------------------------------------ 혜진
 	
 	// 멤버 
@@ -340,7 +356,7 @@ public class GroupController {
 	}
 	
 	// 일정
-	@RequestMapping(value="/groups/groupSchedule.gp", method=RequestMethod.POST)
+	@RequestMapping("/groups/groupSchedule.gp")
 	public String groupSchedule(){
 		
 		return "groups/groupSchedule";

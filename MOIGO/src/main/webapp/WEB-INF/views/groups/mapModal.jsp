@@ -196,8 +196,18 @@ function displayPlaces(places) {
         if(i==0){
         	if(typeof(toEditTarget)=='undefined')
         		displayInfowindow(makeInfoWindow(marker,places[i],closeMapModal),marker);	
-        	else
-        		displayInfowindow(makeInfoWindow(marker,places[i],editMapContent),marker);
+        	else{
+        		
+        		
+        		if($(toEditTarget).attr("name")=="editMapWrap"){
+        			displayInfowindow(makeInfoWindow(marker,places[i],editMapContent),marker);
+        		}else if($(toEditTarget).hasClass("editSchedule")){
+        			displayInfowindow(makeInfoWindow(marker,places[i],editScheduleContent),marker);
+        		}
+        		
+        		
+        		
+        	}
         	
         }
         
@@ -334,7 +344,7 @@ function addMapOnSummerNote(marker,place){
 			+'</div></div>'); */
 			
 			
-	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="alert();">');
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="">');
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');
@@ -402,6 +412,15 @@ function editMapContent(marker,place){
 		$('#insertMap').modal('hide');
 	}
 }
+
+function editScheduleContent(marker,place){
+	$(toEditTarget).text("");
+	$(toEditTarget).siblings("input").val(place.address_name);
+	$(toEditTarget).append("<i class='fas fa-map-marker-alt'>"+place.address_name+"</i>");
+	 
+	$('#insertMap').modal('hide');
+}
+
 
 function deleteMap(obj){
 

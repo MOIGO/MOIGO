@@ -75,7 +75,10 @@ background: #EDEFF2;
 <body>
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
-	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+		<c:param name="groupNo" value="${groupNo }" />
+		<c:param name="memberNo" value="${m.memberNo}" />
+	</c:import>
 
 	<div class="container">
 
@@ -436,7 +439,7 @@ function updatePost(num,postContent){
 			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 			if(data.result>0){
 				$temp.children().remove();
-				console.log(postContent);
+				
 				$temp.append(postContent);
 				alert("글 수정 성공!");
 			}else
