@@ -196,7 +196,7 @@ public class GroupController {
 		map.put("result", groupService.deletePost(postNo));
 		
 		return map;
-	}	
+	}	  
 	
 	//글 수정
 	@RequestMapping("/groups/updatePost.gp")
