@@ -395,6 +395,7 @@ $(document).ready(function(){
 								'<table>';
 		            	 $('.member_detail_slide1').append(str);
 		            	 
+		            	 
 		            	 $('.member_detail_slide2').empty();
 		            	 for(var i in data[1]){
 		            		 console.log("data[1]: "+data[1]);
