@@ -33,7 +33,7 @@
             
         <!-- style="float:none; margin:0 auto;"  -->
         <div class="col-md-9 content_box_wrap " style="float:none; margin:0 auto;" >
-            <h5><i class="fas fa-user-friends"></i> 가입 대기 중</h5> 
+            <h5><i class="fas fa-user-friends"></i> 가입 대기</h5> 
             <div class="groupList_box col-md-12 row" >
                 <c:if test="${empty list}">
                 	<div class=" jumbotron col-12" style="text-align:center;">
@@ -48,14 +48,12 @@
 			                     <input type="hidden" value="${group.groupNo }" name="groupNo">
 			                         <div class="header_bg" >
 			                          		<img alt="" src="${group.groupPicture }" style="width:100%; height:100%;">
+			                          		<span style="position:absolute; right:20px; top:2px;color:yellow"><c:out value="${group.groupGrade }"/></span>
 			                          </div>
 			                         <div class="body_text_container">
 			                             <div class="body_text">
-			                                 <div class="body_title"><c:out value="${group.groupName }"/> <c:out value="${group.groupGrade }"/></div>
-			                                 	<span class="icon-container float-right" style="position:absolute; right:20px; bottom:2px;"> 
-					                              <span class="memberIcon"><c:out value="${group.memberNum }"/> <img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span> 
-					                              <span class="commentIcon"><c:out value="${group.postNum }"/> <img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-					                           </span>
+			                                 <div class="body_title"><c:out value="${group.groupName }"/> </div>
+			                                 <div class="body_member" >멤버 : <c:out value="${group.memberNum }"/> 명   &nbsp;&nbsp;&nbsp; 게시글 : <c:out value="${group.postNum }"/> 개</div>	
 					                           
 			                             </div>
 			                         </div>
