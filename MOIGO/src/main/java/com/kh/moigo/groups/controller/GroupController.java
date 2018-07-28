@@ -4,10 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -32,6 +35,8 @@ import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
+
+import oracle.sql.TIMESTAMP;
 
 @Controller
 public class GroupController {
@@ -248,13 +253,25 @@ public class GroupController {
 	@RequestMapping("/groups/insertSchedule.gp")
 	@ResponseBody
 	public Map<String,Object> insertSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+	
+		//시작시간
+		Timestamp time = new Timestamp(Long.parseLong(startT));
+		schedule.setStartTime(time);
+		
+		//있으면 끝시간도 세팅
+		if(!endT.equals("NaN")){
+			time = new Timestamp(Long.parseLong(startT));
+			schedule.setEndTime(time);
+		}
 		
 		System.out.println(schedule);
-		System.out.println(startT);
-		System.out.println(endT);
 		
+		int result=  groupService.insertSchedule(schedule);
 		
 		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", result);
+		map.put("schedule", schedule);
 		
 		return map;
 	}

@@ -1,6 +1,9 @@
 package com.kh.moigo.groups.model.vo;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+
+import oracle.sql.TIMESTAMP;
 
 public class Schedule implements java.io.Serializable{
 
@@ -12,9 +15,26 @@ public class Schedule implements java.io.Serializable{
 	private String scheduleContent;
 	private String scheduleAddress;
 	private String memberNo;
-	private Date startTime;
-	private Date endTime;
+	private Timestamp startTime;
+	private Timestamp endTime;
 	private String colorLabel;
+	public Schedule(String scheduleNo, String groupNo, String scheduleName, String scheduleContent,
+			String scheduleAddress, String memberNo, Timestamp startTime, Timestamp endTime, String colorLabel) {
+		super();
+		this.scheduleNo = scheduleNo;
+		this.groupNo = groupNo;
+		this.scheduleName = scheduleName;
+		this.scheduleContent = scheduleContent;
+		this.scheduleAddress = scheduleAddress;
+		this.memberNo = memberNo;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.colorLabel = colorLabel;
+	}
+	public Schedule() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public String getScheduleNo() {
 		return scheduleNo;
 	}
@@ -51,16 +71,16 @@ public class Schedule implements java.io.Serializable{
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
 	}
-	public Date getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
-	public Date getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 	public String getColorLabel() {
@@ -146,23 +166,9 @@ public class Schedule implements java.io.Serializable{
 				+ ", scheduleContent=" + scheduleContent + ", scheduleAddress=" + scheduleAddress + ", memberNo="
 				+ memberNo + ", startTime=" + startTime + ", endTime=" + endTime + ", colorLabel=" + colorLabel + "]";
 	}
-	public Schedule(String scheduleNo, String groupNo, String scheduleName, String scheduleContent,
-			String scheduleAddress, String memberNo, Date startTime, Date endTime, String colorLabel) {
-		super();
-		this.scheduleNo = scheduleNo;
-		this.groupNo = groupNo;
-		this.scheduleName = scheduleName;
-		this.scheduleContent = scheduleContent;
-		this.scheduleAddress = scheduleAddress;
-		this.memberNo = memberNo;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.colorLabel = colorLabel;
-	}
-	public Schedule() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
+	
+	
 	
 	
 }

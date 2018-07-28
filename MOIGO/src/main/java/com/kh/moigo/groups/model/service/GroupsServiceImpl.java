@@ -15,6 +15,7 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.PostReply;
 
 @Service
@@ -109,6 +110,12 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.insertGroupMember(gm);
 		
 	}
+  	
+  	@Override
+	public int insertSchedule(Schedule schedule) {
+		
+		return groupDao.insertSchedule(schedule);
+	}
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -141,6 +148,8 @@ public class GroupsServiceImpl implements GroupsService {
 	public int updateGroupCondition(Groups group) {
 		return groupDao.updateGroupCondition(group);
 	}
+
+	
 
 	
 

@@ -339,11 +339,6 @@ function closeMapModal(marker,place){
 //summernote에 붙이기
 function addMapOnSummerNote(marker,place){
 
-	/* var mapDiv = $('<div class="card"><div class="row"><div class="col-2"><div><div class="col-10">'+
-			'<div class="row"><div class="col-12">'+place.place_name+'</div></div>'
-			+'</div></div>'); */
-			
-			
 	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="">');
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');

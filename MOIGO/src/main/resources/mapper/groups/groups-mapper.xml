@@ -20,6 +20,18 @@
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
 	
+	<resultMap type="schedule" id="scheduleResultMap">
+		<id property="scheduleNo" column="SCHEDULE_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="scheduleName" column="SCHEDULE_NAME"/>
+		<result property="scheduleContent" column="SCHEDULE_CONTENT"/>
+		<result property="scheduleAddress" column="SCHEDULE_ADDRESS"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="colorLabel" column="COLOR_LABEL"/>
+	</resultMap>
+	
 	<resultMap type="post" id="postResultMap">
 		<id property="postNo" column="POST_NO"/>
 		<result property="groupNo" column="GROUP_NO"/>
@@ -195,6 +207,16 @@
 	<!--그룹 가입하기 -->
 	<insert id="insertGroupMember" parameterType="groupMember">
 		INSERT INTO GROUP_MEMBER VALUES(#{memberNo},#{groupNo},#{profileImg},#{profileThumb},#{profileMsg},#{memberGradeCode})
+	</insert>
+	
+	<!--일정 등록 -->
+	<insert id="insertSchedule" parameterType="schedule">
+		
+		<selectKey keyProperty="scheduleNo" resultType="string" order="AFTER" >
+			SELECT 'S'||TO_CHAR(SEQ_SCHEDULE.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SCHEDULE VALUES('S'||TO_CHAR(SEQ_SCHEDULE.NEXTVAL,'FM000'),#{groupNo},#{scheduleName},#{scheduleContent},#{scheduleAddress},#{memberNo},#{startTime},#{endTime},#{colorLabel})
 	</insert>
 
 

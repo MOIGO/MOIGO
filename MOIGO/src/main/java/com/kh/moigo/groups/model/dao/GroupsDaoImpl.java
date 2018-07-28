@@ -14,7 +14,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
-
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -121,6 +121,12 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.insert("groups.insertGroupMember",gm);
 	}
+	
+	@Override
+	public int insertSchedule(Schedule schedule) {
+		
+		return sqlSession.insert("groups.insertSchedule",schedule);
+	}
 
 
 
@@ -155,6 +161,8 @@ public class GroupsDaoImpl implements GroupsDao {
 	public int updateGroupCondition(Groups group) {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
+
+	
 
 
 	

@@ -99,47 +99,159 @@
 </div>
 
 <script>
+	function addScheduleOnSummerNote(scheduleObj){
+		
+		var startTime= milisecToDate(scheduleObj.startTime);
+		var endTime="";
+		
+		var timeString =getTimeToString(startTime);
+		
+		console.log(startTime);
+		
+		if(scheduleObj.endTime!=null){
+			endTime=milisecToDate(scheduleObj.endTime);
+			timeString+= " - "+getTimeToString(endTime);
+		}
+		
+		
+		
+		var $mapDiv = $('<div class="card" name="editScheduleWrap" style="border:3px solid black;" contenteditable="false" onclick="">');
+		var $mapBody = $('<div class="card-body">');
+		var $mapRow = $('<div class="row">');
+		var $mapCol2 = $('<div class="col-2">');
+		var $mapCol10 = $('<div class="col-10">');
+		var $col10Row = $('<div class="row">');
+		var $col10RowCol1 =$('<div class="col-12 map_address scheduleName">'+scheduleObj.scheduleName+'</div>');
+		
+		var $mapCol2Day =$('<div style="font-weight:700; font-size:1.2em">'+startTime.getDate()+'</div>');
+		var $mapCol2Dow =$('<div style="color:blue;">'+getDayToKor(startTime.getDay())+'</div>');
+		var $col10RowCol2 =$('<div class="col-12 map_address scheduleTime">'+timeString+'</div>');
+		
+		
+		var $btnWrapper = $('<div class="map_btn_wrapper float-right">');
+		var $btn_edit =$('<button class="btn btn-primary mr-3" name="editBtn">수정</button>');
+		var $btn_del =$('<button class="btn btn-info" name="delBtn">삭제</button>');
+		
+		$mapCol2.append($mapCol2Day);
+		$mapCol2.append($mapCol2Dow);
+		
+		$btnWrapper.append($btn_edit);
+		$btnWrapper.append($btn_del);
+		
+		
+		$col10Row.append($col10RowCol1);
+		$col10Row.append($col10RowCol2);
+		$mapCol10.append($col10Row);
+		$mapRow.append($mapCol2);
+		$col10Row.append($btnWrapper);
+		$mapRow.append($mapCol10);
+		$mapBody.append($mapRow);
+		$mapDiv.append($mapBody);
+		
+		
+		
+		$btn_edit.on("click",function(){
+			toEditTarget=$mapDiv;
+			
+			$('#placeKeyword').val($col10RowCol1.text());
+			editMap();
+		});
+		
+		$btn_del.on("click",function(){
+			deleteMap($(this));
+		});
+		
+		
+		$mapDiv.on('mouseover',function(){
+			$(this).css('border','3px solid #00bfff');
+			
+			$(this).find('.map_btn_wrapper').css("visibility","visible");
+			
+			
+		}).on('mouseout',function(){
+			
+			$(this).css('border','3px solid black');
+			
+			$(this).find('.map_btn_wrapper').css("visibility","hidden");
+		});
+		
+		$('#summernote').summernote('insertNode', $mapDiv[0]);
+		
+	}
+	
+	function milisecToDate(milisecondData){
+		
+		var date = new Date(milisecondData);
+		
+		return date;
+	}
+	
+	function getTimeToString(dateObj){
+		
+		
+		return dateObj.getFullYear()+"년 "+dateObj.getMonth()+"월 "+dateObj.getDate()+"일 "+dateObj.getHours()+":"+dateObj.getMinutes();
+	}
+	
+	function getDayToKor(day){
+		
+		console.log("day " + day);
+		var days = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+		
+		return days[day];
+		
+	}
+
 	function insertSchedule(){
 		 
-		var startDate = ($('#startDate').val()).split(".");
-		var startTime = ($('#startTime').val()).split(":");
-		var endDate= ($('#endDate').val()).split(".");
-		var endTime = ($('#endTime').val()).split(":");
-		 
 		
-		var startDate = new Date(startDate[0],startDate[1],startDate[2],startTime[0],startTime[1],(new Date()).getSeconds(),0);
-		var endDate = new Date(endDate[0],endDate[1],endDate[2],endTime[0],endTime[1],0,0);
+		if(!$('#insertSchedule input[name=scheduleName]').val()){
+			alert("일정 제목은 필수 입력 사항입니다.");
+			return;
+		}
 		
-		/*
-		console.log(startDate);
-		console.log(endDate);
-		console.log(startDate +"   "+startTime);
-		console.log(endDate +"   "+endTime );
-		console.log("${param.groupNo}"+"groupNo");
-		console.log("${param.memberNo}"+"memberNo");
-		console.log("scheduleName="+"     "+$('#insertSchedule input[name=scheduleName]').val());
-		console.log("scheduleContent="+"     "+$('#insertSchedule textarea').val());
-		console.log("scheduleAddress="+"     "+$('#insertSchedule input[name=scheduleAddress]').val());
-		console.log("scheduleLabelColor="+"     "+$('#scheduleLabelColor option:selected').val()); */
+		var startDates = ($('#startDate').val()).split(".");
+		var startTimes = ($('#startTime').val()).split(":");
+		var startDate = new Date(startDates[0],(parseInt(startDates[1])-1),startDates[2],startTimes[0],startTimes[1],(new Date()).getSeconds(),0);
+		
+		var endDates;
+		var endTimes;
+		var endDate ;
+		
+		if($('#endDate').val()!=null&&$('#endTime').val()!=null){
+			endDates= ($('#endDate').val()).split(".");
+			endTimes = ($('#endTime').val()).split(":");
+			endDate = new Date(endDates[0],(parseInt(endDates[1])-1),endDates[2],endTimes[0],endTimes[1],0,0);
+		}
 		
 		
-		$.ajax({
+		
+	 	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/insertSchedule.gp",
 			data:{	groupNo:"${param.groupNo}",
 					scheduleName:$('#insertSchedule input[name=scheduleName]').val(),
 					scheduleContent:$('#insertSchedule textarea').val(),
-					scheduleAddress:$('#scheduleLabelColor option:selected').val(),
-					startT:startDate,
-					endT:endDate,
+					scheduleAddress:$('#insertSchedule input[name=scheduleAddress]').val(),
+					startT:startDate.getTime(),
+					endT:endDate.getTime(),
 					memberNo:'${param.memberNo}',
 					colorLabel:$('#scheduleLabelColor option:selected').val()
 				},success:(function(data){
+					
+					if(data.result>0){
+						alert("일정 입력에 성공하였습니다.");
+						addScheduleOnSummerNote(data.schedule);
+					}
+					else
+						alert("일정 입력에 실패하였습니다.");
+					
+					
+					closeScheduleModal();
 					
 				}),error:(function(data){
 					
 				})
 	
-			});
+			}); 
 	}
 
 	$(function(){
@@ -159,8 +271,9 @@
 			$('#startTime').timepicker({ timeFormat:"H:i",lang: {am:'오전', pm:'오후',AM:'오전', PM:'오후'},step:30});
 			$('#endTime').timepicker({ timeFormat:"H:i",lang: {am:'오전', pm:'오후',AM:'오전', PM:'오후'},step:30});
 			$('#startTime').timepicker("setTime",new Date());
-			
 			$('#startDate').datepicker("setDate",new Date());
+			$('#endTime').timepicker("setTime",null);
+			$('#endDate').datepicker("setDate",null);
 	
 		});
 		
@@ -191,7 +304,7 @@
 			}else{
 
 				if($('#endDate').datepicker("getDate")==null){
-					console.log(getDate($('#startDate')));
+					
 					$('#endDate').datepicker("setDate",getDate($('#startDate')));
 				}
 			}
@@ -200,8 +313,9 @@
 
 		$('#endDate').on("change",function(){
 			
-			console.log($('#endTime').val());
-			if($('#endTime').timepicker("getTime")==null){
+			
+			if($('#endTime').timepicker("getTime")==null&&
+					$('#endDate').datepicker("getDate")>$('#startDate').datepicker("getDate")){
 				$('#endTime').timepicker("setTime",(new Date()));
 			}
 			
@@ -245,14 +359,18 @@
 	      return date;
 	 }
 	
-	
-	 
+
 	 function closeScheduleModal(){
-		
+		 $('#insertSchedule').modal("hide");
+		 
 		 $("#startDate").datepicker( "destroy" );
+		 
 		 $("#endDate").datepicker( "destroy" );
+		 
 		 $("#startTime").timepicker( "remove" );
+		
 		 $("#endTime").timepicker( "remove" );
+		 
 		 $("#insertSchedule .editSchedule").text("");
 		 $("#insertSchedule .editSchedule").append("<i class='fas fa-map-marker-alt'>지도에서 선택</i>");
 		
