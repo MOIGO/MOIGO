@@ -14,6 +14,13 @@
 	max-width:30%;
 }
 
+.day{
+font-weight: 700;
+font-size:2.0em;
+text-align:center;
+
+}
+
 </style>
 
 <div id="insertScheduleModalWrapper"> 
@@ -98,7 +105,124 @@
 
 </div>
 
+
+<div id="viewScheduleModalWrapper">
+	<div class="modal" id="viewSchedule" tabindex="-1"role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg modalSize_schedule" role="document">
+		<div class="modal-content">
+			<!-- <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">일정 만들기</h5>
+				<button type="button" class="close" data-dismiss="modal"aria-label="Close" onclick="closeScheduleModal()">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div> -->
+			
+			<div class="modal-body">
+				<div class="card">
+				  <div class="card-header">
+				    <div class="container">
+				    	<div class="row">
+				    		<div class="col-2">
+				    			<div>
+				    				<span class="day"></span>
+				    				<span class="dayofweek"></span>
+				    			</div>
+				    		</div>
+				    		<div class="col-10">
+				    			<div class="row">
+				    				<div class="col-12 scheduleName">
+				    					
+				    				</div>
+				    				<div class="col-12 scheduleTime">
+				    				
+				    				</div>
+				    				<div class="col-12 memberName">
+				    					
+				    				</div>
+				    			</div>
+				    		</div>
+				    	</div>
+				    </div>
+				  </div>
+				  <div class="card-body">
+				   
+				    <p class="card-text scheduleContent"></p>
+				    
+				    <div id="mapView" style="width:100%;height:350px;"></div>
+				  </div>
+				</div>
+			</div>
+		
+		
+		</div>
+	</div>
+</div>
+	
+ 
+</div>
+
 <script>
+	var mapView;
+	var geocoder;
+	
+	function makeViewMap(){
+		var mapContainer = document.getElementById('mapView'), // 지도를 표시할 div 
+		mapOption = { 
+		    center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+		    level: 3 // 지도의 확대 레벨
+		};
+		
+		mapView = new daum.maps.Map(mapContainer, mapOption); 
+		geocoder = new daum.maps.services.Geocoder();
+		mapView.relayout();
+	}
+	
+	
+	
+
+	function openScheduleViewModal(scheduleNo){
+		$('#viewSchedule').modal("toggle");
+		makeViewMap();
+		getOneSchedule(scheduleNo,setScheduleViewModal)	;
+	}
+	
+	function setScheduleViewModal(obj){
+		
+		
+		$('#viewSchedule').find(".day").text(milisecToDate(obj.startTime).getDate());
+		$('#viewSchedule').find(".dayofweek").text(getDayToKor(milisecToDate(obj.startTime).getDay()));
+		$('#viewSchedule').find(".scheduleName").text(obj.scheduleName);
+		$('#viewSchedule').find(".scheduleContent").text(obj.scheduleContent);
+		
+		var timeString = getTimeToString(milisecToDate(obj.startTime));
+		if(obj.endTime!=null)
+			timeString += " - "+getTimeToString(milisecToDate(obj.endTime));
+		$('#viewSchedule').find(".scheduleTime").text(timeString);
+		
+		if(obj.scheduleAddress!=null){
+			
+			geocoder.addressSearch(obj.scheduleAddress, function(result, status) {
+	
+			    // 정상적으로 검색이 완료됐으면 
+			     if (status === daum.maps.services.Status.OK) {
+	
+			        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+	
+			        // 결과값으로 받은 위치를 마커로 표시합니다
+			        var marker = new daum.maps.Marker({
+			            map: mapView,
+			            position: coords
+			        });
+			    
+			        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+			        mapView.setCenter(coords);
+			    } 
+			}); 
+		}
+		
+	}
+
+
 	function toggleScheduleModal(){
 
 		 $('#insertSchedule').modal("toggle");	    
@@ -111,20 +235,18 @@
 		$('#insertSchedule').find(".modal-footer button").unbind();
 		$('#insertSchedule').find(".modal-footer button").on("click",updateSchedule);
 		
-		getOneSchedule(scheduleNo);
-		
-		
-	
+		getOneSchedule(scheduleNo,setTargetScheduleData);
+
 	}
 	
-	function getOneSchedule(scheduleNo){
+	function getOneSchedule(scheduleNo,callbackfunc){
 	 	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/selectOneSchedule.gp",
 			data:{	scheduleNo:scheduleNo}
 				,success:(function(data){
 					if(data!=null){
 						
-						setTargetScheduleData(data.schedule);
+						callbackfunc(data.schedule);
 					}else
 						alert("일정을 불러오는 과정에서 문제가 생겼습니다.");
 				
@@ -145,9 +267,7 @@
 		else
 			$("#insertSchedule .editSchedule .fas").text("지도에서 선택");
 		
-		
-		milisecToDate(obj.startTime);
-		
+	
 		$('#startTime').timepicker("setTime",milisecToDate(obj.startTime));
 		$('#startDate').datepicker("setDate",milisecToDate(obj.startTime));
 		
@@ -199,7 +319,7 @@
 		
 		
 		var times=  getTimesFromInput();
-		
+
 	  	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/updateSchedule.gp",
 			data:{	scheduleNo:$(toEditTarget).find('[name=scheduleNo]').val(),
@@ -214,7 +334,9 @@
 					
 					if(data.result>0){
 						alert("일정 수정에 성공하였습니다.");
-						editScheduleOnSummerNote(data.schedule);
+						if(typeof(toEditTarget)!='undefined')
+							editScheduleOnSummerNote(data.schedule);
+						
 						$('#insertSchedule').modal('hide');
 					}
 					else
@@ -231,10 +353,13 @@
 	}
 	
 	function parseDateAndTime(dateObj,timeObj){
+		
+
 		var dates = ($(dateObj).val()).split(".");
 		var times = ($(timeObj).val()).split(":");
-		
-		return new Date(dates[0],(parseInt(dates[1])-1),dates[2],times[0],times[1],(new Date()).getSeconds(),0); 
+		return new Date(dates[0],(parseInt(dates[1])-1),dates[2],times[0],times[1],(new Date()).getSeconds(),0);
+	
+		 
 		
 	}
 	
@@ -256,9 +381,9 @@
 		var startDate = parseDateAndTime($('#startDate'),$('#startTime'));
 	
 		var times=  getTimesFromInput();
-		var $mapDiv = $('<div class="card" name="editScheduleWrap" style="border:3px solid black;" contenteditable="false" onclick="">');
+		var $mapDiv = $('<div class="card" name="editScheduleWrap" style="border:3px solid black;" contenteditable="false" onclick="openScheduleViewModal('+"'"+scheduleObj.scheduleNo+"'"+')">');
 		var $scheduleNo=$('<input type="hidden" name="scheduleNo" value="'+scheduleObj.scheduleNo+'">');
-		var $mapBody = $('<div class="card-body">');
+		var $mapBody = $('<div style="cursor:pointer;" class="card-body">');
 		var $mapRow = $('<div class="row">');
 		var $mapCol2 = $('<div class="col-2">');
 		var $mapCol10 = $('<div class="col-10">');
@@ -295,6 +420,7 @@
 		
 		$btn_edit.on("click",function(){
 			toEditTarget=$mapDiv;
+			
 			
 			editSchedule(scheduleObj.scheduleNo);
 			
@@ -384,7 +510,6 @@
 		}
 		
 		var times=  getTimesFromInput();
-		console.log(times);
 		
 	 	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/insertSchedule.gp",
@@ -401,6 +526,7 @@
 					
 					if(data.result>0){
 						alert("일정 입력에 성공하였습니다.");
+						
 						addScheduleOnSummerNote(data.schedule);
 					}
 					else

@@ -302,7 +302,7 @@ public class GroupController {
 		
 		//있으면 끝시간도 세팅
 		if(!endT.equals("none")){
-			time = new Timestamp(Long.parseLong(startT));
+			time = new Timestamp(Long.parseLong(endT));
 			schedule.setEndTime(time);
 		}	
 		

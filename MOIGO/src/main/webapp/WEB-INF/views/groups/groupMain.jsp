@@ -427,8 +427,12 @@ function prepareUpdatePost(num){
 	
 	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
-		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i))
+		
 	}
+	for(var i =0;i<$temp.siblings('[name=editScheduleWrap]').length;++i){
+		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i));
+	}
+	
 }
 
 function updatePost(num,postContent){
@@ -451,6 +455,42 @@ function updatePost(num,postContent){
 		}
 		
 	});
+}
+
+function restoreScheduleEvent(obj){
+	
+	console.log("들어오나?");
+	
+	$(obj).find('[name=editBtn]').on("click",function(event){
+		toEditTarget=obj;
+		 event.stopPropagation();
+		editSchedule($(obj).find('[name=scheduleNo]').val());
+		
+	});
+	
+	$(obj).find('[name=delBtn]').on("click",function(event){
+		 event.stopPropagation();
+		if(confirm("일정을 삭제 하시겠습니까?")){
+			deleteSchedule($(obj).find('[name=scheduleNo]').val(),obj);
+		}
+			
+		
+	});
+	
+	
+	$(obj).on('mouseover',function(){
+		$(this).css('border','3px solid #00bfff');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","visible");
+		
+		
+	}).on('mouseout',function(){
+		
+		$(this).css('border','3px solid black');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","hidden");
+	});
+	
 }
 
 function restoreMapEvent(obj){

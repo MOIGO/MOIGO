@@ -101,7 +101,7 @@ var toEditTarget;
 var toEditContent;
 
 function toggleMapModal(){
-	 $('#insertMap').modal("toggle");
+	$('#insertMap').modal("toggle");
     $('#insertMap').on("shown.bs.modal",makeMap());
 }
 
@@ -371,14 +371,15 @@ function addMapOnSummerNote(marker,place){
 	
 	
 	
-	$btn_edit.on("click",function(){
+	$btn_edit.on("click",function(event){
 		toEditTarget=$mapDiv;
-		
+		event.stopPropagation();
 		$('#placeKeyword').val($col10RowCol1.text());
 		editMap();
 	});
 	
-	$btn_del.on("click",function(){
+	$btn_del.on("click",function(event){
+		event.stopPropagation();
 		deleteMap($(this));
 	});
 	
