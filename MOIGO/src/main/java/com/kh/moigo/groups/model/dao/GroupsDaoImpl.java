@@ -127,7 +127,24 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.insert("groups.insertSchedule",schedule);
 	}
+	
+	@Override
+	public Schedule selectOneSchedule(String scheduleNo) {
+		
+		return sqlSession.selectOne("groups.selectOneSchedule",scheduleNo);
+	}
 
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		
+		return sqlSession.update("groups.updateSchedule",schedule);
+	}
+	
+	@Override
+	public int deleteSchedule(String scheduleNo) {
+		
+		return sqlSession.update("groups.deleteSchedule",scheduleNo);
+	}
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -162,14 +179,6 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
 
-	
-
-
-	
-
-	
-
-	
 
 }
 

@@ -130,6 +130,7 @@
 		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)
 	</insert>
 	
+	<!--댓글 삭제-->
 	<delete id="deleteReply">
 		DELETE FROM POST_REPLY
 		WHERE REPLY_NO=#{replyNo}
@@ -216,9 +217,26 @@
 			SELECT 'S'||TO_CHAR(SEQ_SCHEDULE.CURRVAL,'FM000') FROM DUAL
 		</selectKey>
 		
-		INSERT INTO SCHEDULE VALUES('S'||TO_CHAR(SEQ_SCHEDULE.NEXTVAL,'FM000'),#{groupNo},#{scheduleName},#{scheduleContent},#{scheduleAddress},#{memberNo},#{startTime},#{endTime},#{colorLabel})
+		INSERT INTO SCHEDULE VALUES('S'||TO_CHAR(SEQ_SCHEDULE.NEXTVAL,'FM000'),#{groupNo},#{scheduleName},#{scheduleContent},#{scheduleAddress},#{memberNo},#{startTime},#{endTime},#{colorLabel},#{allDay})
 	</insert>
-
+	
+	<!--일정 하나 가져오기 -->
+	<select id="selectOneSchedule" resultMap="scheduleResultMap">
+		SELECT * FROM SCHEDULE WHERE SCHEDULE_NO =#{scheduleNo}
+	</select>
+	
+	<!--일정 하나 수정하기-->
+	<update id="updateSchedule" parameterType="schedule">
+		 UPDATE SCHEDULE
+		 SET SCHEDULE_NAME=#{scheduleName},SCHEDULE_CONTENT=#{scheduleContent},SCHEDULE_ADDRESS=#{scheduleAddress},START_TIME=#{startTime},END_TIME=#{endTime},COLOR_LABEL=#{colorLabel},ALLDAY=#{allDay}
+		 WHERE SCHEDULE_NO=#{scheduleNo}
+	</update>
+	
+	<!--일정 삭제하기  -->
+	<delete id="deleteSchedule">
+		DELETE FROM SCHEDULE
+		WHERE SCHEDULE_NO=#{scheduleNo}
+	</delete>
 
 	<!-- ===================================================================================================== 혜진 -->
 

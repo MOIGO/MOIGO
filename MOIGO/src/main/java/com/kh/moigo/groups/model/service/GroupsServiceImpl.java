@@ -116,6 +116,27 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.insertSchedule(schedule);
 	}
+  	
+
+	@Override
+	public Schedule selectOneSchedule(String scheduleNo) {
+		
+		return groupDao.selectOneSchedule(scheduleNo);
+	}
+	
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		
+		return groupDao.updateSchedule(schedule);
+	}
+	
+
+	@Override
+	public int deleteSchedule(String scheduleNo) {
+		
+		return groupDao.deleteSchedule(scheduleNo);
+	}
+
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -149,13 +170,6 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updateGroupCondition(group);
 	}
 
-	
-
-	
-
-	
-
-	
 
 	
 

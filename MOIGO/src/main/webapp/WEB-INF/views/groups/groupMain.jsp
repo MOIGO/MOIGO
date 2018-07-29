@@ -427,6 +427,7 @@ function prepareUpdatePost(num){
 	
 	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
+		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i))
 	}
 }
 
@@ -669,15 +670,6 @@ function createSummerNote(){
 	
 }
 
-function toggleMapModal(){
-	 $('#insertMap').modal("toggle");
-     $('#insertMap').on("shown.bs.modal",makeMap());
-}
-
-function toggleScheduleModal(){
-	 $('#insertSchedule').modal("toggle");
-     
-}
 	
 </script>
 

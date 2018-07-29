@@ -100,6 +100,11 @@ var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
 var toEditTarget;
 var toEditContent;
 
+function toggleMapModal(){
+	 $('#insertMap').modal("toggle");
+    $('#insertMap').on("shown.bs.modal",makeMap());
+}
+
 function makeMap(){
 	
 	map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div

@@ -44,6 +44,13 @@ public interface GroupsDao {
 	
 	int insertSchedule(Schedule schedule);
 	
+	Schedule selectOneSchedule(String scheduleNo);
+	
+	int updateSchedule(Schedule schedule);
+	
+	int deleteSchedule(String scheduleNo);
+
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	List<GroupMember> selectGroupMemberList(String groupNo);
@@ -57,6 +64,11 @@ public interface GroupsDao {
 	int updateGroupCondition(Groups group);
 
 	int deleteGroup(String groupNo);
+
+	
+	
+
+	
 
 	
 

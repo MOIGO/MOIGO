@@ -154,7 +154,7 @@ public class GroupController {
 		if(m!=null){
 		
 			if((groupService.selectOneGroup(groupNo)).getAllowSignup().equals("Y")){
-				System.out.println("여기 들어와야지 그지?");
+				
 				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
 			}else{
 				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
@@ -259,12 +259,12 @@ public class GroupController {
 		schedule.setStartTime(time);
 		
 		//있으면 끝시간도 세팅
-		if(!endT.equals("NaN")){
+		if(!endT.equals("none")){
 			time = new Timestamp(Long.parseLong(startT));
 			schedule.setEndTime(time);
 		}
 		
-		System.out.println(schedule);
+		//System.out.println(schedule);
 		
 		int result=  groupService.insertSchedule(schedule);
 		
@@ -273,6 +273,59 @@ public class GroupController {
 		map.put("result", result);
 		map.put("schedule", schedule);
 		
+		return map;
+	}
+	
+	//일정 하나 가져오기
+	@RequestMapping("/groups/selectOneSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneSchedule(@RequestParam String scheduleNo){
+	
+		
+		Schedule schedule = groupService.selectOneSchedule(scheduleNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	//일정 하나 수정하기
+	@RequestMapping("/groups/updateSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> updateSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+		
+		//시작시간
+		Timestamp time = new Timestamp(Long.parseLong(startT));
+		schedule.setStartTime(time);
+		
+		//있으면 끝시간도 세팅
+		if(!endT.equals("none")){
+			time = new Timestamp(Long.parseLong(startT));
+			schedule.setEndTime(time);
+		}	
+		
+		int result = groupService.updateSchedule(schedule);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("result", result);
+			
+		return map;
+	}
+	
+	@RequestMapping("/groups/deleteSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
+		
+		
+		int result = groupService.deleteSchedule(scheduleNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("result", result);
+			
 		return map;
 	}
 	
