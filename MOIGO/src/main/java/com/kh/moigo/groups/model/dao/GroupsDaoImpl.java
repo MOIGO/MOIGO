@@ -130,6 +130,16 @@ public class GroupsDaoImpl implements GroupsDao {
 	public int updateGroupCondition(Groups group) {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
+	
+	@Override
+	public int updateGroupMemberSetting(Map<String, Object> changeMap) {
+		return sqlSession.update("groups.updateGroupMemberSetting", changeMap);
+	}
+
+	@Override
+	public int deleteGroupMember(Map<String, Object> changeMap) {
+		return sqlSession.delete("groups.deleteGroupMember", changeMap);
+	}
 
 }
 

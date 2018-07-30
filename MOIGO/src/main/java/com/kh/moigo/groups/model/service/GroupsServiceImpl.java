@@ -118,4 +118,14 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updateGroupCondition(group);
 	}
 
+	@Override
+	public int updateGroupMemberSetting(Map<String, Object> changeMap) {
+		return groupDao.updateGroupMemberSetting(changeMap);
+	}
+
+	@Override
+	public int deleteGroupMember(Map<String, Object> changeMap) {
+		return groupDao.deleteGroupMember(changeMap);
+	}
+
 }

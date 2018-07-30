@@ -19,6 +19,24 @@
       background: #EDEFF2;
    }
    
+   .card, .card-header{
+   		background:white;
+   }
+   
+	.group_tit {
+		margin-bottom: 0px;
+		font-family: 'nanum-barun-gothic-bold', sans-serif;
+		font-size: 1.3em;
+	}
+
+	.group_tit:hover {
+	cursor: default;
+	}
+	
+	#calendar {
+		padding:0px 15px 15px 15px;
+	}
+   
    .fc-header-toolbar{
    		margin-top: 15px !important;
    		margin-bottom: 10px !important;
@@ -39,13 +57,13 @@
         color: darkgray;
    }
    
-   .group_tit:hover{
-         cursor : default;
-   }
-   
    .btn:focus, .btn:active:focus, .btn.active:focus {
    		box-shadow: none !important;
    		outline: none !important;
+	}
+	
+	.fc-list-item-time, .fc-list-item-marker, .fc-list-item-title, .table-active{
+		border-color: #DDD;
 	}
     
 </style>
@@ -58,11 +76,11 @@
      <c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
      
      <div class="col-7">
-        <div class="card" style="background:white;">
-           <div class="card-header" style="background:white;">           
-              <p class="group_tit" style="margin-bottom:0px; font-size:1.3em; font-weight:bold;">일정</p>
+        <div class="card">
+           <div class="card-header" >           
+              <p class="group_tit">일정</p>
            </div>
-           <div class="card-body" id="calendar" style="padding:0 15px 15px 15px;">
+           <div class="card-body" id="calendar">
            </div>
         </div>
      </div>
@@ -75,15 +93,18 @@
 <script>
 
    function customCalendar() {
-      // 요일 header의 위치를 정렬하는 부분
+      // location of sort date header
          $(".fc-day-header").css({
             "padding-top" : "5px",
             "padding-bottom" : "5px",
             "text-align" : "left",
          });
          
-         // 요일 header에서 요일이 적혀있는 span을 찾아서 공백을 주기
-         $(".fc-day-header").find("span").css("margin-left", "5px");
+         // 요일 header에서 요일이 적혀있는 span을 찾아서 css 적용
+         $(".fc-day-header").find("span").css({
+        	 "margin-left" : "5px",
+        	 "font-family" : "'nanum-barun-gothic-bold', sans-serif"
+       	 });
          
          // 달력의 숫자 위치를 정렬하는 부분
          $(".fc-day-number").css({
@@ -99,7 +120,7 @@
              "margin-left" : "7px",
              "margin-right" : "7px",
               "font-size" : "1.6em",
-              "font-weight" : "bold",
+              "font-family" : "'nanum-barun-gothic-bold', sans-serif",
               "vertical-align" : "middle",
               "cursor" : "pointer",
               "display" : "inline-block"
@@ -193,11 +214,19 @@
       customCalendar();
       
       $('.fc-prev-button').on("click", function(){
-         alert('prev is clicked, do something');
+    	  customCalendar();
       });
    
       $('.fc-next-button').on("click", function(){
-         alert('next is clicked, do something');
+    	  customCalendar();
+      });
+      
+      $('.fc-today-button').on("click", function(){
+    	  customCalendar();
+      });
+      
+      $('.fc-month-button').on("click", function(){
+    	  customCalendar();
       });
       
    });
