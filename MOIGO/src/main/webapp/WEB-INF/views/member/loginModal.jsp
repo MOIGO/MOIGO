@@ -134,12 +134,11 @@
 		});
 
 
-		FB.getLoginStatus(function(response) {
+/* 		FB.getLoginStatus(function(response) {
 			console.log('statusChangeCallback');
 			console.log(response);
-			/* statusChangeCallback(response); */
 		}); 
-		
+ */		
 		
 	};
 
