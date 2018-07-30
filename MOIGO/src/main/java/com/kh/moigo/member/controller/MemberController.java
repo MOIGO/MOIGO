@@ -107,13 +107,6 @@ public class MemberController {
 			result = -1;
 		} else {
 			
-//			if(m.getMemberNo().charAt(0)=='A'){
-//				System.out.println("관리자 로그인");
-//				msg="관리자 로그인";
-//				result = 0;
-//				model.addAttribute("m", m);
-//			}else{
-			
 //				if(bcryptPasswordEncoder.matches(memberPwd, m.getMemberPwd())){
 				if (memberPwd.equals(m.getMemberPwd())) {
 					result = 0;
@@ -123,7 +116,6 @@ public class MemberController {
 					msg = "회원정보가 일치하지 않습니다.";
 					result = 1;
 				}
-//			}
 		}
 
 		map.put("msg", msg);
