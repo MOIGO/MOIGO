@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="schedule">
+	
+	<resultMap type="schedule" id="scheduleResultMap">
+		<id property="scheduleNo" column="SCHEDULE_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="scheduleName" column="SCHEDULE_NAME"/>
+		<result property="scheduleContent" column="SCHEDULE_CONTENT"/>
+		<result property="scheduleAddress" column="SCHEDULE_ADDRESS"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="colorLabel" column="COLOR_LABEL"/>
+	</resultMap>
+
+</mapper>

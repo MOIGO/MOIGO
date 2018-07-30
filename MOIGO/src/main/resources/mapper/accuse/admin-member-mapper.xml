@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="memberDetail">
+	<resultMap type="memberDetail" id="memberDetailResultMap">
+		<id property="memberNo" column="MEMBER_NO" />
+		<result property="memberEmail" column="MEMBER_EMAIL" />
+		<result property="memberPwd" column="MEMBER_PWD" />
+		<result property="memberName" column="MEMBER_NAME" />
+		<result property="memberAddress" column="MEMBER_ADDRESS" />
+		<result property="memberBirth" column="MEMBER_BIRTH" />
+		<result property="memberGender" column="MEMBER_GENDER" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="enrollGroup" column="ENROLL_GR" />
+		<result property="postCount" column="POST_COUNT" />
+		<result property="replyCount" column="REPLY_COUNT" />
+		<result property="accuseCount" column="ACCUSE_COUNT" />
+		<result property="genderCount" column="GENDER_RATE"/>
+		<result property="metrocity" column="METROCITY"/>
+		<result property="addressCount" column="ADDRESS_RATE"/>
+		<result property="minterestCount" column="MINTEREST"/>
+		<result property="bigInterest" column="INTEREST_BIG_NAME"/>
+		<result property="countWmember" column="COUNT_WM" />	
+		<result property="enrollD" column="ENROLL_D" />	
+		<result property="totalMember" column="TOTAL" />	
+		<result property="enrollM" column="ENROLL_M" />	
+		<result property="mmCount" column="MM_COUNT" />	
+		
+	</resultMap>
+
+	<select id="memDetail" parameterType="string" resultMap="memberDetailResultMap">
+		SELECT MEMBER_NO,
+		MEMBER_EMAIL,MEMBER_NAME,MEMBER_ADDRESS,MEMBER_BIRTH,MEMBER_GENDER,ENROLL_DATE,
+		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE MEMBER_NO = M.MEMBER_NO) ENROLL_GR,
+		(SELECT COUNT(*) FROM POST WHERE MEMBER_NO = M.MEMBER_NO) POST_COUNT,
+		(SELECT COUNT(*) FROM POST_REPLY WHERE MEMBER_NO = M.MEMBER_NO) REPLY_COUNT
+		FROM MEMBER M
+		WHERE MEMBER_NO = #{id}
+	</select>
+	<select id="genderCount" resultMap="memberDetailResultMap" >
+		select count(*) gender_rate from member group by member_gender		
+	</select>
+	
+	<select id="addressCount" resultMap="memberDetailResultMap" >
+		select substr(MEMBER_ADDRESS,1,(instr(MEMBER_ADDRESS,' ')-1)) METROCITY, count(*) address_rate 
+		from member 
+		group by substr(MEMBER_ADDRESS,1,(instr(MEMBER_ADDRESS,' ')-1))
+		order by address_rate desc
+	</select>
+	
+	<select id="minterestCount" resultMap="memberDetailResultMap" >
+		SELECT INTEREST_BIG_NAME, COUNT(*) MINTEREST 
+		FROM MEMBER_INTEREST 
+		JOIN INTEREST_BIG USING(interest_big_code)
+		GROUP BY INTEREST_BIG_NAME ORDER BY MINTEREST DESC
+	</select>
+	<select id="weeklyMemEnroll" resultMap="memberDetailResultMap" >
+	<![CDATA[
+		SELECT filter.enroll_d, count(MEMBER_EMAIL)  count_wm
+		FROM
+		(SELECT TO_CHAR(SYSDATE - (LEVEL - 1), 'YY/MM/DD')  as enroll_d
+		FROM dual
+		CONNECT BY LEVEL <= 7
+		) filter
+		left JOIN member
+		ON TO_CHAR(member.ENROLL_DATE, 'YY/MM/DD') = filter.enroll_d
+		group by filter.enroll_d
+		order by enroll_d
+		]]>
+	</select>
+	
+	
+	<select id="memberDashCount" resultMap="memberDetailResultMap">
+		SELECT (SELECT COUNT(*) from member) TOTAL,
+		(SELECT COUNT(*) TODAY FROM MEMBER
+		WHERE TO_CHAR(ENROLL_DATE, 'YY/MM/DD') = TO_CHAR(SYSDATE, 'YY/MM/DD')) TODAY
+		FROM DUAL
+	</select>
+
+	<select id="MemEnrollperMonth" resultMap="memberDetailResultMap">
+		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
+		GROUP BY  SUBSTR(enroll_date, 1, 5)
+		order by  SUBSTR(enroll_date, 1, 5)
+	</select>
+
+</mapper>

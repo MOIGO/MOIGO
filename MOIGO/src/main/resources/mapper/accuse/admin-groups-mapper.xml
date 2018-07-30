@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="groupDetail">
+	<resultMap id="groupDetailResultMap" type="groupDetail">
+		<id property="groupNo" column="GROUP_NO" />
+		<result property="groupName" column="GROUP_NAME" />
+		<result property="groupMsg" column="GROUP_MSG" />
+		<result property="groupPicture" column="GROUP_PICTURE" />
+		<result property="groupAddress" column="GROUP_ADDRESS" />		
+		<result property="groupGradeCode" column="GROUP_GRADE_CODE" />
+		<result property="groupStateCode" column="GROUP_STATE_CODE" />
+		<result property="maxMember" column="MAX_MEMBER" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="interestBigCode" column="INTEREST_BIG_CODE" />
+		<result property="allowSignup" column="ALLOW_SIGNUP" />
+		<result property="minAge" column="MIN_AGE" />
+		<result property="maxAge" column="MAX_AGE" />
+		<result property="groupGender" column="GROUP_GENDER" />
+		<result property="openSetting" column="OPEN_SETTING" />
+		<result property="openSetting" column="OPEN_SETTING" />
+		<result property="memNum" column="MEM_NUM" />	
+		<result property="masterEmail" column="MASTER_EMAIL" />	
+		<result property="groupGradeName" column="GROUP_GRADE_NAME" />	
+		<result property="groupStateName" column="GROUP_STATE_NAME" />			
+		<result property="gGradeCount" column="GRADE_COUNT" />			
+		<result property="bigInterest" column="INTEREST_BIG_NAME" />	
+		<result property="ginterestCount" column="GINTEREST" />	
+		<result property="countWgroup" column="COUNT_WG" />	
+		<result property="enrollD" column="ENROLL_D" />	
+		<result property="totalGroup" column="TOTAL" />	
+		<result property="todayGroup" column="TODAY" />	
+		<result property="enrollM" column="ENROLL_M" />	
+		<result property="grCount" column="GR_COUNT" />	
+	</resultMap>
+	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
+		FROM ACCUSE ORDER BY ACCUSE_NO DESC </select> -->
+
+
+	<select id="grpDetail" resultMap="groupDetailResultMap">
+		SELECT GROUP_NO,GROUP_NAME,GROUP_MSG,GROUP_PICTURE,GROUP_ADDRESS,GROUP_GRADE_CODE,GROUP_STATE_CODE,MAX_MEMBER,ENROLL_DATE,INTEREST_BIG_CODE,ALLOW_SIGNUP,MIN_AGE,MAX_AGE,GROUP_GENDER,OPEN_SETTING,
+		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEM_NUM ,
+ 		(SELECT MEMBER_EMAIL 
+		FROM MEMBER M
+		JOIN  GROUP_MEMBER  GM
+		USING(MEMBER_NO) 
+		WHERE GM.MEMBER_GRADE_CODE =3 AND GROUP_NO=#{id}) MASTER_EMAIL
+		FROM GROUPS G
+		WHERE GROUP_NO=#{id}
+	</select>
+	<select id="gGradeCount" resultMap="groupDetailResultMap">
+		SELECT GROUP_GRADE_NAME, NVL(COUNT(GROUP_MSG), 0) GRADE_COUNT
+		FROM GROUPS
+		RIGHT JOIN GROUP_GRADE USING(GROUP_GRADE_CODE)
+		GROUP BY GROUP_GRADE_NAME
+		ORDER BY GRADE_COUNT DESC
+	</select>
+	
+	<select id="ginterestCount" resultMap="groupDetailResultMap">
+		SELECT INTEREST_BIG_NAME, NVL(COUNT(GROUP_MSG), 0) GINTEREST
+		FROM GROUPS
+		RIGHT JOIN INTEREST_BIG USING(interest_big_code)
+		GROUP BY INTEREST_BIG_NAME ORDER BY GINTEREST DESC
+	</select>
+	
+	
+	
+	<select id="stateCount" resultMap="groupDetailResultMap">
+		SELECT GROUP_STATE_NAME, NVL(COUNT(GROUP_MSG), 0) GRADE_COUNT
+		FROM GROUPS
+		RIGHT JOIN GROUP_STATE USING(GROUP_STATE_CODE)
+		GROUP BY GROUP_STATE_NAME
+		ORDER BY GRADE_COUNT DESC
+	</select>
+	
+	<select id="weeklyMemEnroll" resultMap="groupDetailResultMap">
+	<![CDATA[
+		SELECT filter.enroll_d, count(GROUP_NAME)  count_wg
+		FROM
+		(SELECT TO_CHAR(SYSDATE - (LEVEL - 1), 'YY/MM/DD')  as enroll_d
+		FROM dual
+		CONNECT BY LEVEL <= 7
+		) filter
+		left JOIN groups
+		ON TO_CHAR(groups.ENROLL_DATE, 'YY/MM/DD') = filter.enroll_d
+		group by filter.enroll_d
+		order by enroll_d
+		]]>
+	</select>
+	<select id="groupDashCount" resultMap="groupDetailResultMap">
+		SELECT (SELECT COUNT(*) from GROUPS) TOTAL,
+		(SELECT COUNT(*) TODAY FROM GROUPS
+		WHERE TO_CHAR(ENROLL_DATE, 'YY/MM/DD') = TO_CHAR(SYSDATE, 'YY/MM/DD')) TODAY
+		FROM DUAL
+	</select>
+
+	<select id="GrpEnrollperMonth" resultMap="groupDetailResultMap">
+		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) GR_COUNT FROM GROUPS
+		GROUP BY  SUBSTR(enroll_date, 1, 5)
+		order by  SUBSTR(enroll_date, 1, 5)
+	</select>
+</mapper>
