@@ -308,6 +308,7 @@ body {
 
 	
 		function memberLogout(){
+		
 			FB.getLoginStatus(function(response) {
 				console.log('statusChangeCallback');
 				console.log(response);
@@ -316,9 +317,10 @@ body {
 					FB.logout(function(response) { // 사용자 로그 아웃 이후 콜백처리 
 						alert('로그아웃');
 					});
+					location.href="${pageContext.request.contextPath}/member/memberLogout.do";
 				 } 
-				location.href="${pageContext.request.contextPath}/member/memberLogout.do";	
 			});
+				location.href="${pageContext.request.contextPath}/member/memberLogout.do";	
 					
 		}
 	</script>
