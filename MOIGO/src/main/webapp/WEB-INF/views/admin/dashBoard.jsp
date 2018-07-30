@@ -157,7 +157,7 @@
           var options = {
         		  
           
-        	'title':'New Member per Month',
+        	'title':'New Group per Month',
   			titleTextStyle:{
   			fontName:'Poppins',
   			fontSize: 23

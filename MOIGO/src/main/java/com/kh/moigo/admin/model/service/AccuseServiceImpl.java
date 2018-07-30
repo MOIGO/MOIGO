@@ -176,6 +176,18 @@ public class AccuseServiceImpl implements AccuseService {
 		return ad.GrpEnrollperMonth();
 	}
 
+	@Override
+	public int memDelete(String id) {
+		// TODO Auto-generated method stub
+		return ad.memDelete(id);
+	}
+
+	@Override
+	public int grpDelete(String id) {
+		// TODO Auto-generated method stub
+		return ad.grpDelete(id);
+	}
+
 
 
 

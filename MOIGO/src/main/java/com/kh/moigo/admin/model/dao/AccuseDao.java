@@ -44,5 +44,9 @@ public interface AccuseDao {
 	List<Map<String, Object>> groupDashCount();
 	List<Map<String, Object>> MemEnrollperMonth();
 	List<Map<String, Object>> GrpEnrollperMonth();
+	
+	//--
+	int memDelete(String id);
+	int grpDelete(String id);
 
 }

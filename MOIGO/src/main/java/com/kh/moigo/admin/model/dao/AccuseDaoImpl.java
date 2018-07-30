@@ -171,13 +171,25 @@ public class AccuseDaoImpl implements AccuseDao {
 	@Override
 	public List<Map<String, Object>> MemEnrollperMonth() {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("memberDetail.MemEnrollperMonth");
+		return sqlSession.selectList("memberDetail.memEnrollperMonth");
 	}
 
 	@Override
 	public List<Map<String, Object>> GrpEnrollperMonth() {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("groupDetail.GrpEnrollperMonth");
+	}
+
+	@Override
+	public int memDelete(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("memberDetail.memDelete",id);
+	}
+
+	@Override
+	public int grpDelete(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("groupDetail.grpDelete",id);
 	}
 	
 	

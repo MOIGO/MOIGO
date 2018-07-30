@@ -372,6 +372,8 @@
 								<form action="" method="get">
 									<fieldset class="form-group">
 										<legend> 그룹 정보 </legend>
+										
+										
 										<div class="form-group row">
 											<label for="inputGname" class="col-sm-2 col-form-label">Name</label>
 											<div class="col-sm-10">
@@ -481,7 +483,7 @@
 
 									<div class="form-group row">
 										<div class="col-sm-12  text-center">
-											<button type="submit" class="btn btn-outline-info">
+											<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">
 												그룹 블라인드</button>
 										</div>
 									</div>
@@ -587,8 +589,45 @@ $(document).ready(function(){
 	 								'<td>'+data[1][i].reporter+'</td>' +
 	 								'<td>'+data[1][i].accuseDate+'</td>' +
 								'</tr>';
-		            	 $('.input_accuse_list').append(str);
-		            }		          		           
+		            	 $('.input_accuse_list').append(str);       	 
+		            }	
+		            
+		            $("#memDelSubmit").click(function() {
+		       	  	 var id =data[0].memberNo;
+		       	  	  $.ajax({
+		       	            url: "${pageContext.request.contextPath}/memDelete.ad",
+		       	            type:'get',
+		       	            data: {id:id},
+		       	            dataType:"json",
+		       	            success:function(data){	
+		       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
+		       	            	//location.reload();	  
+			       	            /*  $.ajax({
+					       	            url: "${pageContext.request.contextPath}/renewBlacklistM.ad",
+					       	            type:'get',
+					       	            data: {id:id},
+					       	            dataType:"json",
+					       	            success:function(data){	
+					       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
+					       	            	
+					       	            		       	            	
+					       	            },error:function(request,status,error){
+					       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					       	            }
+					       	  	  }); */
+		       	            		       	            	
+		       	            },error:function(request,status,error){
+		       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       	            }
+		       	  	  
+
+
+		       	  	  });
+
+		       	    
+		       	}); 
+		            
+		           
 	            }
 	        });	           
 		}); //함수 끝
@@ -615,7 +654,7 @@ $(document).ready(function(){
 						$("#inputGsc").val(data[0].groupGender);
 						$("#masterEmail").val(data[0].masterEmail); //모임장
 						
-			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다.");
+			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다. 문의사항이 있다면 본 메일로 문의하십시오.");
 			            
 			            $('.input_accuse_list').empty();
 			            for(var i in data[1]){
@@ -626,7 +665,24 @@ $(document).ready(function(){
 		 								'<td>'+data[1][i].accuseDate+'</td>' +
 									'</tr>';
 			            	 $('.input_accuse_list').append(str);
-			            }		          		           
+			            }
+			            
+			            
+			            $("#grpDelSubmit").click(function() {
+				       	  	 var id =data[0].groupNo;
+				       	  	  $.ajax({
+				       	            url: "${pageContext.request.contextPath}/grpDelete.ad",
+				       	            type:'get',
+				       	            data: {id:id},
+				       	            dataType:"json",
+				       	            success:function(data){	
+				       	            	alert('그룹번호 '+data+' 성공적으로 블라인드 처리 되었습니다.');
+				       	            	location.reload();	       	            	
+				       	            },error:function(request,status,error){
+				       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				       	            }
+				       	  	  });				       	    
+				       	});  
 		            }
 		        });	           
 			}); //함수 끝
@@ -645,26 +701,7 @@ $(document).ready(function(){
 	    });
 	  }); 
    
-   $("#memDelSubmit").click(function() {
-	  	 var id ="안녕";
-	  	  $.ajax({
-	            url: "${pageContext.request.contextPath}/memDelete.ad",
-	            type:'get',
-	            data: {id:id},
-	            dataType:"json",
-	            success:function(data){	
-	            	alert(data);
-	            },error:function(request,status,error){
-	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-	            }
-	  	  
-
-
-	  	  });
-
-	    
-	}); 
-   
+ 
    
    
 }); //시작 이벤트 끝
@@ -684,8 +721,5 @@ $(document).ready(function(){
 </script>
 
 
-<script>
-
-</script>
 </body>
 </html>

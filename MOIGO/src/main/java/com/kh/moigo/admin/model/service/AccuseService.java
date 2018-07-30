@@ -50,6 +50,11 @@ public interface AccuseService {
 	List<Map<String, Object>> MemEnrollperMonth();
 	List<Map<String, Object>> GrpEnrollperMonth();
 	
+	
+	//신고 많이 받은 회원 삭제
+	int memDelete(String id);
+	int grpDelete(String id);
+	
 
 	
 

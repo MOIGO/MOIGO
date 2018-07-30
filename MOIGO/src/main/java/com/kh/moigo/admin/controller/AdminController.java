@@ -116,8 +116,7 @@ public class AdminController {
 	@RequestMapping("adminReport.ad")
 	public String adminReport(@RequestParam(defaultValue="1") int currentPage,Model model) throws Exception{
 		
-		// -- 페이지 처리 코드 부분 -- //
-		
+		// -- 페이지 처리 코드 부분 -- //		
 		int startPage; // 한번에 표시될 게시글들의 시작 페이지
 		int endPage;  // 한번에 표시될 게시글들의 마지막 페이지
 		int maxPage;   // 전체 페이지의 마지막 페이지 
@@ -189,7 +188,7 @@ public class AdminController {
 		model.addAttribute("gtop5",gtop5);
 
 		model.addAttribute("pageName","Report");
-		return "admin/reportManaging";
+		return "admin/reportManaging2";
 	
 	}
 	
@@ -333,12 +332,21 @@ public class AdminController {
 	@RequestMapping(value="memDelete.ad", method=RequestMethod.GET)
 	public Object memDelete(@RequestParam String id) throws Exception{
 		List<Object> List= new ArrayList<Object>();
-	
-		String pid = id;
-		List.add(pid);
-		System.out.println("여기로 들어오나요?"+id);
+		int result = as.memDelete(id);
+		System.out.println("여기로 들어오나요?"+result);
+		List.add(id);
 		return List;	
 	}
 	
 	
+	
+	@ResponseBody
+	@RequestMapping(value="grpDelete.ad", method=RequestMethod.GET)
+	public Object grpDelete(@RequestParam String id) throws Exception{
+		List<Object> List= new ArrayList<Object>();
+		int result = as.grpDelete(id);
+		System.out.println("여기로 들어오나요?"+result);
+		List.add(id);
+		return List;	
+	}
 }
