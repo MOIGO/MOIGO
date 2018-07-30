@@ -8,18 +8,28 @@
 <head>
 
  <style type="text/css">
-	div.vertical-line{
-    border-left: 4px solid #808080;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    width: 10px;
+div.vertical-line {
+	border-left: 4px solid #808080;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	width: 10px;
 }
-	#modalAccuseList{
+
+#modalAccuseList {
 	height: 450px;
 	width: 100%;
 	overflow: scroll;
-	}
+}
+
+input[type="checkbox"] {
+	height: 22px;
+	width: 22px;
+}
+
+.form-check{
+ margin: auto auto;
+}
 </style>
 </head>
 <body>
@@ -36,23 +46,23 @@
 		    <br>
 		    <h2>Recent Report</h2>
 		    <br>
-		    <form>
+		    <form action="${pageContext.request.contextPath}/adminReport.ad" method="get">
 		   
 		    
 		   
 		    <div class="row">
 		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		    <select class=" col-sm-2 col-xs-2">		    
+		    <select class="col-sm-2 col-xs-2" name="searchOption">		    
 			    <option>content</option>
 			    <option>reporter</option>
 			    <option>target</option>  
 		    </select>
-		    <input class="admin_group_search col-sm-4 col-xs-4" id="myInput" type="text" placeholder="Search.."> 
-		    <button type="button" class="btn btn-outline-info">검색</button>&nbsp;&nbsp;
+		    <input class="admin_group_search col-sm-4 col-xs-4" id="reportSearchingKeyword" name="reportSearchingKeyword" type="text" placeholder="Search.."> 
+		    <button type="submit" class="btn btn-outline-info">검색</button>&nbsp;&nbsp;
 		    <br>
 		    <div class="form-check text-right">		  
-						<input class="form-check-input" type="checkbox" name="exampleRadios"id="exampleRadios1" value="처리된 신고 불포함" onClick="updateList(this.value)"> 
-						<label class="form-check-label" for="exampleRadios1">not including processed reports</label>
+						<input class="form-check-input" type="checkbox" name="reportSearchingConstraint" id="reportSearchingConstraint" value="notIncluding" onClick="updateList(this.value)"> 
+						<label class="form-check-label" for="reportSearchingConstraint"> &nbsp;&nbsp;not including processed reports</label>
 			</div>
 		    </div>
 		    
@@ -261,7 +271,7 @@ $(document).ready(function(){
 			}); //함수 끝
 			
 			
-   $("#myInput").on("keyup", function() {
+   $("#reportSearchingKeyword").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#myTable tr").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)

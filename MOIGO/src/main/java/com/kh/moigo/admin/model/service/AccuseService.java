@@ -15,7 +15,7 @@ import com.kh.moigo.member.model.vo.Member;
 public interface AccuseService {
 
 	List<Map<String, Object>> selectAccuseList();
-	int selectAccuseListCnt();
+	int selectAccuseListCnt(PageInfo pi);
 	List<Map<String, Object>> selectAccuseListPaging(PageInfo pi);
 	Member selectMember(String id);
 
@@ -33,6 +33,11 @@ public interface AccuseService {
 	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);//ajax 페이징 포기해서 나중으로 넘겼음	
 	//int selectAccuseListCnt(String id); //그 회원의 신고 갯수 
 	List<Map<String, Object>> selectAccuse2(String id);
+	
+	//검색옵션에 따른 것들
+	List<Map<String, Object>> selectTargetListPaging(PageInfo pi);
+
+	
 	
 	//이하 analytics 
 	ArrayList countGender();
