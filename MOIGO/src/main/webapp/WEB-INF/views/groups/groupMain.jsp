@@ -75,7 +75,10 @@ background: #EDEFF2;
 <body>
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
-	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+		<c:param name="groupNo" value="${groupNo }" />
+		<c:param name="memberNo" value="${m.memberNo}" />
+	</c:import>
 
 	<div class="container">
 
@@ -424,7 +427,12 @@ function prepareUpdatePost(num){
 	
 	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
+		
 	}
+	for(var i =0;i<$temp.siblings('[name=editScheduleWrap]').length;++i){
+		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i));
+	}
+	
 }
 
 function updatePost(num,postContent){
@@ -436,7 +444,7 @@ function updatePost(num,postContent){
 			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 			if(data.result>0){
 				$temp.children().remove();
-				console.log(postContent);
+				
 				$temp.append(postContent);
 				alert("글 수정 성공!");
 			}else
@@ -447,6 +455,44 @@ function updatePost(num,postContent){
 		}
 		
 	});
+}
+
+function restoreScheduleEvent(obj){
+	
+	console.log("들어오나?");
+	
+	$(obj).find('[name=editBtn]').on("click",function(event){
+		//toEditTarget=obj;
+		 event.stopPropagation();
+		 
+		
+		editSchedule(obj,$(obj).find("input[name=scheduleNo]").val());
+		
+	});
+	
+	$(obj).find('[name=delBtn]').on("click",function(event){
+		 event.stopPropagation();
+		if(confirm("일정을 삭제 하시겠습니까?")){
+			deleteSchedule($(obj).find('[name=scheduleNo]').val(),obj);
+		}
+			
+		
+	});
+	
+	
+	$(obj).on('mouseover',function(){
+		$(this).css('border','3px solid #00bfff');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","visible");
+		
+		
+	}).on('mouseout',function(){
+		
+		$(this).css('border','3px solid black');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","hidden");
+	});
+	
 }
 
 function restoreMapEvent(obj){
@@ -666,15 +712,6 @@ function createSummerNote(){
 	
 }
 
-function toggleMapModal(){
-	 $('#insertMap').modal("toggle");
-     $('#insertMap').on("shown.bs.modal",makeMap());
-}
-
-function toggleScheduleModal(){
-	 $('#insertSchedule').modal("toggle");
-     
-}
 	
 </script>
 

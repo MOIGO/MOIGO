@@ -14,7 +14,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
-
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -121,7 +121,37 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.insert("groups.insertGroupMember",gm);
 	}
+	
+	@Override
+	public int insertSchedule(Schedule schedule) {
+		
+		return sqlSession.insert("groups.insertSchedule",schedule);
+	}
+	
+	@Override
+	public Schedule selectOneSchedule(String scheduleNo) {
+		
+		return sqlSession.selectOne("groups.selectOneSchedule",scheduleNo);
+	}
 
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		
+		return sqlSession.update("groups.updateSchedule",schedule);
+	}
+	
+	@Override
+	public int deleteSchedule(String scheduleNo) {
+		
+		return sqlSession.update("groups.deleteSchedule",scheduleNo);
+	}
+	
+	@Override
+	public GroupMember selectOneGrpMemberWithMemNo(String memberNo) {
+		
+		return sqlSession.selectOne("groups.selectOneGroupMember",memberNo);
+	}
+	
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -156,12 +186,6 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
 
-
-	
-
-	
-
-	
 
 }
 

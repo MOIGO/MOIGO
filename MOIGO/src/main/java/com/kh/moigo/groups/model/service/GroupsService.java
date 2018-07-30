@@ -11,6 +11,7 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.PostReply;
 
 public interface GroupsService {
@@ -34,6 +35,12 @@ public interface GroupsService {
 	GroupMember selectGroupLeader(String groupNo);
 	GroupMember selectOneMember(GroupMember gm);
 	int insertGroupMember(GroupMember gm);
+	int insertSchedule(Schedule schedule);
+	Schedule selectOneSchedule(String scheduleNo);
+	int updateSchedule(Schedule schedule);
+	int deleteSchedule(String scheduleNo);
+	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
+	
 	//--------------------------------------------------------------------------- 혜진
 	
 	List<GroupMember> selectGroupMemberList(String groupNo);
@@ -47,6 +54,12 @@ public interface GroupsService {
 	int updateGroupCondition(Groups group);
 
 	int deleteGroup(String groupNo);
+	
+	
+
+	
+	
+	
 	
 	
 	

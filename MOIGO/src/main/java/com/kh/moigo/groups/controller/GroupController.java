@@ -4,10 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -30,7 +33,10 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
+
+import oracle.sql.TIMESTAMP;
 
 @Controller
 public class GroupController {
@@ -148,7 +154,7 @@ public class GroupController {
 		if(m!=null){
 		
 			if((groupService.selectOneGroup(groupNo)).getAllowSignup().equals("Y")){
-				System.out.println("여기 들어와야지 그지?");
+				
 				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
 			}else{
 				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
@@ -173,9 +179,7 @@ public class GroupController {
 		
 		return map;
 	}
-	
-	
-	
+
 	
 	//글 쓰기
 	@RequestMapping("/groups/insertPost.gp")
@@ -198,7 +202,7 @@ public class GroupController {
 		map.put("result", groupService.deletePost(postNo));
 		
 		return map;
-	}	
+	}	  
 	
 	//글 수정
 	@RequestMapping("/groups/updatePost.gp")
@@ -244,6 +248,104 @@ public class GroupController {
 		
 		return map;
 	}
+	
+	//일정 넣기
+	@RequestMapping("/groups/insertSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> insertSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+	
+		//시작시간
+		Timestamp time = new Timestamp(Long.parseLong(startT));
+		schedule.setStartTime(time);
+		
+		//있으면 끝시간도 세팅
+		if(!endT.equals("none")){
+			time = new Timestamp(Long.parseLong(startT));
+			schedule.setEndTime(time);
+		}
+		
+		//System.out.println(schedule);
+		
+		int result=  groupService.insertSchedule(schedule);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", result);
+		map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	//일정 하나 가져오기
+	@RequestMapping("/groups/selectOneSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneSchedule(@RequestParam String scheduleNo){
+	
+		
+		Schedule schedule = groupService.selectOneSchedule(scheduleNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	//일정 하나 수정하기
+	@RequestMapping("/groups/updateSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> updateSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+		
+		//시작시간
+		Timestamp time = new Timestamp(Long.parseLong(startT));
+		schedule.setStartTime(time);
+		
+		//있으면 끝시간도 세팅
+		if(!endT.equals("none")){
+			time = new Timestamp(Long.parseLong(endT));
+			schedule.setEndTime(time);
+		}	
+		
+		int result = groupService.updateSchedule(schedule);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("result", result);
+		
+		if(result>0)
+			map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	@RequestMapping("/groups/deleteSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
+		
+		
+		int result = groupService.deleteSchedule(scheduleNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("result", result);
+			
+		return map;
+	}
+	
+	@RequestMapping("/groups/selectOneGrpMem.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo){
+		
+		GroupMember gm = groupService.selectOneGrpMemberWithMemNo(memberNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("groupMember", gm);
+			
+		return map;
+	}
+	
+	
 	
 	// ------------------------------------------------------------------ 혜진
 	
@@ -342,7 +444,7 @@ public class GroupController {
 	}
 	
 	// 일정
-	@RequestMapping(value="/groups/groupSchedule.gp", method=RequestMethod.POST)
+	@RequestMapping("/groups/groupSchedule.gp")
 	public String groupSchedule(){
 		
 		return "groups/groupSchedule";
