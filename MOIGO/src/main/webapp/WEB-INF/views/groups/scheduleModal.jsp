@@ -276,7 +276,7 @@ text-align:center;
 		
 		
 		
-		getOneSchedule($(toEditObj).find("input[name=scheduleNo]").val(),setTargetScheduleData);
+		getOneSchedule(scheduleNo, setTargetScheduleData);
 
 	}
 	
@@ -596,7 +596,7 @@ text-align:center;
 					scheduleAddress:$('#insertSchedule input[name=scheduleAddress]').val(),
 					startT:times.startTime,
 					endT:times.endTime,
-					memberNo:'${param.memberNo}',
+					memberNo:'${m.memberNo}',
 					allDay:$('#allDay').val(),
 					colorLabel:$('#scheduleLabelColor option:selected').val()
 				},success:(function(data){

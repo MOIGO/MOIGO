@@ -24,6 +24,7 @@
    }
    
 	.group_tit {
+		float : left;
 		margin-bottom: 0px;
 		font-family: 'nanum-barun-gothic-bold', sans-serif;
 		font-size: 1.3em;
@@ -31,6 +32,11 @@
 
 	.group_tit:hover {
 	cursor: default;
+	}
+	
+	#insertScheduleBtn {
+		float: right;
+		margin-bottom: 0px;
 	}
 	
 	#calendar {
@@ -67,9 +73,15 @@
 	}
     
 </style>
-<title>Home</title>
+<title>일정</title>
 </head>
 <body>
+	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+		<c:param name="groupNo" value="${param.groupNo}" />
+		<c:param name="memberNo" value="${m.memberNo}" />
+	</c:import>
+
 <div class="container">
    <div class="row">
      
@@ -79,6 +91,8 @@
         <div class="card">
            <div class="card-header" >           
               <p class="group_tit">일정</p>
+              <!-- toggleScheduleModal(); editSchedule(undefined, 'S010');-->
+              <button type="button" id="insertScheduleBtn" class="btn btn-primary btn-sm" onclick="toggleScheduleModal();">일정만들기</button>
            </div>
            <div class="card-body" id="calendar">
            </div>
@@ -109,8 +123,13 @@
          // 달력의 숫자 위치를 정렬하는 부분
          $(".fc-day-number").css({
             "float" : "left",
+            "font-family" : "'nanum-barun-gothic-bold', sans-serif",
             "padding-left" : "5px"
          });
+         
+         // 토요일과 일요일의 색을 변경
+         $(".fc-sat").css("color", "#007bff");
+         $(".fc-sun").css("color", "#dc3545");
          
          // header에 가운데에 있는 h2태그에 클래스를 추가
          $(".fc-center").find("h2").addClass("full-title");
@@ -125,6 +144,10 @@
               "cursor" : "pointer",
               "display" : "inline-block"
           });
+         
+         $(".full-title").click(function() {
+			alert("얍");
+		});
          
         // 오늘 날짜에 걸려있는 bootstrap 스타일의 클래스를 제거 
         $(".fc-today").removeClass("alert-info");
