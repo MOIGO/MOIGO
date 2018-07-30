@@ -296,6 +296,10 @@ input:-webkit-autofill:active {
 	font-size: 1em;
 }
 
+#groupMemberChangeModal{
+	margin-left:17px;
+}
+
 #gmcMemberAddWrap{
 	height: 30px;
 }
@@ -316,6 +320,8 @@ input:-webkit-autofill:active {
 }
 
 #gmcMemberAddBtn {
+    margin-top: 1px;
+    margin-right: 1px;
 	color: #28a745;
     font-size: 1.2em;
 }
@@ -331,19 +337,26 @@ input:-webkit-autofill:active {
 	padding-top: 7px;
 	font-family:'nanum-barun-gothic-bold', sans-serif; 
 }
-.gmc_minus_btn{
+.gmc_btn{
 	float: right; 
 	margin-top: 8px;
-	color: red; 
 	font-size: 1.2em; 
 }
-.gmc_minus_btn:hover {
+.gmc_btn:hover {
 	cursor: pointer;
 }
 .gmc_info {
 	margin-top : 10px;
 	text-align: center;
 	height : 20px; 
+}
+
+.gmc_minus_btn{
+	color: red; 
+}
+
+.gmc_plus_btn{
+	color: #28a745;  
 }
    
    /* 모임 삭제 모달 부분 */
@@ -545,8 +558,8 @@ input:-webkit-autofill:active {
                  <div class="tab-pane fade show active gs_member_content" id="groupMemberSettingContent" role="tabpanel">
                		<div id="groupMemberSettingBtnWrap">
                			<input type='checkbox' id="gsCheckAllInp">
-					<span class='far fa-check-circle gs_unchecked not_withdraw' id="gsCheckAllBtn"></span>
-					<label id="gsCheckAllLbl" class="not_withdraw" for="gsCheckAllBtn">전체</label>
+						<span class='far fa-check-circle gs_unchecked not_withdraw' id="gsCheckAllBtn"></span>
+						<label id="gsCheckAllLbl" class="not_withdraw" for="gsCheckAllBtn">전체</label>
                			<button type="button" class="btn btn-dark btn-sm gs_member_btn" data-toggle="modal" id="gsConfirmBtn">확인</button>
                		</div>
 					<ul class="list-group gs_member_ul">
@@ -555,8 +568,9 @@ input:-webkit-autofill:active {
                </div>
                   
                </div>
-               
-               <div class="modal" id="groupMemberChangeModal" tabindex="-1" role="dialog" aria-labelledby="groupMemberChangeTitle" aria-hidden="true">
+                  
+            <!-- 멤버 추가 목록 Modal -->
+            <div class="modal" id="groupMemberChangeModal" tabindex="-1" role="dialog" aria-labelledby="groupMemberChangeTitle" aria-hidden="true">
                  <div class="modal-dialog modal-dialog-centered" role="document">
                  <div class="modal-content">
                  
@@ -564,10 +578,10 @@ input:-webkit-autofill:active {
                        <h5 class="modal-title gs_modal_tit" id="groupMemberChangeTitle"></h5>
                     </div>
                     
-                    <!-- MemberList Modal -->
+                    <!-- 멤버 변경 목록 Modal -->
                     <div class="modal-body gs_modal_body" id="gmcModalBody">
                     	<div id="gmcMemberAddWrap">
-                    		<div id="gmcMemberAddInner">
+                    		<div id="gmcMemberAddInner" data-toggle="modal">
 		                   		<span class="fas fa-plus-circle" id="gmcMemberAddBtn"></span>
 	                    		<label id="gmcMemberAddLbl" for="gmcMemberAddBtn">멤버추가</label>
                     		</div>
@@ -581,10 +595,35 @@ input:-webkit-autofill:active {
                     </div>
                      
                      <div class="modal-footer gs_modal_footer">
-                        <button type="button" class="btn btn-primary btn-sm" id="gmcConfirmBtn">확인</button>
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">취소</button>
+                       <button type="button" class="btn btn-primary btn-sm" id="gmcConfirmBtn">확인</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="gmcCancelBtn" data-dismiss="modal">취소</button>
                      </div>
                      
+                  </div>
+               </div>
+            </div>
+            
+               <!-- 멤버 추가 목록 Modal -->
+               <div class="modal" id="groupMemberAddModal" tabindex="-1" role="dialog" aria-labelledby="groupMemberAddTitle" aria-hidden="true">
+                 <div class="modal-dialog modal-dialog-centered" role="document">
+                 <div class="modal-content">
+                 
+                    <div class="modal-header gs_modal_header">
+                       <h5 class="modal-title gs_modal_tit" id="groupMemberAddTitle">멤버추가</h5>
+                    </div>
+                    
+                    <div class="modal-body gs_modal_body" id="addModalBody">
+                      	<div class="card gs_modal_member" id="addModalCard">
+						  <ul class="list-group list-group-flush" id="addMemberUl">
+						   
+						  </ul>
+						</div>
+                    </div>
+                     
+                     <div class="modal-footer gs_modal_footer">
+                        <button type="button" class="btn btn-secondary btn-sm" id="memberAddCancelBtn" data-dismiss="modal">닫기</button>
+                     </div>
+                    
                   </div>
                </div>
             </div>
@@ -708,6 +747,8 @@ function smallRegion(lmRegion){
 
 var gmSettingId = "groupMemberGrade"; // 선택하는 tab의 id값 : 현재 어떤 tab을 사용하는지 판별
 var groupMember = null; // 현재 모임의 멤버리스트를 저장하기 위한 변수
+var groupLeader = null; // 현재 모임장을 맡고 있는 멤버
+var selectedLeader = null; // 모임장 위임에서 선택된 멤버
 
 // 현재 모임의 멤버리스트를 가져오기 위한 ajax
 function getGroupMember(gmSettingId){
@@ -719,8 +760,31 @@ function getGroupMember(gmSettingId){
 		async : false,
 		success : function(data) {
 			groupMember = data.groupMember;
+			groupLeader = Object.values(groupMember.filter(gm => gm.memberGradeCode == 3))[0];
 			groupMember = groupMember.filter(gm => gm.memberGradeCode != 3);
-			createGroupMemberList(groupMember, gmSettingId);			
+			$("#gmsContentNone").remove();
+			if(gmSettingId == "groupJoinApprove" && groupMember.filter(gm => gm.memberGradeCode == 0).length == 0){
+				$("#groupMemberSettingBtnWrap").css("display", "none");
+				$("#groupMemberSettingContent").append("<div class='card' id='gmsContentNone'>가입승인 할 멤버가 없습니다.</div>");
+				$("#gmsContentNone").css({
+					"display" : "block",
+					"height" : "400px",
+					"padding-top" : "180px",
+					"text-align" : "center"
+				});
+			}
+			else if(gmSettingId != "groupJoinApprove" && groupMember.filter(gm => gm.memberGradeCode > 0).length == 0){
+				$("#groupMemberSettingBtnWrap").css("display", "none");
+				$("#groupMemberSettingContent").append("<div class='card' id='gmsContentNone'>선택할 멤버가 없습니다.</div>");
+				$("#gmsContentNone").css({
+					"display" : "block",
+					"height" : "400px",
+					"padding-top" : "180px",
+					"text-align" : "center"
+				});	
+			}
+			else			
+				createGroupMemberList(groupMember, gmSettingId);
 		},
 		error : function() {
 			console.log("멤버설정 멤버리스트 가져오기 오류");
@@ -783,7 +847,7 @@ function createGroupMemberList(groupMember, gmSettingId){
 		var checkBtn = "<span class='far fa-check-circle gs_check_btn gs_unchecked'></span>";
 		
 		if(gmSettingId == "leaderDelegation"){
-			inp = "<input type='radio' name='memberNo' class='gs_check_inp' value='" + groupMember[i].memberNo+ "'>";
+			inp = "<input type='radio' name='leaderDelegation' class='gs_check_inp' value='" + groupMember[i].memberNo+ "'>";
 			checkBtn = "<span class='far fa-dot-circle gs_check_btn gs_unchecked'></span>";
 		}
 		
@@ -797,7 +861,7 @@ function createGroupMemberList(groupMember, gmSettingId){
 		
 		var memberGrade = "";
 		if(groupMember[i].memberGradeCode == 2)
-			memberGrade = "<span class='badge badge-success' id='groupLeader'>운영진</span>";
+			memberGrade = "<span class='badge badge-success' id='groupLeader'>매니저</span>";
 	
 		append += inp + checkBtn + profileImg + groupMemberName + memberGrade + "</div></li>";
 		
@@ -899,12 +963,22 @@ function searchGroupMember() {
 	});
 }
 
+// modal의 모임 멤버 리스트를 만드는 메소드
 function createGroupMemberModalList(usedList) {
 	
 	var iter = usedList.values();
+	var bodyHeight = "450px";
 	
-	$("#gmcModalBody").css("height", "600px");
-	$(".gs_modal_member").css("height", "360px");
+	if(gmSettingId == "groupMemberGrade")
+		bodyHeight = "525px";
+	
+	$(".select_member_none").remove();
+	$("#gmcModalBody").css("height", bodyHeight);
+	$("#gmcMemberUl").children().remove();
+	$(".gs_modal_member").css({
+		"height" : "360px",
+		"overflow-y" : "hidden"
+	});
 	$("#gmcMemberAddWrap").css("display", "block");
 	
 	for(var i=0; i< usedList.size; i++){
@@ -916,15 +990,115 @@ function createGroupMemberModalList(usedList) {
 		else
 			liAppend += "<img class='gmc_member_img' src='${root}/resources/images/common/img_profile.png'/>";
 		liAppend += "<span class='gmc_member_lbl'>" + usedMember.memberName + "</span>";
-		liAppend += "<span class='fas fa-minus-circle gmc_minus_btn'></span></li>";
+		liAppend += "<input type='hidden' value='" + usedMember.memberNo + "'>";
+		liAppend += "<span class='fas fa-minus-circle gmc_btn gmc_minus_btn'></span></li>";
 		
 		$("#gmcMemberUl").append(liAppend);
 	}
 	if(usedList.size > 6)
 		$(".gs_modal_member").css("overflow-y", "scroll");
-	else{
+	else if(usedList.size != 0)
 		$("#gmcMemberUl").append("<li hidden='hidden'></li>");
+	else{
+		$("#gmcModalCard").append("<div class='select_member_none'>선택한 멤버가 없습니다.</div>");
+		$(".select_member_none").css({
+			"display" : "block",
+			"padding-top" : "165px",
+			"text-align" : "center"
+		});		
 	}
+		
+	
+	$(".gmc_minus_btn").each(function() {
+		$(this).click(function() {
+			
+			var unselectedMember = $(this).prev().val();
+			unusedMemberList.set(unselectedMember, findOneGroupMember(unselectedMember));
+			usedMemberList.delete(unselectedMember);
+			
+			createGroupMemberModalList(usedMemberList);
+		});
+	});
+}
+
+// 멤버 추가 목록의 리스트를 만드는 메소드
+function createAddGroupMemberList(unusedList) {
+	var iter = unusedList.values();
+	
+	$("#addModalCard").css("overflow-y", "hidden");
+	$(".unselect_member_none").remove();
+	$("#addMemberUl").children().remove();
+	
+	for(var i=0; i< unusedList.size; i++){
+		var unusedMember = iter.next().value;
+		
+		var liAppend = "<li class='list-group-item'>";
+		if(unusedMember.profileThumb != null)
+			liAppend += "<img class='gmc_member_img' src='${root}/resources/images/profiles/${group.groupNo}/"+ unusedMember.profileThumb +"'/>";
+		else
+			liAppend += "<img class='gmc_member_img' src='${root}/resources/images/common/img_profile.png'/>";
+		liAppend += "<span class='gmc_member_lbl'>" + unusedMember.memberName + "</span>";
+		liAppend += "<input type='hidden' value='" + unusedMember.memberNo + "'>";
+		liAppend += "<span class='fas fa-plus-circle gmc_btn gmc_plus_btn'></span></li>";
+		
+		$("#addMemberUl").append(liAppend);
+	}
+	
+	if(unusedList.size > 8)
+		$("#addModalCard").css("overflow-y", "scroll");
+	else if(unusedList.size != 0)
+		$("#addMemberUl").append("<li hidden='hidden'></li>");
+	else{
+		$("#addModalCard").append("<div class='unselect_member_none'>선택할 멤버가 없습니다.</div>");
+		$(".unselect_member_none").css({
+			"display" : "block",
+			"padding-top" : "225px",
+			"text-align" : "center"
+		});	
+	}
+	
+	$(".gmc_plus_btn").each(function() {
+		$(this).click(function() {
+
+			var selectedMember = $(this).prev().val();
+			usedMemberList.set(selectedMember, findOneGroupMember(selectedMember));
+			unusedMemberList.delete(selectedMember);
+			
+			createAddGroupMemberList(unusedMemberList);
+		});
+	});
+}
+
+// 모임 멤버 설정 modal의 확인 버튼을 눌렀을 때 발생하는 메소드
+// memberGradeCode update & delete
+function changeGroupMember(condition) {
+	
+	var keys = [];
+	var iter = usedMemberList.keys();
+	
+	if(condition == "leaderDelegation"){
+		keys.push(groupLeader.memberNo);
+		keys.push(selectedLeader.memberNo);
+	}
+	else
+		for(var i=0; i < usedMemberList.size; i++)
+			keys.push(iter.next().value);
+
+	$.ajax({
+		url : "${root}/groups/changeGroupMemberSetting.gp",
+		data : {
+			groupNumber : "${param.groupNo}",
+			memberNo : keys,
+			condition : condition
+		},
+		dataType : "json",
+		success : function(data) {
+			location.href="${root}/groups/groupSetting.gp?groupNo=${param.groupNo}";
+		},
+		error : function() {
+			console.log("멤버설정 멤버 변경 오류");
+		}
+	});
 }
 
 
@@ -1206,6 +1380,7 @@ $(function() {
 		
 		$('#groupMemberChangeModal').children().css("width", "400px");
 		$("#gmcMemberUl").children().remove();
+		$(".select_member_none").remove();
 		$(".gs_modal_member").css("overflow-y", "hidden");
 		$(".gmc_info").css("display", "none");
 		$(".gmc_info").children().remove();
@@ -1217,7 +1392,6 @@ $(function() {
 			$("#gmcModalBody").css("height", "120px");
 			$("#gmcMemberAddWrap").css("display", "none");
 			
-			var selectedLeader = null;
 			for(var i=0; i < groupMember.length; i++)
 				if($(".gs_check_inp:checked").val() == groupMember[i].memberNo)
 					selectedLeader = groupMember[i];
@@ -1230,7 +1404,12 @@ $(function() {
 			liAppend += "</li>";
 			
 			$("#gmcMemberUl").append(liAppend);
-			$(".gmc_info").css("display", "block");
+			$(".gmc_info").css({
+				"display": "block",
+				"height" : "20px",
+				"text-align" : "center",
+				"padding-left" : "0px"
+			});
 			$(".gmc_info").text("위 멤버한테 모임장을 위임하시겠습니까?");
 			
 		}
@@ -1241,24 +1420,105 @@ $(function() {
 			if(gmSettingId == "groupMemberWithdraw"){
 				$("#groupMemberChangeTitle").text("멤버탈퇴");
 				$("#gmcModalBody").css("height", "450px");
-				$(".gmc_info").css("display", "block");
+				$(".gmc_info").css({
+					"display": "block",
+					"height" : "20px",
+					"text-align" : "center",
+					"padding-left" : "0px"
+				});
 				$(".gmc_info").text("위 멤버들을 탈퇴시키겠습니까?");
 			}
 			else if(gmSettingId == "groupMemberGrade"){
 				$("#groupMemberChangeTitle").text("멤버등급");
+				$("#gmcModalBody").css("height", "525px");
+				$(".gmc_info").css({
+					"display": "block",
+					"height" : "100px",
+					"text-align" : "left",
+					"padding-left" : "10px"
+				});
+				$(".gmc_info").text("");
+				radioAppend = "<input type='radio' name='memberGrade' value='memberGradeManager' class='member_grade_inp' checked>";
+				radioAppend += "<span class='fas fa-dot-circle gs_checked gmc_member_grade'></span>";
+				radioAppend += "<span class='gmc_member_grade_lbl'>매니저</span>";
+				radioAppend += "<div style='margin:0px 0px 5px 10px'>: 다른 멤버의 글과 댓글을 관리할 수 있습니다.</div>";
+				radioAppend += "<input type='radio' name='memberGrade' value='memberGradeGeneral' class='member_grade_inp'>";
+				radioAppend += "<span class='far fa-dot-circle gs_unchecked gmc_member_grade'></span>";
+				radioAppend += "<span class='gmc_member_grade_lbl'>일반멤버</span>";
+				radioAppend += "<div style='margin:0px 0px 5px 10px'>: 자신의 글과 댓글만 관리할 수 있습니다.</div>";
+				$(".gmc_info").append(radioAppend);
+				
+				$(".member_grade_inp").css("display", "none");
+				
+				$(".gmc_member_grade_lbl").css({
+					"margin-right" : "10px",
+					"font-family" : "'nanum-barun-gothic-bold', sans-serif",
+					"font-weight" : "bold",
+					"cursor" : "pointer"
+				});
+				$(".gmc_member_grade").css({
+					"margin-right" : "3px",
+					"font-size" : "0.9em"
+				});
+				
+				$(".gmc_member_grade_lbl").click(function() {
+					$(this).prev().click();
+				});
+				
+				$(".gmc_member_grade").each(function() {
+					$(this).click(function() {
+						$(this).prev().click();
+						if($(this).prev().is(":checked"))
+							$(this).removeClass('far gs_unchecked').addClass('fas gs_checked');
+						else
+							$(this).removeClass('fas gs_checked').addClass('far gs_unchecked');
+						$(".gmc_member_grade").not($(this)).removeClass('fas gs_checked').addClass('far gs_unchecked');	
+					});
+				});
 			}
 			else {
 				$("#groupMemberChangeTitle").text("가입승인");
 				$("#gmcModalBody").css("height", "450px");
-				$(".gmc_info").css("display", "block");
+				$(".gmc_info").css({
+					"display": "block",
+					"height" : "20px",
+					"text-align" : "center",
+					"padding-left" : "0px"
+				});
 				$(".gmc_info").text("");
-				radioAppend = "<input type='radio' name='memberNo' class='gs_check_inp'>";
-				radioAppend += "<span class='far fa-dot-circle gs_unchecked'></span>";
-				radioAppend += "<label for=''>승인</label>";
-				radioAppend += "<input type='radio' name='memberNo' class='gs_check_inp'>";
-				radioAppend += "<span class='far fa-dot-circle gs_unchecked'></span>";
-				radioAppend += "<label for=''>거절</label>";
+				radioAppend = "<input type='radio' name='joinApprove' value='joinConfirm' class='join_inp' checked>";
+				radioAppend += "<span class='fas fa-dot-circle gs_checked gmc_join'></span>";
+				radioAppend += "<span class='gmc_join_lbl'>승인</span>";
+				radioAppend += "<input type='radio' name='joinApprove' value='joinCancel' class='join_inp'>";
+				radioAppend += "<span class='far fa-dot-circle gs_unchecked gmc_join'></span>";
+				radioAppend += "<span class='gmc_join_lbl'>거절</span>";
 				$(".gmc_info").append(radioAppend);
+				
+				$(".join_inp").css("display", "none");
+				
+				$(".gmc_join_lbl").css({
+					"margin-right" : "10px",
+					"cursor" : "pointer"
+				});
+				$(".gmc_join").css({
+					"margin-right" : "3px",
+					"font-size" : "0.9em"
+				});
+				
+				$(".gmc_join_lbl").click(function() {
+					$(this).prev().click();
+				});
+				
+				$(".gmc_join").each(function() {
+					$(this).click(function() {
+						$(this).prev().click();
+						if($(this).prev().is(":checked"))
+							$(this).removeClass('far gs_unchecked').addClass('fas gs_checked');
+						else
+							$(this).removeClass('fas gs_checked').addClass('far gs_unchecked');
+						$(".gmc_join").not($(this)).removeClass('fas gs_checked').addClass('far gs_unchecked');	
+					});
+				});
 			}
 			
 		}
@@ -1273,16 +1533,45 @@ $(function() {
 		
 	});
 	
-	$("#gmcConfirmBtn").click(function() {
-		if(gmSettingId != "leaderDelegation" && usedMemberList == null)
-			alert("선택된 멤버가 없습니다. 멤버를 선택해주세요.");
+	$("#gmcMemberAddInner").click(function() {
+		if(unusedMemberList.size == 0)
+			alert("추가할 멤버가 없습니다.");
 		else{
-			
+			$('#groupMemberAddModal').children().css("width","400px");
+			$('#addModalBody').children().css("height","480px");
+			createAddGroupMemberList(unusedMemberList);
+			$('#groupMemberAddModal').modal({
+		          backdrop: 'static',
+		          keyboard: false
+		    });
 		}
 	});
 	
-	$("#gmcMemberAddInner").click(function() {
-		alert("테스트");
+	$("#memberAddCancelBtn").click(function() {
+		createGroupMemberModalList(usedMemberList);
+	});
+	
+	$("#gmcConfirmBtn").click(function() {
+		if(gmSettingId != "leaderDelegation" && usedMemberList.size == 0)
+			alert("선택된 멤버가 없습니다. 멤버를 선택해주세요.");
+		else{
+			if(gmSettingId == "leaderDelegation")
+				changeGroupMember(gmSettingId);
+			else if(gmSettingId == "groupMemberWithdraw")
+				changeGroupMember(gmSettingId);
+			else if(gmSettingId == "groupMemberGrade")
+				changeGroupMember($(".member_grade_inp:checked").val());
+			else
+				changeGroupMember($(".join_inp:checked").val());		
+		}
+	});
+	
+	$("#gmcCancelBtn").click(function() {
+		if(gmSettingId != "leaderDelegation"){			
+			if(!$("#gsCheckAllBtn").prev().is(":checked"))
+				$("#gsCheckAllBtn").click();				
+			$("#gsCheckAllBtn").click();
+		}
 	});
    
    /* 모임 삭제 */
