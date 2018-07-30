@@ -136,6 +136,13 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.deleteSchedule(scheduleNo);
 	}
+	
+	
+	@Override
+	public GroupMember selectOneGrpMemberWithMemNo(String memberNo) {
+		
+		return groupDao.selectOneGrpMemberWithMemNo(memberNo);
+	}
 
   
 	//--------------------------------------------------------------------- 혜진
@@ -170,7 +177,5 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updateGroupCondition(group);
 	}
 
-
-	
 
 }

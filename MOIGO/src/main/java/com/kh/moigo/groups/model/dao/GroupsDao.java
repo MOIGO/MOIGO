@@ -50,6 +50,7 @@ public interface GroupsDao {
 	
 	int deleteSchedule(String scheduleNo);
 
+	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
 	
 //-------------------------------------------------------------------------------- 혜진
 	
@@ -64,17 +65,6 @@ public interface GroupsDao {
 	int updateGroupCondition(Groups group);
 
 	int deleteGroup(String groupNo);
-
-	
-	
-
-	
-
-	
-
-	
-
-	
 
 	
 

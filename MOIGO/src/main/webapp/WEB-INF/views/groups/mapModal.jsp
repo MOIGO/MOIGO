@@ -78,7 +78,27 @@
 
 </div>
 
+<div id="mapViewModal"> 
+
+<div class="modal" id="mapViewModal" tabindex="-1"
+		role="dialog" 
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+				test 입니당~
+					<div id="mapView"></div>
+				
+				</div>
+			</div>
+		</div>
+</div>
+
+</div>
+
 <script>
+
+var mapView;
 
 $(function(){
 	$('#insertMap').on('hide.bs.modal',function(){
@@ -91,11 +111,57 @@ $(function(){
 	});
 });
 
+function makeViewMap(addressName){
+	
+	
+	var mapContainer = document.getElementById('mapView'), // 지도를 표시할 div 
+	mapOption = { 
+	    center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+	    level: 3 // 지도의 확대 레벨
+	};
+	
+	var mapView = new daum.maps.Map(mapContainer, mapOption); 
+	var geocoder = new daum.maps.services.Geocoder();
+	mapView.relayout();
+	
+	
+	
+	geocoder.addressSearch(addressName, function(result, status) {
+
+	    // 정상적으로 검색이 완료됐으면 
+	     if (status === daum.maps.services.Status.OK) {
+
+	        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+
+	        // 결과값으로 받은 위치를 마커로 표시합니다
+	        var marker = new daum.maps.Marker({
+	            map: mapView,
+	            position: coords
+	        });
+	    
+	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	        mapView.setCenter(coords);
+	    } 
+	}); 
+	
+}
+
+
+
+function openMapViewModal(addressName){
+	
+	//$('#mapViewModal').modal("toggle");
+	//makeViewMap(addressName);
+	
+
+}
+
 var insertMap_markers=[];
 
 var infowindow_for_Modal = new daum.maps.InfoWindow({zIndex:1}); //인포 윈도우
 
 var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
+
 
 var toEditTarget;
 var toEditContent;
@@ -344,7 +410,7 @@ function closeMapModal(marker,place){
 //summernote에 붙이기
 function addMapOnSummerNote(marker,place){
 
-	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="">');
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="openMapViewModal('+"'"+place.address_name+"'"+')">');
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');

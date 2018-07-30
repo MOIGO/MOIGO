@@ -311,7 +311,10 @@ public class GroupController {
 		Map <String,Object> map = new HashMap<String, Object>();
 
 		map.put("result", result);
-			
+		
+		if(result>0)
+			map.put("schedule", schedule);
+		
 		return map;
 	}
 	
@@ -328,6 +331,21 @@ public class GroupController {
 			
 		return map;
 	}
+	
+	@RequestMapping("/groups/selectOneGrpMem.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo){
+		
+		GroupMember gm = groupService.selectOneGrpMemberWithMemNo(memberNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("groupMember", gm);
+			
+		return map;
+	}
+	
+	
 	
 	// ------------------------------------------------------------------ 혜진
 	

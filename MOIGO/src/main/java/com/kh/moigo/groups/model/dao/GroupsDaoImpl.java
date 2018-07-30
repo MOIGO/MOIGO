@@ -145,6 +145,13 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.update("groups.deleteSchedule",scheduleNo);
 	}
+	
+	@Override
+	public GroupMember selectOneGrpMemberWithMemNo(String memberNo) {
+		
+		return sqlSession.selectOne("groups.selectOneGroupMember",memberNo);
+	}
+	
 
 
 	//------------------------------------------------------------------------- 혜진

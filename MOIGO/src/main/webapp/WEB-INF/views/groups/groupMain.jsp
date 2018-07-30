@@ -462,9 +462,11 @@ function restoreScheduleEvent(obj){
 	console.log("들어오나?");
 	
 	$(obj).find('[name=editBtn]').on("click",function(event){
-		toEditTarget=obj;
+		//toEditTarget=obj;
 		 event.stopPropagation();
-		editSchedule($(obj).find('[name=scheduleNo]').val());
+		 
+		
+		editSchedule(obj,$(obj).find("input[name=scheduleNo]").val());
 		
 	});
 	

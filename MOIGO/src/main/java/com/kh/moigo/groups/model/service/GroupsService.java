@@ -39,6 +39,7 @@ public interface GroupsService {
 	Schedule selectOneSchedule(String scheduleNo);
 	int updateSchedule(Schedule schedule);
 	int deleteSchedule(String scheduleNo);
+	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
 	
 	//--------------------------------------------------------------------------- 혜진
 	
@@ -53,6 +54,8 @@ public interface GroupsService {
 	int updateGroupCondition(Groups group);
 
 	int deleteGroup(String groupNo);
+	
+	
 
 	
 	
