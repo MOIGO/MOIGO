@@ -1,6 +1,7 @@
 package com.kh.moigo.admin.model.dao;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +30,7 @@ public class AccuseDaoImpl implements AccuseDao {
 	@Override //paging 관련 신고갯수 부르기
 	public int selectAccuseListCnt() {
 		// TODO Auto-generated method stub
-		//System.out.println("신고카운트 dao");
-		int result =sqlSession.selectOne("accuse.selectAccuseListCnt");
-		//System.out.println("result" +result);
+
 		return sqlSession.selectOne("accuse.selectAccuseListCnt");
 	}
 
@@ -44,14 +43,10 @@ public class AccuseDaoImpl implements AccuseDao {
 	@Override //memberlist 부르기
 	public Member selectMember(String id) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectOne("member.selectOne",id);
+		return sqlSession.selectOne("memberDetail.memDetail",id);
 	}
 
-	@Override //신고
-	public List<Map<String, Object>> selectAccuse(String id) {
-		// TODO Auto-generated method stub
-		return sqlSession.selectList("accuse.selectList",id);
-	}
+	
 
 	@Override
 	public List<Map<String, Object>> selectmemberList() {
@@ -100,8 +95,104 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("acusseTop5.atop5groupList");
 	}
-	
 
+	@Override
+	public List<Map<String, Object>> selectAccuse(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("accuse.selectTMList",id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAccuse2(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("accuse.selectTGList",id);
+	}
+
+	@Override
+	public ArrayList countGender() {
+		// TODO Auto-generated method stub
+		return (ArrayList) sqlSession.selectList("memberDetail.genderCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countAddress() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.addressCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countMinterest() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.minterestCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> gGradeCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.gGradeCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countGinterest() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.ginterestCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> countState() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.stateCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> weeklyMemEnroll() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.weeklyMemEnroll");
+	}
+
+	@Override
+	public List<Map<String, Object>> weeklyGrpMake() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.weeklyMemEnroll");
+	}
+
+	@Override
+	public List<Map<String, Object>> memberDashCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.memberDashCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> groupDashCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.groupDashCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> MemEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberDetail.MemEnrollperMonth");
+	}
+
+	@Override
+	public List<Map<String, Object>> GrpEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.GrpEnrollperMonth");
+	}
+	
+	
+	
+//	@Override //신고
+//	public List<Map<String, Object>> selectAccusePaging(PageInfo pi) {
+//		// TODO Auto-generated method stub
+//		return sqlSession.selectList("accuse.selectListPaging",pi);
+//	}
+//
+//	@Override
+//	public int selectAccuseListCnt(String id) {
+//		// TODO Auto-generated method stub
+//		return sqlSession.selectOne("accuse.selectAccuseListCntbyGId",id);
+//	}
 
 	
 

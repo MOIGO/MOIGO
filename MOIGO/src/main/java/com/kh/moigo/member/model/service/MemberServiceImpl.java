@@ -56,8 +56,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	
-	
-	
 
 	@Override
 	public int insertMember(Member member, List<String> interestList) {
@@ -140,6 +138,18 @@ public class MemberServiceImpl implements MemberService {
 		 List<MypageGroup> list = memberDao.selectGroupList(hmap);
 		
 		return list;
+	}
+
+
+	@Override
+	public int insertFbMember(Member m) {
+		return memberDao.insertFbMember(m);
+	}
+
+
+	@Override
+	public Member selectOneMemberF(String email) {
+		return memberDao.selectOneMemberF(email);
 	}
 
 	}

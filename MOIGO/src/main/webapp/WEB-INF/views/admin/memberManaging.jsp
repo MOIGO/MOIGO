@@ -140,32 +140,190 @@ tr {
 	<!-- container end-->
 
  
- <!-- The Modal -->
-  <div class="modal fade" id="groupModal">
-    <div class="modal-dialog modal-sm">
+
+
+<div class="modal fade" id="groupModal">
+    <div class="modal-dialog ">
       <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-          Modal body..
-        </div>
-        
-        <!-- Modal footer -->
+				<div class="modal-body">
+				
+					<div class="tabbable">
+						<!-- Only required for left/right tabs -->
+						<div class="btn-group ">
+							<ul class="nav nav-tabs">
+								<li><button type="button"
+										class="btn btn-outline-light active" a href="#tab4"
+										data-toggle="tab">Group Info</button></li>				
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab4">
+								<br>
+								<form action="" method="get">
+									<fieldset class="form-group">
+										<legend> 그룹 정보 </legend>
+										<div class="form-group row">
+											<label for="inputGname" class="col-sm-2 col-form-label">Name</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGname"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputGmsg" class="col-sm-2 col-form-label">Message</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGmsg"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputGaddress" class="col-sm-2 col-form-label">Address</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGaddress"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputMaxMem" class="col-sm-2 col-form-label">maxM</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputMaxMem"
+													readonly>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputGenrollDate" class="col-sm-2 col-form-label">EnrollD</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" id="inputGenrollDate"
+													readonly>
+											</div>
+										</div>
+
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Status</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Grade</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Grade</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inputGgc" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">State</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">State</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inputGsc" readonly>
+												</div>
+											</div>
+										</div>
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Inhibition</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Age</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Age</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inputAge" readonly>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputReply">Gender</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Gender</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inputGender" readonly>
+												</div>
+											</div>
+										</div>
+										<div class="form-group row align-items-center">
+											<label class="col-sm-2 col-form-label">Activity</label>
+											<div class="col-sm-5">
+												<label class="sr-only" for="inlineFormInputPost">Post</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Post</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputPost" readonly>
+												</div>
+											</div> 
+											<div class="col-sm-5"> 
+												<label class="sr-only" for="inlineFormInputReply">Reply</label>
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<div class="input-group-text">Reply</div>
+													</div>
+													<input type="text" class="form-control"
+														id="inlineFormInputReply" readonly>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+
+
+
+							<div class="tab-pane" id="tab5">
+								<div class="container-fluid">
+									<div class="row">
+										<div id="modalAccuseList">
+											<table class="table table-hover table-sm">
+												<thead class="thead-light">
+													<tr>
+														<th>신고내용</th>
+														<th>신고자</th>
+														<th>신고날짜</th>
+													</tr>
+												</thead>
+												<tbody id="mAccuseTable" class="input_accuse_list">
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab6">
+								<form action="${pageContext.request.contextPath}/sendMessage.ad"
+									method="get">
+									<div class="form-group">
+										<label for="recipient-name" class="col-form-label">Recipient:</label>
+										<input type="text" class="form-control" id="masterEmail"
+											name="email">
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">Message:</label>
+										<textarea class="form-control" id="messageTextToMaster"
+											name="messageText"></textarea>
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-outline-success">Send
+											message</button>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         
       </div>
     </div>
   </div>
-  
-
 
 
 
@@ -237,6 +395,7 @@ $(document).ready(function(){
 								'<table>';
 		            	 $('.member_detail_slide1').append(str);
 		            	 
+		            	 
 		            	 $('.member_detail_slide2').empty();
 		            	 for(var i in data[1]){
 		            		 console.log("data[1]: "+data[1]);
@@ -247,12 +406,37 @@ $(document).ready(function(){
 								'<td>'+(num)+'</td>' +
 								'<td>'+data[1][i].groupName+'</td>' +
 								'<td>'+data[1][i].memberGradeName.substring(0,idx)+'</td>' +
-								'<td><button type="button" data-target="#groupModal" data-toggle="modal" data-id="'+data[1][i].groupNo+'" class="btn btn-outline-success btn-sm">보기</button></td>'+
+								'<td><button type="button" data-target="#groupModal" data-toggle="modal" data-id="'+data[1][i].groupNo+'" class="btn btn-outline-success btn-sm identifyingClass">보기</button></td>'+
 								'<tr>';
 		            			
 			            	 $('.member_detail_slide2').append(str2);
 
 						 }
+		            	 $(".identifyingClass").click(function () {
+		         			var grpId =$(this).data('id');		        	
+		         		        $.ajax({
+		         		            url: "${pageContext.request.contextPath}/gpDetail.ad",
+		         		            type:'get',
+		         		            data: {grpId:grpId},
+		         		            dataType:"json",
+		         		            success:function(data){	
+		         		            	
+		         			            $("#inputGname").val(data[0].groupName);
+		         			            $("#inputGmsg").val(data[0].groupMsg);
+		         						$("#inputGaddress").val(data[0].groupAddress);
+		         			            $("#inputMaxMem").val(data[0].maxMember);
+		         			            $("#inputGenrollDate").val(data[0].enrollDate);
+		         						$("#inputGgc").val(data[0].groupGradeCode);
+		         						$("#inputGsc").val(data[0].groupStateCode);
+		         						$("#inputAge").val(data[0].minAge+"~"+data[0].maxAge);
+		         					
+		         						$("#inputGender").val(data[0].groupGender);
+		         						$("#inputGender").val(data[0].groupGender);
+		         						
+		         			           
+		         		            }
+		         		        });	           
+		         			}); //함수 끝
 
 					}//success 끝
 				}); //ajax 끝

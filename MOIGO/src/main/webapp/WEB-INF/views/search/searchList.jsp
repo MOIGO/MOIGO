@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=9">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=2">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -22,7 +22,6 @@
                      <div class="row">
                         <div class="col-sm-6">
                            <div class="inner-search">
-                              <input type="hidden" id="cPage" name="cPage" value="${cPage }"/>
                               <input type="text" placeholder="모임검색" autocomplete="off" onkeyup="if(event.keyCode==13) submit();" name="keyword" id="keyword" class="form-control" value="${keyword }" /> 
                               <span class="search-btn"> <img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();">
                               </span>
@@ -44,6 +43,7 @@
                               <span class="search-btn"> <img alt="searchIcon" src="${pageContext.request.contextPath }/resources/images/search/searchIcon.png" onclick="submit();"></span>
                            </div>
                         </div>
+                        <span class="checkbox-Wrap"><label><input class="regardlessArea" name="regardlessArea" type="checkbox" value="지역무관" onclick="submit();"/>&nbsp;지역무관</label></span>
                      </div>
                   </div>
                </div>
@@ -75,12 +75,16 @@
                <div class="col-sm-4 count-sort" id="listCount">검색결과 ${listCount }개</div>
                <div class="col-sm-4 count-sort" id="sort-inner">
                   <select class="sort" name="sort" id="sort" onchange="submit()">
-                     <option value="ENROLL_DATE">최신순</option>
-                     <option value="멤버순">멤버순</option>
+                     <option value="newSort">최신순</option>
+                     <option value="memberSort">멤버순</option>
+                     <option value="postSort">게시글순</option>
                   </select>
                </div>
             </div>
-            <c:forEach items="${list}" var="group">
+            <c:if test="${listCount == 0 }">
+            	<div class="row searchZero col-sm-12">검색된 모임이 없습니다.</div>
+            </c:if>
+            <c:forEach items="${list}" var="group" varStatus="status">
                <div class="float-left col-lg-4 col-md-6 col-sm-12 col-xs-12 moigo-item-wrap">
                   <div class="content-context">
                      <div class="moigo-item list-item align-left">
@@ -89,6 +93,7 @@
                         <div class="header-text-container">
                            <div class="header-text">
                               <div class="title-wrap">
+	                           	 <input class="groupNo" type="hidden" value="${group.groupNo }"/>
                                  <div class="title">${group.groupName}</div>
                               </div>
                            </div>
@@ -96,28 +101,30 @@
                         <div class="item-contents align-left">
                            <div class="location">${group.groupAddress }</div>
                            <span class="icon-container float-right"> 
-                              <span class="memberIcon"> 0<img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span> 
-                              <span class="commentIcon"> 0<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
+                              <span class="memberCount"> ${group.memberCnt }/<span class="maxMember">${group.maxMember }</span><img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
+                              <span class="commentCount">${group.postCnt }
+                              	<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">
+                              </span>
                            </span>
                         </div>
                      </div>
                   </div>
                </div>
             </c:forEach>
-	          <% 
-		          int listCount = Integer.parseInt(String.valueOf(request.getAttribute("listCount")));
-		          int limit = Integer.parseInt(String.valueOf(request.getAttribute("limit")));
-		          
-		          //파라미터 cPage가 null이거나 "" 일 때에는 기본값 1로 세팅함.  
-		          String cPageTemp = request.getParameter("cPage");
-		          int cPage = 1;
-		          try{
-		             cPage = Integer.parseInt(cPageTemp);
-		          } catch(NumberFormatException e){
-		             
-		          }
-	          %>
-        	  <%= com.kh.moigo.search.model.vo.PageBar.getPageBar(listCount, cPage, limit, "selectList.do") %>
+             <% 
+                int listCount = Integer.parseInt(String.valueOf(request.getAttribute("listCount")));
+                int limit = Integer.parseInt(String.valueOf(request.getAttribute("limit")));
+                
+                //파라미터 cPage가 null이거나 "" 일 때에는 기본값 1로 세팅함.  
+                String cPageTemp = request.getParameter("cPage");
+                int cPage = 1;
+                try{
+                   cPage = Integer.parseInt(cPageTemp);
+                } catch(NumberFormatException e){
+                   
+                }
+             %>
+             <%= com.kh.moigo.search.model.vo.PageBar.getPageBar(listCount, cPage, limit, "selectList.do") %>
          </div>
       </div>
    </form>
@@ -126,9 +133,11 @@
    <script>
       var keyword = $('#keyword').val();
       var place = $('#place').val();
-      var category = $('#category').val();
+      var regardlessArea = $('.regardlessArea[value="${regardlessArea}"]').val();
+      var category = $('#category').find('option[value="${category}"]').val();
       var sort = $('#sort').val();
-
+      var groupNo = $('.groupNo').val();
+      
       $('.map-btn').click(function() {
          $('#map').toggle();
          $('#left-wrap').toggleClass('widthHandler');
@@ -136,6 +145,7 @@
       
       $('#sort').find('option[value="${sort}"]').prop('selected', true);
       $('#category').find('option[value="${category}"]').prop('selected', true);
+      $('.regardlessArea[value="${regardlessArea}"]').prop('checked', true);
       
       var map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
          center : new daum.maps.LatLng(35.180624570993196,
@@ -143,8 +153,6 @@
          level : 13
       // 지도의 확대 레벨
       });
-
-      /* console.log('지도의 중심 좌표는 ' + map.getCenter().toString() +' 입니다.'); */
 
       // 마커 클러스터러를 생성합니다
       // 마커 클러스터러를 생성할 때 disableClickZoom 값을 true로 지정하지 않은 경우
@@ -154,9 +162,46 @@
       var clusterer = new daum.maps.MarkerClusterer({
          map : map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
          averageCenter : true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-         minLevel : 8, // 클러스터 할 최소 지도 레벨
-         disableClickZoom : true
-      // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+         minLevel : 9, // 클러스터 할 최소 지도 레벨
+         calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+         disableClickZoom : true, // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+         styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+             width : '30px', height : '30px',
+             background: 'rgba(244, 238, 66, .8)',
+             borderRadius: '15px',
+             color: '#000',
+             textAlign: 'center',
+             fontWeight: 'bold',
+             lineHeight: '31px'
+         },
+         {
+             width : '40px', height : '40px',
+             background: 'rgba(255, 153, 0, .8)',
+             borderRadius: '20px',
+             color: '#000',
+             textAlign: 'center',
+             fontWeight: 'bold',
+             lineHeight: '41px'
+         },
+         {
+             width : '50px', height : '50px',
+             background: 'rgba(65, 244, 169, .8)',
+             borderRadius: '25px',
+             color: '#000',
+             textAlign: 'center',
+             fontWeight: 'bold',
+             lineHeight: '51px'
+         },
+         {
+             width : '60px', height : '60px',
+             background: 'rgb(0, 191, 255, .8)',
+             borderRadius: '30px',
+             color: '#000',
+             textAlign: 'center',
+             fontWeight: 'bold',
+             lineHeight: '61px'
+         }
+    	 ]
       });
 
       $.ajax({
@@ -164,12 +209,14 @@
          data : {
             keyword : keyword,
             place : place,
+            regardlessArea : regardlessArea,
             category : category
          },
          success : function(listData) {
             var j = 0;
             var data = new Object();
             var positions = new Array();
+            var contents = new Array();
             var geocoder = new daum.maps.services.Geocoder();
             // 주소로 좌표를 검색합니다
             for (var i = 0; i < listData.length ; i++) {
@@ -181,12 +228,19 @@
                         "lng" : Number(result[0].x)
                      });
                      j++;
+                     var imageSrc = '${pageContext.request.contextPath }/resources/images/search/marker.png', // 마커이미지의 주소입니다    
+                     imageSize = new daum.maps.Size(40, 40), // 마커이미지의 크기입니다
+                     imageOption = {offset: new daum.maps.Point(20, 38)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                       
+                     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption);
                      // 마커 생성 및 클러스터러에 마커 추가
                      if(j == listData.length) {
+                    	console.log("짜잔");
                         data = { positions };
                         var markers = data.positions.map(function(position) {
                            return new daum.maps.Marker({
-                              position : new daum.maps.LatLng(position.lat, position.lng)
+                              position : new daum.maps.LatLng(position.lat, position.lng),
+                              image : markerImage                     	
                            });
                         });
                         
@@ -212,6 +266,7 @@
             });
          }
       });
+      
    </script>
 </body>
 </html>

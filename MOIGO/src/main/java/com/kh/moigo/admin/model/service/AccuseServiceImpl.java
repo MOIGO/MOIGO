@@ -1,6 +1,7 @@
 package com.kh.moigo.admin.model.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -96,6 +97,101 @@ public class AccuseServiceImpl implements AccuseService {
 		// TODO Auto-generated method stub
 		return ad.atop5groupList();
 	}
+
+	@Override
+	public List<Map<String, Object>> selectAccuse2(String id) {
+		// TODO Auto-generated method stub
+		return ad.selectAccuse2(id);
+	}
+
+	@Override
+	public ArrayList countGender() {
+		// TODO Auto-generated method stub
+		return ad.countGender();
+	}
+
+	@Override
+	public List<Map<String, Object>> countAddress() {
+		// TODO Auto-generated method stub
+		return ad.countAddress();
+	}
+
+	@Override
+	public List<Map<String, Object>> countMinterest() {
+		// TODO Auto-generated method stub
+		return ad.countMinterest();
+	}
+
+	@Override
+	public List<Map<String, Object>> gGradeCount() {
+		// TODO Auto-generated method stub
+		return ad.gGradeCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> countGinterest() {
+		// TODO Auto-generated method stub
+		return ad.countGinterest();
+	}
+
+	@Override
+	public List<Map<String, Object>> countState() {
+		// TODO Auto-generated method stub
+		return ad.countState();
+	}
+
+	@Override
+	public List<Map<String, Object>> weeklyMemEnroll() {
+		// TODO Auto-generated method stub
+		return ad.weeklyMemEnroll();
+	}
+
+	@Override
+	public List<Map<String, Object>> weeklyGrpMake() {
+		// TODO Auto-generated method stub
+		return ad.weeklyGrpMake();
+	}
+
+	@Override
+	public List<Map<String, Object>> memberDashCount() {
+		// TODO Auto-generated method stub
+		return  ad.memberDashCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> groupDashCount() {
+		// TODO Auto-generated method stub
+		return ad.groupDashCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> MemEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return ad.MemEnrollperMonth();
+	}
+
+	@Override
+	public List<Map<String, Object>> GrpEnrollperMonth() {
+		// TODO Auto-generated method stub
+		return ad.GrpEnrollperMonth();
+	}
+
+
+
+
+
+
+//	@Override
+//	public List<Map<String, Object>> selectAccusePaging(PageInfo pi) {
+//		// TODO Auto-generated method stub
+//		return ad.selectAccusePaging(pi);
+//	}
+//
+//	@Override
+//	public int selectAccuseListCnt(String id) {
+//		System.out.println("신고카운트 서비스");
+//		return ad.selectAccuseListCnt(id);
+//	}
 
 
 }

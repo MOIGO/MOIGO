@@ -21,6 +21,9 @@ public class Groups implements java.io.Serializable{
 	private int maxAge;
 	private String groupGender;
 	private String openSetting;
+	private int memberCnt;
+	private int postCnt;
+
 	public Groups(String groupNo, String groupName, String groupMsg, String groupAddress, String groupPicture,
 			String groupGradeCode, String groupStateCode, int maxMember, Date enrollDate, String interestBigCode,
 			String allowSignup, int minAge, int maxAge, String groupGender, String openSetting) {
@@ -135,6 +138,18 @@ public class Groups implements java.io.Serializable{
 	public void setOpenSetting(String openSetting) {
 		this.openSetting = openSetting;
 	}
+	public int getMemberCnt() {
+		return memberCnt;
+	}
+	public void setMemberCnt(int memberCnt) {
+		this.memberCnt = memberCnt;
+	}
+	public int getPostCnt() {
+		return postCnt;
+	}
+	public void setPostCnt(int postCnt) {
+		this.postCnt = postCnt;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -241,6 +256,9 @@ public class Groups implements java.io.Serializable{
 				+ ", interestBigCode=" + interestBigCode + ", allowSignup=" + allowSignup + ", minAge=" + minAge
 				+ ", maxAge=" + maxAge + ", groupGender=" + groupGender + ", openSetting=" + openSetting + "]";
 	}
+	
+	
+
 	
 	
 

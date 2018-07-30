@@ -28,6 +28,10 @@
 		cursor : pointer;
 	}
 	
+	.customModalSize{
+		max-width: 	40%;
+	}	
+	
 </style>
 </head>
 
@@ -41,33 +45,57 @@
 			<div class="row">
 				<h3 class="card-title groupName bolder_text lead">Moigo Official</h3>
 			</div>
-			<div class="row">
-				<button class="btn btn-block">가입하기</button>
-			</div>
+			
+			<c:choose>
+				<c:when test="${param.memberGrade eq -1 }">
+					<div class="row joinBtnWrapper">
+						<button class="btn btn-block" type="button" data-toggle="modal" data-target="#joinModal">가입하기</button>
+					</div>
+				</c:when>
+				<c:when test="${param.memberGrade eq 0 }"> 
+					<div class="row joinBtnWrapper">
+						<button class="btn btn-block" type="button" disabled>승인 대기중</button>
+					</div>
+				</c:when>
+			</c:choose>
+			
 			<div class="row mt-3">
-				<p class="card-text groupDesc">테스트 그룹입니다.</p>
+				<p class="card-text groupDesc"></p>
 			</div>
-			<div class="row mt-3 ">
-				<div class="col-6 test">
-					멤버: <span class="group_memNum">6명</span>
+			<c:choose>
+				<c:when test="${param.memberGrade>0}">
+					<div class="row mt-3 joined">
+						<div class="col-6 test">
+							멤버: <span class="group_memNum"></span>
+						</div>
+						<div class="col-6  test">
+							<i class="fas fa-plus-circle"></i> 그룹 초대
+						</div>
+					</div>
+				</c:when>
+				<c:when test="${param.memberGrade<0 }">
+				<div class="row mt-3 notJoined">
+						<div class="col-6 test">
+							멤버: <span class="group_memNum">6명</span>
+						</div>
+						<div class="col-6 test">
+							리더 : <span class="group_leader ">홍길동</span>
+						</div>
 				</div>
-				<div class="col-6 text-left test">
-					리더 : <span class="group_leader ">홍길동</span>
-				</div>
-			</div>
-			
-			<div class="row mt-3 ">
-				<div class="col-6 ">
-					멤버: <span class="group_memNum">6명</span>
-				</div>
-				<div class="col-6 text-left test">
-					<i class="fas fa-plus-circle"></i> 그룹 초대
-				</div>
-			</div>
-			
-			<div class="row">
+					
+				</c:when>
+				<c:when test="${param.memberGrade eq 0 }">
+					<div class="row mt-3 notJoined">
+							<div class="col-6 test">
+								멤버: <span class="group_memNum">6명</span>
+							</div>
+							<div class="col-6 test">
+								리더 : <span class="group_leader ">홍길동</span>
+							</div>
+					</div>
+				</c:when>
 				
-			</div>
+			</c:choose>
 			
 		</div>
 	</div>
@@ -86,9 +114,37 @@
 	</div>
  </div>
  
- <form id="groupNoForm">
+ <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
  </form>
+ 
+ 	<!--join modal  -->
+	<div class="modal" id="joinModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog customModalSize modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-center" id="joinModalTitle">가입하기</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+					<div class="modal-body">
+						<div class="d-flex flex-column justify-content-center">
+							<img src="" alt="" class="img-fluid" />
+							<strong class="groupName text-center mt-3 bandName"> </strong>
+							<p class="lead groupDesc mt-3 text-center "></p>
+							<p class="text-center"><strong class="groupName"></strong> 모임에 가입하시겠습니까?</p>
+						</div>
+					</div>
+					
+					<div class="modal-footer">
+					
+						<button type="button" class="btn btn-primary btn-block" onclick="joinGroup()">확인</button>
+					</div>
+			</div>
+		</div>
+	</div>
+	
 
 </body>
 
@@ -96,30 +152,58 @@
 
 
 
-function setGroupDesc(groupNo){
+function setGroupDesc(groupNo,isMember){
 	$.ajax({
-		url:'${root}/groups/getOneGroup.gp',
+		url:'${root}/groups/selectOneGroup.gp',
 		data:{groupNo:groupNo},
 		dataType:"json",
 		success:function(data){
 			var  group = data.group;
+      
 			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
 				$('.card-img-top').attr("src",group.groupPicture);
+				$('#joinModal img').attr("src",group.groupPicture);
 			}else{
 				$('.card-img-top').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
+				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 			}
+			
+		/* 	if(!isMember){
+				$('.joinBtnWrapper').css("display","none");
+				$('.joined').css("display","relative");
+				$('.notJoined').css("display","none");
+			}else{
+				$('.joinBtnWrapper').css("display","relative");
+				$('.joined').css("display","none");
+				$('.notJoined').css("display","relative");
+			} */
+			
+			$('#joinModal .groupName').text(group.groupName);
+			$('#joinModal .groupDesc').text(group.groupMsg);
 			$('.groupName').text(group.groupName);
 			$('.groupDesc').text(group.groupMsg);
-			
-		},error:function(dat){
+			$('.group_leader').text(data.grpLeader.memberName);
+			$('.group_memNum').text(data.grpMemNum+" 명");
+		},error:function(data){
 			
 		}
 	});
 }
 
+function joinGroup(){
+	if('${m.memberNo}'!=null){
+		
+		$('#groupNoForm').submit();
+	}else{
+		alert("로그인 해주세요!");
+	}
+	
+	
+}
+
 $(function() {
 
-	setGroupDesc('${param.groupNo}');
+	setGroupDesc('${param.groupNo}','${param.isMember}');
 	
 	/* 각 메뉴로 이동하는 메소드 */
 	$(".group_list").on("click", function() {

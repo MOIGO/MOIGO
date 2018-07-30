@@ -6,8 +6,182 @@
 
 <html>
 <head>
+<script type="text/javascript"	src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawWeeklyMemberEnrollChart);
+      google.charts.setOnLoadCallback(drawWeeklyGroupMakeChart);
+      google.charts.setOnLoadCallback(drawMemberEnrollPerMonthChart);
+      google.charts.setOnLoadCallback(drawGroupEnrollPerMonthChart);
+
+      function drawWeeklyMemberEnrollChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Day');
+          data.addColumn('number', 'Member');
+
+          
+          data.addRows([
+            ['${weeklyMemEnroll[0].enrollD}', ${weeklyMemEnroll[0].countWmember}],   
+            ['${weeklyMemEnroll[1].enrollD}', ${weeklyMemEnroll[1].countWmember}],  
+            ['${weeklyMemEnroll[2].enrollD}', ${weeklyMemEnroll[2].countWmember}],  
+            ['${weeklyMemEnroll[3].enrollD}', ${weeklyMemEnroll[3].countWmember}],  
+            ['${weeklyMemEnroll[4].enrollD}', ${weeklyMemEnroll[4].countWmember}],  
+            ['${weeklyMemEnroll[5].enrollD}', ${weeklyMemEnroll[5].countWmember}],
+            ['${weeklyMemEnroll[6].enrollD}', ${weeklyMemEnroll[6].countWmember}]
+          ]);
+
+          var options = {
+        	'title':'A Week\'s Change of New Member',
+  			titleTextStyle:{
+  			fontName:'Poppins',
+  			fontSize: 23
+  			},
+  			legend: 'none',
+  		
+  			fontSize :11,
+  			fontName:'Poppins',	           
+            hAxis: {
+              title: 'Date'
+            },
+            vAxis: {
+              title: 'Number'
+            },
+        	backgroundColor :'transparent',
+            width:600,
+            height:400
+            
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+          chart.draw(data, options);
+        }
+      
+      function drawWeeklyGroupMakeChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Day');
+          data.addColumn('number', 'Group');
+
+          
+          data.addRows([
+            ['${weeklyGrpMake[0].enrollD}', ${weeklyGrpMake[0].countWgroup}],   
+            ['${weeklyGrpMake[1].enrollD}', ${weeklyGrpMake[1].countWgroup}],  
+            ['${weeklyGrpMake[2].enrollD}', ${weeklyGrpMake[2].countWgroup}],  
+            ['${weeklyGrpMake[3].enrollD}', ${weeklyGrpMake[3].countWgroup}],  
+            ['${weeklyGrpMake[4].enrollD}', ${weeklyGrpMake[4].countWgroup}],  
+            ['${weeklyGrpMake[5].enrollD}', ${weeklyGrpMake[5].countWgroup}],
+            ['${weeklyGrpMake[6].enrollD}', ${weeklyGrpMake[6].countWgroup}]
+          ]);
+
+          var options = {
+        		  
+          
+        	'title':'Weekly New Group Count',
+  			titleTextStyle:{
+  			fontName:'Poppins',
+  			fontSize: 23
+  			},
+  			legend: 'none',
+  			fontSize :11,
+  			fontName:'Poppins',	           
+            hAxis: {
+              title: 'Date'
+            },
+            vAxis: {
+              title: 'Number'
+            },
+        	backgroundColor :'transparent',
+            width:600,
+            height:400
+            
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div2'));
+          chart.draw(data, options);
+        }
+      
+      function drawMemberEnrollPerMonthChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Day');
+          data.addColumn('number', 'Group');
+
+          
+          data.addRows([
+            ['${MemEnrollperMonth[0].enrollM}', ${MemEnrollperMonth[0].mmCount}],   
+            ['${MemEnrollperMonth[1].enrollM}', ${MemEnrollperMonth[1].mmCount}],  
+            ['${MemEnrollperMonth[2].enrollM}', ${MemEnrollperMonth[2].mmCount}]
+          ]);
+
+          var options = {
+        		  
+          
+        	'title':'New Member per Month',
+  			titleTextStyle:{
+  			fontName:'Poppins',
+  			fontSize: 23
+  			},
+  			legend: 'none',
+  			fontSize :11,
+  			fontName:'Poppins',	           
+            hAxis: {
+              title: 'Month'
+            },
+            vAxis: {
+              title: 'Number'
+            },
+        	backgroundColor :'transparent',
+            width:600,
+            height:400
+            
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div3'));
+          chart.draw(data, options);
+        }
+      function drawGroupEnrollPerMonthChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Day');
+          data.addColumn('number', 'Group');
+
+          
+          data.addRows([
+            ['${GrpEnrollperMonth[0].enrollM}', ${GrpEnrollperMonth[0].grCount}],   
+            ['${GrpEnrollperMonth[1].enrollM}', ${GrpEnrollperMonth[1].grCount}],  
+            ['${GrpEnrollperMonth[2].enrollM}', ${GrpEnrollperMonth[2].grCount}],
+            ['${GrpEnrollperMonth[3].enrollM}', ${GrpEnrollperMonth[3].grCount}]
+          ]);
+
+          var options = {
+        		  
+          
+        	'title':'New Member per Month',
+  			titleTextStyle:{
+  			fontName:'Poppins',
+  			fontSize: 23
+  			},
+  			legend: 'none',
+  			fontSize :11,
+  			fontName:'Poppins',	           
+            hAxis: {
+              title: 'Month'
+            },
+            vAxis: {
+              title: 'Number'
+            },
+        	backgroundColor :'transparent',
+            width:650,
+            height:400
+            
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div4'));
+          chart.draw(data, options);
+        }
+      
+</script>      
 <style type="text/css">
 	.well{
 		margin: 0 auto;
@@ -17,107 +191,75 @@
 </style>
 </head>
 <body>
+	<c:import url="common/reportModal.jsp"></c:import>
 	<c:import url="common/adminSidebar.jsp"></c:import>
     
-    <div class="col-sm-9 body_background">
+    <div class="col-sm-12 body_background">
     <br>
-      <div class="well">
-        <h4>TODAY</h4>
-        <p>${serverTime}</p>
-      </div>
-      
-      
-      <div class="row">
-      	 <div class="card-deck">
-      	 &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;
-		       <div class="card bg-warning">
-		     	   <h4 class="card-title text-center">Card title</h4>
-			      <div class="card-body text-center">
-			        <p class="card-text">Some text inside the second card</p>
-			      </div>
-		    </div>
-		    <div class="card bg-success">
-		   		  <h4 class="card-title text-center">Card title</h4>
-			      <div class="card-body text-center">
-			        <p class="card-text">Some text inside the third card</p>
-			      </div>
-		    </div>
-		    <div class="card bg-danger">
-		   		  <h4 class="card-title text-center">Card title</h4>
-			      <div class="card-body text-center">
-			        <p class="card-text">Some text inside the fourth card</p>
-			      </div>
-		    </div>  
-		    </div>
-      
-      </div>
-      
-      
-      <div class="row">
-        <div class="col-sm-5">
-           <!--Div that will hold the pie chart-->
-  			  <div id="chart_div"></div>
-    
-   			
-        </div>
-        <div class="col-sm-7">
-          <div class="well">
-             <div id="chart_div2"></div> 
-          </div>
-        </div>
-        
-      </div>
-      <div class="row">
-        <div class="col-sm-8">
-          <div class="well">
-            <p>Text</p> 
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="well">
-            <p>Text</p> 
-          </div>
-        </div>
-      </div>
-    </div>
+			<div class="row">
+			<div class="col-lg-1"></div>
+			<div class="card text-white bg-warning mb-3 text-center"
+				style="min-width: 18rem;">
+				<div class="card-header">오늘의 가입자</div>
+				<div class="card-body">
+					<h1 class="card-title">${memberDashCount[0].todayMember}</h1>			
+				</div>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card text-white bg-success mb-3 text-center" style="min-width: 18rem;">
+				<div class="card-header">오늘의 생성그룹</div>
+				<div class="card-body">
+					<h1 class="card-title">${groupDashCount[0].todayGroup}</h1>
+				</div>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card bg-light mb-3 text-center" style="min-width: 18rem;">
+				<div class="card-header">전체 가입자</div>
+				<div class="card-body">
+					<h1 class="card-title">${memberDashCount[0].totalMember}</h1>
+					
+				</div>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<div class="card text-white bg-dark mb-3 text-center" style="min-width: 18rem;">
+				<div class="card-header">전체그룹</div>
+				<div class="card-body">
+					<h1 class="card-title">${groupDashCount[0].totalGroup}</h1>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-lg-6" id="chart_div"><!--  for bar chart --></div>
+			<div class="col-lg-6 " id="chart_div2"><!--  for bar chart --></div>
+
+		</div>
+		<div class="row">
+			<div class="col-lg-6" id="chart_div3"><!--  for bar chart --></div>
+			<div class="col-lg-6 " id="chart_div4"><!--  for bar chart --></div>
+
+		</div>
+		<div class="row">
+			<div class="col-sm-6" id="dBoardtable1">
+				<!--Div that will hold the pie chart-->
+
+
+			</div>
+			<div class="col-sm-6 " id="dBoardtable2"></div>
+
+		</div>
+		
+		
+		
+		
+		
+	</div>  
+	
+	
   </div>
 </div>
-<script type="text/javascript">
 
-      // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
 
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawChart);
-
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-          ['Mushrooms', 3],
-          ['Onions', 1],
-          ['Olives', 1],
-          ['Zucchini', 1],
-          ['Pepperoni', 2]
-        ]);
-
-        // Set chart options
-        var options = {'legend':'none','title':'How Much Pizza I Ate Last Night',
-                       'width':300,
-                       'height':500};
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
-        chart.draw(data, options);
-        chart2.draw(data, options);
-      }
-    </script>
 </body>
 </html>

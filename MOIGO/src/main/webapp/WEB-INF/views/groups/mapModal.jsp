@@ -35,7 +35,7 @@
 
 </style>
 
-<div id="insertModalWrapper"> 
+<div id="insertMapModalWrapper"> 
 
 <div class="modal" id="insertMap" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalLongTitle"
@@ -78,7 +78,27 @@
 
 </div>
 
+<div id="mapViewModal"> 
+
+<div class="modal" id="mapViewModal" tabindex="-1"
+		role="dialog" 
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+				test 입니당~
+					<div id="mapView"></div>
+				
+				</div>
+			</div>
+		</div>
+</div>
+
+</div>
+
 <script>
+
+var mapView;
 
 $(function(){
 	$('#insertMap').on('hide.bs.modal',function(){
@@ -91,14 +111,65 @@ $(function(){
 	});
 });
 
+function makeViewMap(addressName){
+	
+	
+	var mapContainer = document.getElementById('mapView'), // 지도를 표시할 div 
+	mapOption = { 
+	    center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+	    level: 3 // 지도의 확대 레벨
+	};
+	
+	var mapView = new daum.maps.Map(mapContainer, mapOption); 
+	var geocoder = new daum.maps.services.Geocoder();
+	mapView.relayout();
+	
+	
+	
+	geocoder.addressSearch(addressName, function(result, status) {
+
+	    // 정상적으로 검색이 완료됐으면 
+	     if (status === daum.maps.services.Status.OK) {
+
+	        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+
+	        // 결과값으로 받은 위치를 마커로 표시합니다
+	        var marker = new daum.maps.Marker({
+	            map: mapView,
+	            position: coords
+	        });
+	    
+	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	        mapView.setCenter(coords);
+	    } 
+	}); 
+	
+}
+
+
+
+function openMapViewModal(addressName){
+	
+	//$('#mapViewModal').modal("toggle");
+	//makeViewMap(addressName);
+	
+
+}
+
 var insertMap_markers=[];
 
 var infowindow_for_Modal = new daum.maps.InfoWindow({zIndex:1}); //인포 윈도우
 
 var ps_for_Modal = new daum.maps.services.Places();  //장소 검색 객체
 
+
 var toEditTarget;
 var toEditContent;
+
+function toggleMapModal(){
+	$('#insertMap').modal("toggle");
+    $('#insertMap').on("shown.bs.modal",makeMap());
+}
 
 function makeMap(){
 	
@@ -196,8 +267,18 @@ function displayPlaces(places) {
         if(i==0){
         	if(typeof(toEditTarget)=='undefined')
         		displayInfowindow(makeInfoWindow(marker,places[i],closeMapModal),marker);	
-        	else
-        		displayInfowindow(makeInfoWindow(marker,places[i],editMapContent),marker);
+        	else{
+        		
+        		
+        		if($(toEditTarget).attr("name")=="editMapWrap"){
+        			displayInfowindow(makeInfoWindow(marker,places[i],editMapContent),marker);
+        		}else if($(toEditTarget).hasClass("editSchedule")){
+        			displayInfowindow(makeInfoWindow(marker,places[i],editScheduleContent),marker);
+        		}
+        		
+        		
+        		
+        	}
         	
         }
         
@@ -329,12 +410,7 @@ function closeMapModal(marker,place){
 //summernote에 붙이기
 function addMapOnSummerNote(marker,place){
 
-	/* var mapDiv = $('<div class="card"><div class="row"><div class="col-2"><div><div class="col-10">'+
-			'<div class="row"><div class="col-12">'+place.place_name+'</div></div>'
-			+'</div></div>'); */
-			
-			
-	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="alert();">');
+	var $mapDiv = $('<div class="card" name="editMapWrap" style="border:3px solid black;" contenteditable="false" onclick="openMapViewModal('+"'"+place.address_name+"'"+')">');
 	var $mapBody = $('<div class="card-body">');
 	var $mapRow = $('<div class="row">');
 	var $mapCol2 = $('<div class="col-2"><img class="img-fluid" src="../resources/images/icon_navi.png"/></div>');
@@ -361,14 +437,15 @@ function addMapOnSummerNote(marker,place){
 	
 	
 	
-	$btn_edit.on("click",function(){
+	$btn_edit.on("click",function(event){
 		toEditTarget=$mapDiv;
-		
+		event.stopPropagation();
 		$('#placeKeyword').val($col10RowCol1.text());
 		editMap();
 	});
 	
-	$btn_del.on("click",function(){
+	$btn_del.on("click",function(event){
+		event.stopPropagation();
 		deleteMap($(this));
 	});
 	
@@ -402,6 +479,15 @@ function editMapContent(marker,place){
 		$('#insertMap').modal('hide');
 	}
 }
+
+function editScheduleContent(marker,place){
+	$(toEditTarget).text("");
+	$(toEditTarget).siblings("input").val(place.address_name);
+	$(toEditTarget).append("<i class='fas fa-map-marker-alt'>"+place.address_name+"</i>");
+	 
+	$('#insertMap').modal('hide');
+}
+
 
 function deleteMap(obj){
 

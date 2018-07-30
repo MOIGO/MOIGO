@@ -7,7 +7,6 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage/myPage_custom.css?ver=0">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -42,25 +41,38 @@
                	<c:if test="${! empty list}">
 	               <c:forEach items="${list }" var="group">
 	                 <div class="groupList_item col-xl-3 col-sm-6 col-12 " >
-	                     <div class="item_content">
+	                     <div class="item_content" id="${group.groupNo }">
 	                     <input type="hidden" value="${group.groupNo }" name="groupNo">
 	                         <div class="header_bg" >
-	                          		<img alt="" src="${pageContext.request.contextPath}/resources/images/moigo.png" style="width:100%; height:100%;">
+	                          		<img alt="" src="${group.groupPicture }" style="width:100%; height:100%;">
+	                         		<span style="position:absolute; right:20px; top:2px;color:yellow"><c:out value="${group.groupGrade }"/></span>
 	                          </div>
 	                         <div class="body_text_container">
 	                             <div class="body_text">
 	                                 <div class="body_title"><c:out value="${group.groupName }"/> </div>
-	                                 <div class="body_member">멤버 : <c:out value="${group.gropuNum }"/> 명</div>
+	                                 <div class="body_member" >멤버 : <c:out value="${group.memberNum }"/> 명   &nbsp;&nbsp;&nbsp; 게시글 : <c:out value="${group.postNum }"/> 개</div>
 	                             </div>
 	                         </div>
 	                     </div>
 	                 </div>
+		       
 	                </c:forEach>
               	 </c:if>
+              
+               
        		</div>
        	</div>
     </div>
 
-    <br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <script >
+    $(function(){
+    	   $(".item_content").on("click",function(){
+    	      var groupNo = $(this).attr("id");
+    	      alert("그룹번호: " +groupNo);
+    	      /* location.href = "${pageContext.request.contextPath}/board/boardView.do?no="+boardNo; */
+    	   });
+    	});
+    </script>
 </body>
 </html>

@@ -20,6 +20,18 @@
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
 	
+	<resultMap type="schedule" id="scheduleResultMap">
+		<id property="scheduleNo" column="SCHEDULE_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="scheduleName" column="SCHEDULE_NAME"/>
+		<result property="scheduleContent" column="SCHEDULE_CONTENT"/>
+		<result property="scheduleAddress" column="SCHEDULE_ADDRESS"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="colorLabel" column="COLOR_LABEL"/>
+	</resultMap>
+	
 	<resultMap type="post" id="postResultMap">
 		<id property="postNo" column="POST_NO"/>
 		<result property="groupNo" column="GROUP_NO"/>
@@ -118,6 +130,7 @@
 		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)
 	</insert>
 	
+	<!--댓글 삭제-->
 	<delete id="deleteReply">
 		DELETE FROM POST_REPLY
 		WHERE REPLY_NO=#{replyNo}
@@ -166,12 +179,66 @@
 		#{allowSignup},#{minAge},#{maxAge},#{groupGender},#{openSetting})
 	</insert>
 	
+	<!--그룹 커버 사진 바꾸기  -->
 	<update id="updateGroupCover" parameterType="groups">
 		UPDATE GROUPS
 		SET GROUP_PICTURE = #{groupPicture}
 		WHERE GROUP_NO=#{groupNo}
 	</update>
-
+	
+	<!--그룹의 멤버 수 가져오기  -->
+	<select id="selectGrpMemNum" resultType="_int">
+		SELECT COUNT(*) FROM GROUP_MEMBER
+		WHERE GROUP_NO =#{groupNo}
+	</select>
+	
+	<!--그룹의 리더 정보 가져오기  -->
+	<select id="selectGroupLeader" resultMap="groupMemberResultMap">
+		SELECT GROUP_MEMBER.*,MEMBER_NAME 
+		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
+		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
+	</select>
+	
+	<!--그룹 멤버 한명 정보 가져오기  -->
+	<select id="selectOneGrpMem" parameterType="groupMember" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
+	</select>
+	
+	<!--그룹 가입하기 -->
+	<insert id="insertGroupMember" parameterType="groupMember">
+		INSERT INTO GROUP_MEMBER VALUES(#{memberNo},#{groupNo},#{profileImg},#{profileThumb},#{profileMsg},#{memberGradeCode})
+	</insert>
+	
+	<!--일정 등록 -->
+	<insert id="insertSchedule" parameterType="schedule">
+		
+		<selectKey keyProperty="scheduleNo" resultType="string" order="AFTER" >
+			SELECT 'S'||TO_CHAR(SEQ_SCHEDULE.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SCHEDULE VALUES('S'||TO_CHAR(SEQ_SCHEDULE.NEXTVAL,'FM000'),#{groupNo},#{scheduleName},#{scheduleContent},#{scheduleAddress},#{memberNo},#{startTime},#{endTime},#{colorLabel},#{allDay})
+	</insert>
+	
+	<!--일정 하나 가져오기 -->
+	<select id="selectOneSchedule" resultMap="scheduleResultMap">
+		SELECT * FROM SCHEDULE WHERE SCHEDULE_NO =#{scheduleNo}
+	</select>
+	
+	<!--일정 하나 수정하기-->
+	<update id="updateSchedule" parameterType="schedule">
+		 UPDATE SCHEDULE
+		 SET SCHEDULE_NAME=#{scheduleName},SCHEDULE_CONTENT=#{scheduleContent},SCHEDULE_ADDRESS=#{scheduleAddress},START_TIME=#{startTime},END_TIME=#{endTime},COLOR_LABEL=#{colorLabel},ALLDAY=#{allDay}
+		 WHERE SCHEDULE_NO=#{scheduleNo}
+	</update>
+	
+	<!--일정 삭제하기  -->
+	<delete id="deleteSchedule">
+		DELETE FROM SCHEDULE
+		WHERE SCHEDULE_NO=#{scheduleNo}
+	</delete>
+	
+	
 
 	<!-- ===================================================================================================== 혜진 -->
 

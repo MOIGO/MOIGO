@@ -15,6 +15,7 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.PostReply;
 
 @Service
@@ -81,11 +82,69 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updatePost(post);
 	}
   
-  @Override
+	@Override
 	public int updateReply(PostReply postReply) {	
 		return groupDao.updateReply(postReply);
 	}
+  
+  	@Override
+	public int selectGrpMemNum(String groupNo) {
+		
+		return groupDao.selectGrpMemNum(groupNo);
+	}
+  	
+  	@Override
+	public GroupMember selectGroupLeader(String groupNo) {
+		
+		return groupDao.selectGroupLeader(groupNo);
+	}
+  	
+  	@Override
+	public GroupMember selectOneMember(GroupMember gm) {
+		return groupDao.selectOneMember(gm);
+		
+	}
+  	
+  	@Override
+	public int insertGroupMember(GroupMember gm) {
+		return groupDao.insertGroupMember(gm);
+		
+	}
+  	
+  	@Override
+	public int insertSchedule(Schedule schedule) {
+		
+		return groupDao.insertSchedule(schedule);
+	}
+  	
+
+	@Override
+	public Schedule selectOneSchedule(String scheduleNo) {
+		
+		return groupDao.selectOneSchedule(scheduleNo);
+	}
 	
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		
+		return groupDao.updateSchedule(schedule);
+	}
+	
+
+	@Override
+	public int deleteSchedule(String scheduleNo) {
+		
+		return groupDao.deleteSchedule(scheduleNo);
+	}
+	
+	
+	@Override
+	public GroupMember selectOneGrpMemberWithMemNo(String memberNo) {
+		
+		return groupDao.selectOneGrpMemberWithMemNo(memberNo);
+	}
+
+  
 	//--------------------------------------------------------------------- 혜진
 	
 	@Override
@@ -117,6 +176,7 @@ public class GroupsServiceImpl implements GroupsService {
 	public int updateGroupCondition(Groups group) {
 		return groupDao.updateGroupCondition(group);
 	}
+
 
 	@Override
 	public int updateGroupMemberSetting(Map<String, Object> changeMap) {

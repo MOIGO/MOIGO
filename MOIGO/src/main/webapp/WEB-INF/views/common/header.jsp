@@ -111,7 +111,7 @@ body {
 
 .usercon:hover{
 	cursor: pointer;
-	color: skyblue;
+	color: aqua;
 }
 
 #dropDown{
@@ -127,6 +127,35 @@ body {
 #dropdown-Menu{
 	color: white;
 }
+
+#memName{
+	margin-top: 10px;
+	color: white;
+}
+
+/* effect 18 */
+
+.hovername{
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.hovername:after{
+	margin-top: 10px;
+  content: '' attr(data-hover-label) '';
+  width: 0;
+  overflow: hidden;
+  transition: width .2s ease-out;  
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.hovername:hover:after, .hovername:focus:after{
+  width: 100%; 
+  color: aqua;
 </style>
 
 </head>
@@ -159,21 +188,32 @@ body {
 		<div class="col-md-2 col-lg-2"></div>
 		<div class="col-md-3 col-lg-3" id="login">
 			<div class="row">
-			<a href="#" data-toggle="modal" data-target='#Login_Modal'
-				id="login-slide-link">로그인</a>
-				&nbsp;&nbsp;	
+			<c:choose>
+			<c:when test="${m eq null}" >
+				<a href="#" data-toggle="modal" data-target='#Login_Modal'
+					id="login-slide-link">로그인</a>
+					&nbsp;&nbsp;
+			</c:when>
+			<c:otherwise>
+				<span class="hovername" data-hover-label="[${m.memberName}]님이 접속하셨습니다.">
+				<p id="memName">[${m.memberName}]님이 접속하셨습니다.</p></span>
+			</c:otherwise>
+			</c:choose>
+			<c:if test ="${m ne null}">
 			<div class="dropdown">
 					<button class="btn btn-secondary dropdown-toggle" type="button" id="myMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-user usercon" style="font-size: 4ex;"></i>
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/common/test.do">테스트</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupsTest.do">모임 메인</a>
+					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMain.gp">모임 메인</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
+					  <%-- <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a> --%>
+					  <a class="dropdown-item" onclick="memberLogout();" style="cursor: pointer;">로그아웃</a>
+					  
 					</div>
 				  </div>
+			</c:if>	  
 		</div>
 		</div>
 		
@@ -228,6 +268,7 @@ body {
 	<c:set var="m" value="${sessionScope.m}"></c:set>
 	<!-- 테스트 -->
 	
+	
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -260,6 +301,26 @@ body {
 			location.href = "#"
 		});
 		
+	</script>
+	
+	<!-- 로그아웃 -->
+	<script>
+
+	
+		function memberLogout(){
+			FB.getLoginStatus(function(response) {
+				console.log('statusChangeCallback');
+				console.log(response);
+			
+				 if (response.status === 'connected') {
+					FB.logout(function(response) { // 사용자 로그 아웃 이후 콜백처리 
+						alert('로그아웃');
+					});
+				 } 
+				location.href="${pageContext.request.contextPath}/member/memberLogout.do";	
+			});
+					
+		}
 	</script>
 </body>
 </html>

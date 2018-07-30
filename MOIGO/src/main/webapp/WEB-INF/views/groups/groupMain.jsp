@@ -61,6 +61,13 @@ background: #EDEFF2;
 	cursor:pointer;
 }
 
+.font-elipsis{
+	overflow:hidden;
+	text-overflow:ellipsis; 
+	white-space:nowrap;
+
+}
+
 </style>
 
 </head>
@@ -68,6 +75,10 @@ background: #EDEFF2;
 <body>
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+		<c:param name="groupNo" value="${groupNo }" />
+		<c:param name="memberNo" value="${m.memberNo}" />
+	</c:import>
 
 	<div class="container">
 
@@ -75,12 +86,15 @@ background: #EDEFF2;
 
 
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
-            	<c:param name="groupNo" value="G007"/>
-         	</c:import>
+            	<c:param name="groupNo" value="${groupNo}"/>
+            	<c:param name="memberGrade" value="${memberGrade}"/>
+      </c:import>
 
 			<div class="col-7">
 				<div class="col">
+				<c:if test="${memberGrade>0}">
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
+				</c:if>
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
 					<div id="postDiv" class="">
 						
@@ -141,7 +155,7 @@ function deleteAllPost(){
 function setPostList(currentPage){
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
-		data:{groupNo:"G001",currPage:currentPage},
+		data:{groupNo:"${groupNo}",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
 
@@ -217,12 +231,12 @@ function makeProfile(obj){
 	
 	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
 	var $userDataWrapper =$("<div class='d-flex'>");
-	var $userName =$("<span class='mr-4 ' style='overflow:hidden;text-overflow:ellipsis; font-weight:bold'>").text(obj.groupMember.memberName);
-	var $userMsg = $("<span class='w-50 text-muted' style='overflow:hidden;text-overflow:ellipsis;'>").text(obj.groupMember.profileMsg);
+	var $userName =$("<span class='w-25' style='overflow:hidden;text-overflow:ellipsis; font-weight:bold'>").text(obj.groupMember.memberName);
+	var $userMsg = $("<span class='w-75 text-muted font-elipsis'>").text(obj.groupMember.profileMsg);
 	var $replyContent;
 	
 	if(typeof(obj.postNo)!='undefined'){
-		$replyContent = $("<div class='d-flex replyContent '>"); 
+		$replyContent = $("<div class='d-flex replyContent font-elipsis' style='cursor:pointer;' onclick='toggleElipsis(this);'>"); 
 		$replyContent.append(obj.content);
 	}
 	
@@ -256,6 +270,9 @@ function makeProfile(obj){
 	return $profileWrapper;
 }
 
+function toggleElipsis(obj){
+	$(obj).toggleClass("font-elipsis");
+}
 
 
 
@@ -410,7 +427,12 @@ function prepareUpdatePost(num){
 	
 	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
+		
 	}
+	for(var i =0;i<$temp.siblings('[name=editScheduleWrap]').length;++i){
+		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i));
+	}
+	
 }
 
 function updatePost(num,postContent){
@@ -422,7 +444,7 @@ function updatePost(num,postContent){
 			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 			if(data.result>0){
 				$temp.children().remove();
-				console.log(postContent);
+				
 				$temp.append(postContent);
 				alert("글 수정 성공!");
 			}else
@@ -433,6 +455,44 @@ function updatePost(num,postContent){
 		}
 		
 	});
+}
+
+function restoreScheduleEvent(obj){
+	
+	console.log("들어오나?");
+	
+	$(obj).find('[name=editBtn]').on("click",function(event){
+		//toEditTarget=obj;
+		 event.stopPropagation();
+		 
+		
+		editSchedule(obj,$(obj).find("input[name=scheduleNo]").val());
+		
+	});
+	
+	$(obj).find('[name=delBtn]').on("click",function(event){
+		 event.stopPropagation();
+		if(confirm("일정을 삭제 하시겠습니까?")){
+			deleteSchedule($(obj).find('[name=scheduleNo]').val(),obj);
+		}
+			
+		
+	});
+	
+	
+	$(obj).on('mouseover',function(){
+		$(this).css('border','3px solid #00bfff');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","visible");
+		
+		
+	}).on('mouseout',function(){
+		
+		$(this).css('border','3px solid black');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","hidden");
+	});
+	
 }
 
 function restoreMapEvent(obj){
@@ -616,6 +676,22 @@ function createSummerNote(){
 		  return button.render();   // return button as jquery object
 		}
 	
+	var insertSchedule = function (context) {
+		  var ui = $.summernote.ui;
+
+		  // create button
+		  var button = ui.button({
+		    contents: '<i class="fas fa-calendar-alt"></i>',
+		    container:false,
+		    tooltip: '일정 삽입',
+		    click: function () {
+		    	toggleScheduleModal();
+		    }
+		  });
+
+		  return button.render();   // return button as jquery object
+		}
+	
 	$('#summernote').summernote({
 		  toolbar: [
 		  	['style', ['bold', 'italic', 'underline', 'clear']],
@@ -624,20 +700,18 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
-		    ['mybutton', ['insertmap']]
+		    ['mybutton', ['insertmap']],
+		    ['myButton',['insertSchedule']]
 		  ],
 
 		  buttons: {
-		     insertmap: insertMap
+		     insertmap: insertMap,
+		     insertSchedule:insertSchedule
 		  }
 	});
 	
 }
 
-function toggleMapModal(){
-	 $('#insertMap').modal("toggle");
-     $('#insertMap').on("shown.bs.modal",makeMap());
-}
 	
 </script>
 

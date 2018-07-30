@@ -29,8 +29,11 @@ public interface MemberDao {
 
 	int deleteMemberInterest(String memberNo);
 
-
 	List<MypageGroup> selectGroupList(HashMap<String, String> hmap);
+
+	int insertFbMember(Member m);
+
+	Member selectOneMemberF(String email);
 
 
 }
