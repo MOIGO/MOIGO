@@ -63,6 +63,9 @@ public interface GroupsDao {
 	Groups selectOneGroup(String groupNo);
 
 	int updateGroupCondition(Groups group);
+	
+	int updateGroupMemberSetting(Map<String, Object> changeMap);
+	int deleteGroupMember(Map<String, Object> changeMap);
 
 	int deleteGroup(String groupNo);
 

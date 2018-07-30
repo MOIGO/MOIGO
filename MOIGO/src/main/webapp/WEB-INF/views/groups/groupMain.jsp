@@ -88,7 +88,7 @@ background: #EDEFF2;
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
             	<c:param name="groupNo" value="${groupNo}"/>
             	<c:param name="memberGrade" value="${memberGrade}"/>
-         	</c:import>
+      </c:import>
 
 			<div class="col-7">
 				<div class="col">

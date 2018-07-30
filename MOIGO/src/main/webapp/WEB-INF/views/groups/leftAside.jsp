@@ -159,8 +159,7 @@ function setGroupDesc(groupNo,isMember){
 		dataType:"json",
 		success:function(data){
 			var  group = data.group;
-			
-			console.log('${param.memberGrade}'+"멤버 그레이드");
+      
 			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
 				$('.card-img-top').attr("src",group.groupPicture);
 				$('#joinModal img').attr("src",group.groupPicture);

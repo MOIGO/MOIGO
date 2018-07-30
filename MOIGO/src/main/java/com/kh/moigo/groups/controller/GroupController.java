@@ -475,8 +475,7 @@ public class GroupController {
 	@RequestMapping("/groups/updateGroupCondition.gp")
 	public String updateGroupCondition(Groups group) {
 		
-		int result;
-		result = groupService.updateGroupCondition(group);
+		int result = groupService.updateGroupCondition(group);
 		
 		return "redirect:/groups/groupSetting.gp?groupNo=" + group.getGroupNo();
 	}
@@ -494,13 +493,69 @@ public class GroupController {
 		return map;
 	}
 	
+	@ResponseBody
+	@RequestMapping("/groups/searchGroupMemberSetting.gp")
+	public Map<String, Object> searchGroupMemberSetting(@RequestParam String groupNo, @RequestParam String searchName){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, String> searchMap = new HashMap<String, String>();
+		searchMap.put("groupNo", groupNo);
+		searchMap.put("searchName", searchName);
+		
+		List<GroupMember> searchGroupMemberList = groupService.searchGroupMemberList(searchMap);
+		
+		map.put("groupMember", searchGroupMemberList);
+		
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/groups/changeGroupMemberSetting.gp")
+	public Map<String, Object> changeGroupMemberSetting(@RequestParam String groupNumber, @RequestParam(value="memberNo[]") List<String> memberNo, @RequestParam String condition){
+		
+		/* 
+			memberGradeManager : 매니저(2)로 update
+			memberGradeGeneral : 일반멤버(1)로 update
+			leaderDelegation : 리더위임 update 2번 -> 한번은 1로 한번은 3으로
+			groupMemberWithdraw : 모임멤버에서 delete
+			joinConfirm : 모임 멤버에서 1로 update
+			joinCancel : 모임 멤버에서 delete
+		*/
+		
+		Map<String, Object> changeMap = new HashMap<String, Object>();
+		changeMap.put("groupNo", groupNumber);
+		changeMap.put("memberNo", memberNo);
+		changeMap.put("condition", condition);
+		
+		int result;
+		
+		if(condition.equals("groupMemberWithdraw") || condition.equals("joinCancel"))
+			result = groupService.deleteGroupMember(changeMap);
+		else{
+			if(condition.equals("leaderDelegation")){				
+				changeMap.put("leader", "no");
+				result = groupService.updateGroupMemberSetting(changeMap);
+				changeMap.put("leader", "yes");
+			}
+			result = groupService.updateGroupMemberSetting(changeMap);
+		}
+			
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("result", result);
+		
+		return map;
+	}
+	
+	
 	@RequestMapping("/groups/deleteGroup.gp")
 	public String deleteGroup(@RequestParam String groupNo, Model model){
 		
 		int result;
 		// result = groupService.deleteGroup(groupNo);
 		
-		model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
+		model.addAttribute("msg", "Member delete successfully");
 		
 		return "common/msg";
 	}

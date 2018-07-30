@@ -27,7 +27,6 @@ public interface GroupsService {
 	int deletePost(String postNo);
 	int deleteReply(String replyNo);
 	int updatePost(Post post);
-
 	int updateReply(PostReply postReply);
 
 	int selectGrpMemNum(String groupNo);
@@ -52,6 +51,9 @@ public interface GroupsService {
 	Groups selectOneGroup(String groupNo);
 	
 	int updateGroupCondition(Groups group);
+	
+	int updateGroupMemberSetting(Map<String, Object> changeMap);
+	int deleteGroupMember(Map<String, Object> changeMap);
 
 	int deleteGroup(String groupNo);
 	

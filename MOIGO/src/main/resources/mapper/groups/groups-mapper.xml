@@ -295,6 +295,50 @@
 		ALLOW_SIGNUP = #{allowSignup}
 		WHERE GROUP_NO = #{groupNo}
 	</update>
+
+	<update id="updateGroupMemberSetting">
+		<if test="condition != 'leaderDelegation'">
+			UPDATE GROUP_MEMBER
+			<set>
+				<if test="condition == 'memberGradeManager'">MEMBER_GRADE_CODE = 2</if>
+				<if test="condition != 'memberGradeManager'">MEMBER_GRADE_CODE = 1</if>
+			</set>
+			WHERE GROUP_NO = #{groupNo}
+			AND MEMBER_NO IN
+			<foreach item="mNo" collection="memberNo" open="(" separator="," close=")">
+				#{mNo}
+			</foreach>
+		</if>
+		<if test="condition == 'leaderDelegation'">
+	       	UPDATE GROUP_MEMBER
+	       	<if test="leader == 'no'">
+				SET MEMBER_GRADE_CODE = 1
+	    		<foreach item="mNo" index="index" collection="memberNo">
+	    			<if test="index == 0">
+			    		WHERE MEMBER_NO = #{mNo}
+	    			</if>
+				</foreach>
+	       	</if>
+	       	<if test="leader == 'yes'">
+				SET MEMBER_GRADE_CODE = 3
+				<foreach item="mNo" index="index" collection="memberNo">
+    			<if test="index == 1">
+		    		WHERE MEMBER_NO = #{mNo}
+    			</if>
+				</foreach>
+	       	</if>
+    		AND GROUP_NO = #{groupNo}
+		</if>
+	</update>
+	
+	<delete id="deleteGroupMember">
+		DELETE FROM GROUP_MEMBER
+		WHERE GROUP_NO = #{groupNo}
+		AND MEMBER_NO IN
+		<foreach item="mNo" collection="memberNo" open="(" separator="," close=")">
+			#{mNo}
+		</foreach>
+	</delete>
 	
 	<!-- <delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}

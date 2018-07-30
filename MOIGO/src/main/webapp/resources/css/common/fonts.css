@@ -20,5 +20,4 @@
          url('../../fonts/nanumbarungothic/nanumbarungothicregular.woff') format('woff'),
          url('../../fonts/nanumbarungothic/nanumbarungothicregular.ttf') format('truetype'),
          url('../../fonts/nanumbarungothic/nanumbarungothicregular.svg#nanum-barun-gothic-regular') format('svg');
-	font-display : fallback;
 }
