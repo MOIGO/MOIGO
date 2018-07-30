@@ -148,10 +148,8 @@
       $('.regardlessArea[value="${regardlessArea}"]').prop('checked', true);
       
       var map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
-         center : new daum.maps.LatLng(35.180624570993196,
-               128.15614133888792), // 지도의 중심좌표
-         level : 13
-      // 지도의 확대 레벨
+         center : new daum.maps.LatLng(35.180624570993196, 128.15614133888792), // 지도의 중심좌표
+         level : 13 // 지도의 확대 레벨
       });
 
       // 마커 클러스터러를 생성합니다
@@ -224,33 +222,59 @@
                   // 정상적으로 검색이 완료됐으면 
                   if (status === daum.maps.services.Status.OK) {
                      positions.push({
-                        "lat" : Number(result[0].y),
-                        "lng" : Number(result[0].x)
+                        "content" : '<div>카카오</div>',
+                    	"lat" : result[0].y,
+                        "lng" : result[0].x
                      });
+                     
                      j++;
-                     var imageSrc = '${pageContext.request.contextPath }/resources/images/search/marker.png', // 마커이미지의 주소입니다    
+                     
+                     // 마커 이미지 변경
+                     /* var imageSrc = '${pageContext.request.contextPath }/resources/images/search/marker.png', // 마커이미지의 주소입니다    
                      imageSize = new daum.maps.Size(40, 40), // 마커이미지의 크기입니다
                      imageOption = {offset: new daum.maps.Point(20, 38)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                        
-                     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption); */
+                     
                      // 마커 생성 및 클러스터러에 마커 추가
                      if(j == listData.length) {
-                    	console.log("짜잔");
                         data = { positions };
                         var markers = data.positions.map(function(position) {
-                           return new daum.maps.Marker({
-                              position : new daum.maps.LatLng(position.lat, position.lng),
-                              image : markerImage                     	
-                           });
+                        	return new daum.maps.Marker({
+                            	position : new daum.maps.LatLng(position.lat, position.lng),
+                                //image : markerImage                     	
+                            });
                         });
-                        
-                        
-                        clusterer.addMarkers(markers);
-                     }  
+                        /* for(var k = 0; k < positions.length; k++) {
+	                       var infowindow = new daum.maps.InfoWindow({
+	                           	content: data.positions[k].content // 인포윈도우에 표시할 내용
+	                       });
+	                       
+	                   	    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+	                        // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+	                        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                        	daum.maps.event.addListener(markers, 'mouseover', makeOverListener(map, markers, infowindow));
+                            daum.maps.event.addListener(markers, 'mouseout', makeOutListener(infowindow));
+                        }
+                    	// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+                        function makeOverListener(map, markers, infowindow) {
+                             return function() {
+                               infowindow.open(map, markers);
+                             };
+                         }
+
+                         // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+                         function makeOutListener(infowindow) {
+                             return function() {
+                                 infowindow.close();
+                             };
+                         } */
+	                        
+                       clusterer.addMarkers(markers);
+                     }
                   }
                });
             }
-            
             
             // 마커 클러스터러에 클릭이벤트를 등록합니다
             // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
@@ -264,6 +288,8 @@
                   anchor : cluster.getCenter()
                });
             });
+            
+            
          }
       });
       
