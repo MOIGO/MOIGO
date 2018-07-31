@@ -38,7 +38,7 @@
                 <c:if test="${empty list}">
                 	<div class=" jumbotron col-12" style="text-align:center;">
          				<h3>모임정보가 없습니다</h3> 
-         				<button class="btn btn-success" >모임 찾기</button>
+         				<button class="btn btn-success" onclick="location.href=${pageContext.request.contextPath}/">모임 찾기</button>
          			</div>
                 </c:if>
                 <c:if test="${! empty list}">
@@ -48,7 +48,7 @@
 			                     <input type="hidden" value="${group.groupNo }" name="groupNo">
 			                         <div class="header_bg" >
 			                          		<img alt="" src="${group.groupPicture }" style="width:100%; height:100%;">
-			                          		<span style="position:absolute; right:20px; top:2px;color:yellow"><c:out value="${group.groupGrade }"/></span>
+			                          		<%-- <span style="position:absolute; right:20px; top:2px;color:yellow"><c:out value="${group.groupGrade }"/></span> --%>
 			                          </div>
 			                         <div class="body_text_container">
 			                             <div class="body_text">
@@ -68,12 +68,11 @@
     <br><br><br><br><br><br>
     <script >
     $(function(){
-    	   $(".item_content").on("click",function(){
-    	      var groupNo = $(this).attr("id");
-    	      alert("그룹번호: " +groupNo);
-    	      /* location.href = "${pageContext.request.contextPath}/board/boardView.do?no="+boardNo; */
-    	   });
-    	});
+ 	   $(".item_content").on("click",function(){
+ 	      var groupNo = $(this).attr("id");
+ 	       location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+groupNo; 
+ 	   });
+ 	});
     </script>
 </body>
 </html>
