@@ -51,7 +51,7 @@
 }
 </style>
 </head>
-<body>
+<body onload="test()">
 	<c:import url="/WEB-INF/views/common/header.jsp" />
 	<!-- // 메인부분 // -->
 	<br>
@@ -455,4 +455,9 @@
 	<!-- // 메인부분 // -->
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
+<script>
+	function test(){
+		location.href = "";
+	}
+</script>
 </html>
