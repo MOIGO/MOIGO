@@ -1,19 +1,16 @@
 package com.kh.moigo.admin.controller;
 
-import java.text.DateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kh.moigo.HomeController;
 import com.kh.moigo.admin.model.service.AccuseService;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
@@ -41,9 +37,19 @@ public class AdminController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	// 인증번호 이메일 전송
+	
+	//신고
 	@ResponseBody
-	@RequestMapping(value = "/member/sendEmail.ad", method = RequestMethod.POST)
+	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
+	public String reporting(HttpServletRequest request) {
+		String report = request.getParameter("reportRadios")+" " +request.getParameter("myList");
+		System.out.println("report"+report);
+		return report;
+	
+	}
+	// 제제 이유 이메일 전송
+	@ResponseBody
+	@RequestMapping(value = "sendMessage.ad", method = RequestMethod.POST)
 	public Map<String, Object>  mailSending(HttpServletRequest request , @RequestParam String userEmail, @RequestParam String contents) {
 
 		System.out.println("메일 컨트롤러 입장");

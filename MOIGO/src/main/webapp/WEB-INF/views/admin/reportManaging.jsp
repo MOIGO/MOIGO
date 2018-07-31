@@ -171,7 +171,7 @@ input[type="checkbox"] {
 	      <tbody id="myMemberTop5Table">
 	      
 	     
-	        <tr onclick="moveTest()">
+	        <tr >
 	          <td>${mblack.rNum}</td>
 	          <td>${mblack.targetMember}</td>
 	          <td>${mblack.aCount}</td>
@@ -346,20 +346,19 @@ input[type="checkbox"] {
 								</div>
 							</div>
 							<div class="tab-pane" id="tab3">
-								<form action="${pageContext.request.contextPath}/sendMessage.ad"
-									method="get">
+								<form action="" method="post">
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">Recipient:</label>
-										<input type="text" class="form-control" id="recipientName"
+										<input type="text" class="form-control" id="recipientName1"
 											name="email">
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">Message:</label>
-										<textarea class="form-control" id="messageText"
-											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
+										<textarea class="form-control" id="messageText1"
+											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다. 자세한 설명을 듣고 싶다면 본 메일로 문의하십시오</textarea>
 									</div>
 									<div class="text-center">
-										<button type="submit" class="btn btn-outline-success">Send
+										<button type="button" id="mailSend2" class="btn btn-outline-success">Send
 											message</button>
 									</div>
 								</form>
@@ -545,8 +544,7 @@ input[type="checkbox"] {
 								</div>
 							</div>
 							<div class="tab-pane" id="tab6">
-								<form action="${pageContext.request.contextPath}/sendMessage.ad"
-									method="get">
+								<form action="" method="post">
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">Recipient:</label>
 										<input type="text" class="form-control" id="masterEmail"
@@ -555,10 +553,10 @@ input[type="checkbox"] {
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">Message:</label>
 										<textarea class="form-control" id="messageTextToMaster"
-											name="messageText"></textarea>
+											name="messageText2"></textarea>
 									</div>
 									<div class="text-center">
-										<button type="submit" class="btn btn-outline-success">Send
+										<button type="button" id="mailSend" class="btn btn-outline-success">Send
 											message</button>
 									</div>
 								</form>
@@ -612,7 +610,7 @@ $(document).ready(function(){
 		            $("#inlineFormInputPost").val(data[0].postCount);
 					$("#inlineFormInputReply").val(data[0].replyCount);
 		            
-		            $("#recipientName").val(data[0].memberEmail);
+		            $("#recipientName1").val(data[0].memberEmail);
 		            console.log(data[1].length);
 		            $('.input_accuse_list').empty();
 		            for(var i in data[1]){
@@ -625,6 +623,23 @@ $(document).ready(function(){
 		            	 $('.input_accuse_list').append(str);       	 
 		            }	
 		            
+		            $("#mailSend2").click(function() {
+					       
+			       	 	 var userEmail= $("#recipientName1").val();
+			       	     var contents = $("#messageText1").val();
+			       	     console.log(userEmail+contents);
+			       	  	 $.ajax({
+			       	            url: "${pageContext.request.contextPath}/sendMessage.ad",
+			       	            type:'post',
+			       	            data: {userEmail: userEmail, contents: contents} ,
+			       	            dataType:"json",
+			       	            success:function(data){	
+			       	            	alert("성공적으로 메일을 보냈습니다.");
+			       	            },error:function(request,status,error){
+			       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			       	            }
+			       	  	  });
+		            });	  
 		            $("#memDelSubmit").click(function() {
 		       	  	 var id =data[0].memberNo;
 		       	  	  $.ajax({
@@ -635,19 +650,6 @@ $(document).ready(function(){
 		       	            success:function(data){	
 		       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
 		       	            	//location.reload();	  
-			       	            /*  $.ajax({
-					       	            url: "${pageContext.request.contextPath}/renewBlacklistM.ad",
-					       	            type:'get',
-					       	            data: {id:id},
-					       	            dataType:"json",
-					       	            success:function(data){	
-					       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
-					       	            	
-					       	            		       	            	
-					       	            },error:function(request,status,error){
-					       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-					       	            }
-					       	  	  }); */
 		       	            		       	            	
 		       	            },error:function(request,status,error){
 		       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -699,7 +701,23 @@ $(document).ready(function(){
 									'</tr>';
 			            	 $('.input_accuse_list').append(str);
 			            }
-			            
+			            $("#mailSend").click(function() {
+						       
+				       	 	 var userEmail= $("#masterEmail").val();
+				       	     var contents = $("#messageTextToMaster").val();
+				       	     console.log(userEmail+contents);
+				       	  	 $.ajax({
+				       	            url: "${pageContext.request.contextPath}/sendMessage.ad",
+				       	            type:'post',
+				       	            data: {userEmail: userEmail, contents: contents} ,
+				       	            dataType:"json",
+				       	            success:function(data){	
+				       	            	alert("성공적으로 메일을 보냈습니다.");
+				       	            },error:function(request,status,error){
+				       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				       	            }
+				       	  	  });
+			            });	  
 			            
 			            $("#grpDelSubmit").click(function() {
 				       	  	 var id =data[0].groupNo;
