@@ -78,12 +78,14 @@ public class GroupController {
 	
 	//그룹 만들고 커버파일 있으면 저장하기
 	@RequestMapping(value="/groups/createGroupEnd.gp", method=RequestMethod.POST)
-	public String createGroupEnd(Groups group,@RequestParam MultipartFile groupImage,HttpServletRequest request)
+	public String createGroupEnd(Groups group,@RequestParam String memberNo, @RequestParam MultipartFile groupImage,HttpServletRequest request)
 	{
 		String groupPicture = "";
 		String profileImg = "";
 		
 		int result =  groupService.createGroup(group);
+		
+		System.out.println("그룹 이미지"+groupImage);
 		
 		if(groupImage!=null){
 			try{		
@@ -119,11 +121,36 @@ public class GroupController {
 			
 			group.setGroupPicture(groupPicture);
 			
+			groupService.insertGroupMember(new GroupMember(memberNo, group.getGroupNo(), 3));
+			
 			result = groupService.updateGroupImg(group);
 		}
 		
+		
+		
 		return "redirect:/groups/groupMain.gp?groupNo="+ group.getGroupNo();
 
+	}
+	
+	//그룹 글 검색한 글 리스트 가져오기
+	@RequestMapping("/groups/getKeywordPostList.gp")
+	@ResponseBody
+	public Map<String,Object> getKeywordPostList(@RequestParam String groupNo, 
+												@RequestParam int currPage,
+												@RequestParam String keyword, Model model){
+		
+		PageInfo p = new PageInfo(currPage, groupService.selectKeywordPostCnt(groupNo,keyword),7);
+		
+		/*ArrayList<PostWithMem> list = groupService.selectPostList(groupNo, p);*/
+		ArrayList<PostWithMem> list = groupService.selectKeywordPost(groupNo, keyword ,p);
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("posts", list);
+		map.put("pageInfo", p);
+		
+		
+		return map;
 	}
 	
 	//그룹 메인에 글 가져오기
@@ -332,6 +359,8 @@ public class GroupController {
 		return map;
 	}
 	
+	
+	//
 	@RequestMapping("/groups/selectOneGrpMem.gp")
 	@ResponseBody
 	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo){

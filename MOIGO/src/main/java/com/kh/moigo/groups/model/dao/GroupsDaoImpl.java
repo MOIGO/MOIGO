@@ -151,7 +151,34 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.selectOne("groups.selectOneGroupMember",memberNo);
 	}
+
+	@Override
+	public int selectKeywordPostCnt(String groupNo, String keyword) {
+		
+		
+		Map<String,String> map = new HashMap<String,String>();
+		
+		map.put("groupNo", groupNo);
+		map.put("keyword", keyword);
+		
+		return sqlSession.selectOne("groups.selectKeywordPostCnt", map);
+		
+		
+	}
+
+
+	@Override
+	public ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p) {
 	
+		Map<String,Object> map = new HashMap<String, Object>();
+		
+		map.put("groupNo", groupNo);
+		map.put("keyword", keyword);
+		map.put("startRow", p.getStartRow());
+		map.put("endRow", p.getStartRow());
+		
+		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectKeywordPost",map));
+	}
 
 
 	//------------------------------------------------------------------------- 혜진

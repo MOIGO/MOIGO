@@ -73,7 +73,7 @@
 <body>
 	
 	<c:import url="/WEB-INF/views/common/header.jsp"></c:import>
-	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp" method="post" enctype="multipart/form-data"">
+	<form action="${pageContext.request.contextPath}/groups/createGroupEnd.gp" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="memberNo" value="${m.memberNo}" />
 	<div class="container">
 		<div class="make_cover">
@@ -383,8 +383,8 @@
 		setSelectYears($('#max_ageSelect'),100);
 		
 		$('#maxNumber').change(function(){
-			if($(this).val()>100)
-				$(this).val(100);
+			if($(this).val()>50)
+				$(this).val(50);
 			else if($(this).val()<1)
 				$(this).val(1);
 		});

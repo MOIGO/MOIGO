@@ -143,7 +143,20 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.selectOneGrpMemberWithMemNo(memberNo);
 	}
+	
+	@Override
+	public int selectKeywordPostCnt(String groupNo, String keyword) {
+		
+		return groupDao.selectKeywordPostCnt(groupNo,keyword);
+	}
 
+	@Override
+	public ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p) {
+		
+		return groupDao.selectKeywordPost(groupNo,keyword,p);
+	}
+
+	
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -187,5 +200,8 @@ public class GroupsServiceImpl implements GroupsService {
 	public int deleteGroupMember(Map<String, Object> changeMap) {
 		return groupDao.deleteGroupMember(changeMap);
 	}
+
+	
+	
 
 }

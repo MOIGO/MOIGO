@@ -238,8 +238,19 @@
 		WHERE SCHEDULE_NO=#{scheduleNo}
 	</delete>
 	
+	<!--키워드 포함한 글 갯수 가져오기 -->
+	<select id="selectKeywordPostCnt" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*) FROM POST 
+		WHERE GROUP_NO = #{groupNo} AND (CONTENT LIKE '%'||#{keyword}||'%')
+	</select>
 	
-
+	<!--키워드 포함흔 글 가져오기  -->
+	<select id="selectKeywordPost" resultType="postWithMem" resultMap="postWithMemResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} AND CONTENT LIKE '%'||#{keyword}||'%' ORDER BY POST.SUBMIT_DATE DESC)
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
 	<!-- ===================================================================================================== 혜진 -->
 
 

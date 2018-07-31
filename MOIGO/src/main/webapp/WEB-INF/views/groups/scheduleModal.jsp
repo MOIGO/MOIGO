@@ -18,7 +18,6 @@
 font-weight: 700;
 font-size:2.0em;
 text-align:center;
-
 }
 
 </style>

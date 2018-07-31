@@ -39,6 +39,8 @@ public interface GroupsService {
 	int updateSchedule(Schedule schedule);
 	int deleteSchedule(String scheduleNo);
 	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
+	int selectKeywordPostCnt(String groupNo, String keyword);
+	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	
 	//--------------------------------------------------------------------------- 혜진
 	
@@ -56,6 +58,8 @@ public interface GroupsService {
 	int deleteGroupMember(Map<String, Object> changeMap);
 
 	int deleteGroup(String groupNo);
+	
+	
 	
 	
 
