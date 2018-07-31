@@ -147,9 +147,9 @@ public class GroupsDaoImpl implements GroupsDao {
 	}
 	
 	@Override
-	public GroupMember selectOneGrpMemberWithMemNo(String memberNo) {
+	public GroupMember selectOneGrpMemberWithMemNo(GroupMember gm) {
 		
-		return sqlSession.selectOne("groups.selectOneGroupMember",memberNo);
+		return sqlSession.selectOne("groups.selectOneGroupMember",gm);
 	}
 
 	@Override

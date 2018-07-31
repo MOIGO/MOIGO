@@ -12,14 +12,14 @@ public class PostReplyWithMem extends PostReply implements java.io.Serializable 
 		// TODO Auto-generated constructor stub
 	}
 
-	public PostReplyWithMem(String replyNo, String postNo, String memberNo, String content, Date submitDate) {
-		super(replyNo, postNo, memberNo, content, submitDate);
+	public PostReplyWithMem(String replyNo, String postNo, String memberNo,String groupNo ,String content, Date submitDate) {
+		super(replyNo, postNo, memberNo,groupNo,content, submitDate);
 		// TODO Auto-generated constructor stub
 	}
 
-	public PostReplyWithMem(String replyNo, String postNo, String memberNo, String content, Date submitDate,
+	public PostReplyWithMem(String replyNo, String postNo, String memberNo,String groupNo,String content, Date submitDate,
 			GroupMember groupMember) {
-		super(replyNo, postNo, memberNo, content, submitDate);
+		super(replyNo, postNo, memberNo,groupNo ,content, submitDate);
 		this.groupMember = groupMember;
 	}
 

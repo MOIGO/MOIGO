@@ -78,18 +78,21 @@ public class GroupController {
 	
 	//그룹 만들고 커버파일 있으면 저장하기
 	@RequestMapping(value="/groups/createGroupEnd.gp", method=RequestMethod.POST)
-	public String createGroupEnd(Groups group,@RequestParam String memberNo, @RequestParam MultipartFile groupImage,HttpServletRequest request)
+	public String createGroupEnd(Groups group,@RequestParam String memberNo, 
+												@RequestParam MultipartFile groupImageFile,
+												@RequestParam String groupDefaultImg,
+												HttpServletRequest request)
 	{
 		String groupPicture = "";
-		String profileImg = "";
+		
 		
 		int result =  groupService.createGroup(group);
 		
-		System.out.println("그룹 이미지"+groupImage);
 		
-		if(groupImage!=null){
+		
+		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
 			try{		
-				
+				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
 				// 프로필 이미지를 저장할 경로
 				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
 				
@@ -103,14 +106,13 @@ public class GroupController {
 				
 				groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
 				
-			
-				// 2. upload한 file을 rename, 경로 저장하기
-				String fileName = groupImage.getOriginalFilename();
-				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
 				
+				// 2. upload한 file을 rename, 경로 저장하기
+				String fileName = groupImageFile.getOriginalFilename();
+				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
 				groupPicture = groupPicture + "." + ext;
 				
-				groupImage.transferTo(new File(saveDir +"/"+ groupPicture));
+				groupImageFile.transferTo(new File(saveDir +"/"+ groupPicture));
 					
 				
 			}
@@ -121,12 +123,16 @@ public class GroupController {
 			
 			group.setGroupPicture(groupPicture);
 			
-			groupService.insertGroupMember(new GroupMember(memberNo, group.getGroupNo(), 3));
+			
 			
 			result = groupService.updateGroupImg(group);
+		}else{
+			System.out.println("이미지 파일이 없는 경우");
+			group.setGroupPicture(groupDefaultImg);
+			groupService.updateGroupImg(group);
 		}
 		
-		
+		groupService.insertGroupMember(new GroupMember(memberNo,group.getGroupNo(),3));
 		
 		return "redirect:/groups/groupMain.gp?groupNo="+ group.getGroupNo();
 
@@ -248,6 +254,7 @@ public class GroupController {
 	@ResponseBody
 	public Map <String,Object> insertReply(PostReply postReply)
 	{
+		
 		Map <String,Object> map = new HashMap<String, Object>();
 		map.put("result", groupService.insertReply(postReply));
 		
@@ -363,9 +370,9 @@ public class GroupController {
 	//
 	@RequestMapping("/groups/selectOneGrpMem.gp")
 	@ResponseBody
-	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo){
+	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo,@RequestParam String groupNo){
 		
-		GroupMember gm = groupService.selectOneGrpMemberWithMemNo(memberNo);
+		GroupMember gm = groupService.selectOneGrpMemberWithMemNo(new GroupMember(memberNo,groupNo));
 		
 		Map <String,Object> map = new HashMap<String, Object>();
 		

@@ -100,7 +100,7 @@ background: #EDEFF2;
 				
 					<div class="input-group input-group-lg">
 							<label for="searchPost" class="sr-only">searchPost</label>
-							<input type="text" class="form-control" id="searchPost" placeholder="글을 입력해 주세요"/>
+							<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
 							<div class="input-group-append">
 								<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
 							</div>
@@ -154,10 +154,11 @@ background: #EDEFF2;
 <script>
 
 
-var currentPage = 1;
+var currentPage
 
 
 $(function(){
+	currentPage=1;
 	setPostList();
 });
 
@@ -234,14 +235,16 @@ function deleteAllPost(){
 
 
 function setPostList(){
+	console.log(currentPage);
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
 		data:{groupNo:"${groupNo}",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-
-			if(data.posts.length>0){
+			console.log(data);
 			
+			if(data.posts.length>0){
+				
 				for(var i = 0; i <data.posts.length;++i){
 					
 					var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
@@ -673,7 +676,7 @@ function submitPost(){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:{groupNo:"G001",memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
+		data:{groupNo:'${groupNo}',memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
 			
@@ -683,7 +686,7 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList(1);
+			setPostList();
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -711,7 +714,7 @@ function submitReply(postNo,obj){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
-		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val()},
+		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
 			
@@ -721,7 +724,7 @@ function submitReply(postNo,obj){
 				alert("댓글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList(1);
+			setPostList();
 			
 		},
 		error:function(){

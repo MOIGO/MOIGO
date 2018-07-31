@@ -50,7 +50,7 @@ public interface GroupsDao {
 	
 	int deleteSchedule(String scheduleNo);
 
-	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
+	GroupMember selectOneGrpMemberWithMemNo(GroupMember gm);
 	
 	int selectKeywordPostCnt(String groupNo, String keyword);
 	

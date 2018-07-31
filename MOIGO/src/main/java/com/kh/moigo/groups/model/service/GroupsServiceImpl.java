@@ -139,9 +139,9 @@ public class GroupsServiceImpl implements GroupsService {
 	
 	
 	@Override
-	public GroupMember selectOneGrpMemberWithMemNo(String memberNo) {
+	public GroupMember selectOneGrpMemberWithMemNo(GroupMember gm) {
 		
-		return groupDao.selectOneGrpMemberWithMemNo(memberNo);
+		return groupDao.selectOneGrpMemberWithMemNo(gm);
 	}
 	
 	@Override

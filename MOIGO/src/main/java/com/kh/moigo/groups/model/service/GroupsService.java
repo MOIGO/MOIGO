@@ -38,7 +38,7 @@ public interface GroupsService {
 	Schedule selectOneSchedule(String scheduleNo);
 	int updateSchedule(Schedule schedule);
 	int deleteSchedule(String scheduleNo);
-	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
+	GroupMember selectOneGrpMemberWithMemNo(GroupMember groupMember);
 	int selectKeywordPostCnt(String groupNo, String keyword);
 	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	

@@ -209,8 +209,11 @@ $(function() {
 	$(".group_list").on("click", function() {
 		var groupMenu = $(this).text();
 		
-		if(groupMenu == '전체글')
-			alert("전체글!");
+		if(groupMenu == '전체글'){
+			currentPage=1;
+			deleteAllPost();
+			setPostList();
+		}
 		else if(groupMenu == '사진첩')
 			alert("사진첩");
 		else if(groupMenu == '일정')
