@@ -18,7 +18,6 @@
 font-weight: 700;
 font-size:2.0em;
 text-align:center;
-
 }
 
 .datepicker{
@@ -137,7 +136,7 @@ text-align:center;
 				    				<span class="dayofweek" style="margin-top:-10px;"></span>
 				    			</div>
 				    		</div>
-				    		<div class="col-10">
+				    		<div class="col-8">
 				    			<div class="row">
 				    				<div class="col-12 scheduleName">
 				    					
@@ -149,6 +148,9 @@ text-align:center;
 				    					
 				    				</div>
 				    			</div>
+				    		</div>
+				    		<div class="scheduleViewDropDown col-2">
+				    			
 				    		</div>
 				    	</div>
 				    </div>
@@ -229,13 +231,14 @@ text-align:center;
 		scheduleMapView.relayout();
 	}
 	
-	
-	
 
 	function openScheduleViewModal(scheduleNo){
 		$('#viewSchedule').modal("toggle");
 		makeScheduleMapView();
-		getOneSchedule(scheduleNo,setScheduleViewModal)	;
+		getOneSchedule(scheduleNo,setScheduleViewModal);
+		
+		$('#viewSchedule .scheduleViewDropDown').append(makeScheduleViewDropDown(scheduleNo));
+		
 	}
 	
 	function setMemberNameOnView(memberNo){
@@ -246,8 +249,8 @@ text-align:center;
 					groupNo:'${groupNo}'}
 				,success:(function(data){
 					if(data!=null){
-						console.log(data);
 						$('#viewSchedule').find(".memberName").text(data.groupMember.memberName);
+						
 					}else
 						alert("일정을 불러오는 과정에서 문제가 생겼습니다.");
 				
@@ -256,6 +259,66 @@ text-align:center;
 				})
 	
 			}); 
+		
+	}
+	
+	function getOneSchedule2(scheduleNo){
+		
+		var scheduleData;
+		$.ajax({
+			url:"${pageContext.request.contextPath}/groups/selectOneSchedule.gp",
+			data:{	scheduleNo:scheduleNo}
+				,success:(function(data){
+					if(data!=null){
+						//console.log(data);
+						scheduleData= data.schedule;
+						return scheduleData;
+					}else
+						alert("일정을 불러오는 과정에서 문제가 생겼습니다.");
+				
+				}),error:(function(data){
+					
+				})
+	
+			});		
+		return scheduleData;
+	}
+	
+	
+	
+	function makeScheduleViewDropDown(scheduleNo){
+		$dropDownWrapper =$("<div>");
+		
+		var $dropDown =$('<div class="dropdown">');
+		var $dropDownBtn=$('<button class="btn btn-link" type="button" id="scheduleViewDropDown" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>');
+		var $dropDownMenu=$('<div class="dropdown-menu">');
+		
+		var $dropDownItem1;
+		var $dropDownItem2;
+		
+		
+			$dropDownItem1=$("<a class='dropdown-item' >수정</a>");
+			$dropDownItem2=$("<a class='dropdown-item' >삭제</a>");
+	
+			$dropDownMenu.append($dropDownItem1);
+			$dropDownMenu.append($dropDownItem2);
+			
+			
+			$dropDownItem1.on("click",function(){
+				editSchedule(undefined,scheduleNo);
+			});
+			
+			
+			$dropDownItem2.on("click",function(){
+				deleteSchedule(scheduleNo,undefined);
+			});
+
+		$dropDown.append($dropDownBtn);
+		$dropDown.append($dropDownMenu);
+		$dropDownWrapper.append($dropDown);
+		
+		return $dropDownWrapper;
+		
 	}
 	
 	function setScheduleViewModal(obj){
@@ -316,17 +379,15 @@ text-align:center;
 	}
 	
 	function editSchedule(toEditObj,scheduleNo){
-	
+    
 		toggleScheduleModal();
 		
 		$('#insertSchedule').find(".modal-footer button").unbind();
 		$('#insertSchedule').find(".modal-footer button").on("click",function(){
 			updateSchedule(toEditObj,scheduleNo);	
 		});
-		
-		
-		
-		getOneSchedule(scheduleNo, setTargetScheduleData);
+
+		getOneSchedule(scheduleNo,setTargetScheduleData);
 
 	}
 	

@@ -50,7 +50,11 @@ public interface GroupsDao {
 	
 	int deleteSchedule(String scheduleNo);
 
-	GroupMember selectOneGrpMemberWithMemNo(String memberNo);
+	GroupMember selectOneGrpMemberWithMemNo(GroupMember gm);
+	
+	int selectKeywordPostCnt(String groupNo, String keyword);
+	
+	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	
 //-------------------------------------------------------------------------------- 혜진
 	
@@ -68,6 +72,10 @@ public interface GroupsDao {
 	int deleteGroupMember(Map<String, Object> changeMap);
 
 	int deleteGroup(String groupNo);
+
+	
+
+	
 
 	
 

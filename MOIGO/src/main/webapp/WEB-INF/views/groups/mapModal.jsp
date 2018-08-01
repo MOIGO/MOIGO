@@ -37,9 +37,7 @@
 
 <div id="insertMapModalWrapper"> 
 
-<div class="modal" id="insertMap" tabindex="-1"
-		role="dialog" aria-labelledby="exampleModalLongTitle"
-		aria-hidden="true">
+<div class="modal" id="insertMap" tabindex="-1"role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -78,17 +76,23 @@
 
 </div>
 
-<div id="mapViewModal"> 
+<div id="mapViewModalWrapper"> 
 
-<div class="modal" id="mapViewModal" tabindex="-1"
-		role="dialog" 
-		aria-hidden="true">
+<div class="modal" id="mapViewModal" tabindex="-1"role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
+			<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">지도 보기</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			
 				<div class="modal-body">
-				test 입니당~
-					<div id="mapView"></div>
 				
+					<div id="mapView" style="width:100%;height:500px;">test</div>
+					
 				</div>
 			</div>
 		</div>
@@ -150,9 +154,8 @@ function makeViewMap(addressName){
 
 function openMapViewModal(addressName){
 	
-	//$('#mapViewModal').modal("toggle");
-	//makeViewMap(addressName);
-	
+	$('#mapViewModal').modal("toggle");
+	makeViewMap(addressName);
 
 }
 
