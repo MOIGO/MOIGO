@@ -483,6 +483,10 @@
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 <script>
+	$('.ani').on('click',function(){
+		console.log("눌렀다.");
+	});
+	
 	function test(){
 		
 			if(${m ne null}){
@@ -496,16 +500,13 @@
 						var list = data.list;
 						
 						for(l in list){
-							console.log(list[l].groupName);
-							console.log(list[l].groupAddress);
-							console.log(list[l].memberNum);
-							console.log(list[l].postNum);
-							var $div = $('<div class="mainGroup test ani">');
+							var $div = $('<div class="mainGroup test ani clickme">');
+							$div.append('<input type="hidden" value="list[l].groupNo" />')
 							
 							$('#joingroups').append($div);
 							var $div_top = $('<div class="groupView_top test">');
 							var $div_bot = $('<div class="groupView_bot test">');
-							$div_top.append($('<img id="logo4" src="resources/images/main/go.jpg" width="100%" height="100%" />'));
+							$div_top.append($('<img id="logo4" src="resources/images/main/lifestyle.jpeg" width="100%" height="100%" />'));
 							
 							$div_bot.append($('<div class="title">'+list[l].groupName+'</div>'));
 							$div_bot.append($('<div class="location">'+list[l].groupAddress+'</div>'));
@@ -516,8 +517,6 @@
 							
 							$div.append($div_top);
 							$div.append($div_bot);
-							
-							
 						}
 						
 						
@@ -532,5 +531,7 @@
 			}
 		
 	}
+	
+	
 </script>
 </html>
