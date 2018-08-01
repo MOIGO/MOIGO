@@ -6,13 +6,12 @@
 <c:set var="root" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<link rel="stylesheet" href="${root}/resources/css/schedule/fullcalendar.min.css">
+<link rel="stylesheet" href="${root}/resources/css/groups/fullcalendar.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" >
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="${root}/resources/js/schedule/fullcalendar.min.js" ></script>
-<script src="${root}/resources/js/schedule/gcal.min.js" ></script>
-<script src="${root}/resources/js/schedule/locale-all.js" ></script>
+<script src="${root}/resources/js/groups/fullcalendar.min.js" ></script>
+<script src="${root}/resources/js/groups/gcal.min.js" ></script>
+<script src="${root}/resources/js/groups/locale-all.js" ></script>
 <style>
 
    body{
@@ -71,11 +70,19 @@
 	.fc-list-item-time, .fc-list-item-marker, .fc-list-item-title, .table-active{
 		border-color: #DDD;
 	}
+	
+	#datepicker {
+		position: absolute;
+		top : 105px;
+		left : 160px;
+		z-index : 10;
+	}
     
 </style>
 <title>일정</title>
 </head>
 <body>
+
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
 		<c:param name="groupNo" value="${param.groupNo}" />
@@ -94,6 +101,7 @@
               <!-- toggleScheduleModal(); editSchedule(undefined, 'S010');-->
               <button type="button" id="insertScheduleBtn" class="btn btn-primary btn-sm" onclick="toggleScheduleModal();">일정만들기</button>
            </div>
+           <div id="datepicker"></div>
            <div class="card-body" id="calendar">
            </div>
         </div>
@@ -133,7 +141,7 @@
          
          // header에 가운데에 있는 h2태그에 클래스를 추가
          $(".fc-center").find("h2").addClass("full-title");
-          
+         
          // 추가한 클래스에 커스텀 스타일을 적용
          $(".full-title").css({
              "margin-left" : "7px",
@@ -144,10 +152,6 @@
               "cursor" : "pointer",
               "display" : "inline-block"
           });
-         
-         $(".full-title").click(function() {
-			alert("얍");
-		});
          
         // 오늘 날짜에 걸려있는 bootstrap 스타일의 클래스를 제거 
         $(".fc-today").removeClass("alert-info");
@@ -234,8 +238,23 @@
             }
       });
       
-      customCalendar();
+		customCalendar();
+		
+		$(".full-title").append("<div id='datepicker'></div>");
       
+		$("#datepicker").datepicker({
+			language : "ko",
+			view : "months",
+			minView : "months",
+			onSelect: function(date, inst) {
+				$("#datepicker").hide();
+			}
+		}).hide();
+		
+		$(".full-title").click(function(){
+    	    $("#datepicker").toggle();
+		});
+		
       $('.fc-prev-button').on("click", function(){
     	  customCalendar();
       });
