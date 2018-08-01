@@ -41,8 +41,8 @@ public class AdminController {
 	//신고
 	@ResponseBody
 	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
-	public String reporting(HttpServletRequest request) {
-		String report = request.getParameter("reportRadios")+" " +request.getParameter("myList");
+	public String reporting(@RequestParam String data,@RequestParam String data2) {
+		String report = data+" | "+ data2;
 		System.out.println("report"+report);
 		return report;
 	
