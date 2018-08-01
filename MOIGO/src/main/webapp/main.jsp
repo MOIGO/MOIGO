@@ -505,14 +505,14 @@
 							$('#joingroups').append($div);
 							var $div_top = $('<div class="groupView_top test">');
 							var $div_bot = $('<div class="groupView_bot test">');
-							$div_top = $('<img id="logo4" src="resources/images/main/go.jpg" width="100%" height="100%" />');
+							$div_top.append($('<img id="logo4" src="resources/images/main/go.jpg" width="100%" height="100%" />'));
 							
-							$div_bot = $('<div class="title">'+list[l].groupName+'</div>');
-							$div_bot = $('<div class="location">'+list[l].groupAddress+'</div>');
+							$div_bot.append($('<div class="title">'+list[l].groupName+'</div>'));
+							$div_bot.append($('<div class="location">'+list[l].groupAddress+'</div>'));
 							var $span = $('<span class="icon-container float-right">');
-							$span = $('<span class="icon-container float-right"> <span class="memberIcon">'+list[l].memberNum+'<img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>');
-							$span = $('<span class="commentIcon"> '+list[l].postNum+'<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>');
-							$div_bot = $($span);
+							$span.append($('<span class="icon-container float-right"> <span class="memberIcon">'+list[l].memberNum+'<img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>'));
+							$span.append($('<span class="commentIcon"> '+list[l].postNum+'<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>'));
+							$div_bot.append($span);
 							
 							$div.append($div_top);
 							$div.append($div_bot);
