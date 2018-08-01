@@ -216,36 +216,32 @@
             var positions = new Array();
             var contents = new Array();
             var geocoder = new daum.maps.services.Geocoder();
-            // 주소로 좌표를 검색합니다
-            for (var i = 0; i < listData.length ; i++) {
-               geocoder.addressSearch(listData[i].groupAddress, function(result, status) {
-                  // 정상적으로 검색이 완료됐으면 
-                  if (status === daum.maps.services.Status.OK) {
-                	 if(result[0].address_name == listData[cnt].groupAddress) {
-	                     positions.push({
-	                    	"content" : '<div class="moigo-item-wrap" style="width: 200px;">'+
-	                        ' <div class="content-context">'+
-	                        ' <div class="moigo-item list-item align-left">'+
-	                        '<div></div>'+
-	                        '<div class="header-bg" style="background-image: url('+listData[cnt].groupPicture+');"></div>'+
-	                        '<div class="header-text-container">'+
-	                        '<div class="header-text">'+
-	                        '<div class="title-wrap">'+
-	                        '<input class="groupNo" type="hidden" value="'+listData[cnt].groupNo+'"/>'+
-	                        '<div class="title">'+listData[cnt].groupName+'</div>'+
-	                        '</div></div></div>'+
-	                        '<div class="item-contents align-left">'+
-	                        '<div class="location">'+listData[cnt].groupAddress+'</div>'+
-	                        '<span class="icon-container float-right">'+
-	                        '<span class="memberCount">' +listData[cnt].memberCnt+'/<span class="maxMember">'+listData[cnt].maxMember+'</span><img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>'+
-	                        '<span class="commentCount">'+listData[cnt].postCnt+'<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">'+
-	                        '</span></span></div></div></div></div>',
-	                    	"lat" : result[0].y,
-	                        "lng" : result[0].x
-	                     });
-                	 } else {
-                		 console.log('no');
-                	 }
+            
+            listData.forEach(function(addr, i) {
+    			geocoder.addressSearch(addr.groupAddress, function(result, status) {
+                 if (status === daum.maps.services.Status.OK) {
+                	 console.log(result[0]);
+                     positions.push({
+                    	"content" : '<div class="moigo-item-wrap" style="width: 200px;">'+
+                        ' <div class="content-context">'+
+                        ' <div class="moigo-item list-item align-left">'+
+                        '<div></div>'+
+                        '<div class="header-bg" style="background-image: url('+listData[i].groupPicture+');"></div>'+
+                        '<div class="header-text-container">'+
+                        '<div class="header-text">'+
+                        '<div class="title-wrap">'+
+                        '<input class="groupNo" type="hidden" value="'+listData[i].groupNo+'"/>'+
+                        '<div class="title">'+listData[i].groupName+'</div>'+
+                        '</div></div></div>'+
+                        '<div class="item-contents align-left">'+
+                        '<div class="location">'+listData[i].groupAddress+'</div>'+
+                        '<span class="icon-container float-right">'+
+                        '<span class="memberCount">' +listData[i].memberCnt+'/<span class="maxMember">'+listData[i].maxMember+'</span><img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>'+
+                        '<span class="commentCount">'+listData[i].postCnt+'<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">'+
+                        '</span></span></div></div></div></div>',
+                    	"lat" : result[0].y,
+                        "lng" : result[0].x
+                     });
                      cnt++;
                      
                      // 마커 이미지 변경
@@ -257,7 +253,6 @@
                      
                      // 마커 생성 및 클러스터러에 마커 추가
                      if(cnt == listData.length) {
-                    	 console.log(positions);
                         data = { positions };
                         var markers = data.positions.map(function(position) {
                         	//console.log(position);
@@ -293,10 +288,11 @@
                          }
 	                        
                        clusterer.addMarkers(markers);
+                       clusterer.setMinClusterSize(3);
                      }
                   }
                });
-            }
+            });
             
             // 마커 클러스터러에 클릭이벤트를 등록합니다
             // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
@@ -310,10 +306,57 @@
                   anchor : cluster.getCenter()
                });
             });
-            
-            
          }
       });
+      
+   	  
+   	  /* $(function(){
+	    var marker = null;
+   		$('.moigo-item-wrap').mouseenter(function() {
+      		 var addr = $(this).find('.location').html();
+      		 console.log(addr);
+      		 
+      		 var geocoder = new daum.maps.services.Geocoder();
+
+      		// 주소로 좌표를 검색합니다
+      		geocoder.addressSearch(addr, function(result, status) {
+
+      		    // 정상적으로 검색이 완료됐으면 
+      		     if (status === daum.maps.services.Status.OK) {
+   				var num = 0.09;
+      		    	if(map.getLevel() > 9) {
+   					if(map.getLevel() == 12) {
+   						num = 0.07;
+   					}
+   					if(map.getLevel() == 11){
+   						num = 0.04;
+   					} else if(map.getLevel() == 10) {
+   						num = 0.02;
+   					}
+       			        var coords = new daum.maps.LatLng(Number(result[0].y)+num, result[0].x);
+       		        // 결과값으로 받은 위치를 마커로 표시합니다
+       		        marker = new daum.maps.Marker({
+       		            position: coords
+       		        });
+       		        
+       		        
+       		        marker.setMap(map);
+       		        
+	       		     $('.moigo-item-wrap').mouseleave(function() {
+	       				if(marker != null) {
+	       		   			if(map.getLevel() > 9) {
+	       		   				marker.setMap(null);
+	       		   				marker=null;
+	       		   			}				
+	       				}
+	       	   	   	});
+       		        
+      		    	}
+      		     }
+        		});
+      	  });
+		
+   	  }); */
       
    </script>
 </body>
