@@ -8,18 +8,28 @@
 <head>
 
  <style type="text/css">
-	div.vertical-line{
-    border-left: 4px solid #808080;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    width: 10px;
+div.vertical-line {
+	border-left: 4px solid #808080;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	width: 10px;
 }
-	#modalAccuseList{
+
+#modalAccuseList {
 	height: 450px;
 	width: 100%;
 	overflow: scroll;
-	}
+}
+
+input[type="checkbox"] {
+	height: 18px;
+	width: 18px;
+}
+
+.form-check {
+	margin: auto auto;
+}
 </style>
 </head>
 <body>
@@ -30,13 +40,35 @@
   	
 
 	<div class="row report_body_whole"> <!-- 전체 row content 내부 시작 -->
-	  	<div class="col-sm-12 col-md-1 col-lg-1 col-xs-12 d-none d-lg-block"></div> <!-- 사이드바 사이 거리 주기 -->
+	  	<!-- <div class="col-sm-12 col-md-1 col-lg-1 col-xs-12 d-none d-lg-block"></div> --> <!-- 사이드바 사이 거리 주기 -->
 	  
-	    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12"> <!-- 첫번째 단 -->
+	    <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12"> <!-- 첫번째 단 -->
 		    <br>
 		    <h2>Recent Report</h2>
 		    <br>
-		    <input class="form-control admin_group_search col-sm-12 col-xs-8" id="myInput" type="text" placeholder="Search.."> <!-- search -->
+		      <form action="${pageContext.request.contextPath}/adminReport.ad" method="get">
+		   
+		    
+		   
+		    <div class="row">
+		    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    <select class="col-sm-2 col-xs-2" name="searchOption">		    
+			    <option>content</option>
+			    <option>reporter</option>
+			    <option>target</option>  
+		    </select>
+		    <input class="admin_group_search col-sm-4 col-xs-4" id="reportSearchingKeyword" name="reportSearchingKeyword" type="text" placeholder="Search.."> 
+		    <button type="submit" class="btn btn-outline-info">검색</button>&nbsp;&nbsp;
+		    <br>
+		    <div class="form-check text-right">		  
+						<input class="form-check-input" type="checkbox" name="reportSearchingConstraint" id="reportSearchingConstraint" value="notIncluding" onClick="updateList(this.value)"> 
+						<label class="form-check-label" for="reportSearchingConstraint"> &nbsp;&nbsp;not including processed reports</label>
+			</div>
+		    </div>
+		     <div class="form-check text-right">		  
+						'${listCount}' 개가 검색되었습니다.
+			</div>
+		    </form>
 		    <br>
 	    
 	    
@@ -79,17 +111,17 @@
 
 		<div class="pagingArea" align="center">
 			<ul class="pagination justify-content-center">
-				 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=1">&lt;&lt;</a></li>
+				 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=1&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">&lt;&lt;</a></li>
 						<c:if test="${pi.currentPage le 1}">
 						<li class="page-item"><a class="page-link">Pre</a></li>
 				</c:if><c:if test="${pi.currentPage gt 1}">
-					 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage -1}">Pre</a></li>
+					 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage -1}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">Pre</a></li>
 				</c:if>
 				<c:forEach var="i" begin="${pi.startPage}" end="${pi.endPage}">
 					<c:if test="${i eq pi.currentPage}">
 					<li class="page-item"><a class="page-link">${i}</a></li>
 					</c:if>	<c:if test="${i ne pi.currentPage}">
-					 		<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${i}">${i}</a></li>
+					 		<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${i}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">${i}</a></li>
 					</c:if>
 				</c:forEach>
 				
@@ -97,9 +129,9 @@
 				<c:if test="${pi.currentPage ge pi.maxPage}">
 						<li class="page-item"><a class="page-link">Next</a></li>
 				</c:if><c:if test="${pi.currentPage lt pi.maxPage}">
-					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage + 1}">Next</a></li>
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage + 1}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">Next</a></li>
 				</c:if>
-				      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.maxPage}">&gt;&gt;</a></li>
+				      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.maxPage}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">&gt;&gt;</a></li>
 				
 			</ul>
 		</div>
@@ -119,7 +151,8 @@
     
    
     <!-- top 5 신고 시작 -->
- 	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+ 	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="background: white;">
+ 		 <br>
 	    <h2>Blacklist M</h2>
 	    <div class="float-right"><i class="fas fa-sync" style="color: tomato"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> 
 	    
@@ -138,7 +171,7 @@
 	      <tbody id="myMemberTop5Table">
 	      
 	     
-	        <tr onclick="moveTest()">
+	        <tr >
 	          <td>${mblack.rNum}</td>
 	          <td>${mblack.targetMember}</td>
 	          <td>${mblack.aCount}</td>
@@ -313,20 +346,19 @@
 								</div>
 							</div>
 							<div class="tab-pane" id="tab3">
-								<form action="${pageContext.request.contextPath}/sendMessage.ad"
-									method="get">
+								<form action="" method="post">
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">Recipient:</label>
-										<input type="text" class="form-control" id="recipientName"
+										<input type="text" class="form-control" id="recipientName1"
 											name="email">
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">Message:</label>
-										<textarea class="form-control" id="messageText"
-											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다.</textarea>
+										<textarea class="form-control" id="messageText1"
+											name="messageText">귀하는 신고가 누적되어 회원 자격이 박탈당했습니다. 자세한 설명을 듣고 싶다면 본 메일로 문의하십시오</textarea>
 									</div>
 									<div class="text-center">
-										<button type="submit" class="btn btn-outline-success">Send
+										<button type="button" id="mailSend2" class="btn btn-outline-success">Send
 											message</button>
 									</div>
 								</form>
@@ -372,6 +404,8 @@
 								<form action="" method="get">
 									<fieldset class="form-group">
 										<legend> 그룹 정보 </legend>
+										
+										
 										<div class="form-group row">
 											<label for="inputGname" class="col-sm-2 col-form-label">Name</label>
 											<div class="col-sm-10">
@@ -481,7 +515,7 @@
 
 									<div class="form-group row">
 										<div class="col-sm-12  text-center">
-											<button type="submit" class="btn btn-outline-info">
+											<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">
 												그룹 블라인드</button>
 										</div>
 									</div>
@@ -510,8 +544,7 @@
 								</div>
 							</div>
 							<div class="tab-pane" id="tab6">
-								<form action="${pageContext.request.contextPath}/sendMessage.ad"
-									method="get">
+								<form action="" method="post">
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">Recipient:</label>
 										<input type="text" class="form-control" id="masterEmail"
@@ -520,10 +553,10 @@
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">Message:</label>
 										<textarea class="form-control" id="messageTextToMaster"
-											name="messageText"></textarea>
+											name="messageText2"></textarea>
 									</div>
 									<div class="text-center">
-										<button type="submit" class="btn btn-outline-success">Send
+										<button type="button" id="mailSend" class="btn btn-outline-success">Send
 											message</button>
 									</div>
 								</form>
@@ -577,7 +610,7 @@ $(document).ready(function(){
 		            $("#inlineFormInputPost").val(data[0].postCount);
 					$("#inlineFormInputReply").val(data[0].replyCount);
 		            
-		            $("#recipientName").val(data[0].memberEmail);
+		            $("#recipientName1").val(data[0].memberEmail);
 		            console.log(data[1].length);
 		            $('.input_accuse_list').empty();
 		            for(var i in data[1]){
@@ -587,8 +620,49 @@ $(document).ready(function(){
 	 								'<td>'+data[1][i].reporter+'</td>' +
 	 								'<td>'+data[1][i].accuseDate+'</td>' +
 								'</tr>';
-		            	 $('.input_accuse_list').append(str);
-		            }		          		           
+		            	 $('.input_accuse_list').append(str);       	 
+		            }	
+		            
+		            $("#mailSend2").click(function() {
+					       
+			       	 	 var userEmail= $("#recipientName1").val();
+			       	     var contents = $("#messageText1").val();
+			       	     console.log(userEmail+contents);
+			       	  	 $.ajax({
+			       	            url: "${pageContext.request.contextPath}/sendMessage.ad",
+			       	            type:'post',
+			       	            data: {userEmail: userEmail, contents: contents} ,
+			       	            dataType:"json",
+			       	            success:function(data){	
+			       	            	alert("성공적으로 메일을 보냈습니다.");
+			       	            },error:function(request,status,error){
+			       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			       	            }
+			       	  	  });
+		            });	  
+		            $("#memDelSubmit").click(function() {
+		       	  	 var id =data[0].memberNo;
+		       	  	  $.ajax({
+		       	            url: "${pageContext.request.contextPath}/memDelete.ad",
+		       	            type:'get',
+		       	            data: {id:id},
+		       	            dataType:"json",
+		       	            success:function(data){	
+		       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
+		       	            	//location.reload();	  
+		       	            		       	            	
+		       	            },error:function(request,status,error){
+		       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       	            }
+		       	  	  
+
+
+		       	  	  });
+
+		       	    
+		       	}); 
+		            
+		           
 	            }
 	        });	           
 		}); //함수 끝
@@ -615,7 +689,7 @@ $(document).ready(function(){
 						$("#inputGsc").val(data[0].groupGender);
 						$("#masterEmail").val(data[0].masterEmail); //모임장
 						
-			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다.");
+			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다. 문의사항이 있다면 본 메일로 문의하십시오.");
 			            
 			            $('.input_accuse_list').empty();
 			            for(var i in data[1]){
@@ -626,7 +700,40 @@ $(document).ready(function(){
 		 								'<td>'+data[1][i].accuseDate+'</td>' +
 									'</tr>';
 			            	 $('.input_accuse_list').append(str);
-			            }		          		           
+			            }
+			            $("#mailSend").click(function() {
+						       
+				       	 	 var userEmail= $("#masterEmail").val();
+				       	     var contents = $("#messageTextToMaster").val();
+				       	     console.log(userEmail+contents);
+				       	  	 $.ajax({
+				       	            url: "${pageContext.request.contextPath}/sendMessage.ad",
+				       	            type:'post',
+				       	            data: {userEmail: userEmail, contents: contents} ,
+				       	            dataType:"json",
+				       	            success:function(data){	
+				       	            	alert("성공적으로 메일을 보냈습니다.");
+				       	            },error:function(request,status,error){
+				       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				       	            }
+				       	  	  });
+			            });	  
+			            
+			            $("#grpDelSubmit").click(function() {
+				       	  	 var id =data[0].groupNo;
+				       	  	  $.ajax({
+				       	            url: "${pageContext.request.contextPath}/grpDelete.ad",
+				       	            type:'get',
+				       	            data: {id:id},
+				       	            dataType:"json",
+				       	            success:function(data){	
+				       	            	alert('그룹번호 '+data+' 성공적으로 블라인드 처리 되었습니다.');
+				       	            	location.reload();	       	            	
+				       	            },error:function(request,status,error){
+				       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				       	            }
+				       	  	  });				       	    
+				       	});  
 		            }
 		        });	           
 			}); //함수 끝
@@ -645,26 +752,7 @@ $(document).ready(function(){
 	    });
 	  }); 
    
-   $("#memDelSubmit").click(function() {
-	  	 var id ="안녕";
-	  	  $.ajax({
-	            url: "${pageContext.request.contextPath}/memDelete.ad",
-	            type:'get',
-	            data: {id:id},
-	            dataType:"json",
-	            success:function(data){	
-	            	alert(data);
-	            },error:function(request,status,error){
-	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-	            }
-	  	  
-
-
-	  	  });
-
-	    
-	}); 
-   
+ 
    
    
 }); //시작 이벤트 끝
@@ -684,8 +772,5 @@ $(document).ready(function(){
 </script>
 
 
-<script>
-
-</script>
 </body>
 </html>

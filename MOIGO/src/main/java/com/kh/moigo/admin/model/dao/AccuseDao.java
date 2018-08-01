@@ -12,7 +12,7 @@ import com.kh.moigo.member.model.vo.Member;
 public interface AccuseDao {
 
 	List<Map<String, Object>> selectAccuseList();
-	int selectAccuseListCnt();
+	int selectAccuseListCnt(PageInfo pi);
 	List<Map<String, Object>> selectAccuseListPaging(PageInfo pi);
 	Member selectMember(String id);
 	List<Map<String, Object>> selectmemberList();
@@ -44,5 +44,10 @@ public interface AccuseDao {
 	List<Map<String, Object>> groupDashCount();
 	List<Map<String, Object>> MemEnrollperMonth();
 	List<Map<String, Object>> GrpEnrollperMonth();
+	
+	//--
+	int memDelete(String id);
+	int grpDelete(String id);
+	List<Map<String, Object>> selectTargetListPaging(PageInfo pi);
 
 }

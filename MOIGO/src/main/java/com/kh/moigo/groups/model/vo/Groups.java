@@ -2,6 +2,9 @@ package com.kh.moigo.groups.model.vo;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.kh.moigo.member.model.vo.JsonDateSerializer;
+
 public class Groups implements java.io.Serializable{
 	
 	private static final long serialVersionUID = 2632711817694753551L;
@@ -96,6 +99,8 @@ public class Groups implements java.io.Serializable{
 	public void setMaxMember(int maxMember) {
 		this.maxMember = maxMember;
 	}
+	
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getEnrollDate() {
 		return enrollDate;
 	}

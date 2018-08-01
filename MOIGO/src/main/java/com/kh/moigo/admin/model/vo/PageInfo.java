@@ -19,7 +19,56 @@ public class PageInfo implements java.io.Serializable{
 	private int listCount;
 	private int startRow;
 	private int endRow;
-	private String id ="0";
+	
+	private String searchingKey="";
+	private boolean chk;
+	private String opt;
+	
+	
+	
+	public PageInfo(int startPage, int endPage, int maxPage, int limit, int currentPage, int listCount, int startRow,
+			int endRow, String searchingKey,String opt, boolean chk) {
+		super();
+		this.startPage = startPage;
+		this.endPage = endPage;
+		this.maxPage = maxPage;
+		this.limit = limit;
+		this.currentPage = currentPage;
+		this.listCount = listCount;
+		this.startRow = startRow;
+		this.endRow = endRow;		
+		this.searchingKey = searchingKey;
+		this.opt = opt;
+		this.chk=chk;
+	}
+	
+	
+	public String getOpt() {
+		return opt;
+	}
+
+
+	public void setOpt(String opt) {
+		this.opt = opt;
+	}
+
+
+	public boolean isChk() {
+		return chk;
+	}
+
+
+	public void setChk(boolean chk) {
+		this.chk = chk;
+	}
+
+
+	public String getSearchingKey() {
+		return searchingKey;
+	}
+	public void setSearchingKey(String searchingKey) {
+		this.searchingKey = searchingKey;
+	}
 	public int getStartPage() {
 		return startPage;
 	}
@@ -68,14 +117,19 @@ public class PageInfo implements java.io.Serializable{
 	public void setEndRow(int endRow) {
 		this.endRow = endRow;
 	}
+	
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "PageInfo [startPage=" + startPage + ", endPage=" + endPage + ", maxPage=" + maxPage + ", limit=" + limit
 				+ ", currentPage=" + currentPage + ", listCount=" + listCount + ", startRow=" + startRow + ", endRow="
-				+ endRow + "]";
+				+ endRow + ", searchingKey=" + searchingKey + ", chk=" + chk + ", opt=" + opt + "]";
 	}
-	
-	
+
+
 	public PageInfo(int currentPage, int listCount, int limit, int startPage, int endPage, int maxPage, int startRow,
 			int endRow) {
 	
@@ -90,27 +144,6 @@ public class PageInfo implements java.io.Serializable{
 	}
 	
 
-	public PageInfo(int currentPage, int listCount, int limit, int startPage, int endPage, int maxPage, int startRow,
-			int endRow, String id) {
-	
-		this.startPage = startPage;
-		this.endPage = endPage;
-		this.maxPage = maxPage;
-		this.limit = limit;
-		this.currentPage = currentPage;
-		this.listCount = listCount;
-		this.startRow = startRow;
-		this.endRow = endRow;
-		this.id = id;
-	}
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	
 
 	public PageInfo() {
 		super();

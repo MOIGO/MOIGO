@@ -27,8 +27,8 @@
 </style>
  
 </head>
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#acuuseModalTest">
-Launch demo modal
+ <button type="button" class="btn btn-primary" id="reportclick" data-toggle="modal" data-target="#acuuseModalTest" data-id="안녕" data-id2="안녕2">
+			Launch demo modal
 </button>
 
 <div class="wrapper">
@@ -155,6 +155,15 @@ Launch demo modal
           
             curPcTime();
         }
+        
+        
+        $('#reportclick').on('click',function(){
+        	var id =$(this).data('id');	
+        	var id2 =$(this).data('id2');	
+        	$("#accuseTarget").val(id2);
+        	$("#accuseReporter").val(id);
+        	console.log(id+id2);
+        });
     </script>
     
     

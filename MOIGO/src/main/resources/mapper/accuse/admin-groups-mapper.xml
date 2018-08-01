@@ -100,4 +100,13 @@
 		GROUP BY  SUBSTR(enroll_date, 1, 5)
 		order by  SUBSTR(enroll_date, 1, 5)
 	</select>
+	
+	
+	<update id="grpDelete" parameterType="string">
+		UPDATE GROUPS 
+	    SET GROUP_STATE_CODE ='S2' 
+	    WHERE GROUP_NO = #{id}
+	</update>
+	
+	
 </mapper>

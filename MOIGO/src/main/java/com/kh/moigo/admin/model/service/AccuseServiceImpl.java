@@ -27,9 +27,9 @@ public class AccuseServiceImpl implements AccuseService {
 	}
 
 	@Override
-	public int selectAccuseListCnt() {
+	public int selectAccuseListCnt(PageInfo pi) {
 		System.out.println("신고카운트 서비스");
-		return ad.selectAccuseListCnt();
+		return ad.selectAccuseListCnt(pi);
 	}
 
 	@Override
@@ -175,6 +175,25 @@ public class AccuseServiceImpl implements AccuseService {
 		// TODO Auto-generated method stub
 		return ad.GrpEnrollperMonth();
 	}
+
+	@Override
+	public int memDelete(String id) {
+		// TODO Auto-generated method stub
+		return ad.memDelete(id);
+	}
+
+	@Override
+	public int grpDelete(String id) {
+		// TODO Auto-generated method stub
+		return ad.grpDelete(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTargetListPaging(PageInfo pi) {
+		// TODO Auto-generated method stub
+		return ad.selectTargetListPaging(pi);
+	}
+	
 
 
 
