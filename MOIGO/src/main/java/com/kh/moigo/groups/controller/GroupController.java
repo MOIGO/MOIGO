@@ -50,20 +50,28 @@ public class GroupController {
 		//세션에서 멤버 가져옴
 		Member m = (Member)(request.getSession().getAttribute("m"));
 		
+		Groups gp= groupService.selectOneGroup(groupNo);
+		
 		//멤버 널 아니면
 		if(m!=null){
 			//그룹에 있는지 확인하고
 			GroupMember gm = groupService.selectOneMember(new GroupMember(m.getMemberNo(),groupNo));
 			
 			//그룹에 있으면
-			if(gm!=null)
+			if(gm!=null){
 				model.addAttribute("memberGrade",gm.getMemberGradeCode()); //권한 컬럼을 뷰에 리턴
+				model.addAttribute("gm",gm);
+			}
 			else
 				model.addAttribute("memberGrade",-1); //없으면(가입 안되있으면) -1 리턴
+			
+			
 		}else
 			model.addAttribute("memberGrade",-1);//멤버가 아니어도 -1 리턴
 		
 		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
+		model.addAttribute("currGroup",gp);
+		System.out.println("그룹 스테이트 코드 :" +gp.getGroupStateCode());
 		
 		return "groups/groupMain";
 	}

@@ -32,11 +32,27 @@
 		max-width: 	40%;
 	}	
 	
+	.wrap{
+		z-index: 1999;
+		position:absolute;
+		background-color: grey;
+		opacity: 0.5;
+		min-width:1000px;
+		width:1200px;
+		height:100%;
+		
+		font-size:10em;
+	}
+	
 </style>
 </head>
 
 <body>
-	  
+<c:if test="${param.groupStateCode ne S1 }">
+	<div class="wrap row align-items-center justify-content-center">블라인드 처리된 모임입니다.</div>
+</c:if>
+
+
 <div class="col-3">
  	<div class="card">
 		<img class="card-img-top" src="http://via.placeholder.com/300x300"
@@ -114,6 +130,7 @@
 	</div>
  </div>
  
+ 
  <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
  </form>
@@ -168,7 +185,7 @@ function setGroupDesc(groupNo,isMember){
 				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 			}
 			
-		/* 	if(!isMember){
+			/* if(!isMember){
 				$('.joinBtnWrapper').css("display","none");
 				$('.joined').css("display","relative");
 				$('.notJoined').css("display","none");

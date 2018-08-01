@@ -78,7 +78,8 @@ background: #EDEFF2;
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
 		<c:param name="groupNo" value="${groupNo }" />
-		<c:param name="memberNo" value="${m.memberNo}" />
+		<c:param name="memberNo" value="${gm.memberNo}" />
+		<c:param name="groupStateCode" value="${currGroup.groupStateCode}" />
 	</c:import>
 
 	<div class="container">
@@ -92,23 +93,64 @@ background: #EDEFF2;
 
 			<div class="col-7">
 				<div class="col">
-				<c:if test="${memberGrade>0}">
-					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
-				</c:if>
+				<c:if test="${currGroup.groupStateCode eq S1}">
+				
+					<c:if test="${memberGrade>0}">
+						<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
+					</c:if>
+				
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
 				
 				
-					<div class="input-group input-group-lg">
-							<label for="searchPost" class="sr-only">searchPost</label>
-							<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
-							<div class="input-group-append">
-								<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
-							</div>
-					</div>	
+					<c:choose >
+						<c:when test="${(currGroup.groupSetting eq PROTECTED) or (currGroup.groupSetting eq PRIVATE) }">
+							
+							
+							<c:if test="${memberGrade>0 }">
+								<div class="input-group input-group-lg">
+										<label for="searchPost" class="sr-only">searchPost</label>
+										<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
+										<div class="input-group-append">
+											<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
+										</div>
+								</div>	
+							
+								<div id="postDiv" class="">
+									
+								</div>
+							</c:if>
+							
+							<c:if test="${memberGrade eq -1 }">
+								<div style="background:red;">asdf</div>
+							</c:if>
+							
+							<c:if test="${memberGrade<=0 }">
+							
+								<div id="notMember" style="font-size:5em" class="">
+									모임의 멤버만 글을 볼 수 있습니다.
+								</div>
+							</c:if>
+							
+						</c:when>
+						<c:when test="${currGroup.groupSetting eq PUBLIC}">
+							<div class="input-group input-group-lg">
+										<label for="searchPost" class="sr-only">searchPost</label>
+										<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
+										<div class="input-group-append">
+											<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
+										</div>
+								</div>	
+							
+								<div id="postDiv" class="">
+									
+								</div>
+						</c:when>
+					</c:choose>	
 					
-					<div id="postDiv" class="">
-						
-					</div>
+					
+					
+				</c:if>
+	
 				</div>
 				<div class="col">
 					
@@ -154,7 +196,7 @@ background: #EDEFF2;
 <script>
 
 
-var currentPage
+var currentPage;
 
 
 $(function(){
@@ -329,7 +371,7 @@ function makeProfile(obj){
 	
 	
 	var $upLoadDateWrapper=$('<div class="d-flex">');
-	var $dropDownWrapper=$('<div >')
+	var $dropDownWrapper=$('<div>')
 	let now = new Date(obj.submitDate);
 	
 	var $upLoadWrapper  = $("<span>").text(	now.getMonth()+"월"+" "+now.getDate()+"일");
@@ -350,10 +392,14 @@ function makeProfile(obj){
 	$profileImgWrapper.append($profileImg);
 	$profileWrapper.append($profileImgWrapper);
 	$profileWrapper.append($profileAndDate);
-	if(typeof(obj.replyNo)!='undefined')
-		$profileWrapper.append(makeDropDown(false,obj.replyNo));
-	else
-		$profileWrapper.append(makeDropDown(true,obj.postNo));
+	
+	if((obj.groupMember.memberNo=='${gm.memberNo}') | ('${gm.memberGradeCode>=2 }')){
+		if(typeof(obj.replyNo)!='undefined')
+			$profileWrapper.append(makeDropDown(false,obj.replyNo,obj.groupMember.memberNo));
+		else
+			$profileWrapper.append(makeDropDown(true,obj.postNo,obj.groupMember.memberNo));
+	
+	}
 	return $profileWrapper;
 }
 
@@ -363,25 +409,31 @@ function toggleElipsis(obj){
 
 
 
-function makeDropDown(isPost,num){
+function makeDropDown(isPost,num,memberNo){
+	
 	$dropDownWrapper =$("<div>");
 	
 	var $dropDown =$('<div class="dropdown">');
 	var $dropDownBtn=$('<button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>');
 	var $dropDownMenu=$('<div class="dropdown-menu">');
 	
-	var $dropDownItem1
-	var $dropDownItem2
+	var $dropDownItem1;
+	var $dropDownItem2;
+	
+	
 	
 	if(isPost){
 		$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
 		$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
 		var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
-		var $dropDownItem4=$("<a class='dropdown-item'>신고하기</a>");
+		
 		$dropDownMenu.append($dropDownItem1);
 		$dropDownMenu.append($dropDownItem2);
+		
+	
 		$dropDownMenu.append($dropDownItem3);
-		$dropDownMenu.append($dropDownItem4);
+		
+		
 		
 		$dropDownItem1.on("click",function(){
 			prepareUpdatePost(num);
@@ -398,6 +450,7 @@ function makeDropDown(isPost,num){
 		$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
 		$dropDownMenu.append($dropDownItem1);
 		$dropDownMenu.append($dropDownItem2);
+		
 		
 		$dropDownItem1.on("click",function(){
 			addReplyEditForm(num);
@@ -676,7 +729,7 @@ function submitPost(){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:{groupNo:'${groupNo}',memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
+		data:{groupNo:'${groupNo}',memberNo:'${gm.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
 			
@@ -699,7 +752,7 @@ function submitPost(){
 }
 
 function checkLogin(){
-	if('${m.memberNo}'=='')
+	if('${m.memberNo}'==''||'{m eq null}')
 	{
 		alert("로그인 해주세요");
 		return false;
@@ -714,7 +767,7 @@ function submitReply(postNo,obj){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
-		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
+		data:{postNo:postNo,memberNo:'${gm.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
 			
