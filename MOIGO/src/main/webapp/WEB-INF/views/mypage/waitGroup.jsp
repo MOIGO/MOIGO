@@ -65,7 +65,8 @@
         </div>
     </div>
 
-    <br><br><br><br><br><br>
+     <br><br><br><br>
+	<c:import url="/WEB-INF/views/common/footer.jsp" />
     <script >
     $(function(){
  	   $(".item_content").on("click",function(){

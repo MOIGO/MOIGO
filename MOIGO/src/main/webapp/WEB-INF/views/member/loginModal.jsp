@@ -132,14 +132,6 @@
 			xfbml : true,
 			version : 'v3.0'
 		});
-
-
-/* 		FB.getLoginStatus(function(response) {
-			console.log('statusChangeCallback');
-			console.log(response);
-		}); 
- */		
-		
 	};
 
 	
@@ -149,14 +141,9 @@
 	function fbLoginAction() {
 
 		FB.getLoginStatus(function(response) {
-			console.log('statusChangeCallback');
-			console.log(response);
-			/* statusChangeCallback(response); */
-			
 			if (response.status === 'connected') {	
 				FB.logout(function(response) { // 사용자 로그 아웃 이후 콜백처리 
 					alert('다시 시도해주세요');
-					/* location.href="${pageContext.request.contextPath}/"; */
 				});	
 			
 			} else if (response.status === 'not_authorized') {
@@ -178,8 +165,6 @@
 			var fbirthday;
 			var fgender;
 			
-			/* var fbname; */
-			/* var accessToken = response.authResponse.accessToken; */
 			FB.api('/me?fields=id,name,age_range,birthday,gender,email',function(response) {
 						var fb_data = jQuery.parseJSON(JSON.stringify(response));
 						console.log(fb_data );
@@ -198,15 +183,6 @@
 								},
 								type:"get",
 								success : function(data){
-									/* if(data.result == -1){
-										alert('페이스북 회원 추가');
-										location.href="${pageContext.request.contextPath}/";
-									}else if (data.result==0){
-										alert('페이스북 로그인');
-										location.href="${pageContext.request.contextPath}/";
-									}else if (data.result==1){
-										
-									} */
 									alert(data.msg);
 									location.href="${pageContext.request.contextPath}/";
 								},
@@ -217,18 +193,7 @@
 			}); 
 		}, {scope : 'public_profile, email, user_birthday,user_gender'});  
 	}
-	/* 
-	function statusChangeCallback(response) {
-		if (response.status === 'connected') {	
-			console.log('연결 ㅎ'+this.femail+ this.fname+ this.fbirthday+ this.fgender);		
-			//
-		} else if (response.status === 'not_authorized') {
-			console.log('페이스북에는 로그인 되어있으나, 앱에는 로그인 되어있지 않다.')	;				
-		} else {
-			console.log('페이스북에 로그인이 되어있지 않아서, 앱에 로그인 되어있는지 불명확하다.');
-		}
-	}
-	 */
+	
 
 </script>
 
