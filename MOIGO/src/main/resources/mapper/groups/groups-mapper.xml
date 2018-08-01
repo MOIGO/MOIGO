@@ -56,6 +56,7 @@
 		<id property="replyNo" column="REPLY_NO"/>
 		<result property="postNo" column="POST_NO"/>
 		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
 		<result property="content" column="CONTENT"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
 	</resultMap>
@@ -66,7 +67,7 @@
 		<result property="memberNo" column="MEMBER_NO"/>
 		<result property="isNotice" column="IS_NOTICE"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
-		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 		<collection property="postReplyWithMem" column="POST_NO" ofType="postReplyWithMem" select="selectReplyForPost"/>
 		<collection property="files" column="POST_NO" ofType="files" select="selectFilesForPost"/><!--여기서부터!!  -->
 	</resultMap>
@@ -75,9 +76,10 @@
 		<id property="replyNo" column="REPLY_NO"/>
 		<result property="postNo" column="POST_NO"/>
 		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
 		<result property="content" column="CONTENT"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
-		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 	</resultMap>
 	
 	<!--댓글에 멤버 정보 세팅  -->
@@ -87,11 +89,17 @@
 	</select>
 	
 	<!--그룹 멤버 하나 선택  -->
-	<select id="selectOneGroupMember" resultMap="groupMemberResultMap">
+	<select id="selectOneGroupMember" resultMap="groupMemberResultMap" parameterType="groupMember">
 		SELECT GROUP_MEMBER.*,MEMBER_NAME 
 		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
-		WHERE GROUP_MEMBER.MEMBER_NO=#{memberNo}
+		WHERE GROUP_MEMBER.MEMBER_NO=#{memberNo} AND GROUP_MEMBER.GROUP_NO=#{groupNo}
 		
+	</select>
+	
+	<!--그룹 멤버 한명 정보 가져오기  -->
+	<select id="selectOneGrpMem" parameterType="groupMember" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
 	</select>
 	
 	<!--글에 첨부된 파일들 가져오기  -->
@@ -127,7 +135,7 @@
 	
 	<!--댓글 등록  -->
 	<insert id="insertReply" parameterType="postReply">
-		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)
+		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{groupNo},#{content},SYSDATE)
 	</insert>
 	
 	<!--댓글 삭제-->
@@ -199,11 +207,7 @@
 		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
 	</select>
 	
-	<!--그룹 멤버 한명 정보 가져오기  -->
-	<select id="selectOneGrpMem" parameterType="groupMember" resultMap="groupMemberResultMap">
-		SELECT * FROM GROUP_MEMBER
-		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
-	</select>
+	
 	
 	<!--그룹 가입하기 -->
 	<insert id="insertGroupMember" parameterType="groupMember">
@@ -238,8 +242,19 @@
 		WHERE SCHEDULE_NO=#{scheduleNo}
 	</delete>
 	
+	<!--키워드 포함한 글 갯수 가져오기 -->
+	<select id="selectKeywordPostCnt" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*) FROM POST 
+		WHERE GROUP_NO = #{groupNo} AND (CONTENT LIKE '%'||#{keyword}||'%')
+	</select>
 	
-
+	<!--키워드 포함흔 글 가져오기  -->
+	<select id="selectKeywordPost" resultType="postWithMem" resultMap="postWithMemResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} AND CONTENT LIKE '%'||#{keyword}||'%' ORDER BY POST.SUBMIT_DATE DESC)
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
 	<!-- ===================================================================================================== 혜진 -->
 
 

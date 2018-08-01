@@ -38,6 +38,7 @@ body {
 	background: #EDEFF2;
 }
 
+
 #postDiv ,.profileWrapper,.contentWrapper,.postOuter {
 	background:white;
 	
@@ -84,7 +85,6 @@ background: #EDEFF2;
 
 		<div class="row">
 
-
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
             	<c:param name="groupNo" value="${groupNo}"/>
             	<c:param name="memberGrade" value="${memberGrade}"/>
@@ -96,6 +96,16 @@ background: #EDEFF2;
 					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
 				</c:if>
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
+				
+				
+					<div class="input-group input-group-lg">
+							<label for="searchPost" class="sr-only">searchPost</label>
+							<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
+							<div class="input-group-append">
+								<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
+							</div>
+					</div>	
+					
 					<div id="postDiv" class="">
 						
 					</div>
@@ -143,32 +153,109 @@ background: #EDEFF2;
 
 <script>
 
+
+var currentPage
+
+
 $(function(){
-	setPostList(1);
+	currentPage=1;
+	setPostList();
 });
 
+function searchPostList(){
+	
+	if(($('#searchPost').val()).trim().length==0){
+		currPage =1;
+		deleteAllPost();
+		setPostList();
+		return;
+	}
+
+	if($('#searchPost').val()!=null&&(($('#searchPost').val()).trim().length>0)){
+		
+		$.ajax({
+			url:"${pageContext.request.contextPath}/groups/getKeywordPostList.gp",
+			data:{	groupNo:"${groupNo}",
+					currPage:1,
+					keyword:$('#searchPost').val()
+					},
+			dataType:"json",
+			success:function(data){
+				$('#postDiv').children().remove();
+				
+				
+				if(data.posts.length>0){
+					for(var i = 0; i <data.posts.length;++i){
+						
+						var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
+						$postOuter.append(makeProfile(data.posts[i]));
+						$postOuter.append(makeContent(data.posts[i]));
+						$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
+						$postOuter.append(makeSubmitReply(data.posts[i].postNo));
+						$('#postDiv').append($postOuter);
+					}
+				}else{
+					currentPage-=1;
+				}
+			},
+			error:function(){
+				console.log("ajax오류");
+			}
+			
+		});
+		
+		
+	}
+	
+}
+
+
+
+
+$(document).ready(function () {
+	  $(document).scroll(function() {
+	    var maxHeight = $(document).height();
+	    var currentScroll = $(window).scrollTop() + $(window).height();
+
+	    if (maxHeight <= currentScroll + 100) {
+	     	
+			currentPage+=1;
+			
+	    	if($('#searchPost').val()!=null&&(($('#searchPost').val()).trim().length>0)){
+	    		searchPostList();
+	    	}else
+	    		setPostList();
+	    }
+	  })
+	});
+	
 function deleteAllPost(){
 	$('#postDiv').children().remove();
 }
 
 
-function setPostList(currentPage){
+function setPostList(){
+	console.log(currentPage);
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
 		data:{groupNo:"${groupNo}",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-
 			console.log(data);
 			
-			for(var i = 0; i <data.posts.length;++i){
+			if(data.posts.length>0){
 				
-				var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
-				$postOuter.append(makeProfile(data.posts[i]));
-				$postOuter.append(makeContent(data.posts[i]));
-				$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
-				$postOuter.append(makeSubmitReply(data.posts[i].postNo));
-				$('#postDiv').append($postOuter);
+				for(var i = 0; i <data.posts.length;++i){
+					
+					var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
+					$postOuter.append(makeProfile(data.posts[i]));
+					$postOuter.append(makeContent(data.posts[i]));
+					$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
+					$postOuter.append(makeSubmitReply(data.posts[i].postNo));
+					$('#postDiv').append($postOuter);
+				}
+			}else{
+				currentPage-=1;
 			}
 
 		},
@@ -589,7 +676,7 @@ function submitPost(){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:{groupNo:"G001",memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
+		data:{groupNo:'${groupNo}',memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
 			
@@ -599,7 +686,7 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList(1);
+			setPostList();
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -627,7 +714,7 @@ function submitReply(postNo,obj){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
-		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val()},
+		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
 			
@@ -637,7 +724,7 @@ function submitReply(postNo,obj){
 				alert("댓글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList(1);
+			setPostList();
 			
 		},
 		error:function(){
