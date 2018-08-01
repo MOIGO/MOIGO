@@ -58,15 +58,18 @@ public class MainController {
 	}
 	
 	@RequestMapping("/common/joingroups.mi")
-	public String joingroups(HttpSession session, Model model) {
-		Member member=(Member) session.getAttribute("m");
+	@ResponseBody
+	public Map<String,Object> joingroups(@RequestParam String mno) {
 		
-		String mno = member.getMemberNo();
-		
+		System.out.println("mno = "+mno);
 		List<JoinGroups> list = mainService.joingroups(mno);
-		model.addAttribute("joingroup", list);
 		
-		return "main";
+		System.out.println(list.toString());
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("list", list);
+		
+		return map;
 	}
 	
 	

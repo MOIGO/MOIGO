@@ -2,7 +2,7 @@ package com.kh.moigo.common.model.vo;
 
 public class JoinGroups {
 	
-	private int groupNo;
+	private String groupNo;
 	private String groupName;
 	private String groupAddress;
 	private String groupImage;
@@ -12,7 +12,7 @@ public class JoinGroups {
 	public JoinGroups() {
 	}
 
-	public JoinGroups(int groupNo, String groupName, String groupAddress, String groupImage, int memberNum,
+	public JoinGroups(String groupNo, String groupName, String groupAddress, String groupImage, int memberNum,
 			int postNum) {
 		this.groupNo = groupNo;
 		this.groupName = groupName;
@@ -22,11 +22,11 @@ public class JoinGroups {
 		this.postNum = postNum;
 	}
 
-	public int getGroupNo() {
+	public String getGroupNo() {
 		return groupNo;
 	}
 
-	public void setGroupNo(int groupNo) {
+	public void setGroupNo(String groupNo) {
 		this.groupNo = groupNo;
 	}
 
@@ -68,6 +68,12 @@ public class JoinGroups {
 
 	public void setPostNum(int postNum) {
 		this.postNum = postNum;
+	}
+
+	@Override
+	public String toString() {
+		return "JoinGroups [groupNo=" + groupNo + ", groupName=" + groupName + ", groupAddress=" + groupAddress
+				+ ", groupImage=" + groupImage + ", memberNum=" + memberNum + ", postNum=" + postNum + "]";
 	}
 	
 	

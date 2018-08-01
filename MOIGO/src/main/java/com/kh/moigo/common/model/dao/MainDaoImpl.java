@@ -22,7 +22,7 @@ public class MainDaoImpl implements MainDao {
 
 	@Override
 	public List<JoinGroups> joingroups(String mno) {
-		return sqlSession.selectList("", mno);
+		return sqlSession.selectList("joinGroups.joinGroupList", mno);
 	}
 
 }

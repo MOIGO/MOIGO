@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="jg" value="${joingroup}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,6 +55,7 @@
 <body onload="test()">
 	<c:import url="/WEB-INF/views/common/header.jsp" />
 	<!-- // 메인부분 // -->
+	
 	<br>
 	<br>
 	<!-- 케러셀 부분(광고 또는 안내배너) -->
@@ -131,6 +133,8 @@
 					<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
 					<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
 				</ol>
+				<c:choose>
+				<c:when test="${m eq null}">
 				<div class="carousel-inner">
 					<div class="carousel-item active">
 						<div class="mainGroup test ani">
@@ -344,6 +348,32 @@
 						&nbsp;&nbsp;
 					</div>
 				</div>
+				</c:when>
+				<c:otherwise>
+				<div class="carousel-inner">
+					<div class="carousel-item active" id="joingroups">
+					<%-- <c:forEach var="jg" items="${joingroup}">
+						 <div class="mainGroup test ani">
+							<div class="groupView_top test">
+								<img id="logo4" src="${jg.groupImage}"
+									width="100%" height="100%" />
+							</div>
+							<div class="groupView_bot test">
+								<div class="title">${jg.groupName}</div>
+								<div class="location">${jg.groupAddress}</div>
+								<span class="icon-container float-right"> <span
+									class="memberIcon"> ${jg.memberNum}<img alt="memberIcon"
+										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
+									<span class="commentIcon"> ${joingroup.postNum}<img alt="commentIcon"
+										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
+								</span>
+							</div>
+						</div>&nbsp;&nbsp; 
+						</c:forEach> --%>
+						</div>
+					</div>
+				</c:otherwise>
+				</c:choose>
 				<a class="carousel-control-prev" href="#carouselExampleIndicators1"
 					role="button" data-slide="prev"> <span
 					class="carousel-control-prev-icon" aria-hidden="true"></span> <span
@@ -357,10 +387,7 @@
 		</div>
 	</div>
 	<script>
-		$('.plusGroup')
-				.on(
-						'click',
-						function() {
+		$('.plusGroup').on('click',function() {
 							location.href = '${pageContext.request.contextPath}/groups/createGroup.gp';
 						});
 	</script>
@@ -448,7 +475,7 @@
 		</div>
 		&nbsp;&nbsp;
 	</div>
-
+	
 	<br>
 	<br>
 	<br>
@@ -457,7 +484,53 @@
 </body>
 <script>
 	function test(){
-		location.href = "";
+		
+			if(${m ne null}){
+				var mno = '${m.memberNo}';
+				//location.href = "${pageContext.request.contextPath}/common/joingroups.mi?mno="+mno;
+				$.ajax({
+					url : "${pageContext.request.contextPath}/common/joingroups.mi",
+					data : {mno : mno},
+					type : "get",
+					success : function(data){
+						var list = data.list;
+						
+						for(l in list){
+							console.log(list[l].groupName);
+							console.log(list[l].groupAddress);
+							console.log(list[l].memberNum);
+							console.log(list[l].postNum);
+							var $div = $('<div class="mainGroup test ani">');
+							
+							$('#joingroups').append($div);
+							var $div_top = $('<div class="groupView_top test">');
+							var $div_bot = $('<div class="groupView_bot test">');
+							$div_top = $('<img id="logo4" src="resources/images/main/go.jpg" width="100%" height="100%" />');
+							
+							$div_bot = $('<div class="title">'+list[l].groupName+'</div>');
+							$div_bot = $('<div class="location">'+list[l].groupAddress+'</div>');
+							var $span = $('<span class="icon-container float-right">');
+							$span = $('<span class="icon-container float-right"> <span class="memberIcon">'+list[l].memberNum+'<img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>');
+							$span = $('<span class="commentIcon"> '+list[l].postNum+'<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>');
+							$div_bot = $($span);
+							
+							$div.append($div_top);
+							$div.append($div_bot);
+							
+							
+						}
+						
+						
+					},
+					error : function(data){
+						console.log("에러 발생!!");
+					}
+				});
+				
+			} else {
+				alert("로그인 x");
+			}
+		
 	}
 </script>
 </html>
