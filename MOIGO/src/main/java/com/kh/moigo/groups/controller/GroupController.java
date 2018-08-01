@@ -45,7 +45,7 @@ public class GroupController {
 	private GroupsService groupService;
 
 	@RequestMapping("/groups/groupMain.gp")
-	public String groupMain(@RequestParam(value="groupNo", defaultValue="G001")String groupNo ,HttpServletRequest request,Model model){
+	public String groupMain(@RequestParam(value="groupNo", defaultValue="G007")String groupNo ,HttpServletRequest request,Model model){
 		
 		//세션에서 멤버 가져옴
 		Member m = (Member)(request.getSession().getAttribute("m"));
@@ -294,7 +294,7 @@ public class GroupController {
 		
 		//있으면 끝시간도 세팅
 		if(!endT.equals("none")){
-			time = new Timestamp(Long.parseLong(startT));
+			time = new Timestamp(Long.parseLong(endT));
 			schedule.setEndTime(time);
 		}
 		

@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="root" value="${pageContext.request.contextPath}"/>
 
- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
- 
- <script src="${pageContext.request.contextPath}/resources/js/groups/jquery.timepicker.js" ></script>
- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/groups/jquery.timepicker.css" />
-<script src="${pageContext.request.contextPath}/resources/js/groups/datepicker-ko.js" ></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="${root}/resources/js/groups/jquery.timepicker.js" ></script>
+<link rel="stylesheet" href="${root}/resources/css/groups/jquery.timepicker.css" />
+<link rel="stylesheet" href="${root}/resources/css/groups/datepicker.min.css">
+<script src="${root}/resources/js/groups/datepicker.min.js"></script>
 <style>
 
 .modalSize_schedule{
@@ -18,6 +18,15 @@
 font-weight: 700;
 font-size:2.0em;
 text-align:center;
+}
+
+.datepicker{
+	z-index:1151 !important;
+}
+
+.datepicker--cells, .datepicker--nav-title,
+.datepicker--days-names, .datepicker--buttons {
+	font-family: 'nanum-barun-gothic-bold', sans-serif;
 }
 
 </style>
@@ -51,7 +60,7 @@ text-align:center;
 					<div class="mt-2">
 						<div class="row">
 							<div class="col-2"><strong>시작</strong></div>
-							<div class="col-5"><input type="text" id="startDate" name="startDate" class="form-control"/></div>
+							<div class="col-5"><input type="text" id="startDate" name="startDate" class="form-control" autocomplete=”off”/></div>
 							<div class="col-5"><input type="text" id="startTime"  name="startTime" class="form-control" /></div>
 						</div>
 					</div>
@@ -59,8 +68,8 @@ text-align:center;
 					<div class="mt-2">
 						<div class="row">
 							<div class="col-2"><strong>종료</strong></div>
-							<div class="col-5"><input type="text" id="endDate" name="endDate" placeholder="선택" class="form-control"/></div>
-							<div class="col-5"><input type="text" id="endTime" name="endTime" placeholder="선택"  class="form-control" /></div>
+							<div class="col-5"><input type="text" id="endDate" name="endDate" placeholder="선택" class="form-control" autocomplete=”off”/></div>
+							<div class="col-5"><input type="text" id="endTime" name="endTime" placeholder="선택"  class="form-control"/></div>
 						</div>
 					</div>
 					
@@ -164,6 +173,49 @@ text-align:center;
 </div>
 
 <script>
+
+	$(function() {
+		
+		// datepicker에 적용할 한글 언어 설정
+		$.fn.datepicker.language['ko'] = {
+			    days: ['일', '월', '화', '수', '목', '금', '토'],
+			    daysShort: ['일', '월', '화', '수', '목', '금', '토'],
+			    daysMin: ['일', '월', '화', '수', '목', '금', '토'],
+			    months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			    monthsShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			    today: '오늘',
+			    clear: '닫기',
+			    dateFormat: 'yyyy.mm.dd',
+			    timeFormat: 'hh:ii aa',
+			    firstDay: 0
+			};
+			
+			// 시작날짜의 datepicker 설정
+			$("#startDate").datepicker({
+				language : "ko",
+				autoClose : true,
+				todayButton: new Date(),
+				dateFormat: "yyyy.mm.dd",
+				onSelect : function(date) {
+					$("#startDate").trigger('change');
+				}
+			});
+			
+			// 시작 날짜가 처음 열릴 때 선택된 날짜를 오늘 날짜로 지정
+			$("#startDate").data('datepicker').selectDate(new Date());
+			
+			// 종료 날짜의 datepicker 설정
+			$("#endDate").datepicker({
+				language : "ko",
+				autoClose : true,
+				todayButton: new Date(),
+				dateFormat: "yyyy.mm.dd",
+				onSelect : function(date) {
+					$("#endDate").trigger('change');
+				}
+			});
+	});
+
 	var scheduleMapView;
 	var geocoder;
 	
@@ -323,21 +375,18 @@ text-align:center;
 
 	function toggleScheduleModal(){
 
-		 $('#insertSchedule').modal("toggle");	    
+		 $('#insertSchedule').modal("toggle");
 	}
 	
 	function editSchedule(toEditObj,scheduleNo){
-		
-		
+    
 		toggleScheduleModal();
 		
 		$('#insertSchedule').find(".modal-footer button").unbind();
 		$('#insertSchedule').find(".modal-footer button").on("click",function(){
 			updateSchedule(toEditObj,scheduleNo);	
 		});
-		
-		
-		
+
 		getOneSchedule(scheduleNo,setTargetScheduleData);
 
 	}
@@ -377,10 +426,9 @@ text-align:center;
 		$('#startTime').timepicker("setTime",milisecToDate(obj.startTime));
 		$('#startDate').datepicker("setDate",milisecToDate(obj.startTime));
 		
-		
 		if(obj.endTime!=null){
 			$('#endTime').timepicker("setTime",milisecToDate(obj.endTime));
-			$('#endDate').datepicker("setDate",milisecToDate(obj.endTime));
+			$('#endDate').data('datepicker').selectDate(milisecToDate(obj.endTime));
 		}else{
 			$('#endTime').timepicker("setTime",null);
 			$('#endDate').datepicker("setDate",null);
@@ -398,23 +446,21 @@ text-align:center;
 	
 	/*날짜 시간 인풋에서 Date객체,년월일 스트링 가져오기  */
 	function getTimesFromInput(){
+		
 		var startDate = parseDateAndTime($('#startDate'),$('#startTime'));
-		 
-		var endDates;
-		var endTimes;
-		var endDate =null;
+		var endDate = null;
 		
 		var timeString = getTimeToString(startDate); 
 		
-		if($('#endDate').val().length>0&&$('#endTime').val().length>0){
+		if($('#endDate').val().length>0 && $('#endTime').val().length>0){
 			
-			var endDate = parseDateAndTime($('#endDate'),$('#endTime'));
+			endDate = parseDateAndTime($('#endDate'),$('#endTime'));
 			
 			timeString+=" - " +getTimeToString(endDate);
 			endDate = endDate.getTime();
-			
+				
 		}else{
-			endDate="none";
+			endDate = "none";
 		}
 		
 		return {"startTime":startDate.getTime(),"endTime":endDate,"timeString":timeString};
@@ -479,7 +525,7 @@ text-align:center;
 	
 	/*섬머노트에 올라가 있는 스케줄 엘리먼트 정보 수정  */
 	function editScheduleOnSummerNote(scheduleObj,toEditObj){
-		
+		console.log(scheduleObj.endTime);
 		
 		var timeString = getTimeToString(milisecToDate(scheduleObj.startTime));
 		if(scheduleObj.endTime!=null)
@@ -683,16 +729,16 @@ text-align:center;
 
 		/*스케줄 넣는 모달이 띄워질 때  */
 		$('#insertSchedule').on('shown.bs.modal',function(){
-			$('#startDate').datepicker({showButtonPanel: true, 
+			/* $('#startDate').datepicker({showButtonPanel: true, 
 		         closeText: '닫기', 
-		         dateFormat: "yy.mm.dd"});
+		         dateFormat: "yyyy.mm.dd"});
 		
 			$('#endDate').datepicker({showButtonPanel: true, 
 		         closeText: '닫기', 
-		         dateFormat: "yy.mm.dd"});
+		         dateFormat: "yyyy.mm.dd"}); */
 	
-			$('#startTime').timepicker();
-			$('#endTime').timepicker();
+			/* $('#startTime').timepicker();
+			$('#endTime').timepicker(); */
 			
 			$('#startTime').timepicker({ timeFormat:"H:i",lang: {am:'오전', pm:'오후',AM:'오전', PM:'오후'},step:30});
 			$('#endTime').timepicker({ timeFormat:"H:i",lang: {am:'오전', pm:'오후',AM:'오전', PM:'오후'},step:30});
@@ -714,19 +760,9 @@ text-align:center;
 			$(this).find(".modal-footer button").on("click",insertSchedule);
 	
 		});
-
-		
 		
 		$('#startDate').on("change",function(){
-			$('#endDate').datepicker("option","minDate",getDate(this));
-		});
-		
-		$('#endDate').on("change",function(){
-			if($('#endDate').datepicker("getDate")<$('#startDate').datepicker("getDate")){
-				alert("종료 날짜는 시작 날짜 이후여야 합니다 다시 설정해주세요.");
-				$('#endDate').val("");
-				$('#endDate').datepicker("hide");
-			}
+			$('#endDate').datepicker({minDate : getDate(this)});
 		});
 		
 		
@@ -735,13 +771,14 @@ text-align:center;
 			$('#insertSchedule').find("[name=scheduleName]").val("");
 			$('#insertSchedule').find("[name=scheduleContent]").val("");
 			
-			$("#startDate").datepicker( "destroy" );
+			// $("#startDate").datepicker("destroy");
 			 
-			 $("#endDate").datepicker( "destroy" );
+			 $("#endDate").data('datepicker').clear();
 			 
 			 $("#startTime").timepicker( "remove" );
 			
 			 $("#endTime").timepicker( "remove" );
+			 
 			 if($("#allDay").is(":checked")){
 				
 				$('#allDay').click();
@@ -757,13 +794,16 @@ text-align:center;
 		
 		
 		$('#endTime').on("change",function(){
-	
+			
 			if($('#startTime').timepicker('getSecondsFromMidnight')>$('#endTime').timepicker('getSecondsFromMidnight'))
 			{
-				alert("종료 시간은 시작 시간 이후여야 합니다 다시 설정해주세요.");
-				$('#endTime').val("");
-				$('#endTime').timepicker("hide");
+				if($("#startDate").datepicker('getDate').val() == $("#endDate").datepicker('getDate').val()){					
+					alert("종료 시간은 시작 시간 이후여야 합니다 다시 설정해주세요.");
+					$('#endTime').val("");
+					$('#endTime').timepicker("hide");
+				}
 				return;
+				
 			}else{
 
 				if($('#endDate').datepicker("getDate")==null){
@@ -784,8 +824,7 @@ text-align:center;
 			else
 				date.setMinutes(30);
 			
-			if($('#endTime').timepicker("getTime")==null&&
-					$('#endDate').datepicker("getDate")>$('#startDate').datepicker("getDate")){
+			if($('#endTime').timepicker("getTime")==null){
 				$('#endTime').timepicker("setTime",(date));
 			}
 			
