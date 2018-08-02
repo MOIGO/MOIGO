@@ -297,6 +297,12 @@ public class MemberController {
 		return "member/signUp";
 	}
 	
+/*	// 에러페이지이동
+	@RequestMapping("/common/error.do")
+	public String error(){
+		return "common/error";
+	}
+	*/
 	
 	
 	

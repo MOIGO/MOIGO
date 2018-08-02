@@ -65,8 +65,8 @@
 	                          </div>
 	                         <div class="body_text_container">
 	                             <div class="body_text">
-	                                 <div class="body_title"><c:out value="${group.groupName }"/> </div>
-	                                 <div class="body_member" >멤버 : <c:out value="${group.memberNum }"/> 명   &nbsp;&nbsp;&nbsp; 게시글 : <c:out value="${group.postNum }"/> 개</div>
+	                                 <div class="body_title"><c:out value="${group.groupName}"/> </div>
+	                                 <div class="body_member" >멤버 : <c:out value="${group.memberNum}"/> 명   &nbsp;&nbsp;&nbsp; 게시글 : <c:out value="${group.postNum }"/> 개</div>
 	                             </div>
 	                         </div>
 	                     </div>
