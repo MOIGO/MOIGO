@@ -355,27 +355,8 @@
 				</div>
 				</c:when>
 				<c:otherwise>
-				<div class="carousel-inner">
-					<div class="carousel-item active" id="joingroups">
-					<%-- <c:forEach var="jg" items="${joingroup}">
-						 <div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="${jg.groupImage}"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">${jg.groupName}</div>
-								<div class="location">${jg.groupAddress}</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> ${jg.memberNum}<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> ${joingroup.postNum}<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>&nbsp;&nbsp; 
-						</c:forEach> --%>
-						</div>
+					<div class="carousel-inner">
+						<div class="carousel-item active" id="joingroups"></div>
 					</div>
 				</c:otherwise>
 				</c:choose>
@@ -491,6 +472,7 @@
 	
 	function test(){
 		
+	
 			if(${m ne null}){
 				var mno = '${m.memberNo}';
 				//location.href = "${pageContext.request.contextPath}/common/joingroups.mi?mno="+mno;
@@ -501,8 +483,9 @@
 					success : function(data){
 						var list = data.list;
 						
+						
 						for(l in list){
-							var $div = $('<div class="mainGroup test ani clickme">&nbsp;&nbsp;');
+							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 8px;">');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							$('#joingroups').append($div);
@@ -525,6 +508,7 @@
 								console.log(sel);
 								location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+sel
 							});
+							
 						}
 						
 						
