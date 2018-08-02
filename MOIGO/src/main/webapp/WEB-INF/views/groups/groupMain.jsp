@@ -154,7 +154,7 @@ background: #EDEFF2;
 <script>
 
 
-var currentPage
+var currentPage;
 
 
 $(function(){

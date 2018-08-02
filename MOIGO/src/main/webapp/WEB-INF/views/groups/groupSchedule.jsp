@@ -101,7 +101,6 @@
               <!-- toggleScheduleModal(); editSchedule(undefined, 'S010');-->
               <button type="button" id="insertScheduleBtn" class="btn btn-primary btn-sm" onclick="toggleScheduleModal();">일정만들기</button>
            </div>
-           <div id="datepicker"></div>
            <div class="card-body" id="calendar">
            </div>
         </div>
@@ -186,7 +185,16 @@
         $(".fc-bg").find(".fc-today").append("<div class='custom-border'/>");
      
    }
+   
+   // monthpicker라는 이름의 클래스를 부여해주는 메소드
+   function addClassMonthpicker(){
+		$("#datepicker").find('div, svg, nav').each(function() {
+			$(this).addClass('monthpicker');
+		});
+   }
 
+   var currentDate = new Date();
+   
    $(function() {
       // fullcalendar를 적용시켜주는 메소드
       $('#calendar').fullCalendar({
@@ -240,19 +248,46 @@
       
 		customCalendar();
 		
-		$(".full-title").append("<div id='datepicker'></div>");
+		$(".full-title").after("<div id='datepicker'></div>");
       
 		$("#datepicker").datepicker({
 			language : "ko",
 			view : "months",
 			minView : "months",
 			onSelect: function(date, inst) {
+				addClassMonthpicker();
 				$("#datepicker").hide();
+				$('#calendar').fullCalendar('gotoDate', date);
+				customCalendar();
+			},
+			onChangeMonth : function() {
+				addClassMonthpicker();
+			},
+			onChangeYear : function() {
+				addClassMonthpicker();
+			},
+			onChangeDecade : function() {
+				addClassMonthpicker();
+			},
+			onChangeView : function(view) {
+				addClassMonthpicker();
 			}
 		}).hide();
 		
+		$("#datepicker").addClass("monthpicker");
+		
 		$(".full-title").click(function(){
+    	    $("#datepicker").find('div').each(function() {
+    			$(this).removeClass('-selected-');
+    		});
     	    $("#datepicker").toggle();
+		});
+		
+		addClassMonthpicker();
+		
+		$(document).click(function(e) {
+			if(!$(e.target).hasClass('full-title') && !$(e.target).hasClass('monthpicker'))
+				$("#datepicker").hide();
 		});
 		
       $('.fc-prev-button').on("click", function(){
