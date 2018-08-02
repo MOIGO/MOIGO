@@ -78,14 +78,16 @@ text-align:center;
 							<div class="col-2"><strong>라벨 색</strong></div>
 							<div class="col-5">
 								<select name="colorLabel" id="scheduleLabelColor" class="form-control">
-									<option value="#FFFFFF" style="background:#FFFFFF;">      </option>
-									<option value="#FF0000" style="background:#FF0000;">      </option>
-									<option value="#FF8000" style="background:#FF8000;">      </option>
-									<option value="#FFFF00" style="background:#FFFF00;">      </option>
-									<option value="#00FF00" style="background:#00FF00;">      </option>
-									<option value="#0000FF" style="background:#0000FF;">      </option>
-									<option value="#3A01DF" style="background:#3A01DF;">      </option>
-									<option value="#A901DB" style="background:#A901DB;">      </option>
+									<option value="#DE1D6A" style="background:#DE1D6A;" selected>      </option>
+									<option value="#ED6695" style="background:#ED6695;">      </option>
+									<option value="#F58F2A" style="background:#F58F2A;">      </option>
+									<option value="#FCB735" style="background:#FCB735;">      </option>
+									<option value="#4FB846" style="background:#4FB846;">      </option>
+									<option value="#8BC441" style="background:#8BC441;">      </option>
+									<option value="#2A4082" style="background:#2A4082;">      </option>
+									<option value="#1F72DE" style="background:#1F72DE;">      </option>
+									<option value="#AD61A4" style="background:#AD61A4;">      </option>
+									<option value="#756852" style="background:#756852;">      </option>
 								</select>
 							
 							</div>
@@ -104,7 +106,7 @@ text-align:center;
 			
 				<div class="modal-footer">
 		 
-		        <button type="button" onclick="" class="btn btn-primary btn-block">첨부 하기</button>
+		        <button type="button" onclick="" id="scheduleConfirmBtn" class="btn btn-primary btn-block">첨부 하기</button>
 		      </div>
 			</form>
 		</div>
@@ -374,7 +376,7 @@ text-align:center;
 
 
 	function toggleScheduleModal(){
-
+		 $('#endDate').data('datepicker').clear();
 		 $('#insertSchedule').modal("toggle");
 	}
 	
@@ -519,7 +521,10 @@ text-align:center;
 
 		var dates = ($(dateObj).val()).split(".");
 		var times = ($(timeObj).val()).split(":");
-		return new Date(dates[0],(parseInt(dates[1])-1),dates[2],times[0],times[1],(new Date()).getSeconds(),0);
+		if(timeObj.val()==null)
+	         return new Date(dates[0],(parseInt(dates[1])-1),dates[2],0,0,0,0);
+	      else
+	         return new Date(dates[0],(parseInt(dates[1])-1),dates[2],times[0],times[1],(new Date()).getSeconds(),0);
 	
 	}
 	
@@ -711,8 +716,12 @@ text-align:center;
 					
 					if(data.result>0){
 						alert("일정 입력에 성공하였습니다.");
-						
-						addScheduleOnSummerNote(data.schedule);
+						if($("#scheduleConfirmBtn").hasClass("call_schedule")){
+							$("#scheduleConfirmBtn").removeClass("call_schedule");
+							location.reload();
+						}
+						else	
+							addScheduleOnSummerNote(data.schedule);
 					}
 					else
 						alert("일정 입력에 실패하였습니다.");

@@ -70,6 +70,9 @@
 	.fc-list-item-time, .fc-list-item-marker, .fc-list-item-title, .table-active{
 		border-color: #DDD;
 	}
+	.fc-day-grid-event :hover{
+		cursor: pointer;
+	}
 	
 	#datepicker {
 		position: absolute;
@@ -99,7 +102,7 @@
            <div class="card-header" >           
               <p class="group_tit">일정</p>
               <!-- toggleScheduleModal(); editSchedule(undefined, 'S010');-->
-              <button type="button" id="insertScheduleBtn" class="btn btn-primary btn-sm" onclick="toggleScheduleModal();">일정만들기</button>
+              <button type="button" id="insertScheduleBtn" class="btn btn-primary btn-sm" onclick="scheduleModalOpen();">일정만들기</button>
            </div>
            <div class="card-body" id="calendar">
            </div>
@@ -192,10 +195,14 @@
 			$(this).addClass('monthpicker');
 		});
    }
-
-   var currentDate = new Date();
    
+   function scheduleModalOpen() {
+	   $("#scheduleConfirmBtn").addClass("call_schedule");
+	   toggleScheduleModal();
+   }
+
    $(function() {
+	   
       // fullcalendar를 적용시켜주는 메소드
       $('#calendar').fullCalendar({
          
@@ -227,24 +234,53 @@
          // fullcalendar가 다음 달 두번째 주까지 보여주던 기능을 사용하지 않음
          fixedWeekCount : false,
          
+         // 달력에 event 시간을 보여주는 기능을 사용하지 않음
+         displayEventTime: false,
+         
          // 공휴일을 가져오기 위해서 구글의 calendar를 연동할 때 필요한 ApiKey
          googleCalendarApiKey : "AIzaSyAam0_4FBr7PhEoIkBna7pmnl7IF_sQfCo",
          
-         // 공휴일을 가져오기 위한 event
-          events : {
-            googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com", 
-            className : "ko-holidays",
-            color : "#F23F2B",
-            textColor : "white"
-         },
+		// DB에 존재하는 캘린더를 가져와서 event를 뿌려준다.
+         events : function(start, end, timezone, callback) {
+	       	 $.ajax({
+	    			url : "${root}/groups/selectListGroupSchedule.gp",
+	    			type:'GET',
+	    			dataType:'json',
+	    			data : {
+	    				groupNo : "${param.groupNo}"
+	    			},
+	    			success : function(data) {
+	    				var schedule = data.schedule;
+	    				var events = [];
+	  			        $.each(schedule, function(i, obj) {
+	  			          events.push({
+	  			            title: obj.scheduleName,
+	  			            start: obj.startTime,
+	  			            end : obj.endTime,
+	  			            color : obj.colorLabel
+	  			          });
+	  			        });
+	    				 callback(events);
+	    			},
+	    			error:function() {
+	    				console.log("일정 리스트 불러오는 오류"); 	
+	    			}
+	    		});
+		 },
          
          eventClick:function(event) {
                 if(event.url) {
-                    alert(event.title + "\n" + event.url, "width=700,height=600");
                     return false;
                 }
             }
       });
+      
+      $("#calendar").fullCalendar("addEventSource", {
+          googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com", 
+          className : "ko-holidays",
+          color : "#F23F2B",
+          textColor : "white"
+       });
       
 		customCalendar();
 		
