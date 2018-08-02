@@ -198,8 +198,11 @@ background: #EDEFF2;
 <script>
 
 
+
 var pageInfo;
 var currentPage=1;
+
+
 
 $(function(){
 	currentPage=1;

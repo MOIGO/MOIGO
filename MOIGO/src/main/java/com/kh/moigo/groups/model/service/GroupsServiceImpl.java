@@ -207,6 +207,11 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.deleteGroupMember(changeMap);
 	}
 
+	@Override
+	public List<Schedule> selectListGroupSchedule(String groupNo) {
+		return groupDao.selectListGroupSchedule(groupNo);
+	}
+
 	
 	
 

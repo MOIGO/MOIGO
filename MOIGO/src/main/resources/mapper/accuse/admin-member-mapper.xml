@@ -77,10 +77,18 @@
 		FROM DUAL
 	</select>
 
-	<select id="MemEnrollperMonth" resultMap="memberDetailResultMap">
+	<select id="memEnrollperMonth" resultMap="memberDetailResultMap">
 		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
 		GROUP BY  SUBSTR(enroll_date, 1, 5)
 		order by  SUBSTR(enroll_date, 1, 5)
 	</select>
 
+
+	<update id="memDelete" parameterType="string">
+		UPDATE MEMBER
+		SET DELFLAG ='Y'
+		WHERE MEMBER_NO = #{id}	
+	</update>
+	
+	
 </mapper>

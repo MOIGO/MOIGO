@@ -231,6 +231,11 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.delete("groups.deleteGroupMember", changeMap);
 	}
 
+	@Override
+	public List<Schedule> selectListGroupSchedule(String groupNo) {
+		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
+	}
+
 
 
 }

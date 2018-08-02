@@ -28,10 +28,10 @@ public class AccuseDaoImpl implements AccuseDao {
 	}
 
 	@Override //paging 관련 신고갯수 부르기
-	public int selectAccuseListCnt() {
+	public int selectAccuseListCnt(PageInfo pi) {
 		// TODO Auto-generated method stub
 
-		return sqlSession.selectOne("accuse.selectAccuseListCnt");
+		return sqlSession.selectOne("accuse.selectAccuseListCnt",pi);
 	}
 
 	@Override //paging 추가된 신고 리스트 불러오기.
@@ -171,13 +171,31 @@ public class AccuseDaoImpl implements AccuseDao {
 	@Override
 	public List<Map<String, Object>> MemEnrollperMonth() {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("memberDetail.MemEnrollperMonth");
+		return sqlSession.selectList("memberDetail.memEnrollperMonth");
 	}
 
 	@Override
 	public List<Map<String, Object>> GrpEnrollperMonth() {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("groupDetail.GrpEnrollperMonth");
+	}
+
+	@Override
+	public int memDelete(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("memberDetail.memDelete",id);
+	}
+
+	@Override
+	public int grpDelete(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("groupDetail.grpDelete",id);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectTargetListPaging(PageInfo pi) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("accuse.selectTargetListPaging",pi);
 	}
 	
 	

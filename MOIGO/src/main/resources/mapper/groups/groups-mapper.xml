@@ -369,4 +369,10 @@
 	<!-- <delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
 	</delete> -->
+	
+	<select id="selectListGroupSchedule" resultMap="scheduleResultMap">
+		SELECT *
+		FROM SCHEDULE
+		WHERE GROUP_NO = #{groupNo}
+	</select>
 </mapper>

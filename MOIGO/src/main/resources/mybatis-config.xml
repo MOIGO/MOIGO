@@ -28,6 +28,7 @@
 		<typeAlias type="com.kh.moigo.groups.model.vo.PostReplyWithMem" alias="postReplyWithMem"/>
 		<typeAlias type="com.kh.moigo.common.model.vo.QNABoard" alias="qna"/>
 		<typeAlias type="com.kh.moigo.member.model.vo.MypageGroup" alias="mypageGroup"/>
+		<typeAlias type="com.kh.moigo.common.model.vo.JoinGroups" alias="joinGroups"/>
 
 	</typeAliases>
 	

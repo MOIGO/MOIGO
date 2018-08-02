@@ -431,7 +431,7 @@
 	<script type="text/javascript">
 	
 	
-	$(document).ready(function(){
+/* 	$(document).ready(function(){
 		$("#accuseDiv").on("click", function(){
 			 $.ajax({
 		            url: "${pageContext.request.contextPath}/acAnalytics.ad",
@@ -442,7 +442,7 @@
 		            }
 			 });
 		});
-	});
+	}); */
 	
 	
 	</script>

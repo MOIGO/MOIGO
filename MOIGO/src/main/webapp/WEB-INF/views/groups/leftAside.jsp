@@ -212,7 +212,7 @@ $(function() {
 			setPostList();
 		}
 		else if(groupMenu == '사진첩')
-			alert("사진첩");
+			$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
 		else if(groupMenu == '일정')
 			$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
 		else

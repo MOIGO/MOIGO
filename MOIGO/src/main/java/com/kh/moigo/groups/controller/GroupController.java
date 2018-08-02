@@ -46,7 +46,7 @@ public class GroupController {
 	private GroupsService groupService;
 
 	@RequestMapping("/groups/groupMain.gp")
-	public String groupMain(@RequestParam(value="groupNo", defaultValue="G001")String groupNo ,HttpServletRequest request,Model model){
+	public String groupMain(@RequestParam(value="groupNo", defaultValue="G007")String groupNo ,HttpServletRequest request,Model model){
 		
 		//세션에서 멤버 가져옴
 		Member m = (Member)(request.getSession().getAttribute("m"));
@@ -386,7 +386,7 @@ public class GroupController {
 		
 		//있으면 끝시간도 세팅
 		if(!endT.equals("none")){
-			time = new Timestamp(Long.parseLong(startT));
+			time = new Timestamp(Long.parseLong(endT));
 			schedule.setEndTime(time);
 		}
 		
@@ -524,7 +524,7 @@ public class GroupController {
 		return map;
 	}
 	
-	// ------------------------------------------------------------------ 혜진
+	// -------------------------------------------------------------------------------------------------------------------------- 혜진
 	
 	// 멤버 
 	@RequestMapping("/groups/groupMember.gp")
@@ -624,9 +624,29 @@ public class GroupController {
 	
 	// 일정
 	@RequestMapping("/groups/groupSchedule.gp")
-	public String groupSchedule(){
+	public String goGroupSchedule(){
 		
 		return "groups/groupSchedule";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/groups/selectListGroupSchedule.gp")
+	public Map<String, Object> selectListGroupSchedule(@RequestParam String groupNo){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Schedule> scheduleList = groupService.selectListGroupSchedule(groupNo);
+		
+		map.put("schedule", scheduleList);
+		
+		return map;
+	}
+	
+	// 사진첩
+	@RequestMapping("/groups/groupPhotoAlbum.gp")
+	public String goGroupPhotoAlbum(){
+		
+		return "groups/groupPhotoAlbum";
 	}
 	
 	// 모임설정
