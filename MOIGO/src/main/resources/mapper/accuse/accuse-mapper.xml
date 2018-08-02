@@ -12,26 +12,49 @@
 	</resultMap>
 	
 	
-	<select id="selectTargetListPaging" resultMap="accuseResultMap">
+	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
      SELECT * FROM
 		(SELECT ROWNUM RNUM, PAGING.* 
-		FROM(SELECT * FROM ACCUSE 	
-		<if test='searchingKey != ""'> 
+		FROM(SELECT ACCUSE_NO,TARGET_MEMBER,TARGET_GROUP,REPORTER, 
+   		 CONTENT,ACCUSE_DATE FROM ACCUSE 	
 		<choose>
-			<when test='opt eq "reporter"'>
-			WHERE REPORTER like '%'||#{searchingKey}||'%' 
-			</when>
-			<when test='opt eq "content"'>
-			WHERE CONTENT like '%'||#{searchingKey}||'%' 
-			</when>
-			<when test='opt eq "target"'>
-			WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
-			</when>
+			<when test='chk eq "true"'>
+			left JOIN GROUPS G ON(G.GROUP_NO= TARGET_GROUP)
+   			left JOIN MEMBER M ON(M.MEMBER_NO= TARGET_MEMBER)
+   			WHERE M.DELFLAG != 'Y' OR G.GROUP_STATE_CODE != 'S2'
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					AND REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					AND CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					AND TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>	
+			</when>		
+			<otherwise>
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					WHERE REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					WHERE CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>					
+			</otherwise>		
 		</choose>			
-		</if>			
 		ORDER BY ACCUSE_NO DESC) PAGING) 
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
-		
+	
    </select>  
  
 
@@ -59,19 +82,41 @@
 	
 	<select id="selectAccuseListCnt" resultType="int"> 
 		SELECT COUNT(*) FROM ACCUSE 
-		<if test='searchingKey != ""'> 
 		<choose>
-			<when test='opt eq "reporter"'>
-			WHERE REPORTER like '%'||#{searchingKey}||'%' 
-			</when>
-			<when test='opt eq "content"'>
-			WHERE CONTENT like '%'||#{searchingKey}||'%' 
-			</when>
-			<when test='opt eq "target"'>
-			WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
-			</when>
-		</choose>			
-		</if>			
+			<when test='chk eq "true"'>
+			left JOIN GROUPS G ON(G.GROUP_NO= TARGET_GROUP)
+   			left JOIN MEMBER M ON(M.MEMBER_NO= TARGET_MEMBER)
+   			WHERE M.DELFLAG != 'Y' OR G.GROUP_STATE_CODE != 'S2'
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					AND REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					AND CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					AND TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>	
+			</when>		
+			<otherwise>
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					WHERE REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					WHERE CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>					
+			</otherwise>		
+		</choose>				
 
 	</select>
 	

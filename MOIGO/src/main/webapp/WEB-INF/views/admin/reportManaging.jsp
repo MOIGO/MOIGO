@@ -61,7 +61,7 @@ input[type="checkbox"] {
 		    <button type="submit" class="btn btn-outline-info">검색</button>&nbsp;&nbsp;
 		    <br>
 		    <div class="form-check text-right">		  
-						<input class="form-check-input" type="checkbox" name="reportSearchingConstraint" id="reportSearchingConstraint" value="notIncluding" onClick="updateList(this.value)"> 
+						<input class="form-check-input" type="checkbox" name="reportSearchingConstraint" id="reportSearchingConstraint" value="true" > 
 						<label class="form-check-label" for="reportSearchingConstraint"> &nbsp;&nbsp;not including processed reports</label>
 			</div>
 		    </div>
@@ -111,17 +111,21 @@ input[type="checkbox"] {
 
 		<div class="pagingArea" align="center">
 			<ul class="pagination justify-content-center">
-				 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=1&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">&lt;&lt;</a></li>
+				 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=1&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}&reportSearchingConstraint=${pi.chk}">&lt;&lt;</a></li>
 						<c:if test="${pi.currentPage le 1}">
 						<li class="page-item"><a class="page-link">Pre</a></li>
 				</c:if><c:if test="${pi.currentPage gt 1}">
-					 <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage -1}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">Pre</a></li>
+					 <li class="page-item">
+					 <a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage -1}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}&reportSearchingConstraint=${pi.chk}">Pre</a>
+					 </li>
 				</c:if>
 				<c:forEach var="i" begin="${pi.startPage}" end="${pi.endPage}">
 					<c:if test="${i eq pi.currentPage}">
 					<li class="page-item"><a class="page-link">${i}</a></li>
 					</c:if>	<c:if test="${i ne pi.currentPage}">
-					 		<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${i}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">${i}</a></li>
+					 		<li class="page-item">
+					 		<a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${i}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}&reportSearchingConstraint=${pi.chk}">${i}</a>
+					 		</li>
 					</c:if>
 				</c:forEach>
 				
@@ -129,9 +133,9 @@ input[type="checkbox"] {
 				<c:if test="${pi.currentPage ge pi.maxPage}">
 						<li class="page-item"><a class="page-link">Next</a></li>
 				</c:if><c:if test="${pi.currentPage lt pi.maxPage}">
-					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage + 1}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">Next</a></li>
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.currentPage + 1}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}&reportSearchingConstraint=${pi.chk}">Next</a></li>
 				</c:if>
-				      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.maxPage}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}">&gt;&gt;</a></li>
+				      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/adminReport.ad?currentPage=${pi.maxPage}&reportSearchingKeyword=${pi.searchingKey}&searchOption=${pi.opt}&reportSearchingConstraint=${pi.chk}">&gt;&gt;</a></li>
 				
 			</ul>
 		</div>

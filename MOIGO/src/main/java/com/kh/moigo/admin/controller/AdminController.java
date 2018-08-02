@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.moigo.admin.model.service.AccuseService;
+import com.kh.moigo.admin.model.vo.Accuse;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
@@ -41,8 +42,11 @@ public class AdminController {
 	//신고
 	@ResponseBody
 	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
-	public String reporting(@RequestParam String data,@RequestParam String data2) {
-		String report = data+" | "+ data2;
+	public String reporting(Accuse accuse,@RequestParam String data,@RequestParam String data2) {
+		String report =data;
+		accuse.setContent(data);
+		accuse.setReporter(reporter);
+		accuse.setTargetMember(reporter);
 		System.out.println("report"+report);
 		return report;
 	
@@ -170,14 +174,15 @@ public class AdminController {
 			Model model) throws Exception{
 		System.out.println("currentPage: "+currentPage+" //keyword: "+keyword +"option: "+option+" con: "+con);
 		// -- 페이지 처리 코드 부분 -- //	
-		
+		System.out.println("con"+con);
 		PageInfo pi =new PageInfo();
-		boolean check;
-		if(con=="" || con==null){
-			pi.setChk(false);
-			check = false;
+		String check;
+		if(!con.contains("true")){
+			pi.setChk("false");
+			check = "false";
+		}else{
+			pi.setChk("true"); check="true";
 		}
-		pi.setChk(true); check=true;
 		
 		if(option.contains("target")) {
 			pi.setOpt("target"); option="target";
@@ -186,7 +191,7 @@ public class AdminController {
 		if(option.contains("content")) {pi.setOpt("content"); option="content";}
 
 		pi.setSearchingKey(keyword);
-		System.out.println("option 알기" +option);
+		//System.out.println("option 알기" +option);
 		//currentPage; // 현재 페이지
 		int startPage; // 한번에 표시될 게시글들의 시작 페이지
 		int endPage;  // 한번에 표시될 게시글들의 마지막 페이지
@@ -214,43 +219,16 @@ public class AdminController {
 			endPage = maxPage;
 		}
 		
-		System.out.println("limit갑이 왜 변했지?"+limit);
 		int startRow = ((currentPage-1)*limit)+1;
 		int endRow = startRow+(limit-1);
-		
-		System.out.println(startRow);
-		System.out.println(endRow);
 		
 		// 페이지 관련 변수 전달용 VO 생성
 		pi= new PageInfo(startPage,endPage,maxPage, limit, currentPage, listCount, startRow,endRow, keyword, option,check);
 		
-
-		System.out.println("List구하기 전"+pi);
-
 		
-		//--1. 그냥 들어왔을 때  not searching
+		
 		List<Map<String,Object>> accuseList = as.selectTargetListPaging(pi);
-		//
-		/*if(con == null){
-			System.out.println("null입니다.");
-			if(option == "" || option == null ){
-				
-			}else{
-				if(option =="reporter") ;
-				if(option.contains("target")) { System.out.println("target 들어왔다.");
-					accuseList= as.selectTargetListPaging(pi);
-				}
-				if(option == "content") ;
-			}
-			
-		}else{
-			System.out.println("null이 아닙니다.");
-			if(option =="reporter") ;
-			if(option =="target") ;
-			if(option== "content") ;
-			
-		}*/
-		
+
 		//report top 5 구하기
 		List<Map<String,Object>> mtop5 = as.atop5memberList();
 		List<Map<String,Object>> gtop5 = as.atop5groupList();

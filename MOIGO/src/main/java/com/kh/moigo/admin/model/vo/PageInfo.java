@@ -21,13 +21,13 @@ public class PageInfo implements java.io.Serializable{
 	private int endRow;
 	
 	private String searchingKey="";
-	private boolean chk;
+	private String chk;
 	private String opt;
 	
 	
 	
 	public PageInfo(int startPage, int endPage, int maxPage, int limit, int currentPage, int listCount, int startRow,
-			int endRow, String searchingKey,String opt, boolean chk) {
+			int endRow, String searchingKey,String opt, String chk) {
 		super();
 		this.startPage = startPage;
 		this.endPage = endPage;
@@ -43,9 +43,219 @@ public class PageInfo implements java.io.Serializable{
 	}
 	
 	
+	
+	
+	
+	
+	
+	public int getStartPage() {
+		return startPage;
+	}
+
+
+
+
+
+
+
+	public void setStartPage(int startPage) {
+		this.startPage = startPage;
+	}
+
+
+
+
+
+
+
+	public int getEndPage() {
+		return endPage;
+	}
+
+
+
+
+
+
+
+	public void setEndPage(int endPage) {
+		this.endPage = endPage;
+	}
+
+
+
+
+
+
+
+	public int getMaxPage() {
+		return maxPage;
+	}
+
+
+
+
+
+
+
+	public void setMaxPage(int maxPage) {
+		this.maxPage = maxPage;
+	}
+
+
+
+
+
+
+
+	public int getLimit() {
+		return limit;
+	}
+
+
+
+
+
+
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
+
+
+
+
+
+
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+
+
+
+
+
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+
+
+
+
+
+
+	public int getListCount() {
+		return listCount;
+	}
+
+
+
+
+
+
+
+	public void setListCount(int listCount) {
+		this.listCount = listCount;
+	}
+
+
+
+
+
+
+
+	public int getStartRow() {
+		return startRow;
+	}
+
+
+
+
+
+
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+
+
+
+
+
+
+	public int getEndRow() {
+		return endRow;
+	}
+
+
+
+
+
+
+
+	public void setEndRow(int endRow) {
+		this.endRow = endRow;
+	}
+
+
+
+
+
+
+
+	public String getSearchingKey() {
+		return searchingKey;
+	}
+
+
+
+
+
+
+
+	public void setSearchingKey(String searchingKey) {
+		this.searchingKey = searchingKey;
+	}
+
+
+
+
+
+
+
+	public String getChk() {
+		return chk;
+	}
+
+
+
+
+
+
+
+	public void setChk(String chk) {
+		this.chk = chk;
+	}
+
+
+
+
+
+
+
 	public String getOpt() {
 		return opt;
 	}
+
+
+
+
+
 
 
 	public void setOpt(String opt) {
@@ -53,75 +263,11 @@ public class PageInfo implements java.io.Serializable{
 	}
 
 
-	public boolean isChk() {
-		return chk;
-	}
 
 
-	public void setChk(boolean chk) {
-		this.chk = chk;
-	}
 
 
-	public String getSearchingKey() {
-		return searchingKey;
-	}
-	public void setSearchingKey(String searchingKey) {
-		this.searchingKey = searchingKey;
-	}
-	public int getStartPage() {
-		return startPage;
-	}
-	public void setStartPage(int startPage) {
-		this.startPage = startPage;
-	}
-	public int getEndPage() {
-		return endPage;
-	}
-	public void setEndPage(int endPage) {
-		this.endPage = endPage;
-	}
-	public int getMaxPage() {
-		return maxPage;
-	}
-	public void setMaxPage(int maxPage) {
-		this.maxPage = maxPage;
-	}
-	public int getLimit() {
-		return limit;
-	}
-	public void setLimit(int limit) {
-		this.limit = limit;
-	}
-	public int getCurrentPage() {
-		return currentPage;
-	}
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
-	public int getListCount() {
-		return listCount;
-	}
-	public void setListCount(int listCount) {
-		this.listCount = listCount;
-	}
-	public int getStartRow() {
-		return startRow;
-	}
-	public void setStartRow(int startRow) {
-		this.startRow = startRow;
-	}
-	public int getEndRow() {
-		return endRow;
-	}
-	public void setEndRow(int endRow) {
-		this.endRow = endRow;
-	}
-	
-	
-	
-	
-	
+
 	@Override
 	public String toString() {
 		return "PageInfo [startPage=" + startPage + ", endPage=" + endPage + ", maxPage=" + maxPage + ", limit=" + limit
