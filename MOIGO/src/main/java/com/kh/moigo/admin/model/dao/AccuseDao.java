@@ -4,6 +4,8 @@ package com.kh.moigo.admin.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.kh.moigo.admin.model.vo.Accuse;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
@@ -49,5 +51,8 @@ public interface AccuseDao {
 	int memDelete(String id);
 	int grpDelete(String id);
 	List<Map<String, Object>> selectTargetListPaging(PageInfo pi);
+	
+	//--
+	int insertAccuse(Accuse accuse);
 
 }

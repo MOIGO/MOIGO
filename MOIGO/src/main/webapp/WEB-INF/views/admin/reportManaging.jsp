@@ -33,11 +33,7 @@ input[type="checkbox"] {
 </style>
 </head>
 <body>
-	<c:import url="common/adminSidebar.jsp"></c:import>
-
-    
- 
-  	
+	<c:import url="common/adminSidebar.jsp"></c:import> <!-- 사이드바 넣기 -->
 
 	<div class="row report_body_whole"> <!-- 전체 row content 내부 시작 -->
 	  	<!-- <div class="col-sm-12 col-md-1 col-lg-1 col-xs-12 d-none d-lg-block"></div> --> <!-- 사이드바 사이 거리 주기 -->
@@ -65,14 +61,14 @@ input[type="checkbox"] {
 						<label class="form-check-label" for="reportSearchingConstraint"> &nbsp;&nbsp;not including processed reports</label>
 			</div>
 		    </div>
-		     <div class="form-check text-right">		  
-						'${listCount}' 개가 검색되었습니다.
+		     <div class="form-check text-right text-info">		  
+						${listCount} 개가 검색되었습니다.
 			</div>
 		    </form>
 		    <br>
 	    
 	    
-		<table class="table table-bordered table-hover text-center">
+		<table class="table table-bordered table-hover text-center table-sm">
 			<thead class="thead-dark">
 		        <tr>
 		          <th>신고자</th>

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kh.moigo.admin.model.dao.AccuseDao;
+import com.kh.moigo.admin.model.vo.Accuse;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
@@ -192,6 +193,12 @@ public class AccuseServiceImpl implements AccuseService {
 	public List<Map<String, Object>> selectTargetListPaging(PageInfo pi) {
 		// TODO Auto-generated method stub
 		return ad.selectTargetListPaging(pi);
+	}
+
+	@Override
+	public int insertAccuse(Accuse accuse) {
+		return ad.insertAccuse(accuse);
+		
 	}
 	
 
