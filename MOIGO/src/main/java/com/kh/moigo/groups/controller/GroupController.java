@@ -478,10 +478,12 @@ public class GroupController {
 	//이미지 넣기
 	@RequestMapping(value="/groups/insertImageFile.gp", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> insertImageFiles(@RequestParam MultipartFile uploadFile,HttpServletRequest request){
+	public Map<String,Object> insertImageFiles(@RequestParam("uploadFile") MultipartFile uploadFile, HttpServletRequest request){
 		
 		String orignImage = "";
 		String newImage = "";
+		Map <String,Object> map = new HashMap<String, Object>();
+		
 		if(uploadFile!=null){
 			try{		
 				
@@ -496,7 +498,6 @@ public class GroupController {
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 				
-				
 					newImage = "groupImage_"  + "_" + sdf.format(new Date(System.currentTimeMillis()));
 					
 					
@@ -509,6 +510,7 @@ public class GroupController {
 					
 					uploadFile.transferTo(new File(saveDir +"/"+ newImage));
 					
+					map.put("url",newImage);
 				
 			}
 			catch(Exception e){
@@ -517,12 +519,7 @@ public class GroupController {
 			
 			
 		}
-		
-		
-		
-		
-		Map <String,Object> map = new HashMap<String, Object>();
-		
+	
 			
 		return map;
 	}
@@ -554,6 +551,8 @@ public class GroupController {
 		
 		return "groups/groupMember";
 	}
+	
+	
 	
 	@RequestMapping(value="/groups/updateGroupMember.gp", method=RequestMethod.POST)
 	public String updateGroupMember(GroupMember groupMember, @RequestParam MultipartFile uploadProfile, @RequestParam String resizeProfile, 

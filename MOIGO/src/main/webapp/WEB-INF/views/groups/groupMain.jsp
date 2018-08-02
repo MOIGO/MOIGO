@@ -324,9 +324,6 @@ function setPostList(){
 
 
 
-
-
-
 function makeReply(replyList){
 	var $replyWrapper =  $('<div class="p-3 replyWrapper bg-light"> ');
 	
@@ -360,7 +357,7 @@ function makeProfile(obj){
 			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
-		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.postNo));
+			$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.postNo));
 	}
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
@@ -891,22 +888,23 @@ function createSummerNote(){
 function sendFile(file, editor) {
 	
 		var data = new FormData();
-		data.append("uploadFile",file);
+		data.append("uploadFile",file[0]);
 		
-		console.log(file);
+		console.log(file[0]);
 	     $.ajax({ // ajax를 통해 파일 업로드 처리
 	    	type : "POST",
 	    	data : data,
+	    	async : false,
 	        url : "${pageContext.request.contextPath}/groups/insertImageFile.gp",
 	        dataType:"json",
 	        cache: false,
 	        contentType: false,
-	        enctype: 'multipart/form-data',
+	        /* enctype: 'multipart/form-data', */
 	        processData: false,
 	        success : function(data) { // 처리가 성공할 경우
             // 에디터에 이미지 출력
-            console.log(file.url);
-	        	$(editor).summernote('editor.insertImage', data.file.url);
+            console.log(data.url);
+	        	$(editor).summernote('editor.insertImage','${root}/resources/images/groupImages/'+data.url);
 	        }
 	    }); 
 	}
