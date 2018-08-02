@@ -130,8 +130,6 @@ public class MemberController {
 	@RequestMapping(value ="/member/signUpEnd.do", method = RequestMethod.POST)
 	public String signUpEnd(Member member,
 							@RequestParam (value = "interest", required = false,	defaultValue = "") List<String> interestList){
-
-
 		String rawPassword = member.getMemberPwd();
 		System.out.println("password 암호화 전 : "+rawPassword);
 		member.setMemberPwd(bcryptPasswordEncoder.encode(rawPassword));
