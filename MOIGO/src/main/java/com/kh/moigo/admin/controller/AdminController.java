@@ -101,6 +101,7 @@ public class AdminController {
 		List<Map<String,Object>> memberDashCount = as.memberDashCount();
 		List<Map<String,Object>> groupDashCount = as.groupDashCount();  // 회원수 그룹수 통계
 		
+		
 		model.addAttribute("memberDashCount",memberDashCount);
 		model.addAttribute("groupDashCount",groupDashCount);
 		model.addAttribute("MemEnrollperMonth",MemEnrollperMonth);
