@@ -483,8 +483,10 @@
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 <script>
-	$('.ani').on('click',function(){
-		console.log("눌렀다.");
+	$('#joingroups').on('click',function(){
+		var sel = $('#joingroups').children('div').children('input').val();
+		console.log(sel);
+		location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+sel;
 	});
 	
 	function test(){
@@ -501,12 +503,12 @@
 						
 						for(l in list){
 							var $div = $('<div class="mainGroup test ani clickme">');
-							$div.append('<input type="hidden" value="list[l].groupNo" />')
+							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							$('#joingroups').append($div);
 							var $div_top = $('<div class="groupView_top test">');
 							var $div_bot = $('<div class="groupView_bot test">');
-							$div_top.append($('<img id="logo4" src="resources/images/main/lifestyle.jpeg" width="100%" height="100%" />'));
+							$div_top.append($('<img id="logo4" src="'+list[l].groupImage+'" width="100%" height="100%" />'));
 							
 							$div_bot.append($('<div class="title">'+list[l].groupName+'</div>'));
 							$div_bot.append($('<div class="location">'+list[l].groupAddress+'</div>'));
