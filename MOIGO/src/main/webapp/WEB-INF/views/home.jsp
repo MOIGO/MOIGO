@@ -121,7 +121,7 @@
 	<br>
 	<br>
 	<div class="container">
-		<div class="container d-flex justify-content-center jgroup">
+		<div class="container row jgroup">
 			<div
 				class="mainGroup test d-flex justify-content-center align-items-center ani plusGroup"
 				style="background-color: skyblue;">
@@ -488,12 +488,6 @@
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 <script>
-	$('.mainGroup').on('click',function(){
-		console.log("눌렀다");
-		//var sel = $('#joingroups').children('div').children('input').val();
-		//console.log(sel);
-		//location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+sel;
-	});
 	
 	function test(){
 		
@@ -508,7 +502,7 @@
 						var list = data.list;
 						
 						for(l in list){
-							var $div = $('<div class="mainGroup test ani clickme">');
+							var $div = $('<div class="mainGroup test ani clickme">&nbsp;&nbsp;');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							$('#joingroups').append($div);
