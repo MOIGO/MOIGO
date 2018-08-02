@@ -12,7 +12,8 @@
 	</resultMap>
 	
 	<insert id="insertAccuse" parameterType="int">
-	INSERT INTO ACCUSE VALUES(SEQ_ACCUSE.NEXTVAL,#{targetMember},null,#{reporter},#{content},SYSDATE)
+	INSERT INTO ACCUSE VALUES(SEQ_ACCUSE.NEXTVAL,
+	#{targetMember},null,#{reporter},#{content},SYSDATE)
 	</insert>
 	
 	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
