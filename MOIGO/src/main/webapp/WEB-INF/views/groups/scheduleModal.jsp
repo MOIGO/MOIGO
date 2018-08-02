@@ -106,7 +106,9 @@ text-align:center;
 			
 				<div class="modal-footer">
 		 
+
 		        <button type="button" onclick="" id="scheduleConfirmBtn" class="btn btn-primary btn-block">첨부 하기</button>
+
 		      </div>
 			</form>
 		</div>
@@ -133,6 +135,7 @@ text-align:center;
 				    <div class="container">
 				    	<div class="row justify-content-start">
 				    		<div class="col-2">
+				    			<input type="hidden" id="scheduleWriter" value=""/>
 				    			<div>
 				    				<span class="day" ></span><br>
 				    				<span class="dayofweek" style="margin-top:-10px;"></span>
@@ -151,8 +154,20 @@ text-align:center;
 				    				</div>
 				    			</div>
 				    		</div>
-				    		<div class="scheduleViewDropDown col-2">
-				    			
+				    		<div class="col-2">
+				    			<div>
+				    				<div class="dropdown">
+				    					<button class="btn btn-link" type="button" id="scheduleViewDropDown" data-toggle="dropdown" >
+				    						<i class="fas fa-ellipsis-v"></i>
+				    					</button>
+				    					<div class="dropdown-menu">
+				    						<a href="" class="dropdown-item">수정</a>
+				    						<a href="" class="dropdown-item">삭제</a>
+				    					</div>
+				    					
+				    				</div>
+				    			</div>
+				    		
 				    		</div>
 				    	</div>
 				    </div>
@@ -235,12 +250,13 @@ text-align:center;
 	
 
 	function openScheduleViewModal(scheduleNo){
+		
 		$('#viewSchedule').modal("toggle");
 		makeScheduleMapView();
+	
 		getOneSchedule(scheduleNo,setScheduleViewModal);
-		
-		$('#viewSchedule .scheduleViewDropDown').append(makeScheduleViewDropDown(scheduleNo));
-		
+	
+	
 	}
 	
 	function setMemberNameOnView(memberNo){
@@ -252,8 +268,29 @@ text-align:center;
 				,success:(function(data){
 					if(data!=null){
 						$('#viewSchedule').find(".memberName").text(data.groupMember.memberName);
+						$('#scheduleWriter').val(data.groupMember.memberNo);	
 						
-					}else
+						
+						if($('#scheduleWriter').val()!='${m.memberNo}'){
+							
+							$('#viewSchedule .dropdown').css("display","none");
+						}else{
+							$('#viewSchedule .dropdown').css("display","block");
+						}
+						
+						
+						/* 
+						$('# .dropdown-menu a').eq(0).on("click",function(){
+							alert("들어옴");
+							editSchedule(undefined,scheduleNo);
+						});
+						
+						$('.dropdown-menu a').eq(1).on("click",function(){
+							deleteSchedule(scheduleNo,undefined);
+						});
+						 */
+						
+					}else 
 						alert("일정을 불러오는 과정에서 문제가 생겼습니다.");
 				
 				}),error:(function(data){
@@ -440,7 +477,7 @@ text-align:center;
 			 $('#allDay').click();
 		 }
 		
-		$('#scheduleLabelColor').val(obj.colorLabel);
+		$('#scheduleLabelColor').val(obj.colorLabel).prop("selected", true);
 		
 		
 	}
@@ -520,11 +557,17 @@ text-align:center;
 		
 
 		var dates = ($(dateObj).val()).split(".");
-		var times = ($(timeObj).val()).split(":");
-		if(timeObj.val()==null)
-	         return new Date(dates[0],(parseInt(dates[1])-1),dates[2],0,0,0,0);
-	      else
-	         return new Date(dates[0],(parseInt(dates[1])-1),dates[2],times[0],times[1],(new Date()).getSeconds(),0);
+
+		
+		
+		if(timeObj.val()==null||timeObj.val().length<=0)
+			return new Date(dates[0],(parseInt(dates[1])-1),dates[2],0,0,0,0);
+		else{
+			var times = ($(timeObj).val()).split(":");
+			return new Date(dates[0],(parseInt(dates[1])-1),dates[2],times[0],times[1],(new Date()).getSeconds(),0);
+			
+		}
+
 	
 	}
 	
@@ -716,12 +759,14 @@ text-align:center;
 					
 					if(data.result>0){
 						alert("일정 입력에 성공하였습니다.");
+
 						if($("#scheduleConfirmBtn").hasClass("call_schedule")){
 							$("#scheduleConfirmBtn").removeClass("call_schedule");
 							location.reload();
 						}
 						else	
 							addScheduleOnSummerNote(data.schedule);
+
 					}
 					else
 						alert("일정 입력에 실패하였습니다.");

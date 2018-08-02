@@ -476,11 +476,18 @@ function editMap(){
 
 function editMapContent(marker,place){
 	if(typeof(toEditTarget)!='undefined')
-	{
-		$(toEditTarget).find('.place_name').text(place.place_name);
+	{	
+		/* $(toEditTarget).find('.place_name').text(place.place_name);
 		$(toEditTarget).find('.address_name').text(place.address_name);
+		$('#insertMap').modal('hide'); */
+		
+		$(toEditTarget).remove();
+		
+		addMapOnSummerNote(marker,place);
 		$('#insertMap').modal('hide');
 	}
+	
+	
 }
 
 function editScheduleContent(marker,place){

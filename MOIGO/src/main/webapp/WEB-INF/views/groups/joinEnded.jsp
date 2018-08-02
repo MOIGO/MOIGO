@@ -12,7 +12,8 @@
 
 <script>
 $(function(){
-	alert("가입에 성공하셨습니다.");
+	alert("${msg}");
+
 	location.href="${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+'${groupNo}'; 
 });
 </script>

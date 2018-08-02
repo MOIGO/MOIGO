@@ -56,6 +56,8 @@ public interface GroupsDao {
 	
 	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	
+	int updateGroupBasics(Groups group);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -70,6 +72,8 @@ public interface GroupsDao {
 	int deleteGroup(String groupNo);
 
 	List<Schedule> selectListGroupSchedule(String groupNo);
+
+	
 
 	
 

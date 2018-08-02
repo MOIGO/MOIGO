@@ -135,6 +135,12 @@
 	
 	<!--댓글 등록  -->
 	<insert id="insertReply" parameterType="postReply">
+	
+		<selectKey keyProperty="replyNo" resultType="string" order="AFTER" >
+			SELECT 'R'||TO_CHAR(SEQ_POSTREPLY.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+		
+	
 		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{groupNo},#{content},SYSDATE)
 	</insert>
 	
@@ -207,6 +213,11 @@
 		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
 	</select>
 	
+	<update id="updateGroupBasics" parameterType="groups">
+		UPDATE GROUPS
+		SET GROUP_NAME=#{groupName},GROUP_PICTURE=#{groupPicture},OPEN_SETTING=#{openSetting},INTEREST_BIG_CODE=#{interestBigCode}
+		WHERE GROUP_NO=#{groupNo}
+	</update>
 	
 	
 	<!--그룹 가입하기 -->

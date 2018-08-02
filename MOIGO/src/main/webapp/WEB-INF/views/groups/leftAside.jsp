@@ -32,11 +32,15 @@
 		max-width: 	40%;
 	}	
 	
+	
+	
 </style>
 </head>
 
 <body>
-	  
+
+
+
 <div class="col-3">
  	<div class="card">
 		<img class="card-img-top" src="http://via.placeholder.com/300x300"
@@ -114,6 +118,7 @@
 	</div>
  </div>
  
+ 
  <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
  </form>
@@ -168,15 +173,7 @@ function setGroupDesc(groupNo,isMember){
 				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 			}
 			
-		/* 	if(!isMember){
-				$('.joinBtnWrapper').css("display","none");
-				$('.joined').css("display","relative");
-				$('.notJoined').css("display","none");
-			}else{
-				$('.joinBtnWrapper').css("display","relative");
-				$('.joined').css("display","none");
-				$('.notJoined').css("display","relative");
-			} */
+		
 			
 			$('#joinModal .groupName').text(group.groupName);
 			$('#joinModal .groupDesc').text(group.groupMsg);

@@ -32,6 +32,7 @@ import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
+import com.kh.moigo.groups.model.vo.PostReplyWithMem;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
@@ -50,20 +51,30 @@ public class GroupController {
 		//세션에서 멤버 가져옴
 		Member m = (Member)(request.getSession().getAttribute("m"));
 		
+		Groups gp= groupService.selectOneGroup(groupNo);
+		
 		//멤버 널 아니면
 		if(m!=null){
 			//그룹에 있는지 확인하고
-			GroupMember gm = groupService.selectOneMember(new GroupMember(m.getMemberNo(),groupNo));
+			GroupMember gm = groupService.selectOneGrpMemberWithMemNo(new GroupMember(m.getMemberNo(),groupNo));
 			
 			//그룹에 있으면
-			if(gm!=null)
+			if(gm!=null){
 				model.addAttribute("memberGrade",gm.getMemberGradeCode()); //권한 컬럼을 뷰에 리턴
-			else
+				model.addAttribute("gm",gm);
+			}
+			else{
 				model.addAttribute("memberGrade",-1); //없으면(가입 안되있으면) -1 리턴
+				model.addAttribute("gm",null);
+			}
+			
 		}else
 			model.addAttribute("memberGrade",-1);//멤버가 아니어도 -1 리턴
 		
 		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
+		model.addAttribute("currentGroup",gp);
+		model.addAttribute("openSetting",gp.getOpenSetting());
+		System.out.println("그룹 오픈세팅 :" +gp.getOpenSetting());
 		
 		return "groups/groupMain";
 	}
@@ -85,11 +96,8 @@ public class GroupController {
 	{
 		String groupPicture = "";
 		
-		
 		int result =  groupService.createGroup(group);
-		
-		
-		
+	
 		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
 			try{		
 				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
@@ -159,6 +167,60 @@ public class GroupController {
 		return map;
 	}
 	
+	
+	//그룹 기본정보 업데이트 하기
+	@RequestMapping("/groups/updateGroupEnd.gp")
+	public String updateGroupEnd(Groups group,@RequestParam String groupDefaultImg,
+												@RequestParam MultipartFile groupImageFile,
+												HttpServletRequest request){
+		
+		String groupPicture = "";
+		int result =-1;
+		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
+			try{		
+				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
+				// 프로필 이미지를 저장할 경로
+				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
+				
+				// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+				File dir = new File(saveDir);
+				
+				if(!dir.exists())
+					dir.mkdirs();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+				groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
+				
+				
+				// 2. upload한 file을 rename, 경로 저장하기
+				String fileName = groupImageFile.getOriginalFilename();
+				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+				groupPicture = groupPicture + "." + ext;
+				
+				groupImageFile.transferTo(new File(saveDir +"/"+ groupPicture));
+					
+				
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			
+			group.setGroupPicture(groupPicture);
+		
+			result = groupService.updategroupBasics(group);
+		}else{
+			System.out.println("이미지 파일이 없는 경우");
+			group.setGroupPicture(groupDefaultImg);
+			groupService.updategroupBasics(group);
+		}
+		
+		
+		return "redirect:/groups/groupMain.gp?groupNo="+ group.getGroupNo();
+		
+	}
+	
 	//그룹 메인에 글 가져오기
 	@RequestMapping("/groups/getPostList.gp")
 	@ResponseBody
@@ -184,17 +246,37 @@ public class GroupController {
 	
 		
 		Member m = (Member)request.getSession().getAttribute("m");
-		if(m!=null){
 		
-			if((groupService.selectOneGroup(groupNo)).getAllowSignup().equals("Y")){
+		
+		Groups gp =  groupService.selectOneGroup(groupNo);
+		
+		int memCnt = groupService.selectGrpMemNum(groupNo);
+		
+		if(!gp.getGroupGender().equals("N")&&(gp.getGroupGender()!=m.getMemberGender())){
+			model.addAttribute("msg","성별이 제한이 걸려 있습니다.");
+		}else if(m.getMemberBirth().getYear()<gp.getMinAge()||m.getMemberBirth().getYear()<gp.getMaxAge()){
+			model.addAttribute("msg","나이 제한에 맞지 않습니다.");
+		}else if(memCnt>=gp.getMaxMember()){
+			model.addAttribute("msg","그룹 정원이 모두 찼습니다.");
+		}else{
+			if(m!=null){
 				
-				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
-			}else{
-				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
+				if(gp.getAllowSignup().equals("Y")){
+					
+					groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
+				}else{
+					groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
+				}
 			}
+			
+			
+			model.addAttribute("msg","가입에 성공했습니다.");
 		}
+		
+		
 		model.addAttribute("groupNo",groupNo);
-		model.addAttribute("msg","가입에 성공하셨습니다.");
+		
+		
 		return "groups/joinEnded";
 				
 	}
@@ -257,6 +339,16 @@ public class GroupController {
 		
 		Map <String,Object> map = new HashMap<String, Object>();
 		map.put("result", groupService.insertReply(postReply));
+		
+		PostReplyWithMem pwm = new PostReplyWithMem();
+		pwm.setGroupMember(groupService.selectOneGrpMemberWithMemNo(new GroupMember(postReply.getMemberNo(),postReply.getGroupNo())));
+		pwm.setContent(postReply.getContent());
+		pwm.setMemberNo(postReply.getMemberNo());
+		pwm.setPostNo(postReply.getPostNo());
+		pwm.setReplyNo(postReply.getReplyNo());
+		pwm.setSubmitDate(new Date(new java.util.Date().getTime()));
+		map.put("pwm", pwm);
+		
 		
 		return map;
 	}
@@ -352,6 +444,7 @@ public class GroupController {
 		return map;
 	}
 	
+	//스케줄 지우기
 	@RequestMapping("/groups/deleteSchedule.gp")
 	@ResponseBody
 	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
@@ -367,7 +460,7 @@ public class GroupController {
 	}
 	
 	
-	//
+	//멤버 하나 선택하기
 	@RequestMapping("/groups/selectOneGrpMem.gp")
 	@ResponseBody
 	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo,@RequestParam String groupNo){
@@ -382,6 +475,54 @@ public class GroupController {
 	}
 	
 	
+	//이미지 넣기
+	@RequestMapping(value="/groups/insertImageFile.gp", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> insertImageFiles(@RequestParam("uploadFile") MultipartFile uploadFile, HttpServletRequest request){
+		
+		String orignImage = "";
+		String newImage = "";
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		if(uploadFile!=null){
+			try{		
+				
+				// 프로필 이미지를 저장할 경로
+				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupImages/");
+				
+				// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+				File dir = new File(saveDir);
+				
+				if(!dir.exists())
+					dir.mkdirs();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+					newImage = "groupImage_"  + "_" + sdf.format(new Date(System.currentTimeMillis()));
+					
+					
+					// 2. upload한 file을 rename, 경로 저장하기
+					orignImage = uploadFile.getOriginalFilename();
+					System.out.println(uploadFile.getOriginalFilename());
+					
+					String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
+					newImage = newImage + "." + ext;
+					
+					uploadFile.transferTo(new File(saveDir +"/"+ newImage));
+					
+					map.put("url",newImage);
+				
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			
+		}
+	
+			
+		return map;
+	}
 	
 	// -------------------------------------------------------------------------------------------------------------------------- 혜진
 	
@@ -410,6 +551,8 @@ public class GroupController {
 		
 		return "groups/groupMember";
 	}
+	
+	
 	
 	@RequestMapping(value="/groups/updateGroupMember.gp", method=RequestMethod.POST)
 	public String updateGroupMember(GroupMember groupMember, @RequestParam MultipartFile uploadProfile, @RequestParam String resizeProfile, 

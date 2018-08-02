@@ -179,6 +179,14 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectKeywordPost",map));
 	}
+	
+	
+	@Override
+	public int updateGroupBasics(Groups group) {
+		
+		return sqlSession.update("groups.updateGroupBasics",group);
+	}
+
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -227,6 +235,7 @@ public class GroupsDaoImpl implements GroupsDao {
 	public List<Schedule> selectListGroupSchedule(String groupNo) {
 		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
 	}
+
 
 
 }
