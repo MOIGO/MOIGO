@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="root" value="${pageContext.request.contextPath}" />
 <html>
 <head>
 
@@ -77,6 +78,11 @@
 		action="${pageContext.request.contextPath}/groups/createGroupEnd.gp"
 		method="post" enctype="multipart/form-data" id="createGroupForm">
 		<input type="hidden" name="memberNo" value="${m.memberNo}" />
+		<c:if test="${group ne null }">
+			<input type="hidden" name="groupNo" value="${group.groupNo}" />
+		</c:if>
+		
+		
 		<div class="container">
 			<div class="make_cover">
 
@@ -214,7 +220,9 @@
 
 		</div>
 		<!--group open setting div end  -->
-
+		
+		<c:if test="${group eq null}">
+		
 		<div class="container mt-5">
 
 			<label class="labTitle">밴드 제약 설정(선택)</label>
@@ -348,6 +356,7 @@
 				</div>
 			</div>
 		</div>
+		</c:if>
 		<!--distric container end  -->
 		<div class="container mt-5">
 
@@ -447,12 +456,8 @@
 	var cover_curr_page =0;
 	
 	$(function(){
-		var imgNum = Math.floor(Math.random()*6);
-		
-		setMainCover($("[class*='cover_set_0'] > img").eq(imgNum));
 		
 		var cover_imgs = $("[class*='cover_set'] > img").css("cursor","pointer");
-		
 		$(cover_imgs).on("click",function(){
 			setMainCover(this);
 			$('input[name=groupImageFile]').val(null);
@@ -460,6 +465,8 @@
 		
 		setSelectYears($('#min_ageSelect'),100);
 		setSelectYears($('#max_ageSelect'),100);
+		
+		
 		
 		$('#maxNumber').change(function(){
 			if($(this).val()>50)
@@ -469,6 +476,32 @@
 		});
 		
 		largeRegion();
+		
+		
+		if('${group!=null}'=='true'){
+			 
+			$('#inpGrpName').val('${group.groupName}');
+			
+			
+			console.log("${root}/resources/images/groupCovers/${group.groupNo}/'+'${group.groupPicture}");
+			if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){
+				$('.mainCover').attr("src",'${group.groupPicture}');
+				$('#inpCoverImg').val('${group.groupPicture}');
+			
+			}else{
+				$('.mainCover').attr("src",'${root}/resources/images/groupCovers/${group.groupNo}/${group.groupPicture}');
+				$('#inpCoverImg').val('${group.groupPicture}');
+			}
+		
+			
+		 }else{
+			 var imgNum = Math.floor(Math.random()*6);
+				
+				setMainCover($("[class*='cover_set_0'] > img").eq(imgNum));
+			 
+			
+		 }
+
 		
 	});
 	
@@ -494,7 +527,7 @@
 	               	else
 	               		$("#conditionRegionLarge").append("<option value="+regionLarges[i]+">"+regionLarges[i]+"</option>");
 	            }
-
+					
 	           },error:function(data){
 	                 console.log("에러입니다"); 
 	           }
@@ -712,27 +745,24 @@
     
 	 
 	 if($('#min_ageSelect').val()!=-1&&$('#max_ageSelect').val()!=-1){
-		 if($('#min_ageSelect').val()<$('#max_ageSelect').val()){
+		 if($('#min_ageSelect').val()>$('#max_ageSelect').val()){
 		    	alert("최소나이는 최대나이 보다 작아야 합니다.");
 		    	return;
 		 }
 	 }
 	 
-	 if($('#maxNumber').val()<=0||$('#maxNumber').val()>50)
+	if($('#maxNumber').val()<=0||$('#maxNumber').val()>50){
   	  alert("최대 멤버 수를 확인해 주세요");
-	
+	 }
     else if(!$("#regionNone").is(":checked")){
        
        var rLarge = $("#conditionRegionLarge").val();
        var rMedium = $("#conditionRegionMedium").val();
        var rSmall = $("#conditionRegionSmall").val();
-       
+   		
        var regionFull = "";
        
-       // 지역 라벨을 선택했을 경우 alert로 다시 선택하라고 알려줌
-       if(rLarge == "regionNone" || rMedium == "regionNone" || rMedium != "전체" && rSmall == "regionNone")
-          alert("지역을 다시 선택해주세요.");
-       
+      
        // 지역을 한 String으로 담기 위해서 구분
        if(rLarge != "regionNone")
           regionFull = rLarge;
@@ -741,15 +771,22 @@
        if(rSmall != "전체" && rSmall != "regionNone")
           regionFull += " " + rSmall;      
        
-       // 지역이 존재하는 경우만 submit으로 보낼 수 있도록 if로 판별
-       if(regionFull.length != 0){
+      
+     	
           $("#regionFull").val(regionFull);
-          $("#createGroupForm").submit();
-       }
+          
+          if('${group==null}'=='true')
+          	$("#createGroupForm").submit();
+          else
+        	  $("#createGroupForm").attr("action",'${root}/groups/updateGroupEnd.gp').submit();
     }else{
-    	
+
   	 $("#regionFull").val("지역무관");
-       $("#createGroupForm").submit();
+  	 
+  	 if('${group==null}'=='true')
+       	$("#createGroupForm").submit();
+       else
+     	  $("#createGroupForm").attr("action",'${root}/groups/updateGroupEnd.gp').submit();
     }	
  });
 	    

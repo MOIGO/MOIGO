@@ -56,6 +56,8 @@ public interface GroupsDao {
 	
 	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	
+	int updateGroupBasics(Groups group);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	List<GroupMember> selectGroupMemberList(String groupNo);
@@ -72,6 +74,8 @@ public interface GroupsDao {
 	int deleteGroupMember(Map<String, Object> changeMap);
 
 	int deleteGroup(String groupNo);
+
+	
 
 	
 

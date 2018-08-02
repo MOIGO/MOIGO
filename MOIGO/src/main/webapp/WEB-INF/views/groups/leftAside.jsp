@@ -32,25 +32,13 @@
 		max-width: 	40%;
 	}	
 	
-	.wrap{
-		z-index: 1999;
-		position:absolute;
-		background-color: grey;
-		opacity: 0.5;
-		min-width:1000px;
-		width:1200px;
-		height:100%;
-		
-		font-size:10em;
-	}
+	
 	
 </style>
 </head>
 
 <body>
-<c:if test="${param.groupStateCode ne S1 }">
-	<div class="wrap row align-items-center justify-content-center">블라인드 처리된 모임입니다.</div>
-</c:if>
+
 
 
 <div class="col-3">
@@ -185,15 +173,7 @@ function setGroupDesc(groupNo,isMember){
 				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 			}
 			
-			/* if(!isMember){
-				$('.joinBtnWrapper').css("display","none");
-				$('.joined').css("display","relative");
-				$('.notJoined').css("display","none");
-			}else{
-				$('.joinBtnWrapper').css("display","relative");
-				$('.joined').css("display","none");
-				$('.notJoined').css("display","relative");
-			} */
+		
 			
 			$('#joinModal .groupName').text(group.groupName);
 			$('#joinModal .groupDesc').text(group.groupMsg);

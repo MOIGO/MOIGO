@@ -156,6 +156,12 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.selectKeywordPost(groupNo,keyword,p);
 	}
 
+	@Override
+	public int updategroupBasics(Groups group) {
+		
+		return groupDao.updateGroupBasics(group);
+	}
+
 	
   
 	//--------------------------------------------------------------------- 혜진

@@ -179,6 +179,14 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectKeywordPost",map));
 	}
+	
+	
+	@Override
+	public int updateGroupBasics(Groups group) {
+		
+		return sqlSession.update("groups.updateGroupBasics",group);
+	}
+
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -222,6 +230,7 @@ public class GroupsDaoImpl implements GroupsDao {
 	public int deleteGroupMember(Map<String, Object> changeMap) {
 		return sqlSession.delete("groups.deleteGroupMember", changeMap);
 	}
+
 
 
 }

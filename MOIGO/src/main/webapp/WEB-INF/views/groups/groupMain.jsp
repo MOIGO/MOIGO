@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
 <c:set var="root" value="${pageContext.request.contextPath}" />
 <html>
@@ -11,8 +12,8 @@
     <script src="${pageContext.request.contextPath}/resources/js/bootStrap/bootstrap.min.js"></script>
      --%>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
+<link href="${root}/resources/css/groups/summernote-bs4.css" rel="stylesheet">
+<script src="${root}/resources/js/groups/summernote-bs4.js"></script>
 
 <style>
 .test {
@@ -69,17 +70,39 @@ background: #EDEFF2;
 
 }
 
+.wrap{
+		z-index: 1999;
+		position:absolute;
+		left:250px;
+		background-color: grey;
+		opacity: 0.5;
+		min-width:1000px;
+		width:1300px;
+		height:100%;
+		text-align:center;
+		
+	}
+	
+	.contentWrapper iframe{
+		width:100% !important;
+		height:300px !important;
+		
+	}
+
 </style>
 
 </head>
 
 <body>
-	
+	<c:if test="${currentGroup.groupStateCode ne 'S1' }">
+		<div class="wrap row align-items-center justify-content-center" style="font-size:8em;">블라인드<br> 처리된 모임입니다.</div>
+		<span>관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
+	</c:if>
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
 		<c:param name="groupNo" value="${groupNo }" />
 		<c:param name="memberNo" value="${gm.memberNo}" />
-		<c:param name="groupStateCode" value="${currGroup.groupStateCode}" />
+		<%-- <c:param name="groupStateCode" value="${currGroup.groupStateCode}" /> --%>
 	</c:import>
 
 	<div class="container">
@@ -89,68 +112,47 @@ background: #EDEFF2;
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
             	<c:param name="groupNo" value="${groupNo}"/>
             	<c:param name="memberGrade" value="${memberGrade}"/>
-      </c:import>
+            	<c:param name="groupStateCode" value="${currentGroup.groupStateCode}" />
+      		</c:import>
 
 			<div class="col-7">
 				<div class="col">
-				<c:if test="${currGroup.groupStateCode eq S1}">
-				
+			
 					<c:if test="${memberGrade>0}">
 						<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
 					</c:if>
 				
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
-				
-				
-					<c:choose >
-						<c:when test="${(currGroup.groupSetting eq PROTECTED) or (currGroup.groupSetting eq PRIVATE) }">
-							
-							
-							<c:if test="${memberGrade>0 }">
-								<div class="input-group input-group-lg">
-										<label for="searchPost" class="sr-only">searchPost</label>
-										<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
-										<div class="input-group-append">
-											<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
-										</div>
-								</div>	
-							
-								<div id="postDiv" class="">
-									
-								</div>
-							</c:if>
-							
-							<c:if test="${memberGrade eq -1 }">
-								<div style="background:red;">asdf</div>
-							</c:if>
-							
-							<c:if test="${memberGrade<=0 }">
-							
-								<div id="notMember" style="font-size:5em" class="">
-									모임의 멤버만 글을 볼 수 있습니다.
-								</div>
-							</c:if>
-							
-						</c:when>
-						<c:when test="${currGroup.groupSetting eq PUBLIC}">
+					
+					
+					
+					<c:choose>
+						
+					
+						<c:when test="${memberGrade >0 or openSetting  eq 'PUBLIC' }">
+						
 							<div class="input-group input-group-lg">
-										<label for="searchPost" class="sr-only">searchPost</label>
-										<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
-										<div class="input-group-append">
-											<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
-										</div>
-								</div>	
-							
-								<div id="postDiv" class="">
-									
-								</div>
+									<label for="searchPost" class="sr-only">searchPost</label>
+									<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
+									<div class="input-group-append">
+										<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
+									</div>
+							</div>	
+						
+							<div id="postDiv" class="">
+								
+							</div>
 						</c:when>
-					</c:choose>	
+						
 					
-					
-					
-				</c:if>
-	
+						
+						<%-- <c:when test="${memberGrade<=0||currGroup.openSetting != 'PUBLIC' }">
+							<div class="card" style="font-size:1.3em; background:white;text-align:center;">  
+								이 모임의 글은 가입 해야만 볼 수 있습니다.
+							</div>
+						
+						</c:when> --%>
+				</c:choose>
 				</div>
 				<div class="col">
 					
@@ -196,12 +198,14 @@ background: #EDEFF2;
 <script>
 
 
-var currentPage;
-
+var pageInfo;
+var currentPage=1;
 
 $(function(){
 	currentPage=1;
 	setPostList();
+	
+	
 });
 
 function searchPostList(){
@@ -259,9 +263,16 @@ $(document).ready(function () {
 	    var maxHeight = $(document).height();
 	    var currentScroll = $(window).scrollTop() + $(window).height();
 
-	    if (maxHeight <= currentScroll + 100) {
+	    if (maxHeight <= currentScroll) {
 	     	
+	    	
 			currentPage+=1;
+			if(pageInfo.maxPage<currentPage){
+				currentPage-=1;
+				return;
+			}
+			
+				
 			
 	    	if($('#searchPost').val()!=null&&(($('#searchPost').val()).trim().length>0)){
 	    		searchPostList();
@@ -283,7 +294,9 @@ function setPostList(){
 		data:{groupNo:"${groupNo}",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-			console.log(data);
+			
+			
+			pageInfo = data.pageInfo;
 			
 			if(data.posts.length>0){
 				
@@ -374,7 +387,7 @@ function makeProfile(obj){
 	var $dropDownWrapper=$('<div>')
 	let now = new Date(obj.submitDate);
 	
-	var $upLoadWrapper  = $("<span>").text(	now.getMonth()+"월"+" "+now.getDate()+"일");
+	var $upLoadWrapper  = $("<span>").text(	(now.getMonth()+1)+"월"+" "+now.getDate()+"일");
 	
 	$upLoadDateWrapper.append($upLoadWrapper);
 	
@@ -637,14 +650,16 @@ function restoreScheduleEvent(obj){
 
 function restoreMapEvent(obj){
 	
-	 $(obj).find('[name=editBtn]').on("click",function(){
+	 $(obj).find('[name=editBtn]').on("click",function(event){
 		toEditTarget=obj;
 		
+		event.stopPropagation();
 		$('#placeKeyword').val($(obj).find('.place_name').text());
 		editMap();
 	});
 	
-	$(obj).find('[name=delBtn]').on("click",function(){
+	$(obj).find('[name=delBtn]').on("click",function(event){
+		event.stopPropagation();
 		deleteMap($(obj));
 	});
 	
@@ -752,9 +767,13 @@ function submitPost(){
 }
 
 function checkLogin(){
-	if('${m.memberNo}'==''||'{m eq null}')
+	
+
+	if('${gm.memberNo}'.length<0)
 	{
+		alert('${gm.memberNo}');
 		alert("로그인 해주세요");
+		
 		return false;
 	}else
 		return true;
@@ -770,15 +789,20 @@ function submitReply(postNo,obj){
 		data:{postNo:postNo,memberNo:'${gm.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
+			console.log(data);
 			
 			if(data.result>0){
 				alert("댓글 등록 성공!");
+				
+				$(obj).closest('.postOuter').find('.replyWrapper').append(makeProfile(data.pwm));
+				
+				$(obj).val("");
 			}else
 				alert("댓글 등록 실패!");
 			
-			deleteAllPost();
+			/* deleteAllPost();
 			setPostList();
-			
+			 */
 		},
 		error:function(){
 			alert("글 등록 도중 에러가 생겼습니다.");
@@ -840,9 +864,21 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
+		    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
 		    ['mybutton', ['insertmap']],
 		    ['myButton',['insertSchedule']]
+		  	
 		  ],
+		  disableResizeEditor: true,
+		  height: 200,
+		  callbacks:{
+			onImageUpload:function(files,editor,welEditable){
+				
+				
+					sendFile(files,this);
+				
+			}
+		  },
 
 		  buttons: {
 		     insertmap: insertMap,
@@ -851,6 +887,30 @@ function createSummerNote(){
 	});
 	
 }
+
+function sendFile(file, editor) {
+	
+		var data = new FormData();
+		data.append("uploadFile",file);
+		
+		console.log(file);
+	     $.ajax({ // ajax를 통해 파일 업로드 처리
+	    	type : "POST",
+	    	data : data,
+	        url : "${pageContext.request.contextPath}/groups/insertImageFile.gp",
+	        dataType:"json",
+	        cache: false,
+	        contentType: false,
+	        enctype: 'multipart/form-data',
+	        processData: false,
+	        success : function(data) { // 처리가 성공할 경우
+            // 에디터에 이미지 출력
+            console.log(file.url);
+	        	$(editor).summernote('editor.insertImage', data.file.url);
+	        }
+	    }); 
+	}
+
 
 	
 </script>
