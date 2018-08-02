@@ -44,20 +44,18 @@ public interface GroupsService {
 	
 	//--------------------------------------------------------------------------- 혜진
 	
-	List<GroupMember> selectGroupMemberList(String groupNo);
-
-	List<GroupMember> searchGroupMemberList(Map<String, String> searchMap);
-
-	int updateGroupMember(GroupMember groupMember);
-
 	Groups selectOneGroup(String groupNo);
+
+	List<GroupMember> selectGroupMemberList(String groupNo);
+	List<GroupMember> searchGroupMemberList(Map<String, String> searchMap);
+	int updateGroupMember(GroupMember groupMember);
 	
 	int updateGroupCondition(Groups group);
-	
 	int updateGroupMemberSetting(Map<String, Object> changeMap);
 	int deleteGroupMember(Map<String, Object> changeMap);
-
 	int deleteGroup(String groupNo);
+	
+	List<Schedule> selectListGroupSchedule(String groupNo);
 	
 	
 	

@@ -383,7 +383,7 @@ public class GroupController {
 	
 	
 	
-	// ------------------------------------------------------------------ 혜진
+	// -------------------------------------------------------------------------------------------------------------------------- 혜진
 	
 	// 멤버 
 	@RequestMapping("/groups/groupMember.gp")
@@ -484,6 +484,19 @@ public class GroupController {
 	public String goGroupSchedule(){
 		
 		return "groups/groupSchedule";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/groups/selectListGroupSchedule.gp")
+	public Map<String, Object> selectListGroupSchedule(@RequestParam String groupNo){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Schedule> scheduleList = groupService.selectListGroupSchedule(groupNo);
+		
+		map.put("schedule", scheduleList);
+		
+		return map;
 	}
 	
 	// 사진첩
