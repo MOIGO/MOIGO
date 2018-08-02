@@ -481,9 +481,16 @@ public class GroupController {
 	
 	// 일정
 	@RequestMapping("/groups/groupSchedule.gp")
-	public String groupSchedule(){
+	public String goGroupSchedule(){
 		
 		return "groups/groupSchedule";
+	}
+	
+	// 사진첩
+	@RequestMapping("/groups/groupPhotoAlbum.gp")
+	public String goGroupPhotoAlbum(){
+		
+		return "groups/groupPhotoAlbum";
 	}
 	
 	// 모임설정

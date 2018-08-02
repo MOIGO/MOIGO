@@ -763,6 +763,8 @@ text-align:center;
 		
 		$('#startDate').on("change",function(){
 			$('#endDate').datepicker({minDate : getDate(this)});
+			if(getDate($('#startDate')) > getDate($('#endDate')))
+				$('#endDate').data('datepicker').selectDate(getDate($('#startDate')));
 		});
 		
 		
