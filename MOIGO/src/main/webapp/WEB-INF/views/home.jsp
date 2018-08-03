@@ -169,7 +169,7 @@
 			if(${m ne null}){
 				location.href = '${pageContext.request.contextPath}/groups/createGroup.gp';
 			} else {
-				alert("로그인 하신후 이용 가능합니다.");
+				alert("로그인 하신 후 이용 가능합니다.");
 				$('#Login_Modal').modal('show');
 			}
 		});
