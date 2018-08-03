@@ -40,6 +40,7 @@ public class AdminController {
 	
 	
 	//신고
+
 	@ResponseBody
 	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
 	public String reporting(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
@@ -53,6 +54,7 @@ public class AdminController {
 		return report;
 	
 	}
+
 	// 제제 이유 이메일 전송
 	@ResponseBody
 	@RequestMapping(value = "sendMessage.ad", method = RequestMethod.POST)
