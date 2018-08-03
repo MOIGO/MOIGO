@@ -200,6 +200,12 @@ public class AccuseServiceImpl implements AccuseService {
 		return ad.insertAccuse(accuse);
 		
 	}
+
+	@Override
+	public List<Map<String, Object>> gmReportCount() {
+		// TODO Auto-generated method stub
+		return ad.gmReportCount();
+	}
 	
 
 

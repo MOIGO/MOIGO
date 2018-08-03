@@ -53,7 +53,7 @@ input[type="checkbox"] {
 			    <option>reporter</option>
 			    <option>target</option>  
 		    </select>
-		    <input class="admin_group_search col-sm-4 col-xs-4" id="reportSearchingKeyword" name="reportSearchingKeyword" type="text" placeholder="Search.."> 
+		    <input class="admin_group_search col-sm-4 col-xs-4" id="reportSearchingKeyword" name="reportSearchingKeyword" type="text" placeholder="Search.." value="${pi.searchingKey}"> 
 		    <button type="submit" class="btn btn-outline-info">검색</button>&nbsp;&nbsp;
 		    <br>
 		    <div class="form-check text-right">		  
@@ -71,11 +71,11 @@ input[type="checkbox"] {
 		<table class="table table-bordered table-hover text-center table-sm">
 			<thead class="thead-dark">
 		        <tr>
-		          <th>신고자</th>
-		          <th>피신고자</th>
-		          <th>신고타입</th>
-		          <th colspan="4">신고내용</th>         
-		          <th>신고시기</th>         
+		          <th>REPORTER</th>
+		          <th>TARGET</th>
+		          <th>TYPE</th>
+		          <th colspan="4">CONTENT</th>         
+		          <th>DATE</th>         
 		        
 		        </tr>
 			</thead>
@@ -650,7 +650,7 @@ $(document).ready(function(){
 		       	            dataType:"json",
 		       	            success:function(data){	
 		       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
-		       	            	//location.reload();	  
+		       	            	location.reload();	  
 		       	            		       	            	
 		       	            },error:function(request,status,error){
 		       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

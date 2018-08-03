@@ -205,6 +205,12 @@ public class AccuseDaoImpl implements AccuseDao {
 		return sqlSession.insert("accuse.insertAccuse",accuse);
 	
 	}
+
+	@Override
+	public List<Map<String, Object>> gmReportCount() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("accuse.gmReportCount");
+	}
 	
 	
 	

@@ -38,6 +38,7 @@ public interface AccuseDao {
 	List<Map<String, Object>> gGradeCount();
 	List<Map<String, Object>> countGinterest();
 	List<Map<String, Object>> countState();
+	List<Map<String, Object>> gmReportCount();
 	
 	//--
 	List<Map<String, Object>> weeklyMemEnroll();
@@ -54,5 +55,6 @@ public interface AccuseDao {
 	
 	//--
 	int insertAccuse(Accuse accuse);
+
 
 }

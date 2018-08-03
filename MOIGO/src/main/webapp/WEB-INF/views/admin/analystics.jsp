@@ -15,35 +15,19 @@
       google.charts.load('current', {'packages':['corechart']});
 
       // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawGenderChart);
-      
-      
-   	// Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawGenderChart2);
-      
-      // Set a callback to run when the Google Visualization API is loaded
+      google.charts.setOnLoadCallback(drawGenderChart);      
+      google.charts.setOnLoadCallback(drawGenderChart2);     
       google.charts.setOnLoadCallback(drawAddressChart);
-      
-      
-      // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawMinterestChart);
       google.charts.setOnLoadCallback(drawMinterestChart2);
-
-      // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawGinterestChart);
       google.charts.setOnLoadCallback(drawGinterestChart2);
+      google.charts.setOnLoadCallback(drawGgradeChart);
+      google.charts.setOnLoadCallback(drawGstateChart);
+      google.charts.setOnLoadCallback(drawReportCountChart);
 
-      // Set a callback to run when the Google Visualization API is loaded
-     google.charts.setOnLoadCallback(drawGgradeChart);
-  	// Set a callback to run when the Google Visualization API is loaded
-     google.charts.setOnLoadCallback(drawGstateChart);
-  
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
+
       function drawGenderChart() {
-
-        // Create the data table.
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Gender');
         data.addColumn('number', 'percent');
@@ -106,7 +90,7 @@
   					fontName:'Poppins',
   					fontSize: 27
   			  	},
-    	        width: 600,
+    	        width: 500,
     	        height: 400,
     	        bar: {groupWidth: "95%"},
     	        legend: { position: "none" },
@@ -116,7 +100,40 @@
     	    /*   var chart2 = new google.visualization.ColumnChart(document.getElementById("chart_div9"));
     	      chart2.draw(view, options); */
     }
-      
+      function drawReportCountChart() {
+    	  var data = google.visualization.arrayToDataTable([
+    	        ["Report", "수", { role: "style" } ],
+    	        ["Group", ${gmReportCount[0].gReportCount}, "color: #e5e4e2"],
+    	        ["Member", ${gmReportCount[0].mReportCount}, "silver"]
+    	   
+    	      ]);
+
+    	  
+    	  
+    	      var view = new google.visualization.DataView(data);
+    	      view.setColumns([0, 1,
+    	                       { calc: "stringify",
+    	                         sourceColumn: 1,
+    	                         type: "string",
+    	                         role: "annotation" },
+    	                       2]);
+
+    	      var options = {
+    	        title: "Report",
+    	        titleTextStyle:{
+  					fontName:'Poppins',
+  					fontSize: 27
+  			  	},
+    	        width: 500,
+    	        height: 400,
+    	        bar: {groupWidth: "95%"},
+    	        legend: { position: "none" },
+    	      };
+    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div8"));
+    	      chart.draw(view, options);
+    	    /*   var chart2 = new google.visualization.ColumnChart(document.getElementById("chart_div9"));
+    	      chart2.draw(view, options); */
+    }
       function drawMinterestChart2() {
     	  var data = google.visualization.arrayToDataTable([
     	        ["Interest", "수", { role: "style" } ],
@@ -126,7 +143,9 @@
     	        ['${minterestCount[3].bigInterest}', ${minterestCount[3].minterestCount}, "color: #a9cf9b"],
     	        ['${minterestCount[4].bigInterest}', ${minterestCount[4].minterestCount}, "color: #d9e6ad"],
     	        ['${minterestCount[5].bigInterest}', ${minterestCount[5].minterestCount}, "color: #d7ade6"],
-    	        ['${minterestCount[6].bigInterest}', ${minterestCount[6].minterestCount}, "color: #ade6d7"]
+    	        ['${minterestCount[6].bigInterest}', ${minterestCount[6].minterestCount}, "color: #ade6d7"],
+    	        ['${minterestCount[7].bigInterest}', ${minterestCount[6].minterestCount}, "color: #22252e"]
+
     	      ]);
 
     	
@@ -139,18 +158,18 @@
     	                       2]);
 
     	      var options = {
-    	        title: "Member Gender Rate",
+    	        title: "Member Interest Rate",
     	        titleTextStyle:{
   					fontName:'Poppins',
   					fontSize: 27
   			  	},
-    	        width: 600,
+    	        width: 720,
     	        height: 400,
     	        bar: {groupWidth: "95%"},
+    	        fontSize :9,
     	        legend: { position: "none" },
-    	        fontSize :10
     	      };
-    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div8"));
+    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div10"));
     	      chart.draw(view, options);
     	    /*   var chart2 = new google.visualization.ColumnChart(document.getElementById("chart_div9"));
     	      chart2.draw(view, options); */
@@ -267,9 +286,7 @@
           	    ['${ginterestCount[4].bigInterest}',${ginterestCount[4].ginterestCount}, "color: #d9e6ad"],
           	    ['${ginterestCount[5].bigInterest}',${ginterestCount[5].ginterestCount}, "color: #add8e6"],
           	    ['${ginterestCount[6].bigInterest}',${ginterestCount[6].ginterestCount}, "color: #d7ade6"],
-          	    ['${ginterestCount[7].bigInterest}',${ginterestCount[7].ginterestCount}, "color: #ade6d7"],
-          	    ['${ginterestCount[8].bigInterest}',${ginterestCount[8].ginterestCount}, "color: #add8e6"]
-   
+          	    ['${ginterestCount[7].bigInterest}',${ginterestCount[7].ginterestCount}, "color: #ade6d7"]   
     	      ]);
 
     	
@@ -287,14 +304,14 @@
   					fontName:'Poppins',
   					fontSize: 27
   			  	},
-    	        width: 500,
+    	        width: 720,
     	        height: 400,
     	        bar: {groupWidth: "95%"},
     	        legend: { position: "none" },
     	        fontSize :10
     	        
     	      };
-    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div9"));
+    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div11"));
     	      chart.draw(view, options);
  
     }
@@ -479,22 +496,18 @@
 						</div>
 					</div>
 					
-					<div class="tab-pane fade" id="profile" role="tabpanel" style="width: 1350px;"> 
+					<div class="tab-pane fade" id="profile" role="tabpanel" > 
 						<div class="row">
 							<div class="col-lg-4" id="chart_div7"></div>
 							<div class="col-lg-4" id="chart_div8"></div>
 							<div class="col-lg-4" id="chart_div9"></div>					
 						</div>
-					</div>
-					<div class="tab-pane fade" id="contact" role="tabpanel"
-						aria-labelledby="contact-tab">
 						<div class="row">
-							<div class="col-lg-4" id="chart_div1"></div>
-							<div class="col-lg-4" id="chart_div8"></div>
-							<div class="col-lg-4" id="chart_div9"></div>					
+							<div class="col-lg-6" id="chart_div10"></div>
+							<div class="col-lg-6" id="chart_div11"></div>					
 						</div>
-						
-						</div>
+					</div>
+				
 				</div>
 			</div>
 		</div>

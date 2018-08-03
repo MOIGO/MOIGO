@@ -47,6 +47,7 @@ public interface AccuseService {
 	List<Map<String, Object>> gGradeCount();
 	List<Map<String, Object>> countGinterest();
 	List<Map<String, Object>> countState();
+	List<Map<String, Object>> gmReportCount();//report
 	
 	//이하 대시보드
 	List<Map<String, Object>> weeklyMemEnroll();
@@ -64,6 +65,7 @@ public interface AccuseService {
 	
 	//신고하기
 	int insertAccuse(Accuse accuse);
+	
 	
 
 	

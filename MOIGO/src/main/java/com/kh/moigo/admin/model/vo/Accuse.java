@@ -19,9 +19,34 @@ private String content;
 private Date accuseDate;
 
 
+private int gReportCount;
+private int mReportCount;
 
 
 
+
+
+public int getgReportCount() {
+	return gReportCount;
+}
+
+
+
+public void setgReportCount(int gReportCount) {
+	this.gReportCount = gReportCount;
+}
+
+
+
+public int getmReportCount() {
+	return mReportCount;
+}
+
+
+
+public void setmReportCount(int mReportCount) {
+	this.mReportCount = mReportCount;
+}
 
 
 

@@ -40,8 +40,7 @@ public class AdminController {
 	
 	
 	
-	//신고
-
+	//신고 포스트->개인
 	@ResponseBody
 	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
 	public String reporting(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
@@ -56,7 +55,7 @@ public class AdminController {
 	
 	}
 
-	//신고
+	//신고 그룹
 	@ResponseBody
 	@RequestMapping(value = "reporting2.ad", method = RequestMethod.POST)
 	public String reporting2(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
@@ -71,7 +70,7 @@ public class AdminController {
 	}
 	
 
-	// 제제 이유 이메일 전송
+	//제제 이유 이메일 전송
 	@ResponseBody
 	@RequestMapping(value = "sendMessage.ad", method = RequestMethod.POST)
 	public Map<String, Object>  mailSending(HttpServletRequest request , @RequestParam String userEmail, @RequestParam String contents) {
@@ -160,6 +159,7 @@ public class AdminController {
 		List<Map<String,Object>> ginterestCount = as.countGinterest();
 		List<Map<String,Object>> groupStateCount = as.countState();
 		
+		List<Map<String,Object>> gmReportCount = as.gmReportCount();
 		
 		System.out.println("genderCount"+genderCount);
 		model.addAttribute("addressCount",addressCount);
@@ -168,6 +168,7 @@ public class AdminController {
 		model.addAttribute("groupStateCount",groupStateCount);	
 		model.addAttribute("gGradeCount",gGradeCount);
 		model.addAttribute("ginterestCount",ginterestCount);
+		model.addAttribute("gmReportCount",gmReportCount);
 		model.addAttribute("pageName","Analytics");
 		return "admin/analystics";
 	
