@@ -743,6 +743,12 @@
  
  $("#createGroupBtn").click(function() {
     
+	if($('#inpGrpName').val().trim().length<=0)
+		{
+	 		alert("모임 이름을 입력해 주세요");
+	 		return;
+		} 
+	 
 	 
 	 if($('#min_ageSelect').val()!=-1&&$('#max_ageSelect').val()!=-1){
 		 if($('#min_ageSelect').val()>$('#max_ageSelect').val()){

@@ -269,7 +269,7 @@
 	<!--사진 파일 하나 넣기  -->
 	<insert id="insertImageFile" parameterType="files">
 	
-		<selectKey keyProperty="filesNo" resultType="string" order="AFTER" >
+		<selectKey keyProperty="fileNo" resultType="string" order="AFTER" >
 			SELECT 'F'||TO_CHAR(SEQ_FILES.CURRVAL,'FM000') FROM DUAL
 		</selectKey>
 	

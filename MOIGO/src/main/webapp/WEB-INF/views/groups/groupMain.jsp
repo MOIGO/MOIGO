@@ -917,7 +917,7 @@ function createSummerNote(){
 		  ],
 		  disableResizeEditor: true,
 		  height: 200,
-		  callbacks:{
+		  /* callbacks:{
 			onImageUpload:function(files,editor,welEditable){
 				
 				if(files.size/(1024/1024)>=10){
@@ -939,13 +939,9 @@ function createSummerNote(){
 		    		}else{
 		    			alert("사진 형식만 가능합니다.");
 		    		}
-				
-				
-			},onMediaDelete : function ($target, $editable) {
-		            console.log($target.attr('src'));   // get image url 
-		       }
-		    
-		  }, 
+			
+			}
+		  },  */
 
 		  buttons: {
 		     insertmap: insertMap,
