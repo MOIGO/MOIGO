@@ -20,21 +20,21 @@
       <result property="openSetting" column="OPEN_SETTING"/>
    </resultMap>
    <select id="listCount" resultType="_int" parameterType="string">
-      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' AND OPEN_SETTING not like '%PRIVATE%'
+      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' AND OPEN_SETTING not like 'PRIVATE'
    </select>
    
    <select id="selectList" resultMap="groupsResultMap" parameterType="string">
-      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' AND OPEN_SETTING not like '%PRIVATE%' ORDER BY ENROLL_DATE DESC
+      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' AND OPEN_SETTING NOT LIKE 'PRIVATE' ORDER BY ENROLL_DATE DESC
    </select>
    
    <select id="detailListCount" resultType="_int" parameterType="hashmap">
-      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND OPEN_SETTING not like '%PRIVATE%'
+      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND OPEN_SETTING NOT LIKE 'PRIVATE'
       <if test='category != ""'>
       	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
       </if>
       <choose>
       	<when test='regardlessArea != ""'>
-      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%' AND OPEN_SETTING not like '%PRIVATE%' 
+      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%' AND OPEN_SETTING NOT LIKE 'PRIVATE' 
       	</when>
       	<otherwise>
       		AND GROUP_ADDRESS NOT LIKE '지역무관'
@@ -47,7 +47,7 @@
 	      FROM GROUPS G
 	        WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' 
 	          AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
-	          	AND OPEN_SETTING not like '%PRIVATE%' 
+	          	AND OPEN_SETTING NOT LIKE 'PRIVATE' 
       			<if test='category != ""'>
 		      		AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
 		        </if>
@@ -75,7 +75,7 @@
 		    WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' 
 		      AND GROUP_ADDRESS LIKE '%'||#{place}||'%' 
 		        AND GROUP_ADDRESS NOT LIKE '지역무관'
-		        	AND OPEN_SETTING not like '%PRIVATE%'
+		        	AND OPEN_SETTING NOT LIKE 'PRIVATE'
 				      <if test='category != ""'>
 				      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
 				      </if>
