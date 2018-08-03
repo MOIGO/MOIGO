@@ -19,6 +19,10 @@
 	height: 200px;
 }
 
+#joingroups{
+	width: 832px;
+	height: 200px;
+}
 .mainGroup {
 	display: inline-block;
 	width: 200px;
@@ -43,6 +47,12 @@
 	font-size: 18px;
 }
 
+.title{
+	white-space: nowrap;
+    /* word-break: break-word; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 @media all and (max-width: 1200px) { /* #carouselExampleIndicators1 {
 		position: absolute;
 		width: 1200px;
@@ -301,10 +311,11 @@
 						var list = data.list;
 						
 						for(l in list){
+							
 							if(l == 0){
 								var $div_carsel = $('<div class="carousel-item active">');
 								$('#joingroups').append($div_carsel);
-							} else if(l%4 == 1){
+							} else if(4%l == 1){
 								var $div_carsel = $('<div class="carousel-item">');	
 								$('#joingroups').append($div_carsel);
 							}
