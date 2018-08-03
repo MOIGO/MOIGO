@@ -752,9 +752,9 @@ public class GroupController {
 	public String deleteGroup(@RequestParam String groupNo, Model model){
 		
 		int result;
-		// result = groupService.deleteGroup(groupNo);
+		result = groupService.deleteGroup(groupNo);
 		
-		model.addAttribute("msg", "Member delete successfully");
+		model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
 		
 		return "common/msg";
 	}
