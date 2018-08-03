@@ -225,35 +225,35 @@ body {
 		<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item active">
-			  <a class="nav-link navic" href="${pageContext.request.contextPath}/search/searchList.do">
+			  <a class="nav-link navic" href='${pageContext.request.contextPath}/search/searchList.do?keyword='>
 			  전체보기<span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item active">
-				<a class="nav-link navic" href="#">라이프스타일<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B001&sort=newSort">라이프스타일<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">영어/외국어<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B002&sort=newSort">영어/외국어<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">컴퓨터<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B003&sort=newSort">컴퓨터<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">디자인/미술<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B004&sort=newSort">디자인/미술<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">취업<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B005&sort=newSort">취업<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">음악/공연<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B006&sort=newSort">음악/공연<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">스포츠<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B007&sort=newSort">스포츠<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">뷰티/미용<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B008&sort=newSort">뷰티/미용<span class="sr-only">(current)</span></a>
 			  </li>
 			  <li class="nav-item active">
-				<a class="nav-link navic" href="#">게임<span class="sr-only">(current)</span></a>
+				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B009&sort=newSort">게임<span class="sr-only">(current)</span></a>
 			  </li>
 		  </ul>
 		</div>
