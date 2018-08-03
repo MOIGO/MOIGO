@@ -9,6 +9,7 @@ import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
+import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -58,6 +59,8 @@ public interface GroupsDao {
 	
 	int updateGroupBasics(Groups group);
 	
+	int insertImageFile(Files files);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -72,6 +75,8 @@ public interface GroupsDao {
 	int deleteGroup(String groupNo);
 
 	List<Schedule> selectListGroupSchedule(String groupNo);
+
+	
 
 	
 

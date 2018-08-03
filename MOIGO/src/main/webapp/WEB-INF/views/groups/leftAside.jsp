@@ -166,6 +166,7 @@
 
 
 
+
 function setGroupDesc(groupNo,isMember){
 	$.ajax({
 		url:'${root}/groups/selectOneGroup.gp',
@@ -220,9 +221,13 @@ $(function() {
 		var groupMenu = $(this).text();
 		
 		if(groupMenu == '전체글'){
+			
 			currentPage=1;
-			deleteAllPost();
-			setPostList();
+		/* 	deleteAllPost();
+			setPostList(); */
+			
+			location.href = '${pageContext.request.contextPath}/groups/groupMain.gp?groupNo=${param.groupNo}';
+			
 		}
 		else if(groupMenu == '사진첩')
 			$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();

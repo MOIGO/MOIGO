@@ -69,7 +69,7 @@
 		<result property="submitDate" column="SUBMIT_DATE"/>
 		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 		<collection property="postReplyWithMem" column="POST_NO" ofType="postReplyWithMem" select="selectReplyForPost"/>
-		<collection property="files" column="POST_NO" ofType="files" select="selectFilesForPost"/><!--여기서부터!!  -->
+		<collection property="files" column="POST_NO" ofType="files" select="selectFilesForPost"/>
 	</resultMap>
 
 	<resultMap type="postReplyWithMem" id="postReplyWithMemResultMap">
@@ -265,6 +265,16 @@
 		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} AND CONTENT LIKE '%'||#{keyword}||'%' ORDER BY POST.SUBMIT_DATE DESC)
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
 	</select>
+	
+	<!--사진 파일 하나 넣기  -->
+	<insert id="insertImageFile" parameterType="files">
+	
+		<selectKey keyProperty="filesNo" resultType="string" order="AFTER" >
+			SELECT 'F'||TO_CHAR(SEQ_FILES.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO FILES VALUES('F'||TO_CHAR(SEQ_FILES.NEXTVAL,'FM000'),#{fileOriginName},#{fileNewName},#{filePath},#{groupNo},#{memberNo},SYSDATE,'Y')
+	</insert>
 	
 	<!-- ===================================================================================================== 혜진 -->
 

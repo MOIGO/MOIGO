@@ -25,7 +25,19 @@ public class Files implements java.io.Serializable{
 		this.memberNo = memberNo;
 		this.fileDate = fileDate;
 		this.isImage = isImage;
+	}  
+	
+	public Files(String fileOriginName, String fileNewName, String filePath, String groupNo,
+			String memberNo,String isImage){
+		
+		this.fileOriginName = fileOriginName;
+		this.fileNewName = fileNewName;
+		this.filePath = filePath;
+		this.groupNo = groupNo;
+		this.memberNo = memberNo;
+		this.isImage = isImage;
 	}
+	
 	public Files() {
 		super();
 		// TODO Auto-generated constructor stub
