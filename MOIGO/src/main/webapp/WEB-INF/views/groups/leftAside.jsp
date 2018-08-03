@@ -118,8 +118,11 @@
 	</div>
 	<hr />
 	<div class="d-flex justify-content-start">
+		
+	<c:if test="${memberGrade>=3}">
 		<i class="fas fa-cog"></i><span id="groupSetting" class="mr-3">그룹 설정</span>
-		<i class="fas fa-exclamation"></i><span id="groupReport" >그룹 신고</span>
+	</c:if>
+		<!-- <i class="fas fa-exclamation"></i><span id="groupReport" >그룹 신고</span> -->
 	</div>
 	
  </div>
@@ -204,9 +207,9 @@ function joinGroup(){
 	
 }
 
-$('#groupReport').on("click",function(){
+/* $('#groupReport').on("click",function(){
 	$('#reportingModal').modal("toggle");
-});
+}); */
 
 $(function() {
 
@@ -234,9 +237,7 @@ $(function() {
 		$("#groupNoForm").attr("action", "${root}/groups/groupSetting.gp").submit();
 	});
 	
-	
-	$("#accuseTarget").val();
-	$("#accuseReporter").val();
+
 });
 	
 	
@@ -257,6 +258,39 @@ $('#reportSubmit').on('click',function(){
         }
     });
 });	
+
+function Activity(name, list){
+    this.name = name;
+    this.list = list;
+}
+
+var acts = new Array();
+	acts[0] = new Activity('폭력적 또는 혐오스러운 콘텐츠', ['세부 신고 항목 선택','청소년 폭력물', '성인 폭력물', '동물 학대','신체적 공격']);
+	acts[1] = new Activity('증오 또는 악의적인 콘텐츠', ['세부 신고 항목 선택','증오심 또는 폭력 조장', '사회적 약자 학대', '괴롭힘','악의적인 내용']);
+	acts[2] = new Activity('스팸 또는 과장된 광고 콘텐츠', ['세부 신고 항목 선택','대량광고', '의약품 판매', '현혹하는 텍스트','현혹하는 이미지']);
+	acts[3] = new Activity('권리침해', ['세부 신고 항목 선택','내 저작권을 침해함', '내 개인정보를 침해함', '기타 법적 문제']);
+	acts[4] = new Activity('아동학대', ['세부 신고 항목 선택','상해','언어폭력','기타 모욕적인 행위']);
+	acts[5] = new Activity('기타', []);
+function updateList(str){
+    var frm = document.myForm;
+    var oriLen = frm.myList.length;
+    var numActs;
+    
+    for (var i = 0; i < acts.length; i++){
+
+        if (str == acts[i].name) {
+            numActs = acts[i].list.length;
+            for (var j = 0; j < numActs; j++)
+                frm.myList.options[j] = new Option(acts[i].list[j],
+				acts[i].list[j]);
+            for (var j = numActs; j < oriLen; j++)
+				frm.myList.options[numActs] = null;
+        }
+    }
+    if($(".myList").css("display") == "none"){   
+        jQuery('.myList').css("display", "block");   
+    }
+}
 
 </script>
 

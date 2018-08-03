@@ -103,6 +103,7 @@ background: #EDEFF2;
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
 		<c:param name="groupNo" value="${groupNo }" />
 		<c:param name="memberNo" value="${gm.memberNo}" />
+		<c:param name="memberGrade" value="${memberGrade}" />
 		<%-- <c:param name="groupStateCode" value="${currGroup.groupStateCode}" /> --%>
 	</c:import>
 
@@ -407,13 +408,14 @@ function makeProfile(obj){
 	$profileWrapper.append($profileImgWrapper);
 	$profileWrapper.append($profileAndDate);
 	
-	if((obj.groupMember.memberNo=='${gm.memberNo}') | ('${gm.memberGradeCode>=2 }'=='true')){
-		if(typeof(obj.replyNo)!='undefined')
-			$profileWrapper.append(makeDropDown(false,obj.replyNo,obj.groupMember.memberNo));
-		else
-			$profileWrapper.append(makeDropDown(true,obj.postNo,obj.groupMember.memberNo));
+	//멤버면 넣고 아니면 넣지 않기
 	
-	}
+		if(typeof(obj.replyNo)!='undefined')
+			$profileWrapper.append(makeDropDown(false,obj.replyNo,obj.groupMember.memberNo,$profileWrapper));
+		else
+			$profileWrapper.append(makeDropDown(true,obj.postNo,obj.groupMember.memberNo,$profileWrapper));
+	
+	
 	return $profileWrapper;
 }
 
@@ -423,7 +425,7 @@ function toggleElipsis(obj){
 
 
 
-function makeDropDown(isPost,num,memberNo){
+function makeDropDown(isPost,num,memberNo,wrapperObj){
 	
 	$dropDownWrapper =$("<div>");
 	
@@ -437,40 +439,71 @@ function makeDropDown(isPost,num,memberNo){
 	
 	
 	if(isPost){
-		$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
-		$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
-		var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
 		
-		$dropDownMenu.append($dropDownItem1);
-		$dropDownMenu.append($dropDownItem2);
+		if($(wrapperObj).find(".postWriterNo").val()=='${gm.memberNo}'||'${memberGrade>=3}'=='true'){
+			$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
+			$dropDownMenu.append($dropDownItem1);
+			var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
+			$dropDownMenu.append($dropDownItem3);
+			
+			$dropDownItem1.on("click",function(){
+				prepareUpdatePost(num);
+			});
+			
+			$dropDownItem3.on("click",function(){
+				deletePost(num);
+			});
+		}
+		if('${memberGrade >3}'=='true'){
+			$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
+			$dropDownMenu.append($dropDownItem2);
+		}
 		
+		//신고하기 넣기
+		if($(wrapperObj).find(".postWriterNo").val()!='${gm.memberNo}'&&'${memberGrade>=1}'=='true'){
+			var $dropDownItem4=$("<a class='dropdown-item' >신고하기</a>");
+			$dropDownMenu.append($dropDownItem4);
+			
+			$dropDownItem4.on("click",function(){
+				$('#accuseReporter').val("${gm.memberNo}");
+				$('#accuseTarget').val($(wrapperObj).find(".postWriterNo").val());
+				$('#reportingModal').modal("toggle"); 
+			});
 	
-		$dropDownMenu.append($dropDownItem3);
-		
-		
-		
-		$dropDownItem1.on("click",function(){
-			prepareUpdatePost(num);
-		});
-	
-		$dropDownItem3.on("click",function(){
-			deletePost(num);
-		});
-		
+		}
+
 	}else{
-		$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
-		$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
-		$dropDownMenu.append($dropDownItem1);
-		$dropDownMenu.append($dropDownItem2);
 		
+		if($(wrapperObj).find(".replyWriterNo").val()=='${gm.memberNo}'||'${memberGrade>=3}'=='true'){
+			$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
+			$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
+			$dropDownMenu.append($dropDownItem1);
+			$dropDownMenu.append($dropDownItem2);
+			
+			$dropDownItem1.on("click",function(){
+				addReplyEditForm(num);
+			});
+			
+			$dropDownItem2.on("click",function(){
+				deleteReply(num);
+			});
+		}
 		
-		$dropDownItem1.on("click",function(){
-			addReplyEditForm(num);
-		});
-		
-		$dropDownItem2.on("click",function(){
-			deleteReply(num);
-		});
+		//신고하기 넣기
+		if($(wrapperObj).find(".replyWriterNo").val()!='${gm.memberNo}'&&'${memberGrade>=1}'=='true'){
+			var $dropDownItem4=$("<a class='dropdown-item' >신고하기</a>");
+			$dropDownMenu.append($dropDownItem4);
+			
+			$dropDownItem4.on("click",function(){
+				
+						
+				$('#accuseReporter').val("${gm.memberNo}");
+				$('#accuseTarget').val($(wrapperObj).find(".replyWriterNo").val());
+				$('#reportingModal').modal("toggle"); 
+			});
+	
+		}
+	
 	}
 	
 	$dropDown.append($dropDownBtn);

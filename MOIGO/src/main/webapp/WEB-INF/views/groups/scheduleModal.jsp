@@ -78,7 +78,7 @@ text-align:center;
 							<div class="col-2"><strong>라벨 색</strong></div>
 							<div class="col-5">
 								<select name="colorLabel" id="scheduleLabelColor" class="form-control">
-									<option value="#DE1D6A" style="background:#DE1D6A;" selected>      </option>
+									<option value="#DE1D6A" style="background:#DE1D6A;" >      </option>
 									<option value="#ED6695" style="background:#ED6695;">      </option>
 									<option value="#F58F2A" style="background:#F58F2A;">      </option>
 									<option value="#FCB735" style="background:#FCB735;">      </option>
@@ -812,7 +812,11 @@ text-align:center;
 			
 			$(this).find(".modal-footer button").unbind();
 			$(this).find(".modal-footer button").on("click",insertSchedule);
-	
+			
+			
+			$('#scheduleLabelColor').val('#DE1D6A');
+			$('#scheduleLabelColor').css("background","#DE1D6A");
+	 
 		});
 		
 		$('#startDate').on("change",function(){
@@ -842,8 +846,9 @@ text-align:center;
 			
 			 $("#insertSchedule .editSchedule").text("");
 			 $("#insertSchedule .editSchedule").append("<i class='fas fa-map-marker-alt'>지도에서 선택</i>");
+			 $('#scheduleLabelColor').val('#DE1D6A');
+			$('#scheduleLabelColor').css("background","#DE1D6A");
 			 
-			 $("#scheduleLabelColor").find('option:eq(0)').prop('selected', true);
 			 toEditTarget=undefined;
 			
 		});
