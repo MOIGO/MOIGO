@@ -946,7 +946,7 @@ function createSummerNote(){
 		            console.log($target.attr('src'));   // get image url 
 		       }
 		    }
-		  },
+		  }, 
 
 		  buttons: {
 		     insertmap: insertMap,
