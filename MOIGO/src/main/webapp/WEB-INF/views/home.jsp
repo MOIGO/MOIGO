@@ -126,7 +126,11 @@
 
 	<!-- 내가 가입한 모임 -->
 	<div class="d-flex justify-content-center">
-		<b>내가 가입한 모입</b>
+		<c:choose>
+		<c:when test="${m eq null}"><b>가장 활발한 모입 추천</b>
+		</c:when>
+		<c:otherwise><b>내가 가입한 모입</b></c:otherwise>
+		</c:choose>
 	</div>
 	<br>
 	<br>
@@ -148,11 +152,7 @@
 				<c:otherwise>
 					<div id="carouselExampleIndicators1" class="carousel slide"
 					data-ride="carousel">
-						<ol class="carousel-indicators">
-							<li data-target="#carouselExampleIndicators" data-slide-to="0"
-								class="active"></li>
-							<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-							<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+						<ol class="carousel-indicators" id="carouselNum">
 						</ol>
 						
 							<div class="carousel-inner" id="joingroups"></div>
@@ -309,6 +309,22 @@
 					type : "get",
 					success : function(data){
 						var list = data.list;
+						
+						console.log(list.length);
+						
+						var cnt =0;
+						for(var i=0; i<list.length; i++){
+							if(i == 0){
+								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'" class="active">');
+								$('#carouselNum').append($li);
+								cnt++;
+							}else if(4%i == 1){
+								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'">');
+								$('#carouselNum').append($li);
+								cnt++;
+							}
+						}
+						
 						
 						for(l in list){
 							
