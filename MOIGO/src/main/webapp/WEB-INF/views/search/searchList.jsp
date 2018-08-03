@@ -268,6 +268,13 @@
 	                        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
                         	daum.maps.event.addListener(markers[k], 'mouseover', makeOverListener(map, markers[k], infowindow));
                             daum.maps.event.addListener(markers[k], 'mouseout', makeOutListener(infowindow));
+                            daum.maps.event.addListener(markers[k], 'click', makeClickListener(map, markers[k], infowindow));
+                        }
+                        function makeClickListener(map, marker, infowindow) {
+                            return function() {
+                            	var $content = $(infowindow.getContent());
+                            	location.href='${pageContext.request.contextPath}/groups/groupMain.gp?groupNo='+$content.find('.groupNo').val();
+                            };
                         }
                     	// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
                         function makeOverListener(map, marker, infowindow) {
