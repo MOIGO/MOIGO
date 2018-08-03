@@ -33,45 +33,47 @@
             
         <!-- style="float:none; margin:0 auto;"  -->
         <div class="col-md-9 content_box_wrap " style="float:none; margin:0 auto;" >
-            <h5><i class="fas fa-user-friends"></i> 가입 대기 중</h5> 
+            <h5><i class="fas fa-user-friends"></i> 가입 대기</h5> 
             <div class="groupList_box col-md-12 row" >
                 <c:if test="${empty list}">
                 	<div class=" jumbotron col-12" style="text-align:center;">
          				<h3>모임정보가 없습니다</h3> 
-         				<button class="btn btn-success" >모임 찾기</button>
+         				<button class="btn btn-success" onclick="location.href=${pageContext.request.contextPath}/">모임 찾기</button>
          			</div>
                 </c:if>
                 <c:if test="${! empty list}">
 	                <c:forEach items="${list }" var="group">
-	                  <div class="groupList_item col-xl-3 col-sm-6 col-12 " >
-	                      <div class="item_content" id="${group.groupNo }">
-	                      <input type="hidden" value="${group.groupNo }" name="groupNo">
-                          		 <div class="header_bg" >
-	                          		<img alt="" src="${pageContext.request.contextPath}/resources/images/moigo.png" style="width:100%; height:100%;">
-	                          </div>
-	                          <div class="body_text_container">
-	                              <div class="body_text">
-	                                  <div class="body_title"><c:out value="${group.groupName }"/> </div>
-	                                  <div class="body_member">멤버 : <c:out value="${group.gropuNum }"/> 명</div>
-	                              </div>
-	                          </div>
-	                      </div>
-	                  </div>
+		                  <div class="groupList_item col-xl-3 col-sm-6 col-12 " >
+			                     <div class="item_content" id="${group.groupNo }">
+			                     <input type="hidden" value="${group.groupNo }" name="groupNo">
+			                         <div class="header_bg" >
+			                          		<img alt="" src="${group.groupPicture }" style="width:100%; height:100%;">
+			                          		<%-- <span style="position:absolute; right:20px; top:2px;color:yellow"><c:out value="${group.groupGrade }"/></span> --%>
+			                          </div>
+			                         <div class="body_text_container">
+			                             <div class="body_text">
+			                                 <div class="body_title"><c:out value="${group.groupName }"/> </div>
+			                                 <div class="body_member" >멤버 : <c:out value="${group.memberNum }"/> 명   &nbsp;&nbsp;&nbsp; 게시글 : <c:out value="${group.postNum }"/> 개</div>	
+					                           
+			                             </div>
+			                         </div>
+			                     </div>
+			                 </div>
 	                 </c:forEach>
                 </c:if>
         	</div>
         </div>
     </div>
 
-    <br><br><br><br><br><br>
+     <br><br><br><br>
+	<c:import url="/WEB-INF/views/common/footer.jsp" />
     <script >
     $(function(){
-    	   $(".item_content").on("click",function(){
-    	      var groupNo = $(this).attr("id");
-    	      alert("그룹번호: " +groupNo);
-    	      /* location.href = "${pageContext.request.contextPath}/board/boardView.do?no="+boardNo; */
-    	   });
-    	});
+ 	   $(".item_content").on("click",function(){
+ 	      var groupNo = $(this).attr("id");
+ 	       location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+groupNo; 
+ 	   });
+ 	});
     </script>
 </body>
 </html>

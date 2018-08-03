@@ -20,6 +20,18 @@
 		<result property="openSetting" column="OPEN_SETTING"/>
 	</resultMap>
 	
+	<resultMap type="schedule" id="scheduleResultMap">
+		<id property="scheduleNo" column="SCHEDULE_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="scheduleName" column="SCHEDULE_NAME"/>
+		<result property="scheduleContent" column="SCHEDULE_CONTENT"/>
+		<result property="scheduleAddress" column="SCHEDULE_ADDRESS"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="colorLabel" column="COLOR_LABEL"/>
+	</resultMap>
+	
 	<resultMap type="post" id="postResultMap">
 		<id property="postNo" column="POST_NO"/>
 		<result property="groupNo" column="GROUP_NO"/>
@@ -44,6 +56,7 @@
 		<id property="replyNo" column="REPLY_NO"/>
 		<result property="postNo" column="POST_NO"/>
 		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
 		<result property="content" column="CONTENT"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
 	</resultMap>
@@ -54,7 +67,7 @@
 		<result property="memberNo" column="MEMBER_NO"/>
 		<result property="isNotice" column="IS_NOTICE"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
-		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 		<collection property="postReplyWithMem" column="POST_NO" ofType="postReplyWithMem" select="selectReplyForPost"/>
 		<collection property="files" column="POST_NO" ofType="files" select="selectFilesForPost"/><!--여기서부터!!  -->
 	</resultMap>
@@ -63,9 +76,10 @@
 		<id property="replyNo" column="REPLY_NO"/>
 		<result property="postNo" column="POST_NO"/>
 		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="groupNo" column="GROUP_NO"/>
 		<result property="content" column="CONTENT"/>
 		<result property="submitDate" column="SUBMIT_DATE"/>
-		<association property="groupMember" column="MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
+		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 	</resultMap>
 	
 	<!--댓글에 멤버 정보 세팅  -->
@@ -75,11 +89,17 @@
 	</select>
 	
 	<!--그룹 멤버 하나 선택  -->
-	<select id="selectOneGroupMember" resultMap="groupMemberResultMap">
+	<select id="selectOneGroupMember" resultMap="groupMemberResultMap" parameterType="groupMember">
 		SELECT GROUP_MEMBER.*,MEMBER_NAME 
 		FROM GROUP_MEMBER JOIN MEMBER ON(GROUP_MEMBER.MEMBER_NO=MEMBER.MEMBER_NO)
-		WHERE GROUP_MEMBER.MEMBER_NO=#{memberNo}
+		WHERE GROUP_MEMBER.MEMBER_NO=#{memberNo} AND GROUP_MEMBER.GROUP_NO=#{groupNo}
 		
+	</select>
+	
+	<!--그룹 멤버 한명 정보 가져오기  -->
+	<select id="selectOneGrpMem" parameterType="groupMember" resultMap="groupMemberResultMap">
+		SELECT * FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
 	</select>
 	
 	<!--글에 첨부된 파일들 가져오기  -->
@@ -115,9 +135,16 @@
 	
 	<!--댓글 등록  -->
 	<insert id="insertReply" parameterType="postReply">
-		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{content},SYSDATE)
+	
+		<selectKey keyProperty="replyNo" resultType="string" order="AFTER" >
+			SELECT 'R'||TO_CHAR(SEQ_POSTREPLY.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+		
+	
+		INSERT INTO POST_REPLY VALUES('R'||TO_CHAR(SEQ_POSTREPLY.NEXTVAL,'FM000'),#{postNo},#{memberNo},#{groupNo},#{content},SYSDATE)
 	</insert>
 	
+	<!--댓글 삭제-->
 	<delete id="deleteReply">
 		DELETE FROM POST_REPLY
 		WHERE REPLY_NO=#{replyNo}
@@ -176,7 +203,7 @@
 	<!--그룹의 멤버 수 가져오기  -->
 	<select id="selectGrpMemNum" resultType="_int">
 		SELECT COUNT(*) FROM GROUP_MEMBER
-		WHERE GROUP_NO =#{groupNo}
+		WHERE GROUP_NO =#{groupNo} AND MEMBER_GRADE_CODE >0
 	</select>
 	
 	<!--그룹의 리더 정보 가져오기  -->
@@ -186,18 +213,59 @@
 		WHERE  GROUP_NO=#{groupNo} AND MEMBER_GRADE_CODE=3
 	</select>
 	
-	<!--그룹 멤버 한명 정보 가져오기  -->
-	<select id="selectOneGrpMem" parameterType="groupMember" resultMap="groupMemberResultMap">
-		SELECT * FROM GROUP_MEMBER
-		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
-	</select>
+	<update id="updateGroupBasics" parameterType="groups">
+		UPDATE GROUPS
+		SET GROUP_NAME=#{groupName},GROUP_PICTURE=#{groupPicture},OPEN_SETTING=#{openSetting},INTEREST_BIG_CODE=#{interestBigCode}
+		WHERE GROUP_NO=#{groupNo}
+	</update>
+	
 	
 	<!--그룹 가입하기 -->
 	<insert id="insertGroupMember" parameterType="groupMember">
 		INSERT INTO GROUP_MEMBER VALUES(#{memberNo},#{groupNo},#{profileImg},#{profileThumb},#{profileMsg},#{memberGradeCode})
 	</insert>
-
-
+	
+	<!--일정 등록 -->
+	<insert id="insertSchedule" parameterType="schedule">
+		
+		<selectKey keyProperty="scheduleNo" resultType="string" order="AFTER" >
+			SELECT 'S'||TO_CHAR(SEQ_SCHEDULE.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+		
+		INSERT INTO SCHEDULE VALUES('S'||TO_CHAR(SEQ_SCHEDULE.NEXTVAL,'FM000'),#{groupNo},#{scheduleName},#{scheduleContent},#{scheduleAddress},#{memberNo},#{startTime},#{endTime},#{colorLabel},#{allDay})
+	</insert>
+	
+	<!--일정 하나 가져오기 -->
+	<select id="selectOneSchedule" resultMap="scheduleResultMap">
+		SELECT * FROM SCHEDULE WHERE SCHEDULE_NO =#{scheduleNo}
+	</select>
+	
+	<!--일정 하나 수정하기-->
+	<update id="updateSchedule" parameterType="schedule">
+		 UPDATE SCHEDULE
+		 SET SCHEDULE_NAME=#{scheduleName},SCHEDULE_CONTENT=#{scheduleContent},SCHEDULE_ADDRESS=#{scheduleAddress},START_TIME=#{startTime},END_TIME=#{endTime},COLOR_LABEL=#{colorLabel},ALLDAY=#{allDay}
+		 WHERE SCHEDULE_NO=#{scheduleNo}
+	</update>
+	
+	<!--일정 삭제하기  -->
+	<delete id="deleteSchedule">
+		DELETE FROM SCHEDULE
+		WHERE SCHEDULE_NO=#{scheduleNo}
+	</delete>
+	
+	<!--키워드 포함한 글 갯수 가져오기 -->
+	<select id="selectKeywordPostCnt" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*) FROM POST 
+		WHERE GROUP_NO = #{groupNo} AND (CONTENT LIKE '%'||#{keyword}||'%')
+	</select>
+	
+	<!--키워드 포함흔 글 가져오기  -->
+	<select id="selectKeywordPost" resultType="postWithMem" resultMap="postWithMemResultMap">
+		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} AND CONTENT LIKE '%'||#{keyword}||'%' ORDER BY POST.SUBMIT_DATE DESC)
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
 	<!-- ===================================================================================================== 혜진 -->
 
 
@@ -253,8 +321,58 @@
 		ALLOW_SIGNUP = #{allowSignup}
 		WHERE GROUP_NO = #{groupNo}
 	</update>
+
+	<update id="updateGroupMemberSetting">
+		<if test="condition != 'leaderDelegation'">
+			UPDATE GROUP_MEMBER
+			<set>
+				<if test="condition == 'memberGradeManager'">MEMBER_GRADE_CODE = 2</if>
+				<if test="condition != 'memberGradeManager'">MEMBER_GRADE_CODE = 1</if>
+			</set>
+			WHERE GROUP_NO = #{groupNo}
+			AND MEMBER_NO IN
+			<foreach item="mNo" collection="memberNo" open="(" separator="," close=")">
+				#{mNo}
+			</foreach>
+		</if>
+		<if test="condition == 'leaderDelegation'">
+	       	UPDATE GROUP_MEMBER
+	       	<if test="leader == 'no'">
+				SET MEMBER_GRADE_CODE = 1
+	    		<foreach item="mNo" index="index" collection="memberNo">
+	    			<if test="index == 0">
+			    		WHERE MEMBER_NO = #{mNo}
+	    			</if>
+				</foreach>
+	       	</if>
+	       	<if test="leader == 'yes'">
+				SET MEMBER_GRADE_CODE = 3
+				<foreach item="mNo" index="index" collection="memberNo">
+    			<if test="index == 1">
+		    		WHERE MEMBER_NO = #{mNo}
+    			</if>
+				</foreach>
+	       	</if>
+    		AND GROUP_NO = #{groupNo}
+		</if>
+	</update>
 	
-	<!-- <delete id="deleteGroup">
+	<delete id="deleteGroupMember">
+		DELETE FROM GROUP_MEMBER
+		WHERE GROUP_NO = #{groupNo}
+		AND MEMBER_NO IN
+		<foreach item="mNo" collection="memberNo" open="(" separator="," close=")">
+			#{mNo}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
-	</delete> -->
+	</delete>
+	
+	<select id="selectListGroupSchedule" resultMap="scheduleResultMap">
+		SELECT *
+		FROM SCHEDULE
+		WHERE GROUP_NO = #{groupNo}
+	</select>
 </mapper>

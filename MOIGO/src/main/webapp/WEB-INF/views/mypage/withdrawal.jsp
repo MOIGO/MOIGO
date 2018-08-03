@@ -79,15 +79,17 @@
                     <div class="col-md-4 profile_wrap " style="border:none;">
                         <div class="profile_box col-md-12 ">
                             <h6 style="font-weight: bold;">회원탈퇴 대안</h6>
-                                <div>
-                                    <i class="far fa-lightbulb "></i> <a href="" >  클래스 비공개 하기</a> <br>
-                                    <p class="guide_content">  클래스를 비공개하면 더 이상 다른 회원에게 회원님의 연락처가 노출되지 않습니다.</p>
-                                </div>
-
-                                <div>
-                                    <i class="far fa-lightbulb"></i>  <a href=""> 모꼬지 이용방법</a> <br>
+                                 <div>
+                                    <i class="far fa-lightbulb"></i>  <a href="${pageContext.request.contextPath}/common/footpage.ft?selected=guid" class="gg"> 모이고 이용안내</a> <br>
                                     <p class="guide_content">혹시 이용방법이 어려워서 탈퇴하려 하진 않으셨나요? 이용방법을 확인해보세요</p>
                                 </div>
+                                
+                                <div>
+                                    <i class="far fa-lightbulb "></i> <a href="" >  모임 비공개 하기</a> <br>
+                                    <p class="guide_content">  모임을 비공개하면 더 이상 다른 회원에게 회원님의 모임이 노출되지 않습니다.</p>
+                                </div>
+
+                               
                         </div>
                     </div>
                 </div>
@@ -106,8 +108,8 @@
             </div>
         </div>
     </div>
-
-    <br><br><br><br><br><br>
+    <br><br><br><br>
+	<c:import url="/WEB-INF/views/common/footer.jsp" />
     <script>
     var  outType;
     /* var  outReason; */
@@ -143,6 +145,9 @@
 			alert('탙퇴이유 체크 plz');
 		}
     });
+	
+	
+
     </script>
 </body>
 </html>

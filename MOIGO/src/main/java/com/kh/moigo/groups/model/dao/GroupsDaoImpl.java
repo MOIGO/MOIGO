@@ -14,7 +14,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
-
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -121,6 +121,71 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.insert("groups.insertGroupMember",gm);
 	}
+	
+	@Override
+	public int insertSchedule(Schedule schedule) {
+		
+		return sqlSession.insert("groups.insertSchedule",schedule);
+	}
+	
+	@Override
+	public Schedule selectOneSchedule(String scheduleNo) {
+		
+		return sqlSession.selectOne("groups.selectOneSchedule",scheduleNo);
+	}
+
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		
+		return sqlSession.update("groups.updateSchedule",schedule);
+	}
+	
+	@Override
+	public int deleteSchedule(String scheduleNo) {
+		
+		return sqlSession.update("groups.deleteSchedule",scheduleNo);
+	}
+	
+	@Override
+	public GroupMember selectOneGrpMemberWithMemNo(GroupMember gm) {
+		
+		return sqlSession.selectOne("groups.selectOneGroupMember",gm);
+	}
+
+	@Override
+	public int selectKeywordPostCnt(String groupNo, String keyword) {
+		
+		
+		Map<String,String> map = new HashMap<String,String>();
+		
+		map.put("groupNo", groupNo);
+		map.put("keyword", keyword);
+		
+		return sqlSession.selectOne("groups.selectKeywordPostCnt", map);
+		
+		
+	}
+
+
+	@Override
+	public ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p) {
+	
+		Map<String,Object> map = new HashMap<String, Object>();
+		
+		map.put("groupNo", groupNo);
+		map.put("keyword", keyword);
+		map.put("startRow", p.getStartRow());
+		map.put("endRow", p.getStartRow());
+		
+		return new ArrayList<PostWithMem>(sqlSession.selectList("groups.selectKeywordPost",map));
+	}
+	
+	
+	@Override
+	public int updateGroupBasics(Groups group) {
+		
+		return sqlSession.update("groups.updateGroupBasics",group);
+	}
 
 
 
@@ -155,13 +220,23 @@ public class GroupsDaoImpl implements GroupsDao {
 	public int updateGroupCondition(Groups group) {
 		return sqlSession.update("groups.updateGroupCondition", group);
 	}
-
-
 	
+	@Override
+	public int updateGroupMemberSetting(Map<String, Object> changeMap) {
+		return sqlSession.update("groups.updateGroupMemberSetting", changeMap);
+	}
 
-	
+	@Override
+	public int deleteGroupMember(Map<String, Object> changeMap) {
+		return sqlSession.delete("groups.deleteGroupMember", changeMap);
+	}
 
-	
+	@Override
+	public List<Schedule> selectListGroupSchedule(String groupNo) {
+		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
+	}
+
+
 
 }
 

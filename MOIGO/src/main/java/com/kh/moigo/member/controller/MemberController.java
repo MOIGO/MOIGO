@@ -107,13 +107,6 @@ public class MemberController {
 			result = -1;
 		} else {
 			
-//			if(m.getMemberNo().charAt(0)=='A'){
-//				System.out.println("관리자 로그인");
-//				msg="관리자 로그인";
-//				result = 0;
-//				model.addAttribute("m", m);
-//			}else{
-			
 //				if(bcryptPasswordEncoder.matches(memberPwd, m.getMemberPwd())){
 				if (memberPwd.equals(m.getMemberPwd())) {
 					result = 0;
@@ -123,7 +116,6 @@ public class MemberController {
 					msg = "회원정보가 일치하지 않습니다.";
 					result = 1;
 				}
-//			}
 		}
 
 		map.put("msg", msg);
@@ -303,6 +295,12 @@ public class MemberController {
 		return "member/signUp";
 	}
 	
+/*	// 에러페이지이동
+	@RequestMapping("/common/error.do")
+	public String error(){
+		return "common/error";
+	}
+	*/
 	
 	
 	
@@ -339,14 +337,15 @@ public class MemberController {
 			String msg;
 			int result;
 			
-			Member me = memberService.selectOneMember(email);
+			Member me = memberService.selectOneMemberF(email);
 			
 			if (me == null) {
+				
 				Member mee = new Member();
 				mee.setMemberEmail(email);
 				mee.setMemberBirth(memberBirth);
 				mee.setMemberName(name);
-				mee.setMemberPwd("페이스북 회원");
+				mee.setMemberPwd("페이스북 로그인");
 				mee.setMemberGender(gender.equals("male")?"M":"F");
 				
 				result=-1;
@@ -355,10 +354,15 @@ public class MemberController {
 				Member m = memberService.selectOneMember(mee.getMemberEmail());
 				model.addAttribute("m", m);
 			} else {
-				result = 0;
-				msg = "페이스북 로그인 성공";
-				Member m = memberService.selectOneMember(me.getMemberEmail());
-				model.addAttribute("m", m);
+				if(me.getDelflag().equals("Y")){
+					msg="이용할 수 없는 페이스북 아이디";
+					result=1;
+				}else{
+					result = 0;
+					msg = "페이스북 로그인";
+					Member m = memberService.selectOneMember(me.getMemberEmail());
+					model.addAttribute("m", m);
+				}
 			}
 
 			Map<String, Object> map = new HashMap<>();

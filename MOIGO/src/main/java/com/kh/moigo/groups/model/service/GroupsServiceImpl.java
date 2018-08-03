@@ -15,6 +15,7 @@ import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.PostReply;
 
 @Service
@@ -109,6 +110,59 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.insertGroupMember(gm);
 		
 	}
+  	
+  	@Override
+	public int insertSchedule(Schedule schedule) {
+		
+		return groupDao.insertSchedule(schedule);
+	}
+  	
+
+	@Override
+	public Schedule selectOneSchedule(String scheduleNo) {
+		
+		return groupDao.selectOneSchedule(scheduleNo);
+	}
+	
+	@Override
+	public int updateSchedule(Schedule schedule) {
+		
+		return groupDao.updateSchedule(schedule);
+	}
+	
+
+	@Override
+	public int deleteSchedule(String scheduleNo) {
+		
+		return groupDao.deleteSchedule(scheduleNo);
+	}
+	
+	
+	@Override
+	public GroupMember selectOneGrpMemberWithMemNo(GroupMember gm) {
+		
+		return groupDao.selectOneGrpMemberWithMemNo(gm);
+	}
+	
+	@Override
+	public int selectKeywordPostCnt(String groupNo, String keyword) {
+		
+		return groupDao.selectKeywordPostCnt(groupNo,keyword);
+	}
+
+	@Override
+	public ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p) {
+		
+		return groupDao.selectKeywordPost(groupNo,keyword,p);
+	}
+
+	@Override
+	public int updategroupBasics(Groups group) {
+		
+		return groupDao.updateGroupBasics(group);
+	}
+
+	
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -142,12 +196,23 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updateGroupCondition(group);
 	}
 
-	
+
+	@Override
+	public int updateGroupMemberSetting(Map<String, Object> changeMap) {
+		return groupDao.updateGroupMemberSetting(changeMap);
+	}
+
+	@Override
+	public int deleteGroupMember(Map<String, Object> changeMap) {
+		return groupDao.deleteGroupMember(changeMap);
+	}
+
+	@Override
+	public List<Schedule> selectListGroupSchedule(String groupNo) {
+		return groupDao.selectListGroupSchedule(groupNo);
+	}
 
 	
-
-	
-
 	
 
 }

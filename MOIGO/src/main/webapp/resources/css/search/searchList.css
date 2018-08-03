@@ -1,10 +1,9 @@
 body {
-   overflow-y: hidden; 
-   overflow-x: hidden;
+   overflow: hidden; 
 }
 
 #map {
-   height: 100%;
+   height: 84.7%;
    width:40%;
    float: right !important;
    top: -15px;
@@ -245,15 +244,15 @@ ul.pageBar {
     text-align: center;
 }
 @media screen and (min-width: 768px) {
-   #left-wrap {
-      width: 60%;
-      height: 88%;
-      position: fixed;
-      top: 126px;
-      left: 0;
-      bottom: 0;
-      overflow: scroll;
-   }
+    #left-wrap {
+		width: 60%;
+		height: 88%;
+		position: fixed;
+		top: 126px;
+		left: 0;
+		bottom: 0;
+		overflow: scroll;
+	}
    #left-wrap .filter.default-filter {
       overflow: hidden;
       position: static;
@@ -267,16 +266,19 @@ ul.pageBar {
       right: 40%;
       bottom: 0;
       overflow-y: scroll;
-       overflow-x: hidden;
-       padding-bottom: 70px;
+      overflow-x: hidden;
+      padding-bottom: 70px;
    }
    .item-contents {
       height: 80px;
    }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
    body {
       overflow: auto !important;
+   }
+   .alert {
+   	margin-bottom: 0!important;
    }
    #map {
       display: none;

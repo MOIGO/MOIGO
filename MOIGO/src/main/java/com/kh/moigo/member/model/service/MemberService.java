@@ -26,6 +26,8 @@ public interface MemberService {
 
 	int insertFbMember(Member m);
 
+	Member selectOneMemberF(String email);
+
 
 	
 }

@@ -32,11 +32,19 @@
 		max-width: 	40%;
 	}	
 	
+	#groupReport:hover {
+		cursor : pointer;
+	}
+	
+	
+	
 </style>
 </head>
 
 <body>
-	  
+
+<c:import url="/WEB-INF/views/admin/common/reportModal.jsp" />
+
 <div class="col-3">
  	<div class="card">
 		<img class="card-img-top" src="http://via.placeholder.com/300x300"
@@ -109,10 +117,16 @@
 		</ul>
 	</div>
 	<hr />
-	<div class="d-flex justify-content-end">
-		<i class="fas fa-cog"></i><span id="groupSetting">그룹 설정</span>
+	<div class="d-flex justify-content-start">
+		
+	<c:if test="${memberGrade>=3}">
+		<i class="fas fa-cog"></i><span id="groupSetting" class="mr-3">그룹 설정</span>
+	</c:if>
+		<!-- <i class="fas fa-exclamation"></i><span id="groupReport" >그룹 신고</span> -->
 	</div>
+	
  </div>
+ 
  
  <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
@@ -159,8 +173,7 @@ function setGroupDesc(groupNo,isMember){
 		dataType:"json",
 		success:function(data){
 			var  group = data.group;
-			
-			console.log('${param.memberGrade}'+"멤버 그레이드");
+      
 			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
 				$('.card-img-top').attr("src",group.groupPicture);
 				$('#joinModal img').attr("src",group.groupPicture);
@@ -169,15 +182,7 @@ function setGroupDesc(groupNo,isMember){
 				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 			}
 			
-		/* 	if(!isMember){
-				$('.joinBtnWrapper').css("display","none");
-				$('.joined').css("display","relative");
-				$('.notJoined').css("display","none");
-			}else{
-				$('.joinBtnWrapper').css("display","relative");
-				$('.joined').css("display","none");
-				$('.notJoined').css("display","relative");
-			} */
+		
 			
 			$('#joinModal .groupName').text(group.groupName);
 			$('#joinModal .groupDesc').text(group.groupMsg);
@@ -202,6 +207,10 @@ function joinGroup(){
 	
 }
 
+/* $('#groupReport').on("click",function(){
+	$('#reportingModal').modal("toggle");
+}); */
+
 $(function() {
 
 	setGroupDesc('${param.groupNo}','${param.isMember}');
@@ -210,10 +219,13 @@ $(function() {
 	$(".group_list").on("click", function() {
 		var groupMenu = $(this).text();
 		
-		if(groupMenu == '전체글')
-			alert("전체글!");
+		if(groupMenu == '전체글'){
+			currentPage=1;
+			deleteAllPost();
+			setPostList();
+		}
 		else if(groupMenu == '사진첩')
-			alert("사진첩");
+			$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
 		else if(groupMenu == '일정')
 			$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
 		else
@@ -224,8 +236,62 @@ $(function() {
 	$("#groupSetting").on("click", function() {
 		$("#groupNoForm").attr("action", "${root}/groups/groupSetting.gp").submit();
 	});
+	
+
 });
 	
+	
+//신고 모달 관련 스크립트
+
+$('#reportSubmit').on('click',function(){
+	var data =$("input[name=reportRadios]").val() +" | "+$("select[name=myList]").val();
+	var data2 =$("#accuseTarget").val();
+	var data3 =$("#accuseReporter").val();
+	
+	console.log(data+data2+data3);
+    $.ajax({
+        type: 'post', 
+        url: "${pageContext.request.contextPath}/reporting.ad", 
+        data : {data : data, data2: data2},
+        success : function(data){
+		alert("성공"); 
+        }
+    });
+});	
+
+function Activity(name, list){
+    this.name = name;
+    this.list = list;
+}
+
+var acts = new Array();
+	acts[0] = new Activity('폭력적 또는 혐오스러운 콘텐츠', ['세부 신고 항목 선택','청소년 폭력물', '성인 폭력물', '동물 학대','신체적 공격']);
+	acts[1] = new Activity('증오 또는 악의적인 콘텐츠', ['세부 신고 항목 선택','증오심 또는 폭력 조장', '사회적 약자 학대', '괴롭힘','악의적인 내용']);
+	acts[2] = new Activity('스팸 또는 과장된 광고 콘텐츠', ['세부 신고 항목 선택','대량광고', '의약품 판매', '현혹하는 텍스트','현혹하는 이미지']);
+	acts[3] = new Activity('권리침해', ['세부 신고 항목 선택','내 저작권을 침해함', '내 개인정보를 침해함', '기타 법적 문제']);
+	acts[4] = new Activity('아동학대', ['세부 신고 항목 선택','상해','언어폭력','기타 모욕적인 행위']);
+	acts[5] = new Activity('기타', []);
+function updateList(str){
+    var frm = document.myForm;
+    var oriLen = frm.myList.length;
+    var numActs;
+    
+    for (var i = 0; i < acts.length; i++){
+
+        if (str == acts[i].name) {
+            numActs = acts[i].list.length;
+            for (var j = 0; j < numActs; j++)
+                frm.myList.options[j] = new Option(acts[i].list[j],
+				acts[i].list[j]);
+            for (var j = numActs; j < oriLen; j++)
+				frm.myList.options[numActs] = null;
+        }
+    }
+    if($(".myList").css("display") == "none"){   
+        jQuery('.myList').css("display", "block");   
+    }
+}
+
 </script>
 
 </html>

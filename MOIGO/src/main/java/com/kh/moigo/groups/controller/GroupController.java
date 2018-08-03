@@ -4,10 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -29,8 +32,12 @@ import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
+import com.kh.moigo.groups.model.vo.PostReplyWithMem;
 import com.kh.moigo.groups.model.vo.PostWithMem;
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
+
+import oracle.sql.TIMESTAMP;
 
 @Controller
 public class GroupController {
@@ -39,25 +46,35 @@ public class GroupController {
 	private GroupsService groupService;
 
 	@RequestMapping("/groups/groupMain.gp")
-	public String groupMain(@RequestParam(value="groupNo", defaultValue="G001")String groupNo ,HttpServletRequest request,Model model){
+	public String groupMain(@RequestParam(value="groupNo", defaultValue="G004")String groupNo ,HttpServletRequest request,Model model){
 		
 		//세션에서 멤버 가져옴
 		Member m = (Member)(request.getSession().getAttribute("m"));
 		
+		Groups gp= groupService.selectOneGroup(groupNo);
+		
 		//멤버 널 아니면
 		if(m!=null){
 			//그룹에 있는지 확인하고
-			GroupMember gm = groupService.selectOneMember(new GroupMember(m.getMemberNo(),groupNo));
+			GroupMember gm = groupService.selectOneGrpMemberWithMemNo(new GroupMember(m.getMemberNo(),groupNo));
 			
 			//그룹에 있으면
-			if(gm!=null)
+			if(gm!=null){
 				model.addAttribute("memberGrade",gm.getMemberGradeCode()); //권한 컬럼을 뷰에 리턴
-			else
+				model.addAttribute("gm",gm);
+			}
+			else{
 				model.addAttribute("memberGrade",-1); //없으면(가입 안되있으면) -1 리턴
+				model.addAttribute("gm",null);
+			}
+			
 		}else
 			model.addAttribute("memberGrade",-1);//멤버가 아니어도 -1 리턴
 		
 		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
+		model.addAttribute("currentGroup",gp);
+		model.addAttribute("openSetting",gp.getOpenSetting());
+		System.out.println("그룹 오픈세팅 :" +gp.getOpenSetting());
 		
 		return "groups/groupMain";
 	}
@@ -72,16 +89,18 @@ public class GroupController {
 	
 	//그룹 만들고 커버파일 있으면 저장하기
 	@RequestMapping(value="/groups/createGroupEnd.gp", method=RequestMethod.POST)
-	public String createGroupEnd(Groups group,@RequestParam MultipartFile groupImage,HttpServletRequest request)
+	public String createGroupEnd(Groups group,@RequestParam String memberNo, 
+												@RequestParam MultipartFile groupImageFile,
+												@RequestParam String groupDefaultImg,
+												HttpServletRequest request)
 	{
 		String groupPicture = "";
-		String profileImg = "";
 		
 		int result =  groupService.createGroup(group);
-		
-		if(groupImage!=null){
+	
+		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
 			try{		
-				
+				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
 				// 프로필 이미지를 저장할 경로
 				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
 				
@@ -95,14 +114,13 @@ public class GroupController {
 				
 				groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
 				
-			
-				// 2. upload한 file을 rename, 경로 저장하기
-				String fileName = groupImage.getOriginalFilename();
-				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
 				
+				// 2. upload한 file을 rename, 경로 저장하기
+				String fileName = groupImageFile.getOriginalFilename();
+				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
 				groupPicture = groupPicture + "." + ext;
 				
-				groupImage.transferTo(new File(saveDir +"/"+ groupPicture));
+				groupImageFile.transferTo(new File(saveDir +"/"+ groupPicture));
 					
 				
 			}
@@ -113,11 +131,94 @@ public class GroupController {
 			
 			group.setGroupPicture(groupPicture);
 			
+			
+			
 			result = groupService.updateGroupImg(group);
+		}else{
+			System.out.println("이미지 파일이 없는 경우");
+			group.setGroupPicture(groupDefaultImg);
+			groupService.updateGroupImg(group);
 		}
+		
+		groupService.insertGroupMember(new GroupMember(memberNo,group.getGroupNo(),3));
 		
 		return "redirect:/groups/groupMain.gp?groupNo="+ group.getGroupNo();
 
+	}
+	
+	//그룹 글 검색한 글 리스트 가져오기
+	@RequestMapping("/groups/getKeywordPostList.gp")
+	@ResponseBody
+	public Map<String,Object> getKeywordPostList(@RequestParam String groupNo, 
+												@RequestParam int currPage,
+												@RequestParam String keyword, Model model){
+		
+		PageInfo p = new PageInfo(currPage, groupService.selectKeywordPostCnt(groupNo,keyword),7);
+		
+		/*ArrayList<PostWithMem> list = groupService.selectPostList(groupNo, p);*/
+		ArrayList<PostWithMem> list = groupService.selectKeywordPost(groupNo, keyword ,p);
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("posts", list);
+		map.put("pageInfo", p);
+		
+		
+		return map;
+	}
+	
+	
+	//그룹 기본정보 업데이트 하기
+	@RequestMapping("/groups/updateGroupEnd.gp")
+	public String updateGroupEnd(Groups group,@RequestParam String groupDefaultImg,
+												@RequestParam MultipartFile groupImageFile,
+												HttpServletRequest request){
+		
+		String groupPicture = "";
+		int result =-1;
+		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
+			try{		
+				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
+				// 프로필 이미지를 저장할 경로
+				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
+				
+				// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+				File dir = new File(saveDir);
+				
+				if(!dir.exists())
+					dir.mkdirs();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+				groupPicture = "cover_" + group.getGroupNo() + "_" + sdf.format(new Date(System.currentTimeMillis()));
+				
+				
+				// 2. upload한 file을 rename, 경로 저장하기
+				String fileName = groupImageFile.getOriginalFilename();
+				String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+				groupPicture = groupPicture + "." + ext;
+				
+				groupImageFile.transferTo(new File(saveDir +"/"+ groupPicture));
+					
+				
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			
+			group.setGroupPicture(groupPicture);
+		
+			result = groupService.updategroupBasics(group);
+		}else{
+			System.out.println("이미지 파일이 없는 경우");
+			group.setGroupPicture(groupDefaultImg);
+			groupService.updategroupBasics(group);
+		}
+		
+		
+		return "redirect:/groups/groupMain.gp?groupNo="+ group.getGroupNo();
+		
 	}
 	
 	//그룹 메인에 글 가져오기
@@ -145,17 +246,37 @@ public class GroupController {
 	
 		
 		Member m = (Member)request.getSession().getAttribute("m");
-		if(m!=null){
 		
-			if((groupService.selectOneGroup(groupNo)).getAllowSignup().equals("Y")){
-				System.out.println("여기 들어와야지 그지?");
-				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
-			}else{
-				groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
+		
+		Groups gp =  groupService.selectOneGroup(groupNo);
+		
+		int memCnt = groupService.selectGrpMemNum(groupNo);
+		
+		if(!gp.getGroupGender().equals("N")&&(gp.getGroupGender()!=m.getMemberGender())){
+			model.addAttribute("msg","성별이 제한이 걸려 있습니다.");
+		}else if(m.getMemberBirth().getYear()<gp.getMinAge()||m.getMemberBirth().getYear()<gp.getMaxAge()){
+			model.addAttribute("msg","나이 제한에 맞지 않습니다.");
+		}else if(memCnt>=gp.getMaxMember()){
+			model.addAttribute("msg","그룹 정원이 모두 찼습니다.");
+		}else{
+			if(m!=null){
+				
+				if(gp.getAllowSignup().equals("Y")){
+					
+					groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,0));
+				}else{
+					groupService.insertGroupMember(new GroupMember(m.getMemberNo(),groupNo,1));
+				}
 			}
+			
+			
+			model.addAttribute("msg","가입에 성공했습니다.");
 		}
+		
+		
 		model.addAttribute("groupNo",groupNo);
-		model.addAttribute("msg","가입에 성공하셨습니다.");
+		
+		
 		return "groups/joinEnded";
 				
 	}
@@ -173,9 +294,7 @@ public class GroupController {
 		
 		return map;
 	}
-	
-	
-	
+
 	
 	//글 쓰기
 	@RequestMapping("/groups/insertPost.gp")
@@ -198,7 +317,7 @@ public class GroupController {
 		map.put("result", groupService.deletePost(postNo));
 		
 		return map;
-	}	
+	}	  
 	
 	//글 수정
 	@RequestMapping("/groups/updatePost.gp")
@@ -217,8 +336,19 @@ public class GroupController {
 	@ResponseBody
 	public Map <String,Object> insertReply(PostReply postReply)
 	{
+		
 		Map <String,Object> map = new HashMap<String, Object>();
 		map.put("result", groupService.insertReply(postReply));
+		
+		PostReplyWithMem pwm = new PostReplyWithMem();
+		pwm.setGroupMember(groupService.selectOneGrpMemberWithMemNo(new GroupMember(postReply.getMemberNo(),postReply.getGroupNo())));
+		pwm.setContent(postReply.getContent());
+		pwm.setMemberNo(postReply.getMemberNo());
+		pwm.setPostNo(postReply.getPostNo());
+		pwm.setReplyNo(postReply.getReplyNo());
+		pwm.setSubmitDate(new Date(new java.util.Date().getTime()));
+		map.put("pwm", pwm);
+		
 		
 		return map;
 	}
@@ -245,7 +375,156 @@ public class GroupController {
 		return map;
 	}
 	
-	// ------------------------------------------------------------------ 혜진
+	//일정 넣기
+	@RequestMapping("/groups/insertSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> insertSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+	
+		//시작시간
+		Timestamp time = new Timestamp(Long.parseLong(startT));
+		schedule.setStartTime(time);
+		
+		//있으면 끝시간도 세팅
+		if(!endT.equals("none")){
+			time = new Timestamp(Long.parseLong(endT));
+			schedule.setEndTime(time);
+		}
+		
+		//System.out.println(schedule);
+		
+		int result=  groupService.insertSchedule(schedule);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("result", result);
+		map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	//일정 하나 가져오기
+	@RequestMapping("/groups/selectOneSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneSchedule(@RequestParam String scheduleNo){
+	
+		
+		Schedule schedule = groupService.selectOneSchedule(scheduleNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	//일정 하나 수정하기
+	@RequestMapping("/groups/updateSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> updateSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
+		
+		//시작시간
+		Timestamp time = new Timestamp(Long.parseLong(startT));
+		schedule.setStartTime(time);
+		
+		//있으면 끝시간도 세팅
+		if(!endT.equals("none")){
+			time = new Timestamp(Long.parseLong(endT));
+			schedule.setEndTime(time);
+		}	
+		
+		int result = groupService.updateSchedule(schedule);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("result", result);
+		
+		if(result>0)
+			map.put("schedule", schedule);
+		
+		return map;
+	}
+	
+	//스케줄 지우기
+	@RequestMapping("/groups/deleteSchedule.gp")
+	@ResponseBody
+	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
+		
+		
+		int result = groupService.deleteSchedule(scheduleNo);
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+
+		map.put("result", result);
+			
+		return map;
+	}
+	
+	
+	//멤버 하나 선택하기
+	@RequestMapping("/groups/selectOneGrpMem.gp")
+	@ResponseBody
+	public Map<String,Object> selectOneGrpMem(@RequestParam String memberNo,@RequestParam String groupNo){
+		
+		GroupMember gm = groupService.selectOneGrpMemberWithMemNo(new GroupMember(memberNo,groupNo));
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		map.put("groupMember", gm);
+			
+		return map;
+	}
+	
+	
+	//이미지 넣기
+	@RequestMapping(value="/groups/insertImageFile.gp", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> insertImageFiles(@RequestParam("uploadFile") MultipartFile uploadFile, HttpServletRequest request){
+		
+		String orignImage = "";
+		String newImage = "";
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		if(uploadFile!=null){
+			try{		
+				
+				// 프로필 이미지를 저장할 경로
+				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupImages/");
+				
+				// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+				File dir = new File(saveDir);
+				
+				if(!dir.exists())
+					dir.mkdirs();
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+					newImage = "groupImage_"  + "_" + sdf.format(new Date(System.currentTimeMillis()));
+					
+					
+					// 2. upload한 file을 rename, 경로 저장하기
+					orignImage = uploadFile.getOriginalFilename();
+					System.out.println(uploadFile.getOriginalFilename());
+					
+					String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
+					newImage = newImage + "." + ext;
+					
+					uploadFile.transferTo(new File(saveDir +"/"+ newImage));
+					
+					map.put("url",newImage);
+				
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			
+		}
+	
+			
+		return map;
+	}
+	
+	// -------------------------------------------------------------------------------------------------------------------------- 혜진
 	
 	// 멤버 
 	@RequestMapping("/groups/groupMember.gp")
@@ -272,6 +551,8 @@ public class GroupController {
 		
 		return "groups/groupMember";
 	}
+	
+	
 	
 	@RequestMapping(value="/groups/updateGroupMember.gp", method=RequestMethod.POST)
 	public String updateGroupMember(GroupMember groupMember, @RequestParam MultipartFile uploadProfile, @RequestParam String resizeProfile, 
@@ -342,10 +623,30 @@ public class GroupController {
 	}
 	
 	// 일정
-	@RequestMapping(value="/groups/groupSchedule.gp", method=RequestMethod.POST)
-	public String groupSchedule(){
+	@RequestMapping("/groups/groupSchedule.gp")
+	public String goGroupSchedule(){
 		
 		return "groups/groupSchedule";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/groups/selectListGroupSchedule.gp")
+	public Map<String, Object> selectListGroupSchedule(@RequestParam String groupNo){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Schedule> scheduleList = groupService.selectListGroupSchedule(groupNo);
+		
+		map.put("schedule", scheduleList);
+		
+		return map;
+	}
+	
+	// 사진첩
+	@RequestMapping("/groups/groupPhotoAlbum.gp")
+	public String goGroupPhotoAlbum(){
+		
+		return "groups/groupPhotoAlbum";
 	}
 	
 	// 모임설정
@@ -373,8 +674,7 @@ public class GroupController {
 	@RequestMapping("/groups/updateGroupCondition.gp")
 	public String updateGroupCondition(Groups group) {
 		
-		int result;
-		result = groupService.updateGroupCondition(group);
+		int result = groupService.updateGroupCondition(group);
 		
 		return "redirect:/groups/groupSetting.gp?groupNo=" + group.getGroupNo();
 	}
@@ -392,11 +692,67 @@ public class GroupController {
 		return map;
 	}
 	
+	@ResponseBody
+	@RequestMapping("/groups/searchGroupMemberSetting.gp")
+	public Map<String, Object> searchGroupMemberSetting(@RequestParam String groupNo, @RequestParam String searchName){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, String> searchMap = new HashMap<String, String>();
+		searchMap.put("groupNo", groupNo);
+		searchMap.put("searchName", searchName);
+		
+		List<GroupMember> searchGroupMemberList = groupService.searchGroupMemberList(searchMap);
+		
+		map.put("groupMember", searchGroupMemberList);
+		
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/groups/changeGroupMemberSetting.gp")
+	public Map<String, Object> changeGroupMemberSetting(@RequestParam String groupNumber, @RequestParam(value="memberNo[]") List<String> memberNo, @RequestParam String condition){
+		
+		/* 
+			memberGradeManager : 매니저(2)로 update
+			memberGradeGeneral : 일반멤버(1)로 update
+			leaderDelegation : 리더위임 update 2번 -> 한번은 1로 한번은 3으로
+			groupMemberWithdraw : 모임멤버에서 delete
+			joinConfirm : 모임 멤버에서 1로 update
+			joinCancel : 모임 멤버에서 delete
+		*/
+		
+		Map<String, Object> changeMap = new HashMap<String, Object>();
+		changeMap.put("groupNo", groupNumber);
+		changeMap.put("memberNo", memberNo);
+		changeMap.put("condition", condition);
+		
+		int result;
+		
+		if(condition.equals("groupMemberWithdraw") || condition.equals("joinCancel"))
+			result = groupService.deleteGroupMember(changeMap);
+		else{
+			if(condition.equals("leaderDelegation")){				
+				changeMap.put("leader", "no");
+				result = groupService.updateGroupMemberSetting(changeMap);
+				changeMap.put("leader", "yes");
+			}
+			result = groupService.updateGroupMemberSetting(changeMap);
+		}
+			
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("result", result);
+		
+		return map;
+	}
+	
+	
 	@RequestMapping("/groups/deleteGroup.gp")
 	public String deleteGroup(@RequestParam String groupNo, Model model){
 		
 		int result;
-		// result = groupService.deleteGroup(groupNo);
+		result = groupService.deleteGroup(groupNo);
 		
 		model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
 		

@@ -8,7 +8,7 @@ import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
-
+import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -42,19 +42,38 @@ public interface GroupsDao {
 
 	int insertGroupMember(GroupMember gm);
 	
+	int insertSchedule(Schedule schedule);
+	
+	Schedule selectOneSchedule(String scheduleNo);
+	
+	int updateSchedule(Schedule schedule);
+	
+	int deleteSchedule(String scheduleNo);
+
+	GroupMember selectOneGrpMemberWithMemNo(GroupMember gm);
+	
+	int selectKeywordPostCnt(String groupNo, String keyword);
+	
+	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
+	
+	int updateGroupBasics(Groups group);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
-	List<GroupMember> selectGroupMemberList(String groupNo);
+	Groups selectOneGroup(String groupNo);
 	
+	List<GroupMember> selectGroupMemberList(String groupNo);
 	List<GroupMember> searchGroupMemberList(Map<String, String> searchMap);
-
 	int updateGroupMember(GroupMember groupMember);
 
-	Groups selectOneGroup(String groupNo);
-
 	int updateGroupCondition(Groups group);
-
+	int updateGroupMemberSetting(Map<String, Object> changeMap);
+	int deleteGroupMember(Map<String, Object> changeMap);
 	int deleteGroup(String groupNo);
+
+	List<Schedule> selectListGroupSchedule(String groupNo);
+
+	
 
 	
 

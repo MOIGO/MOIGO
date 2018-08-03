@@ -161,7 +161,7 @@ body {
 </head>
 <body>
 <c:import url="/WEB-INF/views/member/loginModal.jsp"/>
-
+<div class="header-container">
 		<!-- // 헤더부분 // -->
 	<div class="container-fluid" id="headerBar">
 		<div class="row">
@@ -208,7 +208,9 @@ body {
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/mypage/profile.do">마이페이지</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/groups/groupMain.gp">모임 메인</a>
 					  <a class="dropdown-item" href="${pageContext.request.contextPath}/adminHome.ad">관리자페이지</a>
-					  <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a>
+					  <%-- <a class="dropdown-item" href="${pageContext.request.contextPath}/member/memberLogout.do">로그아웃</a> --%>
+					  <a class="dropdown-item" onclick="memberLogout();" style="cursor: pointer;">로그아웃</a>
+					  
 					</div>
 				  </div>
 			</c:if>	  
@@ -217,11 +219,6 @@ body {
 		
 		</div>
 	</div>
-	 <script>
-		$('#loginIcon').on('click',function(){
-			$('.usercon').css('color','skyblue');	
-		});
-	</script>
 
 	<!-- 헤더 카테고리 부분 -->
 	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary navsize navbar-expand">
@@ -261,11 +258,16 @@ body {
 		  </ul>
 		</div>
 	</nav>
-	
+</div>
 	<!-- 테스트 -->
 	<c:set var="m" value="${sessionScope.m}"></c:set>
 	<!-- 테스트 -->
 	
+	<script>
+		$('#loginIcon').on('click',function(){
+			$('.usercon').css('color','skyblue');	
+		});
+	</script>
 
 	<script>
 		$('#logo').on( 'click',function() {
@@ -278,8 +280,6 @@ body {
 	<script>
 		
 		$(function() {
-			
-			console.log("${m}");
 			
 			/* 
 				폰트 로드시 FOIT을 방지하기 위해서 FOUT처럼 동작하도록 하는 메소드 
@@ -298,6 +298,28 @@ body {
 			location.href = "#"
 		});
 		
+	</script>
+	
+	<!-- 로그아웃 -->
+	<script>
+
+	
+		function memberLogout(){
+		
+			FB.getLoginStatus(function(response) {
+				console.log('statusChangeCallback');
+				console.log(response);
+			
+				 if (response.status === 'connected') {
+					FB.logout(function(response) { // 사용자 로그 아웃 이후 콜백처리 
+						alert('로그아웃');
+					});
+					location.href="${pageContext.request.contextPath}/member/memberLogout.do";
+				 } 
+			});
+				location.href="${pageContext.request.contextPath}/member/memberLogout.do";	
+					
+		}
 	</script>
 </body>
 </html>

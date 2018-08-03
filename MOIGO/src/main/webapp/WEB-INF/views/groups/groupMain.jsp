@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<!DOCTYPE html>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
 <c:set var="root" value="${pageContext.request.contextPath}" />
 <html>
@@ -11,8 +13,8 @@
     <script src="${pageContext.request.contextPath}/resources/js/bootStrap/bootstrap.min.js"></script>
      --%>
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
+<link href="${root}/resources/css/groups/summernote-bs4.css" rel="stylesheet">
+<script src="${root}/resources/js/groups/summernote-bs4.js"></script>
 
 <style>
 .test {
@@ -37,6 +39,7 @@
 body {
 	background: #EDEFF2;
 }
+
 
 #postDiv ,.profileWrapper,.contentWrapper,.postOuter {
 	background:white;
@@ -68,34 +71,89 @@ background: #EDEFF2;
 
 }
 
+.wrap{
+		z-index: 1999;
+		position:absolute;
+		left:250px;
+		background-color: grey;
+		opacity: 0.5;
+		min-width:1000px;
+		width:1300px;
+		height:100%;
+		text-align:center;
+		
+	}
+	
+	.contentWrapper iframe{
+		width:100% !important;
+		height:300px !important;
+		
+	}
+
 </style>
 
 </head>
 
 <body>
-	
+	<c:if test="${currentGroup.groupStateCode ne 'S1' }">
+		<div class="wrap row align-items-center justify-content-center" style="font-size:8em;">블라인드<br> 처리된 모임입니다.</div>
+		<span>관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
+	</c:if>
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
-	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" />
+	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+		<c:param name="groupNo" value="${groupNo }" />
+		<c:param name="memberNo" value="${gm.memberNo}" />
+		<c:param name="memberGrade" value="${memberGrade}" />
+		<%-- <c:param name="groupStateCode" value="${currGroup.groupStateCode}" /> --%>
+	</c:import>
 
 	<div class="container">
 
 		<div class="row">
 
-
 			<c:import url="/WEB-INF/views/groups/leftAside.jsp">
             	<c:param name="groupNo" value="${groupNo}"/>
             	<c:param name="memberGrade" value="${memberGrade}"/>
-         	</c:import>
+            	<c:param name="groupStateCode" value="${currentGroup.groupStateCode}" />
+      		</c:import>
 
 			<div class="col-7">
 				<div class="col">
-				<c:if test="${memberGrade>0}">
-					<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
-				</c:if>
+			
+					<c:if test="${memberGrade>0}">
+						<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
+					</c:if>
+				
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
-					<div id="postDiv" class="">
+					
+					
+					
+					<c:choose>
 						
-					</div>
+						<c:when test="${memberGrade > 0 or fn:trim(openSetting) eq 'PUBLIC' }">
+						
+							<div class="input-group input-group-lg">
+									<label for="searchPost" class="sr-only">searchPost</label>
+									<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
+									<div class="input-group-append">
+										<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
+									</div>
+							</div>	
+						
+							<div id="postDiv" class="">
+								
+							</div>
+						</c:when>
+						
+					
+						
+						 <c:when test="${memberGrade<=0&&fn:trim(openSetting) != 'PUBLIC' }">
+							<div class="card" style="font-size:1.3em; background:white;text-align:center;">  
+								이 모임의 글은 가입 해야만 볼 수 있습니다.
+							</div>
+							
+						</c:when>
+				</c:choose>
 				</div>
 				<div class="col">
 					
@@ -140,32 +198,121 @@ background: #EDEFF2;
 
 <script>
 
+
+
+var pageInfo;
+var currentPage=1;
+
 $(function(){
-	setPostList(1);
+	currentPage=1;
+	setPostList();
+	
+	
 });
 
+function searchPostList(){
+	
+	if(($('#searchPost').val()).trim().length==0){
+		currPage =1;
+		deleteAllPost();
+		setPostList();
+		return;
+	}
+
+	if($('#searchPost').val()!=null&&(($('#searchPost').val()).trim().length>0)){
+		
+		$.ajax({
+			url:"${pageContext.request.contextPath}/groups/getKeywordPostList.gp",
+			data:{	groupNo:"${groupNo}",
+					currPage:1,
+					keyword:$('#searchPost').val()
+					},
+			dataType:"json",
+			success:function(data){
+				$('#postDiv').children().remove();
+				
+				
+				if(data.posts.length>0){
+					for(var i = 0; i <data.posts.length;++i){
+						
+						var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
+						$postOuter.append(makeProfile(data.posts[i]));
+						$postOuter.append(makeContent(data.posts[i]));
+						$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
+						$postOuter.append(makeSubmitReply(data.posts[i].postNo));
+						$('#postDiv').append($postOuter);
+					}
+				}else{
+					currentPage-=1;
+				}
+			},
+			error:function(){
+				console.log("ajax오류");
+			}
+			
+		});
+		
+		
+	}
+	
+}
+
+
+
+
+$(document).ready(function () {
+	  $(document).scroll(function() {
+	    var maxHeight = $(document).height();
+	    var currentScroll = $(window).scrollTop() + $(window).height();
+
+	    if (maxHeight <= currentScroll) {
+	     	
+	    	
+			currentPage+=1;
+			if(pageInfo.maxPage<currentPage){
+				currentPage-=1;
+				return;
+			}
+			
+				
+			
+	    	if($('#searchPost').val()!=null&&(($('#searchPost').val()).trim().length>0)){
+	    		searchPostList();
+	    	}else
+	    		setPostList();
+	    }
+	  })
+	});
+	
 function deleteAllPost(){
 	$('#postDiv').children().remove();
 }
 
 
-function setPostList(currentPage){
+function setPostList(){
+	console.log(currentPage);
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
 		data:{groupNo:"${groupNo}",currPage:currentPage},
 		dataType:"json",
 		success:function(data){
-
-			console.log(data);
 			
-			for(var i = 0; i <data.posts.length;++i){
+			
+			pageInfo = data.pageInfo;
+			
+			if(data.posts.length>0){
 				
-				var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
-				$postOuter.append(makeProfile(data.posts[i]));
-				$postOuter.append(makeContent(data.posts[i]));
-				$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
-				$postOuter.append(makeSubmitReply(data.posts[i].postNo));
-				$('#postDiv').append($postOuter);
+				for(var i = 0; i <data.posts.length;++i){
+					
+					var $postOuter= $('<div class="p-3 postOuter  mb-3"></div>');
+					$postOuter.append(makeProfile(data.posts[i]));
+					$postOuter.append(makeContent(data.posts[i]));
+					$postOuter.append(makeReply(data.posts[i].postReplyWithMem));
+					$postOuter.append(makeSubmitReply(data.posts[i].postNo));
+					$('#postDiv').append($postOuter);
+				}
+			}else{
+				currentPage-=1;
 			}
 
 		},
@@ -176,9 +323,6 @@ function setPostList(currentPage){
 	});
 	
 }
-
-
-
 
 
 
@@ -215,7 +359,9 @@ function makeProfile(obj){
 			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
-		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.postNo));
+			$profileImgWrapper.append($("<input class='postNo'>").attr("type","hidden").val(obj.postNo));
+			$profileImgWrapper.append($("<input class='postWriterNo'>").attr("type","hidden").val(obj.groupMember.memberNo));
+			
 	}
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
@@ -223,7 +369,8 @@ function makeProfile(obj){
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
-		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.replyNo));
+		$profileImgWrapper.append($("<input class='replyNo'>").attr("type","hidden").val(obj.replyNo));
+		$profileImgWrapper.append($("<input class='replyWriterNo'>").attr("type","hidden").val(obj.groupMember.memberNo));
 	}
 	
 	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
@@ -239,10 +386,10 @@ function makeProfile(obj){
 	
 	
 	var $upLoadDateWrapper=$('<div class="d-flex">');
-	var $dropDownWrapper=$('<div >')
+	var $dropDownWrapper=$('<div>')
 	let now = new Date(obj.submitDate);
 	
-	var $upLoadWrapper  = $("<span>").text(	now.getMonth()+"월"+" "+now.getDate()+"일");
+	var $upLoadWrapper  = $("<span>").text(	(now.getMonth()+1)+"월"+" "+now.getDate()+"일");
 	
 	$upLoadDateWrapper.append($upLoadWrapper);
 	
@@ -260,10 +407,15 @@ function makeProfile(obj){
 	$profileImgWrapper.append($profileImg);
 	$profileWrapper.append($profileImgWrapper);
 	$profileWrapper.append($profileAndDate);
-	if(typeof(obj.replyNo)!='undefined')
-		$profileWrapper.append(makeDropDown(false,obj.replyNo));
-	else
-		$profileWrapper.append(makeDropDown(true,obj.postNo));
+	
+	//멤버면 넣고 아니면 넣지 않기
+	
+		if(typeof(obj.replyNo)!='undefined')
+			$profileWrapper.append(makeDropDown(false,obj.replyNo,obj.groupMember.memberNo,$profileWrapper));
+		else
+			$profileWrapper.append(makeDropDown(true,obj.postNo,obj.groupMember.memberNo,$profileWrapper));
+	
+	
 	return $profileWrapper;
 }
 
@@ -273,49 +425,85 @@ function toggleElipsis(obj){
 
 
 
-function makeDropDown(isPost,num){
+function makeDropDown(isPost,num,memberNo,wrapperObj){
+	
 	$dropDownWrapper =$("<div>");
 	
 	var $dropDown =$('<div class="dropdown">');
 	var $dropDownBtn=$('<button class="btn btn-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>');
 	var $dropDownMenu=$('<div class="dropdown-menu">');
 	
-	var $dropDownItem1
-	var $dropDownItem2
+	var $dropDownItem1;
+	var $dropDownItem2;
+	
+	
 	
 	if(isPost){
-		$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
-		$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
-		var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
-		var $dropDownItem4=$("<a class='dropdown-item'>신고하기</a>");
-		$dropDownMenu.append($dropDownItem1);
-		$dropDownMenu.append($dropDownItem2);
-		$dropDownMenu.append($dropDownItem3);
-		$dropDownMenu.append($dropDownItem4);
 		
-		$dropDownItem1.on("click",function(){
-			prepareUpdatePost(num);
-		});
+		if($(wrapperObj).find(".postWriterNo").val()=='${gm.memberNo}'||'${memberGrade>=3}'=='true'){
+			$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
+			$dropDownMenu.append($dropDownItem1);
+			var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
+			$dropDownMenu.append($dropDownItem3);
+			
+			$dropDownItem1.on("click",function(){
+				prepareUpdatePost(num);
+			});
+			
+			$dropDownItem3.on("click",function(){
+				deletePost(num);
+			});
+		}
+		if('${memberGrade >3}'=='true'){
+			$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
+			$dropDownMenu.append($dropDownItem2);
+		}
 		
-		
-		
-		$dropDownItem3.on("click",function(){
-			deletePost(num);
-		});
-		
+		//신고하기 넣기
+		if($(wrapperObj).find(".postWriterNo").val()!='${gm.memberNo}'&&'${memberGrade>=1}'=='true'){
+			var $dropDownItem4=$("<a class='dropdown-item' >신고하기</a>");
+			$dropDownMenu.append($dropDownItem4);
+			
+			$dropDownItem4.on("click",function(){
+				$('#accuseReporter').val("${gm.memberNo}");
+				$('#accuseTarget').val($(wrapperObj).find(".postWriterNo").val());
+				$('#reportingModal').modal("toggle"); 
+			});
+	
+		}
+
 	}else{
-		$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
-		$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
-		$dropDownMenu.append($dropDownItem1);
-		$dropDownMenu.append($dropDownItem2);
 		
-		$dropDownItem1.on("click",function(){
-			addReplyEditForm(num);
-		});
+		if($(wrapperObj).find(".replyWriterNo").val()=='${gm.memberNo}'||'${memberGrade>=3}'=='true'){
+			$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
+			$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
+			$dropDownMenu.append($dropDownItem1);
+			$dropDownMenu.append($dropDownItem2);
+			
+			$dropDownItem1.on("click",function(){
+				addReplyEditForm(num);
+			});
+			
+			$dropDownItem2.on("click",function(){
+				deleteReply(num);
+			});
+		}
 		
-		$dropDownItem2.on("click",function(){
-			deleteReply(num);
-		});
+		//신고하기 넣기
+		if($(wrapperObj).find(".replyWriterNo").val()!='${gm.memberNo}'&&'${memberGrade>=1}'=='true'){
+			var $dropDownItem4=$("<a class='dropdown-item' >신고하기</a>");
+			$dropDownMenu.append($dropDownItem4);
+			
+			$dropDownItem4.on("click",function(){
+				
+						
+				$('#accuseReporter').val("${gm.memberNo}");
+				$('#accuseTarget').val($(wrapperObj).find(".replyWriterNo").val());
+				$('#reportingModal').modal("toggle"); 
+			});
+	
+		}
+	
 	}
 	
 	$dropDown.append($dropDownBtn);
@@ -424,7 +612,12 @@ function prepareUpdatePost(num){
 	
 	for(var i =0;i<$temp.siblings('[name=editMapWrap]').length;++i){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
+		
 	}
+	for(var i =0;i<$temp.siblings('[name=editScheduleWrap]').length;++i){
+		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i));
+	}
+	
 }
 
 function updatePost(num,postContent){
@@ -436,7 +629,7 @@ function updatePost(num,postContent){
 			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 			if(data.result>0){
 				$temp.children().remove();
-				console.log(postContent);
+				
 				$temp.append(postContent);
 				alert("글 수정 성공!");
 			}else
@@ -449,16 +642,56 @@ function updatePost(num,postContent){
 	});
 }
 
+function restoreScheduleEvent(obj){
+	
+	console.log("들어오나?");
+	
+	$(obj).find('[name=editBtn]').on("click",function(event){
+		//toEditTarget=obj;
+		 event.stopPropagation();
+		 
+		
+		editSchedule(obj,$(obj).find("input[name=scheduleNo]").val());
+		
+	});
+	
+	$(obj).find('[name=delBtn]').on("click",function(event){
+		 event.stopPropagation();
+		if(confirm("일정을 삭제 하시겠습니까?")){
+			deleteSchedule($(obj).find('[name=scheduleNo]').val(),obj);
+		}
+			
+		
+	});
+	
+	
+	$(obj).on('mouseover',function(){
+		$(this).css('border','3px solid #00bfff');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","visible");
+		
+		
+	}).on('mouseout',function(){
+		
+		$(this).css('border','3px solid black');
+		
+		$(this).find('.map_btn_wrapper').css("visibility","hidden");
+	});
+	
+}
+
 function restoreMapEvent(obj){
 	
-	 $(obj).find('[name=editBtn]').on("click",function(){
+	 $(obj).find('[name=editBtn]').on("click",function(event){
 		toEditTarget=obj;
 		
+		event.stopPropagation();
 		$('#placeKeyword').val($(obj).find('.place_name').text());
 		editMap();
 	});
 	
-	$(obj).find('[name=delBtn]').on("click",function(){
+	$(obj).find('[name=delBtn]').on("click",function(event){
+		event.stopPropagation();
 		deleteMap($(obj));
 	});
 	
@@ -543,7 +776,7 @@ function submitPost(){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:{groupNo:"G001",memberNo:'${m.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
+		data:{groupNo:'${groupNo}',memberNo:'${gm.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
 		dataType:"json",
 		success:function(data){
 			
@@ -553,7 +786,7 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
-			setPostList(1);
+			setPostList();
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -566,9 +799,13 @@ function submitPost(){
 }
 
 function checkLogin(){
-	if('${m.memberNo}'=='')
+	
+
+	if('${gm.memberNo}'.length<0)
 	{
+		alert('${gm.memberNo}');
 		alert("로그인 해주세요");
+		
 		return false;
 	}else
 		return true;
@@ -581,18 +818,23 @@ function submitReply(postNo,obj){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/insertReply.gp",
-		data:{postNo:postNo,memberNo:'${m.memberNo}',content:$(obj).val()},
+		data:{postNo:postNo,memberNo:'${gm.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
+			console.log(data);
 			
 			if(data.result>0){
 				alert("댓글 등록 성공!");
+				
+				$(obj).closest('.postOuter').find('.replyWrapper').append(makeProfile(data.pwm));
+				
+				$(obj).val("");
 			}else
 				alert("댓글 등록 실패!");
 			
-			deleteAllPost();
-			setPostList(1);
-			
+			/* deleteAllPost();
+			setPostList();
+			 */
 		},
 		error:function(){
 			alert("글 등록 도중 에러가 생겼습니다.");
@@ -654,9 +896,21 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
+		    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
 		    ['mybutton', ['insertmap']],
 		    ['myButton',['insertSchedule']]
+		  	
 		  ],
+		  disableResizeEditor: true,
+		  height: 200,
+		  callbacks:{
+			onImageUpload:function(files,editor,welEditable){
+				
+				
+					sendFile(files,this);
+				
+			}
+		  },
 
 		  buttons: {
 		     insertmap: insertMap,
@@ -666,15 +920,31 @@ function createSummerNote(){
 	
 }
 
-function toggleMapModal(){
-	 $('#insertMap').modal("toggle");
-     $('#insertMap').on("shown.bs.modal",makeMap());
-}
+function sendFile(file, editor) {
+	
+		var data = new FormData();
+		data.append("uploadFile",file[0]);
+		
+		console.log(file[0]);
+	     $.ajax({ // ajax를 통해 파일 업로드 처리
+	    	type : "POST",
+	    	data : data,
+	    	async : false,
+	        url : "${pageContext.request.contextPath}/groups/insertImageFile.gp",
+	        dataType:"json",
+	        cache: false,
+	        contentType: false,
+	        /* enctype: 'multipart/form-data', */
+	        processData: false,
+	        success : function(data) { // 처리가 성공할 경우
+            // 에디터에 이미지 출력
+            console.log(data.url);
+	        	$(editor).summernote('editor.insertImage','${root}/resources/images/groupImages/'+data.url);
+	        }
+	    }); 
+	}
 
-function toggleScheduleModal(){
-	 $('#insertSchedule').modal("toggle");
-     
-}
+
 	
 </script>
 

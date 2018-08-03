@@ -20,21 +20,21 @@
       <result property="openSetting" column="OPEN_SETTING"/>
    </resultMap>
    <select id="listCount" resultType="_int" parameterType="string">
-      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
+      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' AND OPEN_SETTING not like 'PRIVATE'
    </select>
    
    <select id="selectList" resultMap="groupsResultMap" parameterType="string">
-      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' ORDER BY ENROLL_DATE DESC
+      SELECT GROUP_NO, GROUP_NAME, GROUP_PICTURE, GROUP_ADDRESS, GROUP_GRADE_CODE, MAX_MEMBER FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관' AND OPEN_SETTING NOT LIKE 'PRIVATE' ORDER BY ENROLL_DATE DESC
    </select>
    
    <select id="detailListCount" resultType="_int" parameterType="hashmap">
-      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
+      SELECT COUNT(*) FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND OPEN_SETTING NOT LIKE 'PRIVATE'
       <if test='category != ""'>
       	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
       </if>
       <choose>
       	<when test='regardlessArea != ""'>
-      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%' AND OPEN_SETTING NOT LIKE 'PRIVATE' 
       	</when>
       	<otherwise>
       		AND GROUP_ADDRESS NOT LIKE '지역무관'
@@ -43,10 +43,11 @@
    </select>
    
    <select id="detailSelectList" resultMap="groupsResultMap" parameterType="hashmap">
-      SELECT G.GROUP_NO, G.GROUP_NAME, G.GROUP_PICTURE, G.GROUP_ADDRESS, G.GROUP_GRADE_CODE, G.MAX_MEMBER,G.INTEREST_BIG_CODE, G.ENROLL_DATE , (SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEMBERCNT, (SELECT COUNT(*) FROM POST WHERE GROUP_NO = G.GROUP_NO) POSTCNT
+      SELECT G.GROUP_NO, G.GROUP_NAME, G.GROUP_PICTURE, G.GROUP_ADDRESS, G.GROUP_GRADE_CODE, G.MAX_MEMBER,G.INTEREST_BIG_CODE, G.ENROLL_DATE, (SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEMBERCNT, (SELECT COUNT(*) FROM POST WHERE GROUP_NO = G.GROUP_NO) POSTCNT
 	      FROM GROUPS G
 	        WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' 
-	          AND GROUP_ADDRESS LIKE '%'||#{place}||'%' 
+	          AND GROUP_ADDRESS LIKE '%'||#{place}||'%'
+	          	AND OPEN_SETTING NOT LIKE 'PRIVATE' 
       			<if test='category != ""'>
 		      		AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
 		        </if>
@@ -69,12 +70,15 @@
 			    </choose>
    </select>
    <select id="getAddressList" resultMap="groupsResultMap" parameterType="hashmap" resultType="Groups">
-      SELECT GROUP_ADDRESS FROM GROUPS WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND GROUP_ADDRESS NOT LIKE '지역무관'
-      <choose>
-      </choose>
-      <if test='category != ""'>
-      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
-      </if>
+      SELECT G.GROUP_NO, G.GROUP_NAME, G.GROUP_PICTURE, G.GROUP_ADDRESS, G.GROUP_GRADE_CODE, G.MAX_MEMBER,G.INTEREST_BIG_CODE, G.ENROLL_DATE, (SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEMBERCNT, (SELECT COUNT(*) FROM POST WHERE GROUP_NO = G.GROUP_NO) POSTCNT 
+		  FROM GROUPS G 
+		    WHERE GROUP_NAME LIKE '%'||#{keyword}||'%' 
+		      AND GROUP_ADDRESS LIKE '%'||#{place}||'%' 
+		        AND GROUP_ADDRESS NOT LIKE '지역무관'
+		        	AND OPEN_SETTING NOT LIKE 'PRIVATE'
+				      <if test='category != ""'>
+				      	AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
+				      </if>
    </select>
 </mapper>
    

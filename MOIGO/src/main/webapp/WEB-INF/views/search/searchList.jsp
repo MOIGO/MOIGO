@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=2">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=3">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -148,10 +148,8 @@
       $('.regardlessArea[value="${regardlessArea}"]').prop('checked', true);
       
       var map = new daum.maps.Map(document.getElementById('map'), { // 지도를 표시할 div
-         center : new daum.maps.LatLng(35.180624570993196,
-               128.15614133888792), // 지도의 중심좌표
-         level : 13
-      // 지도의 확대 레벨
+         center : new daum.maps.LatLng(35.247459153890844, 127.89270048793044), // 지도의 중심좌표
+         level : 13 // 지도의 확대 레벨
       });
 
       // 마커 클러스터러를 생성합니다
@@ -162,7 +160,7 @@
       var clusterer = new daum.maps.MarkerClusterer({
          map : map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
          averageCenter : true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-         minLevel : 9, // 클러스터 할 최소 지도 레벨
+         minLevel : 10, // 클러스터 할 최소 지도 레벨
          calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
          disableClickZoom : true, // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
          styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
@@ -213,44 +211,84 @@
             category : category
          },
          success : function(listData) {
-            var j = 0;
+            var cnt = 0;
             var data = new Object();
             var positions = new Array();
             var contents = new Array();
             var geocoder = new daum.maps.services.Geocoder();
-            // 주소로 좌표를 검색합니다
-            for (var i = 0; i < listData.length ; i++) {
-               geocoder.addressSearch(listData[i].groupAddress, function(result, status) {
-                  // 정상적으로 검색이 완료됐으면 
-                  if (status === daum.maps.services.Status.OK) {
+            
+            listData.forEach(function(addr, i) {
+    			geocoder.addressSearch(addr.groupAddress, function(result, status) {
+                 if (status === daum.maps.services.Status.OK) {
                      positions.push({
-                        "lat" : Number(result[0].y),
-                        "lng" : Number(result[0].x)
+                    	"content" : '<div class="moigo-item-wrap" style="width: 200px;">'+
+                        ' <div class="content-context">'+
+                        ' <div class="moigo-item list-item align-left">'+
+                        '<div></div>'+
+                        '<div class="header-bg" style="background-image: url('+listData[i].groupPicture+');"></div>'+
+                        '<div class="header-text-container">'+
+                        '<div class="header-text">'+
+                        '<div class="title-wrap">'+
+                        '<input class="groupNo" type="hidden" value="'+listData[i].groupNo+'"/>'+
+                        '<div class="title">'+listData[i].groupName+'</div>'+
+                        '</div></div></div>'+
+                        '<div class="item-contents align-left">'+
+                        '<div class="location">'+listData[i].groupAddress+'</div>'+
+                        '<span class="icon-container float-right">'+
+                        '<span class="memberCount">' +listData[i].memberCnt+'/<span class="maxMember">'+listData[i].maxMember+'</span><img alt="memberIcon" src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>'+
+                        '<span class="commentCount">'+listData[i].postCnt+'<img alt="commentIcon" src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png">'+
+                        '</span></span></div></div></div></div>',
+                    	"lat" : result[0].y,
+                        "lng" : result[0].x
                      });
-                     j++;
-                     var imageSrc = '${pageContext.request.contextPath }/resources/images/search/marker.png', // 마커이미지의 주소입니다    
+                     cnt++;
+                     
+                     // 마커 이미지 변경
+                     /* var imageSrc = '${pageContext.request.contextPath }/resources/images/search/marker.png', // 마커이미지의 주소입니다    
                      imageSize = new daum.maps.Size(40, 40), // 마커이미지의 크기입니다
                      imageOption = {offset: new daum.maps.Point(20, 38)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                        
-                     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption); */
+                     
                      // 마커 생성 및 클러스터러에 마커 추가
-                     if(j == listData.length) {
-                    	console.log("짜잔");
+                     if(cnt == listData.length) {
                         data = { positions };
                         var markers = data.positions.map(function(position) {
-                           return new daum.maps.Marker({
-                              position : new daum.maps.LatLng(position.lat, position.lng),
-                              image : markerImage                     	
-                           });
+                        	return new daum.maps.Marker({
+                            	position : new daum.maps.LatLng(position.lat, position.lng),
+                                //image : markerImage                     	
+                            });
                         });
-                        
-                        
-                        clusterer.addMarkers(markers);
-                     }  
+                        for(var k = 0; k < positions.length; k++) {
+	                       var infowindow = new daum.maps.InfoWindow({
+	                           	content: data.positions[k].content // 인포윈도우에 표시할 내용
+	                       });
+	                   	    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+	                        // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+	                        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                        	daum.maps.event.addListener(markers[k], 'mouseover', makeOverListener(map, markers[k], infowindow));
+                            daum.maps.event.addListener(markers[k], 'mouseout', makeOutListener(infowindow));
+                        }
+                    	// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+                        function makeOverListener(map, marker, infowindow) {
+                             return function() {
+                               infowindow.open(map, marker);
+                             };
+                         }
+
+                         // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+                         function makeOutListener(infowindow) {
+                             return function() {
+                                 infowindow.close();
+                             };
+                         }
+	                        
+                       clusterer.addMarkers(markers);
+                       clusterer.setMinClusterSize(3);
+                     }
                   }
                });
-            }
-            
+            });
             
             // 마커 클러스터러에 클릭이벤트를 등록합니다
             // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
@@ -266,6 +304,56 @@
             });
          }
       });
+      
+      $('.content-context').click(function() {
+    	  location.href='${pageContext.request.contextPath}/groups/groupMain.gp?groupNo='+$(this).find('.groupNo').val();
+      });
+   	  /* $(function(){
+	    var marker = null;
+   		$('.moigo-item-wrap').mouseenter(function() {
+      		 var addr = $(this).find('.location').html();
+      		 
+      		 var geocoder = new daum.maps.services.Geocoder();
+
+      		// 주소로 좌표를 검색합니다
+      		geocoder.addressSearch(addr, function(result, status) {
+
+      		    // 정상적으로 검색이 완료됐으면 
+      		     if (status === daum.maps.services.Status.OK) {
+   				var num = 0.09;
+      		    	if(map.getLevel() > 9) {
+   					if(map.getLevel() == 12) {
+   						num = 0.07;
+   					}
+   					if(map.getLevel() == 11){
+   						num = 0.04;
+   					} else if(map.getLevel() == 10) {
+   						num = 0.02;
+   					}
+       			        var coords = new daum.maps.LatLng(Number(result[0].y)+num, result[0].x);
+       		        // 결과값으로 받은 위치를 마커로 표시합니다
+       		        marker = new daum.maps.Marker({
+       		            position: coords
+       		        });
+       		        
+       		        
+       		        marker.setMap(map);
+       		        
+	       		     $('.moigo-item-wrap').mouseleave(function() {
+	       				if(marker != null) {
+	       		   			if(map.getLevel() > 9) {
+	       		   				marker.setMap(null);
+	       		   				marker=null;
+	       		   			}				
+	       				}
+	       	   	   	});
+       		        
+      		    	}
+      		     }
+        		});
+      	  });
+		
+   	  }); */
       
    </script>
 </body>

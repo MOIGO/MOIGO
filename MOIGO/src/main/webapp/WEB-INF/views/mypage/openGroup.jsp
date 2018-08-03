@@ -7,7 +7,6 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage/myPage_custom.css?ver=0">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -36,7 +35,7 @@
               	<c:if test="${empty list}">
               		<div class=" jumbotron col-12" style="text-align:center;">
          				<h3>모임정보가 없습니다</h3> 
-         				<button class="btn btn-success" >모임 만들기</button>
+         				<button class="btn btn-success" onclick="location.href=location.href = '${pageContext.request.contextPath}/groups/createGroup.gp'">모임 만들기</button>
          			</div>
               	</c:if>
                	<c:if test="${! empty list}">
@@ -45,31 +44,51 @@
 	                     <div class="item_content" id="${group.groupNo }">
 	                     <input type="hidden" value="${group.groupNo }" name="groupNo">
 	                         <div class="header_bg" >
-	                          		<img alt="" src="${pageContext.request.contextPath}/resources/images/moigo.png" style="width:100%; height:100%;">
+	                          		<img alt="" src="${group.groupPicture }" style="width:100%; height:100%;">
+	                         		<%-- <span style="position:absolute; right:20px; top:2px;color:yellow">
+	                         			<c:if test="${group.groupGrade.equals('G1') }">
+											<span>브론즈</span>
+	                         			</c:if>
+	                         			<c:if test="${group.groupGrade.equals('G2') }">
+	                         				<span>실버</span>
+	                         			</c:if>
+	                         			<c:if test="${group.groupGrade.equals('G3') }">
+	                         				<span>골드</span>
+	                         			</c:if>
+	                         			<c:if test="${group.groupGrade.equals('G4') }">
+	                         				<span>플래티넘</span>
+	                         			</c:if>
+	                         			<c:if test="${group.groupGrade.equals('G5') }">
+	                         				<span>VIP</span>
+	                         			</c:if>
+                         			 </span>  --%>
 	                          </div>
 	                         <div class="body_text_container">
 	                             <div class="body_text">
-	                                 <div class="body_title"><c:out value="${group.groupName }"/> </div>
-	                                 <div class="body_member">멤버 : <c:out value="${group.gropuNum }"/> 명</div>
+	                                 <div class="body_title"><c:out value="${group.groupName}"/> </div>
+	                                 <div class="body_member" >멤버 : <c:out value="${group.memberNum}"/> 명   &nbsp;&nbsp;&nbsp; 게시글 : <c:out value="${group.postNum }"/> 개</div>
 	                             </div>
 	                         </div>
 	                     </div>
 	                 </div>
+		       
 	                </c:forEach>
               	 </c:if>
+              
+               
        		</div>
        	</div>
     </div>
 
-    <br><br><br><br><br><br>
+     <br><br><br><br>
+	<c:import url="/WEB-INF/views/common/footer.jsp" />
     <script >
     $(function(){
-    	   $(".item_content").on("click",function(){
-    	      var groupNo = $(this).attr("id");
-    	      alert("그룹번호: " +groupNo);
-    	      /* location.href = "${pageContext.request.contextPath}/board/boardView.do?no="+boardNo; */
-    	   });
-    	});
+ 	   $(".item_content").on("click",function(){
+ 	      var groupNo = $(this).attr("id");
+ 	       location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+groupNo; 
+ 	   });
+ 	});
     </script>
 </body>
 </html>

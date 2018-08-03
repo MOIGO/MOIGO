@@ -33,5 +33,7 @@ public interface MemberDao {
 
 	int insertFbMember(Member m);
 
+	Member selectOneMemberF(String email);
+
 
 }

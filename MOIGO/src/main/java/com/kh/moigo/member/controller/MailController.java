@@ -71,7 +71,7 @@ public class MailController {
 	   
 	    Map<String, Object> map = new HashMap<>();
 	    
-		map.put("msg", "인증번호 전송");
+		map.put("msg", "인증번호가 전송되었습니다");
 		map.put("joinCode", joinCode);
 	    
 	    return map;

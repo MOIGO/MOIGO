@@ -351,7 +351,7 @@ $(function(){
     
     /* 회원가입 췌키아웃 */
     var chkId= false;
-    var chkNum = true;  //false 로 변경 할것 ㅎ 인증 받으려면
+    var chkNum = false;  //false 로 변경 할것 ㅎ 인증 받으려면
     var chkPwd = false;
     var chkPwd2 = false;
     var chkName = false;
@@ -440,7 +440,7 @@ $(function(){
 				data : {userEmail : userEmail },
 				dataType : "json",
 				success : function(data){
-						/* alert(data.msg); */
+						alert(data.msg); 
 						joinCode=data.joinCode;
 						$('#joinCode, #btn_joinCode').attr('disabled',false);
 						$('#codeChkMsg').html('인증번호를 발송했습니다.<br>인증번호가 오지 않으면 입력하신 정보가 정확한지 확인하여 주세요.').addClass('okChk').removeClass('noChk');

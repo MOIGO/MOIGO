@@ -1,6 +1,9 @@
 package com.kh.moigo.groups.model.vo;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+
+import oracle.sql.TIMESTAMP;
 
 public class Schedule implements java.io.Serializable{
 
@@ -12,9 +15,29 @@ public class Schedule implements java.io.Serializable{
 	private String scheduleContent;
 	private String scheduleAddress;
 	private String memberNo;
-	private Date startTime;
-	private Date endTime;
+	private Timestamp startTime;
+	private Timestamp endTime;
 	private String colorLabel;
+	private String allDay;
+	public Schedule(String scheduleNo, String groupNo, String scheduleName, String scheduleContent,
+			String scheduleAddress, String memberNo, Timestamp startTime, Timestamp endTime, String colorLabel,
+			String allDay) {
+		super();
+		this.scheduleNo = scheduleNo;
+		this.groupNo = groupNo;
+		this.scheduleName = scheduleName;
+		this.scheduleContent = scheduleContent;
+		this.scheduleAddress = scheduleAddress;
+		this.memberNo = memberNo;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.colorLabel = colorLabel;
+		this.allDay = allDay;
+	}
+	public Schedule() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public String getScheduleNo() {
 		return scheduleNo;
 	}
@@ -51,16 +74,16 @@ public class Schedule implements java.io.Serializable{
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
 	}
-	public Date getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
-	public Date getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 	public String getColorLabel() {
@@ -69,10 +92,17 @@ public class Schedule implements java.io.Serializable{
 	public void setColorLabel(String colorLabel) {
 		this.colorLabel = colorLabel;
 	}
+	public String getAllDay() {
+		return allDay;
+	}
+	public void setAllDay(String allDay) {
+		this.allDay = allDay;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((allDay == null) ? 0 : allDay.hashCode());
 		result = prime * result + ((colorLabel == null) ? 0 : colorLabel.hashCode());
 		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
 		result = prime * result + ((groupNo == null) ? 0 : groupNo.hashCode());
@@ -93,6 +123,11 @@ public class Schedule implements java.io.Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Schedule other = (Schedule) obj;
+		if (allDay == null) {
+			if (other.allDay != null)
+				return false;
+		} else if (!allDay.equals(other.allDay))
+			return false;
 		if (colorLabel == null) {
 			if (other.colorLabel != null)
 				return false;
@@ -144,25 +179,15 @@ public class Schedule implements java.io.Serializable{
 	public String toString() {
 		return "Schedule [scheduleNo=" + scheduleNo + ", groupNo=" + groupNo + ", scheduleName=" + scheduleName
 				+ ", scheduleContent=" + scheduleContent + ", scheduleAddress=" + scheduleAddress + ", memberNo="
-				+ memberNo + ", startTime=" + startTime + ", endTime=" + endTime + ", colorLabel=" + colorLabel + "]";
+				+ memberNo + ", startTime=" + startTime + ", endTime=" + endTime + ", colorLabel=" + colorLabel
+				+ ", allDay=" + allDay + "]";
 	}
-	public Schedule(String scheduleNo, String groupNo, String scheduleName, String scheduleContent,
-			String scheduleAddress, String memberNo, Date startTime, Date endTime, String colorLabel) {
-		super();
-		this.scheduleNo = scheduleNo;
-		this.groupNo = groupNo;
-		this.scheduleName = scheduleName;
-		this.scheduleContent = scheduleContent;
-		this.scheduleAddress = scheduleAddress;
-		this.memberNo = memberNo;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.colorLabel = colorLabel;
-	}
-	public Schedule() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
+	
+	
+		
+	
+	
 	
 	
 }

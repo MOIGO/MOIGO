@@ -82,6 +82,11 @@ public class MemberDaoImpl implements MemberDao {
 		return sqlSession.insert("member.insertFbMember",m);
 	}
 
+	@Override
+	public Member selectOneMemberF(String email) {
+		return sqlSession.selectOne("member.selectOneMemberF",email);
+	}
+
 
 
 

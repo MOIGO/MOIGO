@@ -103,7 +103,8 @@ input:DISABLED {
         </div>
     </div>
 
-    <br><br><br><br><br><br>
+   <br><br><br><br>
+	<c:import url="/WEB-INF/views/common/footer.jsp" />
     <script>
     
     
