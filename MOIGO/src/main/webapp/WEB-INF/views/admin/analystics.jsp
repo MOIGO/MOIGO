@@ -109,6 +109,7 @@
     	      ]);
 
     	  
+    	  
     	      var view = new google.visualization.DataView(data);
     	      view.setColumns([0, 1,
     	                       { calc: "stringify",
