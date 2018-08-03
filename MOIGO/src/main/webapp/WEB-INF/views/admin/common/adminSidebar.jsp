@@ -29,9 +29,6 @@
 </head>
 
 <!-- test 신고 모달  -->
-<!--  <span type="button" class="btn btn-primary" id="reportingButton" data-toggle="modal" data-target="#reportingModal" data-reporter="ㄹㄹ" data-mtarget="ㄴㄴ">
-			Launch demo modal
-</span> -->
 
 <div class="wrapper">
         <!-- Sidebar Holder -->

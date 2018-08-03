@@ -244,17 +244,18 @@ $(function() {
 //신고 모달 관련 스크립트
 
 $('#reportSubmit').on('click',function(){
-	var data =$("input[name=reportRadios]").val() +" | "+$("select[name=myList]").val();
+	var data =$("input[name=reportRadios]:checked").val()+" | "+$("select[name=myList]").val();
 	var data2 =$("#accuseTarget").val();
 	var data3 =$("#accuseReporter").val();
-	
 	console.log(data+data2+data3);
     $.ajax({
         type: 'post', 
         url: "${pageContext.request.contextPath}/reporting.ad", 
-        data : {data : data, data2: data2},
+        data : {data : data, data2: data2, data3:data3},
         success : function(data){
-		alert("성공"); 
+			alert("성공적으로 신고되었습니다."); 
+        },error:function(request,status,error){
+               alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 });	
@@ -271,6 +272,7 @@ var acts = new Array();
 	acts[3] = new Activity('권리침해', ['세부 신고 항목 선택','내 저작권을 침해함', '내 개인정보를 침해함', '기타 법적 문제']);
 	acts[4] = new Activity('아동학대', ['세부 신고 항목 선택','상해','언어폭력','기타 모욕적인 행위']);
 	acts[5] = new Activity('기타', []);
+	
 function updateList(str){
     var frm = document.myForm;
     var oriLen = frm.myList.length;

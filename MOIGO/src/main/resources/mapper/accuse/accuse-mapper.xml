@@ -11,7 +11,7 @@
 		<result column="SEARCHING_KEY" property="searchingKey" />
 	</resultMap>
 	
-	<insert id="insertAccuse" parameterType="int">
+	<insert id="insertAccuse" parameterType="accuse">
 	INSERT INTO ACCUSE VALUES(SEQ_ACCUSE.NEXTVAL,
 	#{targetMember},#{targetGroup},#{reporter},#{content},SYSDATE)
 	</insert>
