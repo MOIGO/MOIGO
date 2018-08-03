@@ -920,7 +920,6 @@ function createSummerNote(){
 		  callbacks:{
 			onImageUpload:function(files,editor,welEditable){
 				
-				
 				if(files.size/(1024/1024)>=10){
 		    		alert("파일 크기는 10mb 이하여야 합니다.");
 		    		
@@ -942,10 +941,10 @@ function createSummerNote(){
 		    		}
 				
 				
-			}, onMediaDelete : function ($target, $editable) {
+			},onMediaDelete : function ($target, $editable) {
 		            console.log($target.attr('src'));   // get image url 
 		       }
-		    }
+		    
 		  }, 
 
 		  buttons: {
