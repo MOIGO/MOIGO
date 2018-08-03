@@ -161,7 +161,7 @@ body {
 </head>
 <body>
 <c:import url="/WEB-INF/views/member/loginModal.jsp"/>
-
+<div class="header-container">
 		<!-- // 헤더부분 // -->
 	<div class="container-fluid" id="headerBar">
 		<div class="row">
@@ -219,11 +219,6 @@ body {
 		
 		</div>
 	</div>
-	 <script>
-		$('#loginIcon').on('click',function(){
-			$('.usercon').css('color','skyblue');	
-		});
-	</script>
 
 	<!-- 헤더 카테고리 부분 -->
 	<nav class="navbar navbar-expand-lg navbar-light alert alert-primary navsize navbar-expand">
@@ -263,12 +258,16 @@ body {
 		  </ul>
 		</div>
 	</nav>
-	
+</div>
 	<!-- 테스트 -->
 	<c:set var="m" value="${sessionScope.m}"></c:set>
 	<!-- 테스트 -->
 	
-	
+	<script>
+		$('#loginIcon').on('click',function(){
+			$('.usercon').css('color','skyblue');	
+		});
+	</script>
 
 	<script>
 		$('#logo').on( 'click',function() {
