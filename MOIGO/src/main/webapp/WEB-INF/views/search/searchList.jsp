@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=2">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=3">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -220,7 +220,6 @@
             listData.forEach(function(addr, i) {
     			geocoder.addressSearch(addr.groupAddress, function(result, status) {
                  if (status === daum.maps.services.Status.OK) {
-                	 console.log(result[0]);
                      positions.push({
                     	"content" : '<div class="moigo-item-wrap" style="width: 200px;">'+
                         ' <div class="content-context">'+
@@ -255,7 +254,6 @@
                      if(cnt == listData.length) {
                         data = { positions };
                         var markers = data.positions.map(function(position) {
-                        	//console.log(position);
                         	return new daum.maps.Marker({
                             	position : new daum.maps.LatLng(position.lat, position.lng),
                                 //image : markerImage                     	
@@ -268,8 +266,6 @@
 	                   	    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
 	                        // 이벤트 리스너로는 클로저를 만들어 등록합니다 
 	                        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-	                        //console.log(markers[k]);
-                    		//console.log(listData[k].groupAddress);
                         	daum.maps.event.addListener(markers[k], 'mouseover', makeOverListener(map, markers[k], infowindow));
                             daum.maps.event.addListener(markers[k], 'mouseout', makeOutListener(infowindow));
                         }
@@ -309,12 +305,13 @@
          }
       });
       
-   	  
+      $('.content-context').click(function() {
+    	  location.href='${pageContext.request.contextPath}/groups/groupMain.gp?groupNo='+$(this).find('.groupNo').val();
+      });
    	  /* $(function(){
 	    var marker = null;
    		$('.moigo-item-wrap').mouseenter(function() {
       		 var addr = $(this).find('.location').html();
-      		 console.log(addr);
       		 
       		 var geocoder = new daum.maps.services.Geocoder();
 

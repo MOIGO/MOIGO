@@ -40,19 +40,21 @@ public class AdminController {
 	
 	
 	//신고
-		@ResponseBody
-		@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
-		public String reporting(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
-			String report =data;
-			accuse.setContent(data);
-			accuse.setTargetMember(data2);
-			accuse.setReporter(data3);
-			/*int result = as.insertAccuse(accuse);
-			System.out.println(result);*/
-			
-			return report;
+
+	@ResponseBody
+	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
+	public String reporting(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
+		String report =data;
+		accuse.setContent(data);
+		accuse.setTargetMember(data2);
+		accuse.setReporter(data3);
+		int result = as.insertAccuse(accuse);
+		System.out.println(result);
 		
-		}
+		return report;
+	
+	}
+
 	// 제제 이유 이메일 전송
 	@ResponseBody
 	@RequestMapping(value = "sendMessage.ad", method = RequestMethod.POST)

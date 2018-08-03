@@ -276,7 +276,7 @@ $(document).ready(function(){
 
 	            		//console.log(data[0]);
 		            	var str ='<h4>상세정보</h4>'+
-		            			'<table class="table table-bordered text-center detail_group">'+
+		            			'<table class="table table-sm table-bordered text-center detail_group">'+
 		            			'<tr>'+
 		            			'<td>번호</td>' +
 								'<td colspan="2" style="width:70%">'+data[0].groupNo+'</td>' +

@@ -49,7 +49,6 @@ tr {
 	<br>
 
 	<div class="row">
-		<div class="col-1"></div>
 		<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 			<input class="form-control admin_member_search col-5" id="myInput"
 				type="text" placeholder="Search.."> <br>

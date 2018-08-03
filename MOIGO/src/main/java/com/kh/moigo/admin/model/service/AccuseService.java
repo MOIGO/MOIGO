@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.moigo.admin.model.vo.Accuse;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
@@ -59,6 +60,10 @@ public interface AccuseService {
 	//신고 많이 받은 회원 삭제
 	int memDelete(String id);
 	int grpDelete(String id);
+	
+	
+	//신고하기
+	int insertAccuse(Accuse accuse);
 	
 
 	

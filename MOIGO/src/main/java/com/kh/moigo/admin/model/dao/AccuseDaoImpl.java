@@ -9,6 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.moigo.admin.model.vo.Accuse;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
@@ -196,6 +197,13 @@ public class AccuseDaoImpl implements AccuseDao {
 	public List<Map<String, Object>> selectTargetListPaging(PageInfo pi) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("accuse.selectTargetListPaging",pi);
+	}
+
+	@Override
+	public int insertAccuse(Accuse accuse) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("accuse.insertAccuse",accuse);
+	
 	}
 	
 	

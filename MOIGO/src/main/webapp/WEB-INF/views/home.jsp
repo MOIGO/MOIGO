@@ -355,8 +355,8 @@
 				</div>
 				</c:when>
 				<c:otherwise>
-					<div class="carousel-inner">
-						<div class="carousel-item active" id="joingroups"></div>
+					<div class="carousel-inner" id="joingroups">
+						
 					</div>
 				</c:otherwise>
 				</c:choose>
@@ -483,12 +483,22 @@
 					success : function(data){
 						var list = data.list;
 						
+						console.log(list.length);
 						
 						for(l in list){
+							console.log(l);
+							if(l == 0){
+								var $div_carsel = $('<div class="carousel-item active">');
+								$('#joingroups').append($div_carsel);
+							} else if(l%4 == 1){
+								var $div_carsel = $('<div class="carousel-item">');	
+								$('#joingroups').append($div_carsel);
+							}
+							
 							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 8px;">');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
-							$('#joingroups').append($div);
+							
 							var $div_top = $('<div class="groupView_top test">');
 							var $div_bot = $('<div class="groupView_bot test">');
 							$div_top.append($('<img id="logo4" src="moigo/'+list[l].groupImage+'" width="100%" height="100%" />'));
@@ -503,11 +513,15 @@
 							$div.append($div_top);
 							$div.append($div_bot);
 							
+							$div_carsel.append($div);
+							
+							
 							$('.clickme').on("click",function(){
 								var sel = $(this).children('input').val();
 								console.log(sel);
 								location.href = "${pageContext.request.contextPath}/groups/groupMain.gp?groupNo="+sel
 							});
+							
 							
 						}
 						
