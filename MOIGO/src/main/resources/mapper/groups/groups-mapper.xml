@@ -203,7 +203,7 @@
 	<!--그룹의 멤버 수 가져오기  -->
 	<select id="selectGrpMemNum" resultType="_int">
 		SELECT COUNT(*) FROM GROUP_MEMBER
-		WHERE GROUP_NO =#{groupNo}
+		WHERE GROUP_NO =#{groupNo} AND MEMBER_GRADE_CODE >0
 	</select>
 	
 	<!--그룹의 리더 정보 가져오기  -->

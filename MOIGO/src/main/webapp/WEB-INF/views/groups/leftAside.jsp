@@ -32,6 +32,10 @@
 		max-width: 	40%;
 	}	
 	
+	#groupReport:hover {
+		cursor : pointer;
+	}
+	
 	
 	
 </style>
@@ -39,7 +43,7 @@
 
 <body>
 
-
+<c:import url="/WEB-INF/views/admin/common/reportModal.jsp" />
 
 <div class="col-3">
  	<div class="card">
@@ -113,9 +117,11 @@
 		</ul>
 	</div>
 	<hr />
-	<div class="d-flex justify-content-end">
-		<i class="fas fa-cog"></i><span id="groupSetting">그룹 설정</span>
+	<div class="d-flex justify-content-start">
+		<i class="fas fa-cog"></i><span id="groupSetting" class="mr-3">그룹 설정</span>
+		<i class="fas fa-exclamation"></i><span id="groupReport" >그룹 신고</span>
 	</div>
+	
  </div>
  
  
@@ -198,6 +204,10 @@ function joinGroup(){
 	
 }
 
+$('#groupReport').on("click",function(){
+	$('#reportingModal').modal("toggle");
+});
+
 $(function() {
 
 	setGroupDesc('${param.groupNo}','${param.isMember}');
@@ -223,8 +233,31 @@ $(function() {
 	$("#groupSetting").on("click", function() {
 		$("#groupNoForm").attr("action", "${root}/groups/groupSetting.gp").submit();
 	});
+	
+	
+	$("#accuseTarget").val();
+	$("#accuseReporter").val();
 });
 	
+	
+//신고 모달 관련 스크립트
+
+$('#reportSubmit').on('click',function(){
+	var data =$("input[name=reportRadios]").val() +" | "+$("select[name=myList]").val();
+	var data2 =$("#accuseTarget").val();
+	var data3 =$("#accuseReporter").val();
+	
+	console.log(data+data2+data3);
+    $.ajax({
+        type: 'post', 
+        url: "${pageContext.request.contextPath}/reporting.ad", 
+        data : {data : data, data2: data2},
+        success : function(data){
+		alert("성공"); 
+        }
+    });
+});	
+
 </script>
 
 </html>
