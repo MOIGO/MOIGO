@@ -112,9 +112,10 @@ input:-webkit-autofill:active {
 
 #profileBtn {
 	float: right;
-	margin-top: 10px;
-	color: darkgray;
-	font-size: 1.7em;
+    margin-top: 15px;
+    margin-right: 2px;
+    color: darkgray;
+    font-size: 1.3em;
 }
 
 #profileBtn:hover {
@@ -315,7 +316,7 @@ input:-webkit-autofill:active {
 										</c:if>
 										<c:if test="${groupMember.memberNo == m.memberNo}">
 											<c:set var="loginGroupMember" value="${groupMember}"/>
-											<ion-icon id="profileBtn" name="create" data-toggle="modal"></ion-icon>
+											<span id="profileBtn" class="fas fa-pen" data-toggle="modal"></span>
 										</c:if>
 									</div>
 								</li>
