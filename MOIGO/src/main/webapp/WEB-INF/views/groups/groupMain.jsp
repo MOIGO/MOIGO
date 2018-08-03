@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <c:import url="/WEB-INF/views/common/header.jsp"></c:import>
 <c:set var="root" value="${pageContext.request.contextPath}" />
@@ -128,8 +129,7 @@ background: #EDEFF2;
 					
 					<c:choose>
 						
-					
-						<c:when test="${memberGrade >0 or openSetting  eq 'PUBLIC' }">
+						<c:when test="${memberGrade > 0 or fn:trim(openSetting) eq 'PUBLIC' }">
 						
 							<div class="input-group input-group-lg">
 									<label for="searchPost" class="sr-only">searchPost</label>
@@ -146,12 +146,12 @@ background: #EDEFF2;
 						
 					
 						
-						<%-- <c:when test="${memberGrade<=0||currGroup.openSetting != 'PUBLIC' }">
+						 <c:when test="${memberGrade<=0&&fn:trim(openSetting) != 'PUBLIC' }">
 							<div class="card" style="font-size:1.3em; background:white;text-align:center;">  
 								이 모임의 글은 가입 해야만 볼 수 있습니다.
 							</div>
-						
-						</c:when> --%>
+							
+						</c:when>
 				</c:choose>
 				</div>
 				<div class="col">
@@ -201,8 +201,6 @@ background: #EDEFF2;
 
 var pageInfo;
 var currentPage=1;
-
-
 
 $(function(){
 	currentPage=1;
@@ -360,7 +358,9 @@ function makeProfile(obj){
 			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
-			$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.postNo));
+			$profileImgWrapper.append($("<input class='postNo'>").attr("type","hidden").val(obj.postNo));
+			$profileImgWrapper.append($("<input class='postWriterNo'>").attr("type","hidden").val(obj.groupMember.memberNo));
+			
 	}
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
@@ -368,7 +368,8 @@ function makeProfile(obj){
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
-		$profileImgWrapper.append($("<input>").attr("type","hidden").val(obj.replyNo));
+		$profileImgWrapper.append($("<input class='replyNo'>").attr("type","hidden").val(obj.replyNo));
+		$profileImgWrapper.append($("<input class='replyWriterNo'>").attr("type","hidden").val(obj.groupMember.memberNo));
 	}
 	
 	var $profileAndDate =$("<div class='d-flex w-75 flex-column'>");
@@ -406,7 +407,7 @@ function makeProfile(obj){
 	$profileWrapper.append($profileImgWrapper);
 	$profileWrapper.append($profileAndDate);
 	
-	if((obj.groupMember.memberNo=='${gm.memberNo}') | ('${gm.memberGradeCode>=2 }')){
+	if((obj.groupMember.memberNo=='${gm.memberNo}') | ('${gm.memberGradeCode>=2 }'=='true')){
 		if(typeof(obj.replyNo)!='undefined')
 			$profileWrapper.append(makeDropDown(false,obj.replyNo,obj.groupMember.memberNo));
 		else
@@ -451,9 +452,7 @@ function makeDropDown(isPost,num,memberNo){
 		$dropDownItem1.on("click",function(){
 			prepareUpdatePost(num);
 		});
-		
-		
-		
+	
 		$dropDownItem3.on("click",function(){
 			deletePost(num);
 		});
