@@ -256,7 +256,7 @@ body {
 				<a class="nav-link navic" href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=B009&sort=newSort">게임<span class="sr-only">(current)</span></a>
 			  </li>
 		  </ul>
-		</div> 
+		</div>
 	</nav>
 </div>
 	<!-- 테스트 -->
