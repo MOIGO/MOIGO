@@ -11,6 +11,10 @@
 		<result column="SEARCHING_KEY" property="searchingKey" />
 	</resultMap>
 	
+	<insert id="insertAccuse" parameterType="int">
+	INSERT INTO ACCUSE VALUES(SEQ_ACCUSE.NEXTVAL,
+	#{targetMember},null,#{reporter},#{content},SYSDATE)
+	</insert>
 	
 	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
      SELECT * FROM
@@ -53,8 +57,7 @@
 			</otherwise>		
 		</choose>			
 		ORDER BY ACCUSE_NO DESC) PAGING) 
-		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
-	
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}	
    </select>  
  
 
