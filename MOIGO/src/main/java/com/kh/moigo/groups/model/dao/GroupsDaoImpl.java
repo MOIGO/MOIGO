@@ -15,6 +15,7 @@ import com.kh.moigo.groups.model.vo.Post;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
+import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -187,6 +188,10 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updateGroupBasics",group);
 	}
 
+	@Override
+	public int insertImageFile(Files files) {
+		return sqlSession.insert("groups.insertImageFile",files);
+	}
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -235,7 +240,6 @@ public class GroupsDaoImpl implements GroupsDao {
 	public List<Schedule> selectListGroupSchedule(String groupNo) {
 		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
 	}
-
 
 
 }

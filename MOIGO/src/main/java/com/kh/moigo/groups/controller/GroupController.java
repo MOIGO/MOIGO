@@ -5,12 +5,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -28,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
+import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
@@ -36,8 +35,6 @@ import com.kh.moigo.groups.model.vo.PostReplyWithMem;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
-
-import oracle.sql.TIMESTAMP;
 
 @Controller
 public class GroupController {
@@ -444,7 +441,7 @@ public class GroupController {
 		return map;
 	}
 	
-	//스케줄 지우기
+	//일정 지우기
 	@RequestMapping("/groups/deleteSchedule.gp")
 	@ResponseBody
 	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
@@ -478,11 +475,19 @@ public class GroupController {
 	//이미지 넣기
 	@RequestMapping(value="/groups/insertImageFile.gp", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> insertImageFiles(@RequestParam("uploadFile") MultipartFile uploadFile, HttpServletRequest request){
+	public Map<String,Object> insertImageFiles(@RequestParam("uploadFile") MultipartFile uploadFile, 
+			@RequestParam String groupNo,@RequestParam String memberNo,HttpServletRequest request){
 		
 		String orignImage = "";
 		String newImage = "";
 		Map <String,Object> map = new HashMap<String, Object>();
+		
+
+		
+		
+		
+		
+		System.out.println("memno:"+memberNo+"groupno : "+groupNo);
 		
 		if(uploadFile!=null){
 			try{		
@@ -510,8 +515,11 @@ public class GroupController {
 					
 					uploadFile.transferTo(new File(saveDir +"/"+ newImage));
 					
+					Files files=new Files(orignImage,newImage,"${pageContext.request.contextPath}/resources/images/groupImages/"+groupNo+"/",groupNo,memberNo,"Y");
+					groupService.insertImageFile(files);
+					
 					map.put("url",newImage);
-				
+					map.put("fileNo",files.getFileNo());
 			}
 			catch(Exception e){
 				e.printStackTrace();

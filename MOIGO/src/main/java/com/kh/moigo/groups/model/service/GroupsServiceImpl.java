@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.dao.GroupsDao;
-
+import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
@@ -162,7 +162,12 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.updateGroupBasics(group);
 	}
 
-	
+	@Override
+	public int insertImageFile(Files files) {
+		return groupDao.insertImageFile(files);
+		
+	}
+
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -213,6 +218,4 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 	
-	
-
 }

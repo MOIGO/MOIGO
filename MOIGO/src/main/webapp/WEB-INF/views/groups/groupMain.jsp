@@ -68,7 +68,10 @@ background: #EDEFF2;
 	overflow:hidden;
 	text-overflow:ellipsis; 
 	white-space:nowrap;
+}
 
+.font-wordBreak{
+	word-break:break-all;
 }
 
 .wrap{
@@ -99,6 +102,7 @@ background: #EDEFF2;
 		<div class="wrap row align-items-center justify-content-center" style="font-size:8em;">블라인드<br> 처리된 모임입니다.</div>
 		<span>관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
 	</c:if>
+	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
 		<c:param name="groupNo" value="${groupNo }" />
@@ -202,6 +206,7 @@ background: #EDEFF2;
 
 var pageInfo;
 var currentPage=1;
+var postFiles=[];
 
 $(function(){
 	currentPage=1;
@@ -284,13 +289,9 @@ $(document).ready(function () {
 	  })
 	});
 	
-function deleteAllPost(){
-	$('#postDiv').children().remove();
-}
-
 
 function setPostList(){
-	console.log(currentPage);
+	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/getPostList.gp",
 		data:{groupNo:"${groupNo}",currPage:currentPage},
@@ -299,6 +300,8 @@ function setPostList(){
 			
 			
 			pageInfo = data.pageInfo;
+			
+			console.log(data);
 			
 			if(data.posts.length>0){
 				
@@ -324,6 +327,12 @@ function setPostList(){
 	
 }
 
+function deleteAllPost(){
+	$('#postDiv').children().remove();
+}
+
+
+
 
 
 function makeReply(replyList){
@@ -340,6 +349,9 @@ function makeContent(post){
 	var $contentWrapper = $('<div class="p-3 contentWrapper">');
 	
 	$contentWrapper.append(post.content);
+	
+	$contentWrapper.find('p').css("word-break","break-all");
+	$contentWrapper.find('img').addClass("img-fluid");
 	
 	return $contentWrapper;
 }
@@ -421,6 +433,7 @@ function makeProfile(obj){
 
 function toggleElipsis(obj){
 	$(obj).toggleClass("font-elipsis");
+	$(obj).toggleClass("font-wordBreak");
 }
 
 
@@ -580,8 +593,9 @@ function makeEditReply(num,originContent){
 	});
 	
 	var $cancleBtn = $('<button class="btn btn-info btn-sm">취소</button>').on("click",function(){
-		toEditContent=undefined;
+		
 		$(toEditContent).text(originContent);
+		toEditContent=undefined;
 		$editWrapper.remove();
 	});
 	
@@ -907,9 +921,31 @@ function createSummerNote(){
 			onImageUpload:function(files,editor,welEditable){
 				
 				
-					sendFile(files,this);
+				if(files.size/(1024/1024)>=10){
+		    		alert("파일 크기는 10mb 이하여야 합니다.");
+		    		
+		    		return;
+		    	}
 				
-			}
+				console.log(files);
+				
+				var Extension = files[0].name.substring(
+						files[0].name.lastIndexOf('.') + 1).toLowerCase();
+				
+				if(Extension == "gif" || Extension == "png" || Extension == "bmp"
+		            || Extension == "jpeg" || Extension == "jpg")
+		    		{
+						alert("들어옴");
+						sendFile(files,this);
+		    		}else{
+		    			alert("사진 형식만 가능합니다.");
+		    		}
+				
+				
+			}, onMediaDelete : function ($target, $editable) {
+		            console.log($target.attr('src'));   // get image url 
+		       }
+		    }
 		  },
 
 		  buttons: {
@@ -924,27 +960,36 @@ function sendFile(file, editor) {
 	
 		var data = new FormData();
 		data.append("uploadFile",file[0]);
-		
-		console.log(file[0]);
-	     $.ajax({ // ajax를 통해 파일 업로드 처리
-	    	type : "POST",
-	    	data : data,
-	    	async : false,
-	        url : "${pageContext.request.contextPath}/groups/insertImageFile.gp",
-	        dataType:"json",
-	        cache: false,
-	        contentType: false,
-	        /* enctype: 'multipart/form-data', */
-	        processData: false,
-	        success : function(data) { // 처리가 성공할 경우
-            // 에디터에 이미지 출력
-            console.log(data.url);
-	        	$(editor).summernote('editor.insertImage','${root}/resources/images/groupImages/'+data.url);
-	        }
-	    }); 
+		data.append("groupNo",'${groupNo}');
+		data.append("memberNo","${gm.memberNo}");
+	
+  		   $.ajax({ // ajax를 통해 파일 업로드 처리
+  		    	type : "POST",
+  		    	data : data,
+  		    	async : false,
+  		        url : "${pageContext.request.contextPath}/groups/insertImageFile.gp",
+  		        dataType:"json",
+  		        cache: false,
+  		        contentType: false,
+  		        /* enctype: 'multipart/form-data', */
+  		        processData: false,
+  		        success : function(data) { // 처리가 성공할 경우
+  	            // 에디터에 이미지 출력
+  	            console.log(data.url);
+  		        	$(editor).summernote('editor.insertImage','${root}/resources/images/groupImages/'+data.url);
+  		        }
+  		    }); 
+    	
 	}
 
-
+	$("#summernote").summernote({
+	    onMediaDelete : function($target, editor, $editable) {
+	        alert($target.context.dataset.filename);         
+	        $target.remove();
+	    }
+	}); 
+	
+	
 	
 </script>
 

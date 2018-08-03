@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.admin.model.vo.PageInfo;
@@ -42,7 +43,7 @@ public interface GroupsService {
 	int selectKeywordPostCnt(String groupNo, String keyword);
 	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	int updategroupBasics(Groups group);
-	
+	int insertImageFile(Files files);
 	//--------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -57,6 +58,7 @@ public interface GroupsService {
 	int deleteGroup(String groupNo);
 	
 	List<Schedule> selectListGroupSchedule(String groupNo);
+	
 	
 	
 	
