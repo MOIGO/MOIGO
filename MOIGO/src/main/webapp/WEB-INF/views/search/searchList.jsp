@@ -257,7 +257,7 @@
                         	return new daum.maps.Marker({
                             	position : new daum.maps.LatLng(position.lat, position.lng),
                                 //image : markerImage                     	
-                            });
+                            }); 
                         });
                         for(var k = 0; k < positions.length; k++) {
 	                       var infowindow = new daum.maps.InfoWindow({
