@@ -129,225 +129,11 @@
 					src="resources/images/main/plus.png" width="50" height="50" /> </a>
 				&nbsp; 모임 만들기
 			</div>
-			&nbsp;&nbsp;&nbsp;
-			
 				<c:choose>
 				<c:when test="${m eq null}">
 				 <div id="recommendList">
 				</div> 
-				 <%-- <div class="carousel-inner">
-					<div class="carousel-item active">
-						<div class="mainGroup test ani">
-							<div class="groupView_top">
-								<img id="logo4" src="resources/images/main/culture.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot">
-								<div class="title">꽃길</div>
-								<div class="location">서울시 서초구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>&nbsp;&nbsp;
-
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/culture.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">플라워로드</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>&nbsp;&nbsp;
-
-						<div class="mainGroup test ani">
-							<div class="groupView_top">
-								<img id="logo4" src="resources/images/main/culture.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">모이고고</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>&nbsp;&nbsp;
-
-						<div class="mainGroup test ani">
-							<div class="groupView_top">
-								<img id="logo4" src="resources/images/main/culture.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>&nbsp;&nbsp;
-
-					</div>
-
-					<div class="carousel-item">
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/play.jpg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/play.jpg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/play.jpg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/play.jpg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-					</div>
-					<div class="carousel-item">
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/global.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/global.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/global.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-						<div class="mainGroup test ani">
-							<div class="groupView_top test">
-								<img id="logo4" src="resources/images/main/global.jpeg"
-									width="100%" height="100%" />
-							</div>
-							<div class="groupView_bot test">
-								<div class="title">나마에와</div>
-								<div class="location">서울시 강남구</div>
-								<span class="icon-container float-right"> <span
-									class="memberIcon"> 0<img alt="memberIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/memberCountIcon.png"></span>
-									<span class="commentIcon"> 0<img alt="commentIcon"
-										src="${pageContext.request.contextPath }/resources/images/search/commentIcon.png"></span>
-								</span>
-							</div>
-						</div>
-						&nbsp;&nbsp;
-					</div>
-				</div>  --%>
+				 
 				</c:when>
 				<c:otherwise>
 					<div id="carouselExampleIndicators1" class="carousel slide"
@@ -383,7 +169,7 @@
 			if(${m ne null}){
 				location.href = '${pageContext.request.contextPath}/groups/createGroup.gp';
 			} else {
-				alert("로그인 하신 후 이용 가능합니다.");
+				alert("로그인 하신후 이용 가능합니다.");
 				$('#Login_Modal').modal('show');
 			}
 		});
@@ -504,6 +290,7 @@
 	function start(){
 		
 			if(${m ne null}){
+				
 				var mno = '${m.memberNo}';
 				//location.href = "${pageContext.request.contextPath}/common/joingroups.mi?mno="+mno;
 				$.ajax({
@@ -540,7 +327,7 @@
 							$div.append($div_top);
 							$div.append($div_bot);
 							
-							$('#recommendList').append($div);
+							$('#joingroups').append($div);
 							
 							
 							$('.clickme').on("click",function(){

@@ -107,8 +107,8 @@ public class MemberController {
 			result = -1;
 		} else {
 			
-				if(bcryptPasswordEncoder.matches(memberPwd, m.getMemberPwd())){
-//				if (memberPwd.equals(m.getMemberPwd())) {
+//				if(bcryptPasswordEncoder.matches(memberPwd, m.getMemberPwd())){
+				if (memberPwd.equals(m.getMemberPwd())) {
 					result = 0;
 					msg = "로그인 성공";
 					model.addAttribute("m", m);
