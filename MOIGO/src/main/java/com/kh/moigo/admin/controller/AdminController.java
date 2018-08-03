@@ -26,6 +26,7 @@ import com.kh.moigo.admin.model.vo.Accuse;
 import com.kh.moigo.admin.model.vo.GroupDetail;
 import com.kh.moigo.admin.model.vo.MemberDetail;
 import com.kh.moigo.admin.model.vo.PageInfo;
+import com.kh.moigo.member.model.vo.Member;
 
 
 
@@ -38,7 +39,16 @@ public class AdminController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	@RequestMapping("adminBackHome.ad") //dash board로 가는 것
+	public String adminBackHome(Model model,HttpServletRequest request){
+		/*Member m = (Member)(request.getSession().getAttribute("m"));
+		if(m.getMemberNo().charAt(0)!='A'){
+			return "common/error";
+		}*/
+		model.addAttribute("pageName","DashBoard");
+		return "home";
 	
+	}
 	
 	//신고 포스트->개인
 	@ResponseBody
@@ -104,8 +114,11 @@ public class AdminController {
 	
 	
 	@RequestMapping("adminHome.ad") //dash board로 가는 것
-	public String adminHome(Locale locale,Model model){
-		
+	public String adminHome(Locale locale,Model model,HttpServletRequest request){
+		/*Member m = (Member)(request.getSession().getAttribute("m"));
+		if(m.getMemberNo().charAt(0)!='A'){
+			return "common/error";
+		}*/
 		List<Map<String,Object>> weeklyGrpMake = as.weeklyGrpMake(); 
 		List<Map<String,Object>> weeklyMemEnroll = as.weeklyMemEnroll();
 		List<Map<String,Object>> MemEnrollperMonth = as.MemEnrollperMonth();
@@ -123,7 +136,11 @@ public class AdminController {
 	
 	}
 	@RequestMapping("adminMember.ad")
-	public String adminMember(Model model){		
+	public String adminMember(Model model,HttpServletRequest request){		
+		/*Member m = (Member)(request.getSession().getAttribute("m"));
+		if(m.getMemberNo().charAt(0)!='A'){
+			return "common/error";
+		}*/
 		List<Map<String,Object>> memberListnotPaging = as.selectmemberList();
 		System.out.println(memberListnotPaging);		
 		model.addAttribute("memberList",memberListnotPaging); //페이징 x 멤버 목록 불러오기
@@ -135,7 +152,11 @@ public class AdminController {
 	
 	
 	@RequestMapping("adminGroup.ad")
-	public String adminGroup(Model model){
+	public String adminGroup(Model model,HttpServletRequest request){
+		/*Member m = (Member)(request.getSession().getAttribute("m"));
+		if(m.getMemberNo().charAt(0)!='A'){
+			return "common/error";
+		}*/
 		List<Map<String,Object>> groupListnotPaging = as.selectgroupList();
 		System.out.println(groupListnotPaging);		
 		model.addAttribute("groupList",groupListnotPaging); //페이징 x 그룹 목록 불러오기
@@ -147,8 +168,11 @@ public class AdminController {
 	
 	
 	@RequestMapping("adminAnalytics.ad")
-	public String adminAnalytics(Model model){
-		
+	public String adminAnalytics(Model model,HttpServletRequest request){
+		/*Member m = (Member)(request.getSession().getAttribute("m"));
+		if(m.getMemberNo().charAt(0)!='A'){
+			return "common/error";
+		}*/
 		//member
 		ArrayList genderCount = as.countGender(); //변경하기
 		List<Map<String,Object>> addressCount = as.countAddress();
