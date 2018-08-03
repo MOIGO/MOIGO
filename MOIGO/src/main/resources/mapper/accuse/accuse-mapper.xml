@@ -9,6 +9,8 @@
 		<result column="CONTENT" property="content" />
 		<result column="ACCUSE_DATE" property="accuseDate" />
 		<result column="SEARCHING_KEY" property="searchingKey" />
+		<result column="GROUP_REPORT" property="gReportCount" />
+		<result column="MEMBER_REPORT" property="mReportCount" />
 	</resultMap>
 	
 	<insert id="insertAccuse" parameterType="accuse">
@@ -16,6 +18,11 @@
 	#{targetMember},#{targetGroup},#{reporter},#{content},SYSDATE)
 	</insert>
 	
+	<select id="gmReportCount"  resultMap="accuseResultMap">
+		SELECT (SELECT COUNT(*) FROM ACCUSE WHERE TARGET_GROUP IS NULL) GROUP_REPORT,
+   		(SELECT COUNT(*) FROM ACCUSE WHERE TARGET_MEMBER IS NULL) MEMBER_REPORT
+    	FROM DUAL	
+	</select>
 	
 	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
      SELECT * FROM
