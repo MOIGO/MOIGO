@@ -70,9 +70,6 @@
 	.fc-list-item-time, .fc-list-item-marker, .fc-list-item-title, .table-active{
 		border-color: #DDD;
 	}
-	.fc-day-grid-event :hover{
-		cursor: pointer;
-	}
 	
 	#datepicker {
 		position: absolute;
@@ -80,7 +77,14 @@
 		left : 160px;
 		z-index : 10;
 	}
-    
+	
+	.ko-holidays {
+		font-weight: bold;
+	}
+	
+	.fc-event-container:hover, .ko-holidays:hover {
+		cursor : default;
+	}
 </style>
 <title>일정</title>
 </head>
@@ -241,7 +245,28 @@
          googleCalendarApiKey : "AIzaSyAam0_4FBr7PhEoIkBna7pmnl7IF_sQfCo",
          
 		// DB에 존재하는 캘린더를 가져와서 event를 뿌려준다.
-         events : function(start, end, timezone, callback) {
+         events :{
+             googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com", 
+             className : "ko-holidays",
+             color : "white",
+             textColor : "#F23F2B"
+          },
+		 eventMouseover: function(event, jsEvent, view) {
+			if(event.className == "moigo_schedule")				
+				$(this).find("div, span").css("cursor", "pointer");				
+		 },
+         eventClick:function(event) {
+                if(event.url)
+                    return false;   
+          },
+		dayClick: function(date, jsEvent, view) {
+			console.log(date);		
+			console.log(view);		
+			console.log(jsEvent);			
+		}
+      });
+      
+      $("#calendar").fullCalendar("addEventSource", function(start, end, timezone, callback) {
 	       	 $.ajax({
 	    			url : "${root}/groups/selectListGroupSchedule.gp",
 	    			type:'GET',
@@ -254,6 +279,7 @@
 	    				var events = [];
 	  			        $.each(schedule, function(i, obj) {
 	  			          events.push({
+	  			        	className : "moigo_schedule",
 	  			            title: obj.scheduleName,
 	  			            start: obj.startTime,
 	  			            end : obj.endTime,
@@ -266,23 +292,9 @@
 	    				console.log("일정 리스트 불러오는 오류"); 	
 	    			}
 	    		});
-		 },
-         
-         eventClick:function(event) {
-                if(event.url) {
-                    return false;
-                }
-            }
-      });
+		 });
       
-      $("#calendar").fullCalendar("addEventSource", {
-          googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com", 
-          className : "ko-holidays",
-          color : "#F23F2B",
-          textColor : "white"
-       });
-      
-		customCalendar();
+      customCalendar();
 		
 		$(".full-title").after("<div id='datepicker'></div>");
       

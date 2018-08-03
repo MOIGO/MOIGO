@@ -366,9 +366,9 @@
 		</foreach>
 	</delete>
 	
-	<!-- <delete id="deleteGroup">
+	<delete id="deleteGroup">
 		DELETE FROM GROUPS WHERE GROUP_NO = #{groupNo}
-	</delete> -->
+	</delete>
 	
 	<select id="selectListGroupSchedule" resultMap="scheduleResultMap">
 		SELECT *

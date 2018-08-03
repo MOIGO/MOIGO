@@ -29,6 +29,16 @@
 	cursor: default;
 	}
 	
+	.btn:focus, .btn:active:focus, .btn.active:focus {
+   		box-shadow: none !important;
+   		outline: none !important;
+	}
+	
+	/* 사진첩 부분 */
+	.gpa_btn_wrap {
+		float : right;
+	}
+	
 </style>
 <title>사진첩</title>
 </head>
@@ -42,6 +52,10 @@
         <div class="card">
            <div class="card-header" >           
               <p class="group_tit">사진첩</p>
+              <div class="gpa_btn_wrap">
+	              <button type="button" class="btn btn-primary btn-sm">사진올리기</button>
+	              <button type="button" class="btn btn-danger btn-sm">삭제</button>
+              </div>
            </div>
             <div class="card-body" >
            </div>
