@@ -39,51 +39,62 @@ public class AdminController {
 	private JavaMailSender mailSender;
 	
 	
+	
 	//신고
 	@ResponseBody
-	@RequestMapping(value = "reporting.ad", method = RequestMethod.POST)
+	@RequestMapping(value = "reporting.ad", method = RequestMethod.GET)
 	public String reporting(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
 		String report =data;
 		accuse.setContent(data);
 		accuse.setTargetMember(data2);
 		accuse.setReporter(data3);
 		int result = as.insertAccuse(accuse);
-		System.out.println(result);
-		
+		System.out.println(result);		
 		return report;
 	
 	}
+	
+	
+	//신고
+	@ResponseBody
+	@RequestMapping(value = "reporting2.ad", method = RequestMethod.POST)
+	public String reporting2(Accuse accuse,@RequestParam String data,@RequestParam String data2,@RequestParam String data3) {
+		String report =data;
+		accuse.setContent(data);
+		accuse.setTargetGroup(data2);
+		accuse.setReporter(data3);
+		int result = as.insertAccuse(accuse);
+		System.out.println(result);		
+		return report;
+		
+	}
+	
+	
 	// 제제 이유 이메일 전송
 	@ResponseBody
 	@RequestMapping(value = "sendMessage.ad", method = RequestMethod.POST)
 	public Map<String, Object>  mailSending(HttpServletRequest request , @RequestParam String userEmail, @RequestParam String contents) {
 
 		System.out.println("메일 컨트롤러 입장");
-
 		String setfrom = "moigogo1234@gmail.com";         
 		String tomail  = userEmail;     // 받는 사람 이메일
 		String title   = "모이고입니다. 권한 제한에 대해 알려드립니다." ;     // 제목
 		String content= contents;
 
-
-
 		try {
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper 
 			= new MimeMessageHelper(message, true, "UTF-8");
-
 			messageHelper.setFrom(setfrom);  // 보내는사람 생략하거나 하면 정상작동을 안함
 			messageHelper.setTo(tomail);     // 받는사람 이메일
 			messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
 			messageHelper.setText(content,true);  // 메일 내용
-
 			mailSender.send(message);
 		} catch(Exception e){
 			System.out.println(e);
 		}
 
 		Map<String, Object> map = new HashMap<>();
-
 		map.put("msg", "메일 전송 완료");
 
 
@@ -98,19 +109,15 @@ public class AdminController {
 		List<Map<String,Object>> weeklyGrpMake = as.weeklyGrpMake(); 
 		List<Map<String,Object>> weeklyMemEnroll = as.weeklyMemEnroll();
 		List<Map<String,Object>> MemEnrollperMonth = as.MemEnrollperMonth();
-		List<Map<String,Object>> GrpEnrollperMonth = as.GrpEnrollperMonth();	// 꺽은선 그래프 4개
-		
+		List<Map<String,Object>> GrpEnrollperMonth = as.GrpEnrollperMonth();	// 꺽은선 그래프 4개		
 		List<Map<String,Object>> memberDashCount = as.memberDashCount();
-		List<Map<String,Object>> groupDashCount = as.groupDashCount();  // 회원수 그룹수 통계
-		
-		
+		List<Map<String,Object>> groupDashCount = as.groupDashCount();  // 회원수 그룹수 통계				
 		model.addAttribute("memberDashCount",memberDashCount);
 		model.addAttribute("groupDashCount",groupDashCount);
 		model.addAttribute("MemEnrollperMonth",MemEnrollperMonth);
 		model.addAttribute("GrpEnrollperMonth",GrpEnrollperMonth);
 		model.addAttribute("weeklyMemEnroll",weeklyMemEnroll);
-		model.addAttribute("weeklyGrpMake",weeklyGrpMake);
-		
+		model.addAttribute("weeklyGrpMake",weeklyGrpMake);		
 		model.addAttribute("pageName","DashBoard");
 		return "admin/dashBoard";
 	
@@ -118,11 +125,9 @@ public class AdminController {
 	@RequestMapping("adminMember.ad")
 	public String adminMember(Model model){		
 		List<Map<String,Object>> memberListnotPaging = as.selectmemberList();
-		System.out.println(memberListnotPaging);
-		
+		System.out.println(memberListnotPaging);		
 		model.addAttribute("memberList",memberListnotPaging); //페이징 x 멤버 목록 불러오기
-		model.addAttribute("pageName","Member");
-		
+		model.addAttribute("pageName","Member");		
 		return "admin/memberManaging";
 	
 	}
@@ -132,8 +137,7 @@ public class AdminController {
 	@RequestMapping("adminGroup.ad")
 	public String adminGroup(Model model){
 		List<Map<String,Object>> groupListnotPaging = as.selectgroupList();
-		System.out.println(groupListnotPaging);
-		
+		System.out.println(groupListnotPaging);		
 		model.addAttribute("groupList",groupListnotPaging); //페이징 x 그룹 목록 불러오기
 		model.addAttribute("pageName","Group");
 		return "admin/groupManaging";
@@ -253,52 +257,7 @@ public class AdminController {
 	
 	
 	
-	/**
-	모달 창을 누른 뒤에 멤버 정보와 상세 신고목록 확인 가능  ajax로 페이징하기 어려워서 포기
-	 */
-//	@RequestMapping(value="mrDetail.ad", method=RequestMethod.GET)
-//	public @ResponseBody Object mrDetail(@RequestParam String id, @RequestParam(defaultValue="1") int currentPage) throws Exception{
-//		List<Object> mrdList= new ArrayList<Object>();
-//		// -- 페이지 처리 코드 부분 -- //
-//		int startPage; // 한번에 표시될 게시글들의 시작 페이지
-//		int endPage;  // 한번에 표시될 게시글들의 마지막 페이지
-//		int maxPage;   // 전체 페이지의 마지막 페이지 
-//		int limit=5;       // 한 페이지당 게시글 수
-//		int listCount = as.selectAccuseListCnt(id);			
-//		System.out.println("총 게시글 수 : "+listCount);							
-//		maxPage = (int)((double)listCount / limit + 0.9);
-//		System.out.println("maxPage"+maxPage);
-//		System.out.println("maxPage"+limit);
-//		startPage = (((int)((double)currentPage / limit + 0.9)) - 1) * limit + 1;
-//		endPage= startPage + limit - 1;			
-//		if( maxPage < endPage){
-//			endPage = maxPage;
-//		}				
-//		System.out.println("limit갑이 왜 변했지?"+limit);
-//		int startRow = ((currentPage-1)*limit)+1;
-//		int endRow = startRow+(limit-1);
-//
-//		System.out.println(startRow);
-//		System.out.println(endRow);			
-//		// 페이지 관련 변수 전달용 VO 생성
-//		PageInfo pi
-//		= new PageInfo(currentPage, listCount, 10, startPage, endPage, maxPage,startRow,endRow,id);
-//		System.out.println("List구하기 전"+pi);
-//
-//		MemberDetail md = as.memDetail(id);
-//		mrdList.add(md);
-//		
-//		//List<Map<String, Object>> a = as.selectAccuse(id);
-//		List<Map<String, Object>> a = as.selectAccusePaging(pi);
-//		
-//		mrdList.add(a);
-//		mrdList.add(pi);
-//
-//		System.out.println("list:"+mrdList);
-//
-//		return mrdList;
-//	
-//	}
+
 	
 	@RequestMapping(value="mrDetail.ad", method=RequestMethod.GET)
 	public @ResponseBody Object mrDetail(@RequestParam String id) throws Exception{
@@ -326,26 +285,8 @@ public class AdminController {
 	
 	}
 	
-	/*@RequestMapping(value="sendMessage.ad", method=RequestMethod.GET)
-	public String adminSendMessage(@RequestParam("email") String recipientName,@RequestParam("messageText") String messageText, HttpServletResponse res) throws Exception{
-		
-		System.out.println("아이디 넣기"+recipientName);
-		System.out.println(messageText);
-		//res.setContentType("application/json; charset=UTF-8");	
-		
-		return "admin/reportManaging";
-		
-	}*/ //이걸 ajax로 넘기는 게 차라리 덜 시간이 덜릴 수도 페이지 로딩을 한다면  @RequestMapping("adminReport.ad")이 함수랑 동일한 값을 보내야함
+
 	
-	
-	@RequestMapping(value="modals.ad", method=RequestMethod.GET)
-	public String adminSendMessage(Model model) throws Exception{
-		
-		
-		
-		return "admin/modals";
-		
-	}
 	/**
 	 * 회원 상세 정보 확인 및 가입 그룹 확인
 	 */

@@ -21,6 +21,8 @@
 		<result property="openSetting" column="OPEN_SETTING" />
 		<result property="openSetting" column="OPEN_SETTING" />
 		<result property="memNum" column="MEM_NUM" />	
+		<result property="postCount" column="G_POST_COUNT" />
+		<result property="replyCount" column="G_REPLY_COUNT" />
 		<result property="masterEmail" column="MASTER_EMAIL" />	
 		<result property="groupGradeName" column="GROUP_GRADE_NAME" />	
 		<result property="groupStateName" column="GROUP_STATE_NAME" />			
@@ -41,6 +43,8 @@
 	<select id="grpDetail" resultMap="groupDetailResultMap">
 		SELECT GROUP_NO,GROUP_NAME,GROUP_MSG,GROUP_PICTURE,GROUP_ADDRESS,GROUP_GRADE_CODE,GROUP_STATE_CODE,MAX_MEMBER,ENROLL_DATE,INTEREST_BIG_CODE,ALLOW_SIGNUP,MIN_AGE,MAX_AGE,GROUP_GENDER,OPEN_SETTING,
 		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE GROUP_NO = G.GROUP_NO) MEM_NUM ,
+		(SELECT COUNT(*) FROM POST WHERE GROUP_NO = G.GROUP_NO) G_POST_COUNT,
+		(SELECT COUNT(*) FROM POST_REPLY WHERE GROUP_NO = G.GROUP_NO) G_REPLY_COUNT,
  		(SELECT MEMBER_EMAIL 
 		FROM MEMBER M
 		JOIN  GROUP_MEMBER  GM
