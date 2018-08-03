@@ -191,6 +191,7 @@ body {
     max-height: 288px;
     display: table;
     color: white;
+    word-break: break-all;
 }
 .moigo-item .header-text-container {
     width: 100%;

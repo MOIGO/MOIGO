@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>검색 - moigo</title>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=4">
 
 </head>
 <c:import url="/WEB-INF/views/common/header.jsp" />
@@ -282,9 +282,7 @@
                                  infowindow.close();
                              };
                          }
-	                        
                        clusterer.addMarkers(markers);
-                       clusterer.setMinClusterSize(3);
                      }
                   }
                });
@@ -308,52 +306,37 @@
       $('.content-context').click(function() {
     	  location.href='${pageContext.request.contextPath}/groups/groupMain.gp?groupNo='+$(this).find('.groupNo').val();
       });
-   	  /* $(function(){
-	    var marker = null;
-   		$('.moigo-item-wrap').mouseenter(function() {
-      		 var addr = $(this).find('.location').html();
-      		 
-      		 var geocoder = new daum.maps.services.Geocoder();
+      var marker = null;
+      $('.content-context').mouseenter(function() {
+    	  var addr = $(this).find('.location').html();
+    	  var geocoder = new daum.maps.services.Geocoder();
 
-      		// 주소로 좌표를 검색합니다
-      		geocoder.addressSearch(addr, function(result, status) {
+    	  // 주소로 좌표를 검색합니다
+    	  geocoder.addressSearch(addr, function(result, status) {
 
-      		    // 정상적으로 검색이 완료됐으면 
-      		     if (status === daum.maps.services.Status.OK) {
-   				var num = 0.09;
-      		    	if(map.getLevel() > 9) {
-   					if(map.getLevel() == 12) {
-   						num = 0.07;
-   					}
-   					if(map.getLevel() == 11){
-   						num = 0.04;
-   					} else if(map.getLevel() == 10) {
-   						num = 0.02;
-   					}
-       			        var coords = new daum.maps.LatLng(Number(result[0].y)+num, result[0].x);
-       		        // 결과값으로 받은 위치를 마커로 표시합니다
-       		        marker = new daum.maps.Marker({
-       		            position: coords
-       		        });
-       		        
-       		        
-       		        marker.setMap(map);
-       		        
-	       		     $('.moigo-item-wrap').mouseleave(function() {
-	       				if(marker != null) {
-	       		   			if(map.getLevel() > 9) {
-	       		   				marker.setMap(null);
-	       		   				marker=null;
-	       		   			}				
-	       				}
-	       	   	   	});
-       		        
-      		    	}
-      		     }
-        		});
-      	  });
-		
-   	  }); */
+    		  // 정상적으로 검색이 완료됐으면 
+      		  if (status === daum.maps.services.Status.OK) {
+      			  if(marker == null) {
+	      			  if(map.getLevel() > 9) {
+	      				  var coords = new daum.maps.LatLng(Number(result[0].y), result[0].x);
+	      				  // 결과값으로 받은 위치를 마커로 표시합니다
+	      				  marker = new daum.maps.Marker({
+	      					  position: coords
+	      				  });
+	      				  marker.setMap(map);
+	      				  }
+      			  }
+  			  }
+   		  });
+   	  });
+      $('.content-context').mouseleave(function() {
+    	  if(marker != null) {
+    		  if(map.getLevel() > 9) {
+    			  marker.setMap(null);
+    			  marker = null;
+   			  }
+   		  }
+   	  });
       
    </script>
 </body>
