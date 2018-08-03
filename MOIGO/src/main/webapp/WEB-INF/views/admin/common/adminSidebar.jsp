@@ -83,7 +83,7 @@
                     <div class="admin_name" id="adminName">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" href="#">Logout</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/adminBackHome.ad">MOIGO HOME</a>
                                  
                             </li>
                           
