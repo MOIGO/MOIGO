@@ -26,4 +26,16 @@
 		WHERE MEMBER_NO= #{mno}
 	</select>
 	
+	<select id="recommendGroupList" resultMap="jg">
+		select * from
+		(select ROWNUM RNUM, al.* from
+		(SELECT DISTINCT gm.GROUP_NO groupNo, g.GROUP_NAME groupName,g.group_address groupAddress, g.GROUP_PICTURE groupImage, grm.cnum memberNum, PN.cnum postNum
+		FROM (SELECT GROUP_NO , count(*) cnum FROM GROUP_MEMBER  GROUP BY GROUP_NO) grm
+		JOIN GROUPS g ON (grm.GROUP_NO = g.GROUP_NO ) 
+		JOIN GROUP_MEMBER gm on (grm.GROUP_NO=gm.GROUP_NO)
+        JOIN (SELECT GROUP_NO , count(*) cnum FROM POST NATURAL FULL JOIN GROUPS GROUP BY GROUP_NO) pn ON (pn.GROUP_NO = GRM.GROUP_NO) 
+        order by membernum desc) al)
+        where RNUM between 1 and 4
+	</select>
+	
 </mapper>

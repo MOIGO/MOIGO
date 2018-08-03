@@ -12,6 +12,8 @@ public interface MainService {
 
 	List<JoinGroups> joingroups(String mno);
 
+	List<JoinGroups> recommendgroups();
+
 	
 	
 }

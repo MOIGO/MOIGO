@@ -61,14 +61,25 @@ public class MainController {
 	@ResponseBody
 	public Map<String,Object> joingroups(@RequestParam String mno) {
 		
-		System.out.println("mno = "+mno);
 		List<JoinGroups> list = mainService.joingroups(mno);
 		
-		System.out.println(list.toString());
 		Map<String,Object> map = new HashMap<String,Object>();
 		
 		map.put("list", list);
 		
+		return map;
+	}
+	
+	@RequestMapping("/common/recommendgroups.mi")
+	@ResponseBody
+	public Map<String,Object> recommendgroups() {
+		
+		List<JoinGroups> list = mainService.recommendgroups();
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		map.put("list", list);
+		System.out.println(list.toString());
 		return map;
 	}
 	

@@ -24,6 +24,11 @@ public class MainServiceImpl implements MainService {
 	public List<JoinGroups> joingroups(String mno) {
 		return mainDao.joingroups(mno);
 	}
+
+	@Override
+	public List<JoinGroups> recommendgroups() {
+		return mainDao.recommendgroups();
+	}
 			
 			
 }

@@ -13,5 +13,7 @@ public interface MainDao {
 	List<QNABoard> qnaList(String selected);
 
 	List<JoinGroups> joingroups(String mno);
+
+	List<JoinGroups> recommendgroups();
 	
 }
