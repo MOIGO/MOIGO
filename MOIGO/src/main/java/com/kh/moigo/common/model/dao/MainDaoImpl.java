@@ -25,4 +25,9 @@ public class MainDaoImpl implements MainDao {
 		return sqlSession.selectList("joinGroups.joinGroupList", mno);
 	}
 
+	@Override
+	public List<JoinGroups> recommendgroups() {
+		return sqlSession.selectList("joinGroups.recommendGroupList");
+	}
+
 }
