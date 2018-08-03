@@ -120,7 +120,7 @@
 
 /* 모임관리 */
 .groupList_item{
-    height: 212px;
+    height: 202px;
     margin-bottom: 20px;
  
 }
@@ -145,7 +145,7 @@
 
 .body_text_container{
     width: 100%;
-    height: 70px;
+    height: 60px;
     background-color: #fff;
 
 }
@@ -159,6 +159,10 @@
 
 .body_title{
     font-weight: bold;
+     white-space: nowrap;
+    /* word-break: break-word; */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .body_member{
     color: #aaa;
