@@ -48,7 +48,7 @@ public class MemberController {
 		Member member=(Member) session.getAttribute("m");
 		boolean result ;
 
-		if(bcryptPasswordEncoder.matches(memberPwd, member.getMemberPwd())){
+		 if(bcryptPasswordEncoder.matches(memberPwd, member.getMemberPwd())){
 //		if(member.getMemberPwd().equals(memberPwd)){
 			result=true;
 		}else{
