@@ -75,7 +75,7 @@ input[type="checkbox"] {
 		          <th>피신고자</th>
 		          <th>신고타입</th>
 		          <th colspan="4">신고내용</th>         
-		          <th>상세 정보</th> 
+		        
 		        </tr>
 			</thead>
 	      
@@ -97,7 +97,7 @@ input[type="checkbox"] {
 				          </c:choose>  
 		         		 </td>
 				        <td colspan="4">${accuse.content}</td>
-				        <td><button type="button" class="btn btn-outline-success btn-sm">확인</button> </td>   	
+				        
 	        		</tr>      
 	      		</tbody>
 			</c:forEach>
