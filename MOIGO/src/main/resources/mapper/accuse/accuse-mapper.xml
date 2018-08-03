@@ -13,8 +13,9 @@
 	
 	<insert id="insertAccuse" parameterType="int">
 	INSERT INTO ACCUSE VALUES(SEQ_ACCUSE.NEXTVAL,
-	#{targetMember},null,#{reporter},#{content},SYSDATE)
+	#{targetMember},#{targetGroup},#{reporter},#{content},SYSDATE)
 	</insert>
+	
 	
 	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
      SELECT * FROM
@@ -74,14 +75,12 @@
 	DELETE FROM ACCUSE WHERE TARGET_MEMBER = #{id}
 	</delete>
 	  
+	<select id="countReport" resultMap="accuseResultMap">
+	SELECT (SELECT COUNT(*) FROM ACCUSE WHERE TARGET_GROUP IS NULL) GROUP_REPORT,
+    (SELECT COUNT(*) FROM ACCUSE WHERE TARGET_MEMBER IS NULL) MEMBER_REPORT
+    FROM DUAL
+	</select>
 
-	<!-- <select id="selectTargetListPaging" resultMap="accuseResultMap">  
-		SELECT * FROM
-		(SELECT ROWNUM RNUM, PAGING.* 
-		FROM(SELECT * FROM ACCUSE WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%' OR  TARGET_GROUP like %'||#{searchingKey}||'%' 
-		ORDER BY ACCUSE_NO DESC) PAGING) 
-		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
-	</select> -->
 	
 	<select id="selectAccuseListCnt" resultType="int"> 
 		SELECT COUNT(*) FROM ACCUSE 

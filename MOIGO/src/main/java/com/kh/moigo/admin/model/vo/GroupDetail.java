@@ -12,6 +12,8 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 	private static final long serialVersionUID = -5252765492046188622L;
 		
 	private int memNum;
+	private int postCount;
+	private int replyCount;
 	private String masterEmail;
 	private int gGradeCount;
 	private String groupGradeName;
@@ -27,6 +29,38 @@ public class GroupDetail extends Groups implements java.io.Serializable {
 	
 	public String getEnrollM() {
 		return enrollM;
+	}
+
+
+
+
+
+	public int getPostCount() {
+		return postCount;
+	}
+
+
+
+
+
+	public void setPostCount(int postCount) {
+		this.postCount = postCount;
+	}
+
+
+
+
+
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+
+
+
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 
 

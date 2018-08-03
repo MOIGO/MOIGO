@@ -75,6 +75,7 @@ input[type="checkbox"] {
 		          <th>피신고자</th>
 		          <th>신고타입</th>
 		          <th colspan="4">신고내용</th>         
+		          <th>신고시기</th>         
 		        
 		        </tr>
 			</thead>
@@ -97,7 +98,7 @@ input[type="checkbox"] {
 				          </c:choose>  
 		         		 </td>
 				        <td colspan="4">${accuse.content}</td>
-				        
+				        <td colspan="4">${accuse.accuseDate}</td>
 	        		</tr>      
 	      		</tbody>
 			</c:forEach>
@@ -474,7 +475,7 @@ input[type="checkbox"] {
 														<div class="input-group-text">Age</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputPost" readonly>
+														id="inputAge" readonly>
 												</div>
 											</div>
 											<div class="col-sm-5">
@@ -484,7 +485,7 @@ input[type="checkbox"] {
 														<div class="input-group-text">Gender</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputReply" readonly>
+														id="inputGender" readonly>
 												</div>
 											</div>
 										</div>
@@ -497,7 +498,7 @@ input[type="checkbox"] {
 														<div class="input-group-text">Post</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputPost" readonly>
+														id="inputPost" readonly>
 												</div>
 											</div>
 											<div class="col-sm-5">
@@ -507,7 +508,7 @@ input[type="checkbox"] {
 														<div class="input-group-text">Reply</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputReply" readonly>
+														id="inputReply" readonly>
 												</div>
 											</div>
 										</div>
@@ -684,9 +685,10 @@ $(document).ready(function(){
 			            $("#inputGenrollDate").val(data[0].enrollDate);
 						$("#inputGgc").val(data[0].groupGradeCode);
 						$("#inputGsc").val(data[0].groupStateCode);
-						$("#inputGsc").val(data[0].minAge);
-						$("#inputGsc").val(data[0].maxAge);
-						$("#inputGsc").val(data[0].groupGender);
+						$("#inputAge").val(data[0].minAge+"~"+data[0].maxAge);
+						$("#inputPost").val(data[0].postCount);
+						$("#inputReply").val(data[0].replyCount);
+						$("#inputGender").val(data[0].groupGender);
 						$("#masterEmail").val(data[0].masterEmail); //모임장
 						
 			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다. 문의사항이 있다면 본 메일로 문의하십시오.");

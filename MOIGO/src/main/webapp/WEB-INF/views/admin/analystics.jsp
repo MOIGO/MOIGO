@@ -27,10 +27,12 @@
       
       // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawMinterestChart);
-      
+      google.charts.setOnLoadCallback(drawMinterestChart2);
+
       // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawGinterestChart);
-      
+      google.charts.setOnLoadCallback(drawGinterestChart2);
+
       // Set a callback to run when the Google Visualization API is loaded
      google.charts.setOnLoadCallback(drawGgradeChart);
   	// Set a callback to run when the Google Visualization API is loaded
@@ -86,7 +88,7 @@
     	  var data = google.visualization.arrayToDataTable([
     	        ["Gender", "수", { role: "style" } ],
     	        ["Male", ${genderCount[0].genderCount}, "color: #e5e4e2"],
-    	        ["Female", ${genderCount[1].genderCount}, "silver"],
+    	        ["Female", ${genderCount[1].genderCount}, "silver"]
     	   
     	      ]);
 
@@ -115,6 +117,44 @@
     	      chart2.draw(view, options); */
     }
       
+      function drawMinterestChart2() {
+    	  var data = google.visualization.arrayToDataTable([
+    	        ["Interest", "수", { role: "style" } ],
+    	        ['${minterestCount[0].bigInterest}', ${minterestCount[0].minterestCount}, "color: #add8e6"],
+    	        ['${minterestCount[1].bigInterest}', ${minterestCount[1].minterestCount}, "color: #d6ddf2"],
+    	        ['${minterestCount[2].bigInterest}', ${minterestCount[2].minterestCount}, "color: #e6d7ad"],
+    	        ['${minterestCount[3].bigInterest}', ${minterestCount[3].minterestCount}, "color: #a9cf9b"],
+    	        ['${minterestCount[4].bigInterest}', ${minterestCount[4].minterestCount}, "color: #d9e6ad"],
+    	        ['${minterestCount[5].bigInterest}', ${minterestCount[5].minterestCount}, "color: #d7ade6"],
+    	        ['${minterestCount[6].bigInterest}', ${minterestCount[6].minterestCount}, "color: #ade6d7"]
+    	      ]);
+
+    	
+    	      var view = new google.visualization.DataView(data);
+    	      view.setColumns([0, 1,
+    	                       { calc: "stringify",
+    	                         sourceColumn: 1,
+    	                         type: "string",
+    	                         role: "annotation" },
+    	                       2]);
+
+    	      var options = {
+    	        title: "Member Gender Rate",
+    	        titleTextStyle:{
+  					fontName:'Poppins',
+  					fontSize: 27
+  			  	},
+    	        width: 600,
+    	        height: 400,
+    	        bar: {groupWidth: "95%"},
+    	        legend: { position: "none" },
+    	        fontSize :10
+    	      };
+    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div8"));
+    	      chart.draw(view, options);
+    	    /*   var chart2 = new google.visualization.ColumnChart(document.getElementById("chart_div9"));
+    	      chart2.draw(view, options); */
+    }
       
       function drawAddressChart() {
 
@@ -205,7 +245,7 @@
                              5: { color: '#d9e6ad' },
                              6: { color: '#d7ade6' },
                              7: { color: '#ade6d7' },
-                             7: { color: '#22252e' }
+                             8: { color: '#22252e' }
                            },
   				        pieSliceTextStyle: {
   				            color: '#344c41',
@@ -217,7 +257,47 @@
           chart.draw(data, options);
         }
       
-      
+      function drawGinterestChart2() {
+    	  var data = google.visualization.arrayToDataTable([
+    	        ["Interest", "수", { role: "style" } ],
+    	        ['${ginterestCount[0].bigInterest}',${ginterestCount[0].ginterestCount}, "color: #add8e6"] ,
+          		['${ginterestCount[1].bigInterest}',${ginterestCount[1].ginterestCount}, "color: #d6ddf2"],
+          		['${ginterestCount[2].bigInterest}',${ginterestCount[2].ginterestCount}, "color: #e6d7ad"],
+          	    ['${ginterestCount[3].bigInterest}',${ginterestCount[3].ginterestCount}, "color: #a9cf9b"],
+          	    ['${ginterestCount[4].bigInterest}',${ginterestCount[4].ginterestCount}, "color: #d9e6ad"],
+          	    ['${ginterestCount[5].bigInterest}',${ginterestCount[5].ginterestCount}, "color: #add8e6"],
+          	    ['${ginterestCount[6].bigInterest}',${ginterestCount[6].ginterestCount}, "color: #d7ade6"],
+          	    ['${ginterestCount[7].bigInterest}',${ginterestCount[7].ginterestCount}, "color: #ade6d7"],
+          	    ['${ginterestCount[8].bigInterest}',${ginterestCount[8].ginterestCount}, "color: #add8e6"]
+   
+    	      ]);
+
+    	
+    	      var view = new google.visualization.DataView(data);
+    	      view.setColumns([0, 1,
+    	                       { calc: "stringify",
+    	                         sourceColumn: 1,
+    	                         type: "string",
+    	                         role: "annotation" },
+    	                       2]);
+
+    	      var options = {
+    	        title: "Group Interest Rate",
+    	        titleTextStyle:{
+  					fontName:'Poppins',
+  					fontSize: 27
+  			  	},
+    	        width: 500,
+    	        height: 400,
+    	        bar: {groupWidth: "95%"},
+    	        legend: { position: "none" },
+    	        fontSize :10
+    	        
+    	      };
+    	      var chart = new google.visualization.ColumnChart(document.getElementById("chart_div9"));
+    	      chart.draw(view, options);
+ 
+    }
       
       function drawGinterestChart() {
 
@@ -383,6 +463,7 @@
 			</div>
 			<div class="card-body" >
 				<div class="tab-content" id="myTabContent" style="width: 100%;">
+				
 					<div class="tab-pane fade show active" id="home" role="tabpanel"
 						aria-labelledby="home-tab">
 						<div class="row">
@@ -397,6 +478,7 @@
 							<div class="col-lg-4" id="chart_div6"></div>					
 						</div>
 					</div>
+					
 					<div class="tab-pane fade" id="profile" role="tabpanel" style="width: 1350px;"> 
 						<div class="row">
 							<div class="col-lg-4" id="chart_div7"></div>

@@ -252,7 +252,7 @@ tr {
 														<div class="input-group-text">Post</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputPost" readonly>
+														id="postCount" readonly>
 												</div>
 											</div> 
 											<div class="col-sm-5"> 
@@ -262,7 +262,7 @@ tr {
 														<div class="input-group-text">Reply</div>
 													</div>
 													<input type="text" class="form-control"
-														id="inlineFormInputReply" readonly>
+														id="replyCount" readonly>
 												</div>
 											</div>
 										</div>
@@ -430,9 +430,9 @@ $(document).ready(function(){
 		         						$("#inputAge").val(data[0].minAge+"~"+data[0].maxAge);
 		         					
 		         						$("#inputGender").val(data[0].groupGender);
-		         						$("#inputGender").val(data[0].groupGender);
-		         						
-		         			           
+		         						$("#postCount").val(data[0].postCount);		         						
+		         						$("#replyCount").val(data[0].replyCount);
+
 		         		            }
 		         		        });	           
 		         			}); //함수 끝
