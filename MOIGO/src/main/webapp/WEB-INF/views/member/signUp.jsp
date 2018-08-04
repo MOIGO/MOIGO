@@ -537,7 +537,7 @@ $(function(){
       });
 
      
-      $('#signUpForm').on('keyup blur change',function(){
+      $('#signUpForm').on('keyup blur change click',function(){
     	 /*  console.log(chkId +" / " + chkNum +" / " +chkPwd +" / " +chkPwd2 +" / "+ chkName +" / " +chkBirth +" / " +chkGender +" / "); */
     	 
     	 
