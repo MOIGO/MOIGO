@@ -227,7 +227,7 @@
 	
 	<update id="updateGroupBasics" parameterType="groups">
 		UPDATE GROUPS
-		SET GROUP_NAME=#{groupName},GROUP_PICTURE=#{groupPicture},OPEN_SETTING=#{openSetting},INTEREST_BIG_CODE=#{interestBigCode}
+		SET GROUP_NAME=#{groupName},GROUP_PICTURE=#{groupPicture},OPEN_SETTING=#{openSetting},INTEREST_BIG_CODE=#{interestBigCode},GROUP_MSG=#{groupMsg}
 		WHERE GROUP_NO=#{groupNo}
 	</update>
 	

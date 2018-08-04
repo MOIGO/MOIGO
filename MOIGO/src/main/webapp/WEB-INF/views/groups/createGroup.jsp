@@ -87,11 +87,11 @@
 			<div class="make_cover">
 
 				<div class="form-group">
-					<label for="inpGrpName" id="labGroupName" class="labTitle">밴드
-						이름</label>
+					<label for="inpGrpName" id="labGroupName" class="labTitle">모임
+						이름(필수)</label>
 					<div class="input-group input-group-lg">
 						<input type="text" id="inpGrpName" name="groupName"
-							placeholder="밴드 이름 입력" class="form-control " required />
+							placeholder="모임 이름 입력(최대30자)" class="form-control " required />
 					</div>
 					<input type="file" class="profile_upload_inp" name="groupImageFile"
 						id="coverUploadInp" accept="image/*" />
@@ -100,6 +100,12 @@
 			</div>
 		</div>
 		<!--make band name container end-->
+		
+		<div class="container mt-5">
+			<label class="labTitle">모임 소개 메시지(선택)</label>
+			<input type="text" id="inpGrpMsg" name="groupMsg"
+							placeholder="모임 소개 메시지 입력(최대100자)" class="form-control " />
+		</div>
 
 		<div class="container mt-4">
 			<div class="row cover_select">
@@ -183,7 +189,7 @@
 		<div class="container mt-5">
 			<div class="row constraint_select">
 				<div class="col-12">
-					<h3 class="labTitle">밴드 공개 설정(필수)</h3>
+					<h3 class="labTitle">모임 공개 설정(필수)</h3>
 				</div>
 				<div class="col-12 constraints">
 					<div class=" d-flex flex-row  justify-content-around">
@@ -221,11 +227,13 @@
 		</div>
 		<!--group open setting div end  -->
 		
+		
+		
 		<c:if test="${group eq null}">
 		
 		<div class="container mt-5">
 
-			<label class="labTitle">밴드 제약 설정(선택)</label>
+			<label class="labTitle">모임 제약 설정(선택)</label>
 			<button class="btn btn-primary btn-sm" type="button"
 				data-toggle="collapse" data-target="#divRestrict">펼치기</button>
 
@@ -267,7 +275,7 @@
 									<div class="row">
 										<div class="col mt-1">
 											<div class="form-group">
-												<label for="conditionRegionLarge" class="bolder_text">시</label>
+												<label for="conditionRegionLarge" class="bolder_text">(주요활동)시</label>
 												<select class=" form-control condition_region"
 													id="conditionRegionLarge">
 													<option value="regionNone">- 시도 -</option>
@@ -360,7 +368,7 @@
 		<!--distric container end  -->
 		<div class="container mt-5">
 
-			<label class="labTitle">그룹 분류(선택)</label>
+			<label class="labTitle">모임 분류(선택)</label>
 			<button class="btn btn-primary btn-sm" data-toggle="collapse"
 				data-target="#interestCategory" type="button">펼치기</button>
 
@@ -481,7 +489,7 @@
 		if('${group!=null}'=='true'){
 			 
 			$('#inpGrpName').val('${group.groupName}');
-			
+			$('#inpGrpMsg').val('${group.groupMsg}');
 			
 			console.log("${root}/resources/images/groupCovers/${group.groupNo}/'+'${group.groupPicture}");
 			if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){
@@ -492,6 +500,8 @@
 				$('.mainCover').attr("src",'${root}/resources/images/groupCovers/${group.groupNo}/${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
 			}
+			
+			$("input[name=openSetting][value=" + '${group.openSetting}' + "]").attr('checked', 'checked');
 		
 			
 		 }else{
@@ -756,6 +766,22 @@
 	 		alert("모임 이름을 입력해 주세요");
 	 		return;
 		} 
+	
+	if($('#inpGrpName').val().trim().length>30)
+		{
+			alert("모임 이름 글자수를 초과하였습니다.");
+			$('#inpGrpName').val("");
+			$('#inpGrpName').focus();
+			return;
+		}
+	
+	if($('#inpGrpName').val().trim().length>100)
+	{
+		alert("모임 소개 메시지 글자수를 초과하였습니다.");
+		$('#inpGrpMsg').val("");
+		$('#inpGrpMsg').focus();
+		return;
+	}
 	 
 	 
 	 if($('#min_ageSelect').val()!=-1&&$('#max_ageSelect').val()!=-1){
