@@ -169,7 +169,17 @@ background: #EDEFF2;
 		</div>
 	</div>
 	<!--container end-->
-
+	
+	<!--post insertform -->
+	
+		<input type="hidden" name="content" />
+		<input type="file" name="postFiles"  style="display:none;" id="postFiles" multiple/>
+		<input type="file" name="postImages"  style="display:none;" id="postImages" multiple/>
+		<input type="hidden" value="${groupNo}" />
+		<input type="hidden" value="${gm.memberNo}" />
+		<input type="hidden" name="isNotice" value="N" />
+	
+	
 
 	<!--post edit modals  -->
 	<div class="modal fade" id="postEdit" tabindex="-1"
@@ -206,13 +216,18 @@ background: #EDEFF2;
 
 var pageInfo;
 var currentPage=1;
-var postFiles=[];
+
 
 $(function(){
 	currentPage=1;
 	setPostList();
+	destroyPostEditModal();
 	
-	
+});
+
+
+$('#postImages').on('shown.bs.modal',function(){
+	createSummerNote();
 });
 
 function searchPostList(){
@@ -348,6 +363,7 @@ function makeReply(replyList){
 function makeContent(post){
 	var $contentWrapper = $('<div class="p-3 contentWrapper">');
 	
+	
 	$contentWrapper.append(post.content);
 	
 	$contentWrapper.find('p').css("word-break","break-all");
@@ -464,7 +480,7 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			});
 			
 			$dropDownItem3.on("click",function(){
-				deletePost(num);
+				deletePost(num,wrapperObj);
 			});
 		}
 		if('${memberGrade >3}'=='true'){
@@ -509,7 +525,7 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			
 			$dropDownItem4.on("click",function(){
 				
-						
+				reportUrl="${pageContext.request.contextPath}/reporting.ad";		
 				$('#accuseReporter').val("${gm.memberNo}");
 				$('#accuseTarget').val($(wrapperObj).find(".replyWriterNo").val());
 				$('#reportingModal').modal("toggle"); 
@@ -658,7 +674,7 @@ function updatePost(num,postContent){
 
 function restoreScheduleEvent(obj){
 	
-	console.log("들어오나?");
+
 	
 	$(obj).find('[name=editBtn]').on("click",function(event){
 		//toEditTarget=obj;
@@ -746,7 +762,7 @@ function deleteReply(num){
 	});
 }
 
-function deletePost(num){
+function deletePost(num,wrapperObj){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/deletePost.gp",
@@ -756,11 +772,13 @@ function deletePost(num){
 			
 			if(data.result>0){
 				alert("글 삭제 성공!");
+				$(wrapperObj).closest('.postOuter').remove();
+				
 			}else
 				alert("글 삭제 실패!");
 			
-			deleteAllPost();
-			setPostList(1);
+			//deleteAllPost();
+			//setPostList(1);
 		},
 		error:function(){
 			alert("글 삭제 도중 에러가 생겼습니다.");
@@ -783,15 +801,65 @@ function editOrSubmit(){
 	
 }
 
+var imageNameToSave=[];
+
 function submitPost(){
 	
 	if(!checkLogin())
 		return ;  
 	
-	$.ajax({
+	if('${gm==null}'=='true'){
+		alert("회원이 아닙니다.");
+		return;
+	}
+	
+	
+	var content =$($('#summernote').summernote('code'));
+	
+	
+	$(content).find('img').each(function(index){
+		imageNameToSave.push($(this).attr("data-filename"));
+	
+		
+		$(this).attr("src",$(this).attr("data-filename"));
+		
+	});
+	
+	$('#summernote').summernote('reset');
+	$('#summernote').summernote("code",$(content));
+	
+	
+	
+	
+	console.log($('#summernote').summernote("code"));
+	
+	
+	
+  	   var imageFormData = new FormData();
+  
+ 	 for(var i = 0;i<document.getElementById('postImages').files.length;++i){
+		
+		imageFormData.append("postImages",document.getElementById('postImages').files[i]);
+	} 
+  
+	 imageFormData.append("postImages",document.getElementById('postImages').files); 
+	 imageFormData.append("groupNo",'${groupNo}');
+	 imageFormData.append("memberNo",'${gm.memberNo}');
+	 imageFormData.append("content",$('#summernote').summernote("code"));
+	 imageFormData.append("isNotice","N");
+	 imageFormData.append("imageNameToSave",imageNameToSave);
+	
+	
+	 $.ajax({
+		type:"POST",
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:{groupNo:'${groupNo}',memberNo:'${gm.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
+		data:imageFormData,
 		dataType:"json",
+		async : false,
+		cache: false,
+	     contentType: false,
+	       enctype: 'multipart/form-data', 
+	    processData: false,
 		success:function(data){
 			
 			if(data.result>0){
@@ -800,7 +868,9 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
+			currpage=1;
 			setPostList();
+			$('#postImages').val("");
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -808,8 +878,8 @@ function submitPost(){
 			destroyPostEditModal();
 		}
 		
-	});
-
+	});  
+ 
 }
 
 function checkLogin(){
@@ -835,7 +905,7 @@ function submitReply(postNo,obj){
 		data:{postNo:postNo,memberNo:'${gm.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
-			console.log(data);
+			
 			
 			if(data.result>0){
 				alert("댓글 등록 성공!");
@@ -902,6 +972,23 @@ function createSummerNote(){
 		  return button.render();   // return button as jquery object
 		}
 	
+	
+	var insertImage = function (context) {
+		  var ui = $.summernote.ui;
+
+		  // create button
+		  var button = ui.button({
+		    contents: '<i class="fas fa-image"></i>',
+		    container:false,
+		    tooltip: '사진 삽입',
+		    click: function () {
+		    	$('#postImages').click();
+		    }
+		  });
+
+		  return button.render();   // return button as jquery object
+		}
+	
 	$('#summernote').summernote({
 		  toolbar: [
 		  	['style', ['bold', 'italic', 'underline', 'clear']],
@@ -910,10 +997,11 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
-		    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+		    ['insert', ['link', 'video', 'hr', 'readmore']],
+		    ['myButton',['insertImage']],
 		    ['mybutton', ['insertmap']],
 		    ['myButton',['insertSchedule']]
-		  	
+		    
 		  ],
 		  disableResizeEditor: true,
 		  height: 200,
@@ -925,8 +1013,7 @@ function createSummerNote(){
 		    		
 		    		return;
 		    	}
-				
-				console.log(files);
+
 				
 				var Extension = files[0].name.substring(
 						files[0].name.lastIndexOf('.') + 1).toLowerCase();
@@ -945,11 +1032,64 @@ function createSummerNote(){
 
 		  buttons: {
 		     insertmap: insertMap,
-		     insertSchedule:insertSchedule
+		     insertSchedule:insertSchedule,
+		     insertImage:insertImage 
 		  }
 	});
 	
 }
+
+
+$('#postImages').on("change",function(){
+	 
+	readURL(this);
+});
+
+
+function readURL(input) {
+	 
+	
+	for(var i =0;i<input.files.length;++i){
+	
+	   
+    	if(input.files[i].size/1024/1024>=10){
+    		alert("파일 크기는 10mb 이하여야 합니다.");
+    		
+    		return;
+    	}
+    	var Extension = input.files[i].name.substring(
+    			input.files[i].name.lastIndexOf('.') + 1).toLowerCase();
+    	
+    	if(Extension == "gif" || Extension == "png" || Extension == "bmp"
+            || Extension == "jpeg" || Extension == "jpg")
+    		{
+	    		var reader = new FileReader();
+	    		var originName = input.files[i].name;
+	    		var file = input.files[i];
+	    		
+		        reader.onload = (function (f) {
+		            return function(e) {
+		            	 $('#summernote').summernote("insertImage",e.target.result,f.name);
+		 		       
+		            };
+		        })(input.files[i]);
+		        
+		        
+		 
+		        reader.readAsDataURL(input.files[i]);
+		      
+    	
+    		}else{
+    			
+    			alert("이미지 파일을 올려주세요");
+    			return;
+    			
+    		}
+	
+	    
+	}
+}
+
 
 function sendFile(file, editor) {
 	
@@ -970,7 +1110,7 @@ function sendFile(file, editor) {
   		        processData: false,
   		        success : function(data) { // 처리가 성공할 경우
   	            // 에디터에 이미지 출력
-  	            console.log(data.url);
+  	            
   		        	$(editor).summernote('editor.insertImage','${root}/resources/images/groupImages/'+data.url);
   		        }
   		    }); 

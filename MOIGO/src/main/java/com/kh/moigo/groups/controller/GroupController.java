@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.vo.Post;
+import com.kh.moigo.groups.model.vo.PostFiles;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostReplyWithMem;
 import com.kh.moigo.groups.model.vo.PostWithMem;
@@ -293,14 +295,101 @@ public class GroupController {
 	}
 
 	
+	
 	//글 쓰기
-	@RequestMapping("/groups/insertPost.gp")
+	@RequestMapping(value="/groups/insertPost.gp" , method=RequestMethod.POST)
 	@ResponseBody
-	public Map <String,Object> insertPost(Post post)
+	public Map <String,Object> insertPost(Post post,
+											@RequestParam("postImages") MultipartFile[] postImages,
+											@RequestParam String[] imageNameToSave,
+											HttpServletRequest request)
 	{
-		Map <String,Object> map = new HashMap<String, Object>();
-		map.put("result", groupService.insertPost(post));
 		
+		
+		
+		
+		String orignImage ="";
+		ArrayList<Files> files=new ArrayList<Files>();
+		int processed=0;
+		
+		//파일이 널이 아닐때
+		if(postImages!=null){
+			
+			//갯수만큼 포문을 도는데
+			for(int i=0;i<postImages.length;++i){
+				
+				
+				for(int j=0+processed;j<imageNameToSave.length;++j){
+					
+					System.out.println(imageNameToSave[j]);
+					System.out.println(postImages[i].getOriginalFilename());
+					
+					//이미지 파일이어야 한다.
+					if(imageNameToSave[j].equals(postImages[i].getOriginalFilename())){
+						
+						try{		
+						
+							// 프로필 이미지를 저장할 경로
+							String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupImages/"+post.getGroupNo());
+							
+							// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+							File dir = new File(saveDir);
+							
+							if(!dir.exists())
+								dir.mkdirs();
+							
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+								
+							
+								String newImage = "groupImage"  + "_" + sdf.format(new Date(System.currentTimeMillis()))+Math.floor(new Random().nextFloat()*1000);
+								
+								
+								// 2. upload한 file을 rename, 경로 저장하기
+								orignImage = postImages[i].getOriginalFilename();
+								
+								
+								String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
+								newImage = newImage + "." + ext;
+								
+								postImages[i].transferTo(new File(saveDir +"/"+ newImage));
+								
+								files.add(new Files(orignImage,newImage,"../resources/images/groupImages/"+post.getGroupNo()+"/",post.getGroupNo(),post.getMemberNo(),"Y"));
+							
+								
+								post.setContent(post.getContent().replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+post.getGroupNo()+"/"+newImage));
+								
+								processed++;
+								break;
+								
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+						
+					}
+				}
+			}
+		
+		}
+		
+		//groupService.insertImageFile(files);
+	
+		groupService.insertPost(post);
+		
+		for(int i=0;i<files.size();++i){
+			files.get(i).setPostNo(post.getPostNo());
+			groupService.insertImageFile(files.get(i));
+		}
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		//map.put("fileNo",groupService.insertPost(post));
+		
+		/*for(int i=0;i<filesNo.size();++i){
+			groupService.insertPostFiles(new PostFiles(post.getPostNo(),filesNo.get(i)));
+		}
+		*/
+		map.put("result", 1);
 		return map;
 	}
 	
@@ -481,13 +570,7 @@ public class GroupController {
 		String orignImage = "";
 		String newImage = "";
 		Map <String,Object> map = new HashMap<String, Object>();
-		
-
-		
-		
-		
-		
-		System.out.println("memno:"+memberNo+"groupno : "+groupNo);
+	
 		
 		if(uploadFile!=null){
 			try{		

@@ -604,7 +604,7 @@
 	    	
 	    	console.log(input);
 	    	console.log(input.files[0]);
-	    	if(input.files[0].size/(1024/1024)>=10){
+	    	if(input.files[0].size/1024/1024>=10){
 	    		alert("파일 크기는 10mb 이하여야 합니다.");
 	    		
 	    		setMainCover($("[class*='cover_set_0'] > img").eq( Math.floor(Math.random()*6)));
