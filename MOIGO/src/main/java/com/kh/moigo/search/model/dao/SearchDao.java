@@ -7,10 +7,6 @@ import com.kh.moigo.groups.model.vo.Groups;
 
 public interface SearchDao {
 
-	int listCount(String keyword);
-
-	List<Groups> selectList(String keyword, int cPage, int limit);
-
 	int detailListCount(Map<String, String> map);
 
 	List<Groups> detailSelectList(Map<String, String> map);
