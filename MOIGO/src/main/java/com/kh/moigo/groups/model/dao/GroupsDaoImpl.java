@@ -194,11 +194,7 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.insert("groups.insertImageFile",files);
 	}
 	
-	@Override
-	public int insertPostFiles(PostFiles postFiles) {
-		
-		return sqlSession.insert("groups.insertPostFiles",postFiles);
-	}
+	
 
 	@Override
 	public int deleteOneGroupMember(GroupMember groupMember) {

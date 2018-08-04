@@ -168,12 +168,7 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.insertImageFile(files);
 		
 	}
-	
-	@Override
-	public int insertPostFiles(PostFiles postFiles) {
-		
-		return groupDao.insertPostFiles(postFiles);
-	}
+
 	
 	@Override
 	public int deleteOneGroupMember(GroupMember groupMember) {

@@ -83,10 +83,6 @@
 		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 	</resultMap>
 	
-	<resultMap type="postFiles" id="postFilesResultMap">
-		<result property="postNo" column="POST_NO"/>
-		<result property="fileNo" column="FILE_NO"/>
-	</resultMap>
 	
 	<!--댓글에 멤버 정보 세팅  -->
 	<select id="selectMemberForPostReply" resultMap="groupMemberResultMap">

@@ -61,8 +61,7 @@ public interface GroupsDao {
 	int updateGroupBasics(Groups group);
 	
 	int insertImageFile(Files files);
-	
-	int insertPostFiles(PostFiles postFiles);
+
 	
 	int deleteOneGroupMember(GroupMember groupMember);
 	

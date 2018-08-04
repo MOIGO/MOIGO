@@ -45,7 +45,7 @@ public interface GroupsService {
 	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	int updategroupBasics(Groups group);
 	int insertImageFile(Files files);
-	int insertPostFiles(PostFiles postFiles);
+	
 	int deleteOneGroupMember(GroupMember groupMember);
 	//--------------------------------------------------------------------------- 혜진
 	
