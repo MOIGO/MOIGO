@@ -92,6 +92,11 @@ background: #EDEFF2;
 		height:300px !important;
 		
 	}
+	
+	#postEdit .modal-dialog {
+		max-width:650px;
+		
+	}
 
 </style>
 
@@ -384,7 +389,7 @@ function makeProfile(obj){
 	if(typeof(obj.replyNo)=='undefined'){
 		$profileImgWrapper = $('<div class="">');
 		if(obj.groupMember.profileImg!=null)
-			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
 			$profileImgWrapper.append($("<input class='postNo'>").attr("type","hidden").val(obj.postNo));
@@ -394,7 +399,7 @@ function makeProfile(obj){
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
 		if(obj.groupMember.profileImg!=null)
-			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileImg);
 		else
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
 		$profileImgWrapper.append($("<input class='replyNo'>").attr("type","hidden").val(obj.replyNo));
@@ -1004,7 +1009,7 @@ function createSummerNote(){
 		    
 		  ],
 		  disableResizeEditor: true,
-		  height: 200,
+		  height: 350,
 		  /* callbacks:{
 			onImageUpload:function(files,editor,welEditable){
 				

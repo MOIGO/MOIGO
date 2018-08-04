@@ -200,7 +200,11 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.insert("groups.insertPostFiles",postFiles);
 	}
 
-
+	@Override
+	public int deleteOneGroupMember(GroupMember groupMember) {
+		
+		return sqlSession.delete("groups.deleteOneGroupMember",groupMember);
+	}
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -249,6 +253,8 @@ public class GroupsDaoImpl implements GroupsDao {
 	public List<Schedule> selectListGroupSchedule(String groupNo) {
 		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
 	}
+
+	
 
 
 }

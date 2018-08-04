@@ -142,6 +142,13 @@
 	
  </div>
  
+ <form id="groupWithdrawalForm" action="${pageContext.request.contextPath}/groups/groupWithdrawal.gp" method="post">
+ 	<input type="hidden" name="memberNo" value="${gm.memberNo}"/>
+ 	<input type="hidden" name="groupNo" value="${groupNo}"/>
+ 	<input type="hidden" name="deleteGroup"/>
+ </form>
+ 
+ 
  
  <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
  	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
@@ -272,16 +279,34 @@ $(function() {
 $('#groupWithdrawal').on("click",function(){
 	
 	
-	if('${gm.memberGradeCode>=3}'=='true'){
+	if('${gm.memberGradeCode>=3}'=='true'&&memberNum>1){
 		alert("모임장은 탈퇴 할 수 없습니다.");
 		return;
 	}
 	  
 	
 	
-	if('${gm.memberGradeCode>=1}'=='true'&&memberNum>1){
-		confirm("탈퇴하시겠습니까?");
+	if('${gm.memberGradeCode>=1}'=='true'){
+		
+		if(memberNum<=1){
+			if(confirm("모임의 마지막 멤버인 경우 모임도 같이 삭제 됩니다. 탈퇴하시겠습니까?")){
+				
+				$('#groupWithdrawalForm input[name=deleteGroup]').val('Y');
+				$('#groupWithdrawalForm').submit();
+				return;
+			}
+					
+		}
+		
+		
+		if(confirm("탈퇴하시겠습니까?")){
+			$('#groupWithdrawalForm input[name=deleteGroup]').val('N');
+			$('#groupWithdrawalForm').submit();
+			return;
+		}
 	}
+	
+	
 	
 	
 });
@@ -309,9 +334,6 @@ $('#reportSubmit').on('click',function(){
 });	
 
 
-function sendReport(action){
-	
-}
 
 function Activity(name, list){
     this.name = name;

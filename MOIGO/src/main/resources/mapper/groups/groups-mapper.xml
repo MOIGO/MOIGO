@@ -292,11 +292,12 @@
 		INSERT INTO FILES VALUES('F'||TO_CHAR(SEQ_FILES.NEXTVAL,'FM000'),#{fileOriginName},#{fileNewName},#{filePath},#{groupNo},#{memberNo},SYSDATE,'Y',#{postNo})
 	</insert>
 	
+	<delete id="deleteOneGroupMember" parameterType="groupMember">
+		DELETE FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
+	</delete>
 	
-	<!--포스트와 파일 리스트 연결하는 테이블에 넣기  -->
-	<insert id="insertPostFiles" parameterType="postFiles">
-		INSERT INTO POSTFILES VALUES (#{postNo},#{fileNo})
-	</insert>
+	
 	
 	<!-- ===================================================================================================== 혜진 -->
 

@@ -615,6 +615,30 @@ public class GroupController {
 		return map;
 	}
 	
+	
+	//그룹에서 한명 탈퇴
+	@RequestMapping(value="/groups/groupWithdrawal.gp",method=RequestMethod.POST)
+	public String groupWithdrawal(@RequestParam String groupNo,@RequestParam String memberNo,@RequestParam String deleteGroup, Model model){
+		
+		int result;
+		
+		if(deleteGroup.equals("Y")){
+			
+			result = groupService.deleteGroup(groupNo);
+			
+			model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
+			return "common/msg";
+		}
+		
+	
+		
+			result = groupService.deleteOneGroupMember(new GroupMember(memberNo,groupNo));
+			
+			model.addAttribute("정상적으로 탈퇴 하셨습니다." );
+			
+		return "common/msg";
+	}
+	
 	// -------------------------------------------------------------------------------------------------------------------------- 혜진
 	
 	// 멤버 

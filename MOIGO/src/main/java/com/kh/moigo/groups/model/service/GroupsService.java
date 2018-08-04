@@ -46,6 +46,7 @@ public interface GroupsService {
 	int updategroupBasics(Groups group);
 	int insertImageFile(Files files);
 	int insertPostFiles(PostFiles postFiles);
+	int deleteOneGroupMember(GroupMember groupMember);
 	//--------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -60,6 +61,7 @@ public interface GroupsService {
 	int deleteGroup(String groupNo);
 	
 	List<Schedule> selectListGroupSchedule(String groupNo);
+	
 	
 	
 	

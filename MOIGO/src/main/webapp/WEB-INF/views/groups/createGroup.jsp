@@ -443,7 +443,7 @@
 		<div class="container mt-4">
 			<div class="d-flex justify-content-center">
 				<button type="reset"
-					class="btn btn-secondary btn-lg mr-4 button_sizing">취소하기</button>
+					class="btn btn-secondary btn-lg mr-4 button_sizing" id="cancelCreateGroup">취소하기</button>
 				<button type="button" class="btn btn-primary btn-lg button_sizing" id="createGroupBtn">완료</button>
 			</div>
 		</div>
@@ -504,6 +504,14 @@
 
 		
 	});
+	
+	//취소버튼 클릭했을때
+	$('#cancelCreateGroup').on("click",function(){
+		if('${group==null}'!='true')
+			window.history.back();
+		else
+			location.href="${pageContext.request.contextPath}/";
+	})
 	
 	function largeRegion(){
 		  // 행정구역 list를 가져오기 위한 ajax 부분

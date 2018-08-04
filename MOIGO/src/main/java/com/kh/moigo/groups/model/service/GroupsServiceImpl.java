@@ -174,6 +174,13 @@ public class GroupsServiceImpl implements GroupsService {
 		
 		return groupDao.insertPostFiles(postFiles);
 	}
+	
+	@Override
+	public int deleteOneGroupMember(GroupMember groupMember) {
+		return groupDao.deleteOneGroupMember(groupMember);
+	}
+
+
 
   
 	//--------------------------------------------------------------------- 혜진
@@ -225,6 +232,5 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 	
-
 	
 }

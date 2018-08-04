@@ -64,6 +64,8 @@ public interface GroupsDao {
 	
 	int insertPostFiles(PostFiles postFiles);
 	
+	int deleteOneGroupMember(GroupMember groupMember);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -78,6 +80,8 @@ public interface GroupsDao {
 	int deleteGroup(String groupNo);
 
 	List<Schedule> selectListGroupSchedule(String groupNo);
+
+	
 
 	
 
