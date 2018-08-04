@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="accuse">
+	<resultMap id="accuseResultMap" type="accuse">
+		<id column="ACCUSE_NO" property="accuseNo" />
+		<result column="TARGET_MEMBER" property="targetMember" />
+		<result column="TARGET_GROUP" property="targetGroup" />
+		<result column="REPORTER" property="reporter" />
+		<result column="CONTENT" property="content" />
+		<result column="ACCUSE_DATE" property="accuseDate" />
+		<result column="SEARCHING_KEY" property="searchingKey" />
+		<result column="GROUP_REPORT" property="gReportCount" />
+		<result column="MEMBER_REPORT" property="mReportCount" />
+	</resultMap>
+	
+	<insert id="insertAccuse" parameterType="accuse">
+	INSERT INTO ACCUSE VALUES(SEQ_ACCUSE.NEXTVAL,
+	#{targetMember},#{targetGroup},#{reporter},#{content},SYSDATE)
+	</insert>
+	
+	<select id="gmReportCount"  resultMap="accuseResultMap">
+		SELECT (SELECT COUNT(*) FROM ACCUSE WHERE TARGET_GROUP IS NULL) GROUP_REPORT,
+   		(SELECT COUNT(*) FROM ACCUSE WHERE TARGET_MEMBER IS NULL) MEMBER_REPORT
+    	FROM DUAL	
+	</select>
+	
+	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
+     SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM(SELECT ACCUSE_NO,TARGET_MEMBER,TARGET_GROUP,REPORTER, 
+   		 CONTENT,ACCUSE_DATE FROM ACCUSE 	
+		<choose>
+			<when test='chk eq "true"'>
+			left JOIN GROUPS G ON(G.GROUP_NO= TARGET_GROUP)
+   			left JOIN MEMBER M ON(M.MEMBER_NO= TARGET_MEMBER)
+   			WHERE M.DELFLAG != 'Y' OR G.GROUP_STATE_CODE != 'S2'
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					AND REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					AND CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					AND TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>	
+			</when>		
+			<otherwise>
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					WHERE REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					WHERE CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>					
+			</otherwise>		
+		</choose>			
+		ORDER BY ACCUSE_NO DESC) PAGING) 
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow}	
+   </select>  
+ 
+
+	<select id="selectTMList" resultMap="accuseResultMap">
+	 SELECT * FROM ACCUSE WHERE TARGET_MEMBER = #{id}
+	 </select>
+	  
+	 <select id="selectTGList" resultMap="accuseResultMap">
+	 SELECT * FROM ACCUSE WHERE TARGET_GROUP = #{id}
+	  </select>
+	  
+
+	<delete id="deleteAccuse" parameterType="_int"> 
+	DELETE FROM ACCUSE WHERE TARGET_MEMBER = #{id}
+	</delete>
+	  
+	<select id="countReport" resultMap="accuseResultMap">
+	SELECT (SELECT COUNT(*) FROM ACCUSE WHERE TARGET_GROUP IS NULL) GROUP_REPORT,
+    (SELECT COUNT(*) FROM ACCUSE WHERE TARGET_MEMBER IS NULL) MEMBER_REPORT
+    FROM DUAL
+	</select>
+
+	
+	<select id="selectAccuseListCnt" resultType="int"> 
+		SELECT COUNT(*) FROM ACCUSE 
+		<choose>
+			<when test='chk eq "true"'>
+			left JOIN GROUPS G ON(G.GROUP_NO= TARGET_GROUP)
+   			left JOIN MEMBER M ON(M.MEMBER_NO= TARGET_MEMBER)
+   			WHERE M.DELFLAG != 'Y' OR G.GROUP_STATE_CODE != 'S2'
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					AND REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					AND CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					AND TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>	
+			</when>		
+			<otherwise>
+				<if test='searchingKey != ""'> 
+				<choose>
+					<when test='opt eq "reporter"'>
+					WHERE REPORTER like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "content"'>
+					WHERE CONTENT like '%'||#{searchingKey}||'%' 
+					</when>
+					<when test='opt eq "target"'>
+					WHERE TARGET_MEMBER like '%'||#{searchingKey}||'%'  OR TARGET_GROUP like '%'||#{searchingKey}||'%'  
+					</when>		
+				</choose>			
+				</if>					
+			</otherwise>		
+		</choose>				
+
+	</select>
+	
+	
+	  
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="joinGroups">
+	
+	<resultMap type="joinGroups" id="jg">
+		<!-- 가져올 기본 키의 값을 연결시킴(mapping) / 대소문자 구분하지 않음 -->
+		<!-- property : 필드 변수의 이름 -->
+		<!-- column : 데이터 베이스의 결과 컬럼 이름 -->
+		<id property="groupNo" column="GROUPNO"/>
+		<!-- 가져올 일반 데이터의 값을 연결시킴(mapping) -->
+		<result property="groupName" column="GROUPNAME"/>
+		<result property="groupAddress" column="GROUPADDRESS"/>
+		<result property="groupImage" column="GROUPIMAGE"/>
+		<result property="memberNum" column="MEMBERNUM"/>
+		<result property="postNum" column="POSTNUM"/>
+	</resultMap>
+	
+	<select id="joinGroupList" parameterType="String" resultMap="jg">
+		SELECT gm.GROUP_NO groupNo, g.GROUP_NAME groupName,g.group_address groupAddress, g.GROUP_PICTURE groupImage, grm.cnum memberNum, PN.cnum postNum
+		FROM (SELECT GROUP_NO , count(*) cnum FROM GROUP_MEMBER  GROUP BY GROUP_NO) grm
+		JOIN GROUPS g ON (grm.GROUP_NO = g.GROUP_NO ) 
+		JOIN GROUP_MEMBER gm on (grm.GROUP_NO=gm.GROUP_NO)
+        JOIN (SELECT GROUP_NO , count(*) cnum FROM POST NATURAL FULL JOIN GROUPS GROUP BY GROUP_NO) pn ON (pn.GROUP_NO = GRM.GROUP_NO)
+		WHERE MEMBER_NO= #{mno}
+	</select>
+	
+	<select id="recommendGroupList" resultMap="jg">
+		select * from
+		(select ROWNUM RNUM, al.* from
+		(SELECT DISTINCT gm.GROUP_NO groupNo, g.GROUP_NAME groupName,g.group_address groupAddress, g.GROUP_PICTURE groupImage, grm.cnum memberNum, PN.cnum postNum
+		FROM (SELECT GROUP_NO , count(*) cnum FROM GROUP_MEMBER  GROUP BY GROUP_NO) grm
+		JOIN GROUPS g ON (grm.GROUP_NO = g.GROUP_NO ) 
+		JOIN GROUP_MEMBER gm on (grm.GROUP_NO=gm.GROUP_NO)
+        JOIN (SELECT GROUP_NO , count(*) cnum FROM POST NATURAL FULL JOIN GROUPS GROUP BY GROUP_NO) pn ON (pn.GROUP_NO = GRM.GROUP_NO) 
+        order by membernum desc) al)
+        where RNUM between 1 and 4
+	</select>
+	
+</mapper>
