@@ -293,6 +293,12 @@
 		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
 	</delete>
 	
+	<select id="selectCloseScheduleList" resultType="schedule" resultMap="scheduleResultMap">
+		SELECT * FROM SCHEDULE
+		WHERE GROUP_NO=#{groupNo}
+		AND START_TIME BETWEEN SYSDATE AND SYSDATE+2
+	</select>
+	
 	
 	
 	<!-- ===================================================================================================== 혜진 -->

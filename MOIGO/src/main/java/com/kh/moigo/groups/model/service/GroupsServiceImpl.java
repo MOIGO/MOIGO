@@ -14,7 +14,6 @@ import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.groups.model.exception.GroupsExeption;
 import com.kh.moigo.groups.model.vo.Post;
-import com.kh.moigo.groups.model.vo.PostFiles;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.PostReply;
@@ -176,7 +175,11 @@ public class GroupsServiceImpl implements GroupsService {
 	}
 
 
-
+	@Override
+	public List<Schedule> selectCloseScheduleList(String groupNo) {
+	
+		return groupDao.selectCloseScheduleList(groupNo);
+	}
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -225,6 +228,8 @@ public class GroupsServiceImpl implements GroupsService {
 	public List<Schedule> selectListGroupSchedule(String groupNo) {
 		return groupDao.selectListGroupSchedule(groupNo);
 	}
+
+	
 
 	
 	

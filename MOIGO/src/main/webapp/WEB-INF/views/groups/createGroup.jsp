@@ -193,18 +193,18 @@
 				</div>
 				<div class="col-12 constraints">
 					<div class=" d-flex flex-row  justify-content-around">
-						<div class="form-check form-check-inline ">
+						<!-- <div class="form-check form-check-inline ">
 							<input type="radio" id="openSetting1" name="openSetting"
 								class="form-check-input" style="position: relative; top: 40px;"
 								value="PRIVATE" required> <label
 								class="form-check-label" for="openSetting1"><strong>비공개
 									모임</strong><br>
 							<span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span></label>
-						</div>
+						</div> -->
 
 						<div class="form-check form-check-inline ">
 							<input type="radio" id="openSetting2" name="openSetting"
-								class="form-check-input" style="position: relative; top: 40px;"
+								class="form-check-input" style="position: relative; top: 5px;"
 								value="PROTECTED" required> <label
 								class="form-check-label" for="openSetting2"><strong>모임명
 									공개 모임</strong><br> <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수
@@ -212,7 +212,7 @@
 						</div>
 						<div class="form-check form-check-inline">
 							<input type="radio" id="openSetting3" name="openSetting"
-								class="form-check-input" style="position: relative; top: 40px;"
+								class="form-check-input" style="position: relative; top: 5px;"
 								value="PUBLIC" required> <label class="form-check-label"
 								for="openSetting3"><strong>공개 모임</strong><br>
 							<span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span></label>

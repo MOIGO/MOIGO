@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
-import com.kh.moigo.groups.model.vo.PostFiles;
+
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
@@ -201,6 +201,12 @@ public class GroupsDaoImpl implements GroupsDao {
 		
 		return sqlSession.delete("groups.deleteOneGroupMember",groupMember);
 	}
+	
+	@Override
+	public List<Schedule> selectCloseScheduleList(String groupNo) {
+		
+		return new ArrayList<Schedule>(sqlSession.selectList("groups.selectCloseScheduleList",groupNo));
+	}
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -249,6 +255,8 @@ public class GroupsDaoImpl implements GroupsDao {
 	public List<Schedule> selectListGroupSchedule(String groupNo) {
 		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
 	}
+
+	
 
 	
 

@@ -79,20 +79,20 @@
 			<c:choose>
 				<c:when test="${param.memberGrade>0}">
 					<div class="row mt-3 joined">
-						<div class="col-6">
+						<div class="col-5">
 							멤버: <span class="group_memNum"></span>
 						</div>
-						<div class="col-6 ">
-							<i class="fas fa-plus-circle"></i> 그룹 초대
+						<div class="col-7">
+							리더 : <span class="group_leader ">홍길동</span>
 						</div>
 					</div>
 				</c:when>
 				<c:when test="${param.memberGrade<0 }">
 				<div class="row mt-3 notJoined">
-						<div class="col-6">
+						<div class="col-5">
 							멤버: <span class="group_memNum">6명</span>
 						</div>
-						<div class="col-6">
+						<div class="col-7">
 							리더 : <span class="group_leader ">홍길동</span>
 						</div>
 				</div>
@@ -100,10 +100,10 @@
 				</c:when>
 				<c:when test="${param.memberGrade eq 0 }">
 					<div class="row mt-3 notJoined">
-							<div class="col-6">
+							<div class="col-5">
 								멤버: <span class="group_memNum">6명</span>
 							</div>
-							<div class="col-6">
+							<div class="col-7">
 								리더 : <span class="group_leader ">홍길동</span>
 							</div>
 					</div>
@@ -236,7 +236,7 @@ $('#groupReport').on("click",function(){
 	
 	reportUrl="${pageContext.request.contextPath}/reporting2.ad";
 	
-	$('#accuseReporter').val("${gm.memberNo}");
+	$('#accuseReporter').val("${m.memberNo}");
 	$('#accuseTarget').val("${groupNo}");
 	
 	$('#reportingModal').modal("toggle");

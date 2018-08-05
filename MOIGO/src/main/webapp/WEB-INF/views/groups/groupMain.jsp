@@ -169,7 +169,9 @@ background: #EDEFF2;
 				</div>
 			</div>
 
-			<c:import url="/WEB-INF/views/groups/rightAside.jsp" />
+			<c:import url="/WEB-INF/views/groups/rightAside.jsp" >
+				<c:param name="groupNo" value="${groupNo}"/>
+			</c:import>
 
 		</div>
 	</div>
@@ -321,7 +323,7 @@ function setPostList(){
 			
 			pageInfo = data.pageInfo;
 			
-			console.log(data);
+		
 			
 			if(data.posts.length>0){
 				
@@ -334,6 +336,8 @@ function setPostList(){
 					$postOuter.append(makeSubmitReply(data.posts[i].postNo));
 					$('#postDiv').append($postOuter);
 				}
+				
+				restoreScheduleElement();
 			}else{
 				currentPage-=1;
 			}
@@ -346,6 +350,47 @@ function setPostList(){
 	});
 	
 }
+
+function restoreScheduleElement(){
+	
+	$('#postDiv').find(".scheduleInputWrapper").each(function(){
+		
+		if($(this).find('.editScheduleWrap').length<=0){
+		
+			restoreScheduleElementCallBack($(this));
+			
+		}
+				
+	});
+	
+}
+
+function restoreScheduleElementCallBack(addObj){
+	
+
+
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/selectOneSchedule.gp",
+		data:{scheduleNo:$(addObj).find("input").val()},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.schedule!=null)
+				addScheduleElement(addObj,data.schedule);
+			else
+				addEmptyScheduleElement(addObj);
+	
+		},
+		error:function(){
+			alert("스케줄을 불러오는 도중 문제가 생겼습니다.");
+		}
+		
+	});
+	
+}
+
+
+
 
 function deleteAllPost(){
 	$('#postDiv').children().remove();
@@ -380,6 +425,8 @@ function makeContent(post){
 function makeProfile(obj){
 	/*profile Element  */
 	
+	
+	
 	var $profileWrapper = $('<div class="d-flex align-items-center mt-2 mr-auto profileWrapper">');
 	
 	var $profileImgWrapper;
@@ -388,8 +435,8 @@ function makeProfile(obj){
 	
 	if(typeof(obj.replyNo)=='undefined'){
 		$profileImgWrapper = $('<div class="">');
-		if(obj.groupMember.profileImg!=null)
-			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileImg);
+		if(obj.groupMember.profileThumb!=null)
+			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileThumb);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
 			$profileImgWrapper.append($("<input class='postNo'>").attr("type","hidden").val(obj.postNo));
@@ -398,8 +445,8 @@ function makeProfile(obj){
 	}
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
-		if(obj.groupMember.profileImg!=null)
-			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileImg);
+		if(obj.groupMember.profileThumb!=null)
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileThumb);
 		else
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
 		$profileImgWrapper.append($("<input class='replyNo'>").attr("type","hidden").val(obj.replyNo));
@@ -649,38 +696,91 @@ function prepareUpdatePost(num){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
 		
 	}
-	for(var i =0;i<$temp.siblings('[name=editScheduleWrap]').length;++i){
-		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i));
-	}
+	
+	
+	
+	$temp.find('[name=editScheduleWrap]').each(function(){
+		restoreScheduleEvent($(this));
+	});
 	
 }
 
 function updatePost(num,postContent){
-	$.ajax({
+
+	//코드를 가져와서
+	var content =$($('#summernote').summernote('code'));
+	
+	
+	var formData = new FormData();
+	
+	//이미지 설정
+	$(content).find('img:not(.addedImage)').each(function(index){
+		imageNameToSave.push($(this).attr("data-filename"));
+	
+		$(this).attr("src",$(this).attr("data-filename"));
+		
+		
+	});
+	
+	for(var i = 0;i<document.getElementById('postImages').files.length;++i){
+			
+		formData.append("postImages",document.getElementById('postImages').files[i]);
+	} 
+	
+	$(content).find("[name=editScheduleWrap]").remove();
+
+		 
+	$('#summernote').summernote('reset');
+	$('#summernote').summernote("code",$(content));
+	
+	imageNameToSave.sort();
+	
+
+	formData.append("postNo",num);
+	formData.append("content",$('#summernote').summernote("code"));
+	formData.append("postImages",document.getElementById('postImages').files);
+	/* formData.append("schedules",JSON.stringify(schedules)); */
+	formData.append("imageNameToSave",imageNameToSave);
+	formData.append("groupNo",'${groupNo}');
+	formData.append("memberNo",'${gm.memberNo}');
+
+	
+	 $.ajax({
+		type:"POST",
 		url:"${pageContext.request.contextPath}/groups/updatePost.gp",
-		data:{postNo:num,content:postContent},
+		data:formData,
 		dataType:"json",
+		async : false,
+		cache: false,
+	    contentType: false,
+	    processData: false,
 		success:function(data){
 			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 			if(data.result>0){
+				
 				$temp.children().remove();
 				
 				$temp.append(postContent);
+				
+				imageNameToSave=[];
+				
+				$('#postImages').replaceWith($('#postImages').val('').clone(true));
+				$('#postImages').val(""); 
+				destroyPostEditModal();
 				alert("글 수정 성공!");
 			}else
 				alert("댓글 삭제 실패!");	
 		},
 		error:function(){
-			alert("댓글 삭제 도중 에러가 생겼습니다.");
+			alert("글 수정 도중 에러가 생겼습니다.");
 		}
 		
-	});
+	}); 
 }
 
 function restoreScheduleEvent(obj){
 	
 
-	
 	$(obj).find('[name=editBtn]').on("click",function(event){
 		//toEditTarget=obj;
 		 event.stopPropagation();
@@ -743,6 +843,8 @@ function restoreMapEvent(obj){
 		$(obj).find('.map_btn_wrapper').css("visibility","hidden");
 	});
 }
+
+
 
 
 function deleteReply(num){
@@ -818,52 +920,55 @@ function submitPost(){
 		return;
 	}
 	
-	
+	//코드를 가져와서
 	var content =$($('#summernote').summernote('code'));
 	
 	
+	//이미지 설정
 	$(content).find('img').each(function(index){
 		imageNameToSave.push($(this).attr("data-filename"));
 	
 		
 		$(this).attr("src",$(this).attr("data-filename"));
-		
+		$(this).addClass("addedImage");
 	});
 	
+	$(content).find("[name=editScheduleWrap]").remove();
+
+
+	 
 	$('#summernote').summernote('reset');
 	$('#summernote').summernote("code",$(content));
 	
-	
-	
-	
-	console.log($('#summernote').summernote("code"));
-	
-	
-	
-  	   var imageFormData = new FormData();
+
+  	var formData = new FormData();
   
  	 for(var i = 0;i<document.getElementById('postImages').files.length;++i){
 		
-		imageFormData.append("postImages",document.getElementById('postImages').files[i]);
+		formData.append("postImages",document.getElementById('postImages').files[i]);
 	} 
+ 	 
+ 	
+ 	 
+ 	 imageNameToSave.sort();
   
-	 imageFormData.append("postImages",document.getElementById('postImages').files); 
-	 imageFormData.append("groupNo",'${groupNo}');
-	 imageFormData.append("memberNo",'${gm.memberNo}');
-	 imageFormData.append("content",$('#summernote').summernote("code"));
-	 imageFormData.append("isNotice","N");
-	 imageFormData.append("imageNameToSave",imageNameToSave);
+	 formData.append("postImages",document.getElementById('postImages').files); 
+	 formData.append("groupNo",'${groupNo}');
+	 formData.append("memberNo",'${gm.memberNo}');
+	 formData.append("content",$('#summernote').summernote("code"));
+	 formData.append("isNotice","N");
+	 formData.append("imageNameToSave",imageNameToSave);
+	/*  formData.append("schedules",JSON.stringify(schedules)); */
 	
-	
-	 $.ajax({
+	 
+	   $.ajax({
 		type:"POST",
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:imageFormData,
+		data:formData,
 		dataType:"json",
 		async : false,
 		cache: false,
-	     contentType: false,
-	       enctype: 'multipart/form-data', 
+	    contentType: false,
 	    processData: false,
 		success:function(data){
 			
@@ -875,7 +980,10 @@ function submitPost(){
 			deleteAllPost();
 			currpage=1;
 			setPostList();
-			$('#postImages').val("");
+			imageNameToSave=[];
+			schedule=null;
+			$('#postImages').replaceWith($('#postImages').val('').clone(true));
+			 $('#postImages').val(""); 
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -970,6 +1078,13 @@ function createSummerNote(){
 		    container:false,
 		    tooltip: '일정 삽입',
 		    click: function () {
+		    	var temp = $($('#summernote').summernote('code'));
+				
+				if($(temp).siblings(".scheduleInputWrapper").length>0){
+					alert("이미 일정이 존재합니다.");
+					return;
+				}
+		    	
 		    	toggleScheduleModal();
 		    }
 		  });

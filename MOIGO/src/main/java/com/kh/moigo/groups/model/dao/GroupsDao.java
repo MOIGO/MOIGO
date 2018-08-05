@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
-import com.kh.moigo.groups.model.vo.PostFiles;
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
@@ -65,6 +64,8 @@ public interface GroupsDao {
 	
 	int deleteOneGroupMember(GroupMember groupMember);
 	
+	List<Schedule> selectCloseScheduleList(String groupNo);
+	
 //-------------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -79,6 +80,8 @@ public interface GroupsDao {
 	int deleteGroup(String groupNo);
 
 	List<Schedule> selectListGroupSchedule(String groupNo);
+
+	
 
 	
 
