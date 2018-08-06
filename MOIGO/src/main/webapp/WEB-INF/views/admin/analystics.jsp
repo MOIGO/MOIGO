@@ -6,6 +6,8 @@
 
 <html>
 <head>
+<title>통계</title>
+
 <!--Load the AJAX API-->
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
