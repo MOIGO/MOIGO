@@ -8,6 +8,7 @@
 <head>
 <title>멤버 관리</title>
 
+
 <style type="text/css">
 .admin_member_table {
 	height: 500px;
