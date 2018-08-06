@@ -6,8 +6,9 @@
 
 <html>
 <head>
+<title>신고 관리</title>
 
- <style type="text/css">
+<style type="text/css">
 div.vertical-line {
 	border-left: 4px solid #808080;
 	height: 100%;
