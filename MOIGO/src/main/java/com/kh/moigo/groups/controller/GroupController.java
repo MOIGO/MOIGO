@@ -66,14 +66,24 @@ public class GroupController {
 			if(gm!=null){
 				model.addAttribute("memberGrade",gm.getMemberGradeCode()); //권한 컬럼을 뷰에 리턴
 				model.addAttribute("gm",gm);
+				request.getSession().setAttribute("memberGrade", gm.getMemberGradeCode());
+				request.getSession().setAttribute("gm", gm);
+				
 			}
 			else{
+				request.getSession().setAttribute("memberGrade", -1);
+				request.getSession().setAttribute("gm", null);
 				model.addAttribute("memberGrade",-1); //없으면(가입 안되있으면) -1 리턴
 				model.addAttribute("gm",null);
 			}
 			
-		}else
+		}else{
+			
+			request.getSession().setAttribute("memberGrade", -1);
 			model.addAttribute("memberGrade",-1);//멤버가 아니어도 -1 리턴
+		}
+		
+		request.getSession().setAttribute("groupNo", groupNo);
 		
 		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
 		model.addAttribute("currentGroup",gp);

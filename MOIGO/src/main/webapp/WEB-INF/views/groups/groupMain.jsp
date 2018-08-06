@@ -143,7 +143,6 @@ background: #EDEFF2;
 		<c:param name="groupNo" value="${groupNo }" />
 		<c:param name="memberNo" value="${gm.memberNo}" />
 		<c:param name="memberGrade" value="${memberGrade}" />
-		<%-- <c:param name="groupStateCode" value="${currGroup.groupStateCode}" /> --%>
 	</c:import>
 
 	<div class="container">
