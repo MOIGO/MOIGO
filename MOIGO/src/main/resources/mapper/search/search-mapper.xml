@@ -27,7 +27,7 @@
       </if>
       <choose>
       	<when test='regardlessArea != ""'>
-      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%' AND OPEN_SETTING NOT LIKE '%PRIVATE%' 
+      		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND OPEN_SETTING NOT LIKE '%PRIVATE%' 
       	</when>
       	<otherwise>
       		AND GROUP_ADDRESS NOT LIKE '지역무관'
@@ -46,7 +46,7 @@
 		        </if>
 			    <choose>
 			    	<when test='regardlessArea != ""'>
-			    		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%')
+			    		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND OPEN_SETTING NOT LIKE '%PRIVATE%' 
 			    	</when>
 			    	<otherwise>
 			    		AND GROUP_ADDRESS NOT LIKE '지역무관'
