@@ -14,7 +14,7 @@
 	margin: auto;
 }
 
-.jgroup{
+#jgroup{
 	width: 1110px;
 	height: 200px;
 }
@@ -61,18 +61,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-@media all and (max-width: 1200px) { /* #carouselExampleIndicators1 {
-		position: absolute;
-		width: 1200px;
+/*  @media all and (min-width: 1px){ 
+	.jgroup{
+		width: 1100px !important;
+		height: 200px;
 	}
-	.carousel {
-		position: absolute;
-	}
-	.mainGroup test ani {
-		position: absolute;
-		width: 300px;
-	} */
-}
+} */ 
 
 .maintagFont{
 	position:absolute; 
@@ -81,6 +75,8 @@
 	color: snow;
 	font-weight: bold;
 }
+
+
 </style>
 </head>
 <body onload="start()">
@@ -106,7 +102,7 @@
 				<h3 class="maintagFont" style="top: 200px;">#한국사</h3>
 				<h3 class="maintagFont" style="top: 250px;">#세계사</h3>
 				<h3 class="maintagFont" style="top: 300px;">#지리</h3>
-				<img class="d-block w-60" src="resources/images/main/history.png"
+				<img class="d-block w-60" src="resources/images/main/history.jpg"
 						alt="First slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
 					
 					
@@ -157,8 +153,8 @@
 	</div>
 	<br>
 	<br>
-	<div class="container">
-		<div class="container row jgroup">
+	<div id="jgroup" style="margin: auto;">
+		<div class="row jgroup">
 			<div
 				class="mainGroup test d-flex justify-content-center align-items-center ani plusGroup"
 				style="background-color: skyblue; margin-right: 15px;">
@@ -353,7 +349,7 @@
 								$('#joingroups').append($div_carsel);
 							}
 							
-							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 8px;">');
+							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 20px;">');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							
