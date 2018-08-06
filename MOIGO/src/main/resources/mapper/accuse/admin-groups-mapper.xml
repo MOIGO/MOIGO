@@ -33,7 +33,7 @@
 		<result property="enrollD" column="ENROLL_D" />	
 		<result property="totalGroup" column="TOTAL" />	
 		<result property="todayGroup" column="TODAY" />	
-		<result property="enrollM" column="ENROLL_M" />	
+		<result property="enrollM" column="ENROLL_M" />	 
 		<result property="grCount" column="GR_COUNT" />	
 	</resultMap>
 	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
