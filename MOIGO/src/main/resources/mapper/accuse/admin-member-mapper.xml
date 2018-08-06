@@ -22,7 +22,8 @@
 		<result property="bigInterest" column="INTEREST_BIG_NAME"/>
 		<result property="countWmember" column="COUNT_WM" />	
 		<result property="enrollD" column="ENROLL_D" />	
-		<result property="totalMember" column="TOTAL" />	
+		<result property="totalMember" column="TOTAL" />
+		<result property="todayMember" column="TODAY" />		
 		<result property="enrollM" column="ENROLL_M" />	
 		<result property="mmCount" column="MM_COUNT" />	
 		
