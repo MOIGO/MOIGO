@@ -410,4 +410,31 @@
 		FROM SCHEDULE
 		WHERE GROUP_NO = #{groupNo}
 	</select>
+	
+	<!-- <select id="selectListGroupPhoto" parameterMap="fileMap" resultMap="filesResultMap">
+		SELECT *
+		FROM FILES
+		WHERE TO_CHAR(FILE_DATE, 'RRRRMM') = #{dates}
+		AND GROUP_NO = #{groupNo}
+		ORDER BY FILE_DATE DESC
+	</select>
+	
+	<insert id="insertGroupPhoto">
+		
+		<selectKey keyProperty="filesNo" resultType="string" order="AFTER" >
+			SELECT 'F'||TO_CHAR(SEQ_FILES.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO FILES VALUES('F'||TO_CHAR(SEQ_FILES.NEXTVAL,'FM000'),#{fileOriginName},#{fileNewName},#{filePath},#{groupNo},#{memberNo},SYSDATE,'Y', null)
+		
+	</insert> -->
+	
+	<delete id="deleteGroupPhoto">
+		DELETE FROM FILES
+		WHERE FILE_NO IN
+		<foreach item="fNo" collection="fileNo" open="(" separator="," close=")">
+			#{fNo}
+		</foreach>
+	</delete>
+	
 </mapper>
