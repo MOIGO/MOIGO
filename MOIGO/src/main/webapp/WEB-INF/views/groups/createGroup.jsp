@@ -87,11 +87,11 @@
 			<div class="make_cover">
 
 				<div class="form-group">
-					<label for="inpGrpName" id="labGroupName" class="labTitle">밴드
-						이름</label>
+					<label for="inpGrpName" id="labGroupName" class="labTitle">모임
+						이름(필수)</label>
 					<div class="input-group input-group-lg">
 						<input type="text" id="inpGrpName" name="groupName"
-							placeholder="밴드 이름 입력" class="form-control " required />
+							placeholder="모임 이름 입력(최대30자)" class="form-control " required />
 					</div>
 					<input type="file" class="profile_upload_inp" name="groupImageFile"
 						id="coverUploadInp" accept="image/*" />
@@ -100,6 +100,12 @@
 			</div>
 		</div>
 		<!--make band name container end-->
+		
+		<div class="container mt-5">
+			<label class="labTitle">모임 소개 메시지(선택)</label>
+			<input type="text" id="inpGrpMsg" name="groupMsg"
+							placeholder="모임 소개 메시지 입력(최대100자)" class="form-control " />
+		</div>
 
 		<div class="container mt-4">
 			<div class="row cover_select">
@@ -183,22 +189,22 @@
 		<div class="container mt-5">
 			<div class="row constraint_select">
 				<div class="col-12">
-					<h3 class="labTitle">밴드 공개 설정(필수)</h3>
+					<h3 class="labTitle">모임 공개 설정(필수)</h3>
 				</div>
 				<div class="col-12 constraints">
 					<div class=" d-flex flex-row  justify-content-around">
-						<div class="form-check form-check-inline ">
+						<!-- <div class="form-check form-check-inline ">
 							<input type="radio" id="openSetting1" name="openSetting"
 								class="form-check-input" style="position: relative; top: 40px;"
 								value="PRIVATE" required> <label
 								class="form-check-label" for="openSetting1"><strong>비공개
 									모임</strong><br>
 							<span>모임의 게시글이 공개되지 않습니다. 초대를 통해서만 가입할 수 있습니다.</span></label>
-						</div>
+						</div> -->
 
 						<div class="form-check form-check-inline ">
 							<input type="radio" id="openSetting2" name="openSetting"
-								class="form-check-input" style="position: relative; top: 40px;"
+								class="form-check-input" style="position: relative; top: 5px;"
 								value="PROTECTED" required> <label
 								class="form-check-label" for="openSetting2"><strong>모임명
 									공개 모임</strong><br> <span>누구나 모임을 검색해 찾을 수 있지만, 게시물은 멤버만 볼 수
@@ -206,7 +212,7 @@
 						</div>
 						<div class="form-check form-check-inline">
 							<input type="radio" id="openSetting3" name="openSetting"
-								class="form-check-input" style="position: relative; top: 40px;"
+								class="form-check-input" style="position: relative; top: 5px;"
 								value="PUBLIC" required> <label class="form-check-label"
 								for="openSetting3"><strong>공개 모임</strong><br>
 							<span>누구나 모임을 검색해 찾을 수 있고, 게시물을 볼 수 있습니다.</span></label>
@@ -221,11 +227,13 @@
 		</div>
 		<!--group open setting div end  -->
 		
+		
+		
 		<c:if test="${group eq null}">
 		
 		<div class="container mt-5">
 
-			<label class="labTitle">밴드 제약 설정(선택)</label>
+			<label class="labTitle">모임 제약 설정(선택)</label>
 			<button class="btn btn-primary btn-sm" type="button"
 				data-toggle="collapse" data-target="#divRestrict">펼치기</button>
 
@@ -267,7 +275,7 @@
 									<div class="row">
 										<div class="col mt-1">
 											<div class="form-group">
-												<label for="conditionRegionLarge" class="bolder_text">시</label>
+												<label for="conditionRegionLarge" class="bolder_text">(주요활동)시</label>
 												<select class=" form-control condition_region"
 													id="conditionRegionLarge">
 													<option value="regionNone">- 시도 -</option>
@@ -360,7 +368,7 @@
 		<!--distric container end  -->
 		<div class="container mt-5">
 
-			<label class="labTitle">그룹 분류(선택)</label>
+			<label class="labTitle">모임 분류(선택)</label>
 			<button class="btn btn-primary btn-sm" data-toggle="collapse"
 				data-target="#interestCategory" type="button">펼치기</button>
 
@@ -443,7 +451,7 @@
 		<div class="container mt-4">
 			<div class="d-flex justify-content-center">
 				<button type="reset"
-					class="btn btn-secondary btn-lg mr-4 button_sizing">취소하기</button>
+					class="btn btn-secondary btn-lg mr-4 button_sizing" id="cancelCreateGroup">취소하기</button>
 				<button type="button" class="btn btn-primary btn-lg button_sizing" id="createGroupBtn">완료</button>
 			</div>
 		</div>
@@ -481,17 +489,19 @@
 		if('${group!=null}'=='true'){
 			 
 			$('#inpGrpName').val('${group.groupName}');
-			
+			$('#inpGrpMsg').val('${group.groupMsg}');
 			
 			console.log("${root}/resources/images/groupCovers/${group.groupNo}/'+'${group.groupPicture}");
-			if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){
+			/* if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){ */
 				$('.mainCover').attr("src",'${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
-			
+			/* 
 			}else{
 				$('.mainCover').attr("src",'${root}/resources/images/groupCovers/${group.groupNo}/${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
-			}
+			} */
+			
+			$("input[name=openSetting][value=" + '${group.openSetting}' + "]").attr('checked', 'checked');
 		
 			
 		 }else{
@@ -504,6 +514,14 @@
 
 		
 	});
+	
+	//취소버튼 클릭했을때
+	$('#cancelCreateGroup').on("click",function(){
+		if('${group==null}'!='true')
+			window.history.back();
+		else
+			location.href="${pageContext.request.contextPath}/";
+	})
 	
 	function largeRegion(){
 		  // 행정구역 list를 가져오기 위한 ajax 부분
@@ -604,7 +622,7 @@
 	    	
 	    	console.log(input);
 	    	console.log(input.files[0]);
-	    	if(input.files[0].size/(1024/1024)>=10){
+	    	if(input.files[0].size/1024/1024>=10){
 	    		alert("파일 크기는 10mb 이하여야 합니다.");
 	    		
 	    		setMainCover($("[class*='cover_set_0'] > img").eq( Math.floor(Math.random()*6)));
@@ -743,6 +761,31 @@
  
  $("#createGroupBtn").click(function() {
     
+	if($('#inpGrpName').val().trim().length<=0)
+		{
+	 		alert("모임 이름을 입력해 주세요");
+	 		return;
+		} 
+	
+	if($('#inpGrpName').val().trim().length>30)
+		{
+			alert("모임 이름 글자수를 초과하였습니다.");
+			$('#inpGrpName').val("");
+			$('#inpGrpName').focus();
+			return;
+		}
+	
+	if($('#inpGrpName').val().trim().length>100)
+	{
+		alert("모임 소개 메시지 글자수를 초과하였습니다.");
+		$('#inpGrpMsg').val("");
+		$('#inpGrpMsg').focus();
+		return;
+	}
+	
+	if($('#inpGrpName').val().trim().length==0)
+		$('#inpGrpName').val("");
+	 
 	 
 	 if($('#min_ageSelect').val()!=-1&&$('#max_ageSelect').val()!=-1){
 		 if($('#min_ageSelect').val()>$('#max_ageSelect').val()){
@@ -766,13 +809,16 @@
        // 지역을 한 String으로 담기 위해서 구분
        if(rLarge != "regionNone")
           regionFull = rLarge;
+       else
+    	   regionFull="지역무관";
+       
        if (rMedium != "전체" && rMedium != "regionNone")
           regionFull += " " + rMedium;
        if(rSmall != "전체" && rSmall != "regionNone")
           regionFull += " " + rSmall;      
+     
        
-      
-     	
+
           $("#regionFull").val(regionFull);
           
           if('${group==null}'=='true')

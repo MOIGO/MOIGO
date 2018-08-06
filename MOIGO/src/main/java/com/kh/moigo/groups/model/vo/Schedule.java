@@ -19,11 +19,26 @@ public class Schedule implements java.io.Serializable{
 	private Timestamp endTime;
 	private String colorLabel;
 	private String allDay;
+	
 	public Schedule(String scheduleNo, String groupNo, String scheduleName, String scheduleContent,
 			String scheduleAddress, String memberNo, Timestamp startTime, Timestamp endTime, String colorLabel,
 			String allDay) {
 		super();
 		this.scheduleNo = scheduleNo;
+		this.groupNo = groupNo;
+		this.scheduleName = scheduleName;
+		this.scheduleContent = scheduleContent;
+		this.scheduleAddress = scheduleAddress;
+		this.memberNo = memberNo;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.colorLabel = colorLabel;
+		this.allDay = allDay;
+	}
+	public Schedule( String groupNo, String scheduleName, String scheduleContent,
+			String scheduleAddress, String memberNo, Timestamp startTime, Timestamp endTime, String colorLabel,
+			String allDay) {
+		super();
 		this.groupNo = groupNo;
 		this.scheduleName = scheduleName;
 		this.scheduleContent = scheduleContent;

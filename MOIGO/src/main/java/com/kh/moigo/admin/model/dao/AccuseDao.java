@@ -39,7 +39,8 @@ public interface AccuseDao {
 	List<Map<String, Object>> countGinterest();
 	List<Map<String, Object>> countState();
 	List<Map<String, Object>> gmReportCount();
-	
+	List<Map<String, Object>> moreActiveGroups();
+
 	//--
 	List<Map<String, Object>> weeklyMemEnroll();
 	List<Map<String, Object>> weeklyGrpMake();

@@ -6,6 +6,7 @@
 
 <html>
 <head>
+<title>그룹 관리</title>
 
 <style type="text/css">
 .carousel-inner div {

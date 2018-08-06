@@ -210,7 +210,7 @@
 	      }
    	   	 $('#memberAddress').val(str.replace(/regionNone/gi," ").trim()); 
 	   
-   	   	 console.log($('#memberAddress').val() );
+   	   	 /* console.log($('#memberAddress').val() ); */
 	});
     
 $(function(){
@@ -529,7 +529,7 @@ $(function(){
     	  
     	  if(yy!="" && mm!="" && dd!="" ){
     		  $('#memberBirth').val(yy+"-"+mm+"-"+dd);
-    		  console.log($('#memberBirth').val());
+    		/*   console.log($('#memberBirth').val()); */
     		  chkBirth=true;
     		  $('#birthChkMsg').html('OK!').addClass('okChk').removeClass('noChk');
     	  }

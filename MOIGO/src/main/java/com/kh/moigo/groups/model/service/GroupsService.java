@@ -11,6 +11,7 @@ import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
+
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.groups.model.vo.PostReply;
@@ -44,6 +45,10 @@ public interface GroupsService {
 	ArrayList<PostWithMem> selectKeywordPost(String groupNo, String keyword, PageInfo p);
 	int updategroupBasics(Groups group);
 	int insertImageFile(Files files);
+	
+	int deleteOneGroupMember(GroupMember groupMember);
+	
+	List<Schedule> selectCloseScheduleList(String groupNo);
 	//--------------------------------------------------------------------------- 혜진
 	
 	Groups selectOneGroup(String groupNo);
@@ -58,6 +63,9 @@ public interface GroupsService {
 	int deleteGroup(String groupNo);
 	
 	List<Schedule> selectListGroupSchedule(String groupNo);
+	
+	
+	
 	
 	
 	

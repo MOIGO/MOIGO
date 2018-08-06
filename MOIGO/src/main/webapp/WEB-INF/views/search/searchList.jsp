@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=4">
 
 </head>
-<c:import url="/WEB-INF/views/common/header.jsp" />
+<c:import url="/WEB-INF/views/common/header.jsp" /> 
 <body>
    <form action="${pageContext.request.contextPath}/search/selectList.do" id="left-form">
       <div id="left-wrap">
@@ -135,12 +135,13 @@
       var place = $('#place').val();
       var regardlessArea = $('.regardlessArea[value="${regardlessArea}"]').val();
       var category = $('#category').find('option[value="${category}"]').val();
-      var sort = $('#sort').val();
-      var groupNo = $('.groupNo').val();
-      
       $('.map-btn').click(function() {
          $('#map').toggle();
          $('#left-wrap').toggleClass('widthHandler');
+      });
+      
+      $('.content-context').click(function() {
+    	  location.href='${pageContext.request.contextPath}/groups/groupMain.gp?groupNo='+$(this).find('.groupNo').val();
       });
       
       $('#sort').find('option[value="${sort}"]').prop('selected', true);
@@ -300,7 +301,9 @@
             // 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
             daum.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
                // 현재 지도 레벨에서 1레벨 확대한 레벨
-               var level = map.getLevel() - 3;
+
+               var level = map.getLevel() - 2;
+
 
                // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
                map.setLevel(level, {
@@ -310,9 +313,6 @@
          }
       });
       
-      $('.content-context').click(function() {
-    	  location.href='${pageContext.request.contextPath}/groups/groupMain.gp?groupNo='+$(this).find('.groupNo').val();
-      });
       var marker = null;
       $('.content-context').mouseenter(function() {
     	  var addr = $(this).find('.location').html();
@@ -325,7 +325,7 @@
       		  if (status === daum.maps.services.Status.OK) {
       			  if(marker == null) {
 	      			  if(map.getLevel() > 9) {
-	      				  var coords = new daum.maps.LatLng(Number(result[0].y), result[0].x);
+	      				  var coords = new daum.maps.LatLng(result[0].y, result[0].x);
 	      				  // 결과값으로 받은 위치를 마커로 표시합니다
 	      				  marker = new daum.maps.Marker({
 	      					  position: coords

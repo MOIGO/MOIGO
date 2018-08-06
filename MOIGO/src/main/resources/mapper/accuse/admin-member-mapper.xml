@@ -22,7 +22,8 @@
 		<result property="bigInterest" column="INTEREST_BIG_NAME"/>
 		<result property="countWmember" column="COUNT_WM" />	
 		<result property="enrollD" column="ENROLL_D" />	
-		<result property="totalMember" column="TOTAL" />	
+		<result property="totalMember" column="TOTAL" />
+		<result property="todayMember" column="TODAY" />		
 		<result property="enrollM" column="ENROLL_M" />	
 		<result property="mmCount" column="MM_COUNT" />	
 		
@@ -78,9 +79,14 @@
 	</select>
 
 	<select id="memEnrollperMonth" resultMap="memberDetailResultMap">
-		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
-		GROUP BY  SUBSTR(enroll_date, 1, 5)
-		order by  SUBSTR(enroll_date, 1, 5)
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM  (SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
+				GROUP BY  SUBSTR(enroll_date, 1, 5)
+				order by  SUBSTR(enroll_date, 1, 5) desc)
+		    paging)
+		WHERE RNUM BETWEEN 1 AND 5
+		order by ENROLL_M
 	</select>
 
 

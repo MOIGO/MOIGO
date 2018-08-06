@@ -65,8 +65,9 @@ public class PageBar {
       //fn_paging함수
       pageBar += "<script>";
       pageBar += "function fn_paging(cPage,numPerPage){";
-	  pageBar += "location.href='"+url+"?cPage='+cPage+'&keyword='+$('#keyword').val()+'&place='+$('#place').val()+'&category='+$('#category').val()+'&sort='+$('#sort').val()";
-	  pageBar += "}";
+      pageBar += "if($('.regardlessArea:checked').val() == \"지역무관\") {";
+	  pageBar += "location.href='"+url+"?cPage='+cPage+'&keyword='+$('#keyword').val()+'&place='+$('#place').val()+'&regardlessArea='+$('.regardlessArea:checked').val()+'&category='+$('#category').val()+'&sort='+$('#sort').val()";
+	  pageBar += "} else { location.href='"+url+"?cPage='+cPage+'&keyword='+$('#keyword').val()+'&place='+$('#place').val()+'&category='+$('#category').val()+'&sort='+$('#sort').val() }}";
       pageBar += "</script>";
       
       return pageBar; 

@@ -392,10 +392,13 @@ function displayInfowindow(infoWindow,marker) {
 
 function makeInfoWindow(marker,place,callbackFunc){
 	
-	var $wrapper= $('<button class="btn btn-info btn-block">');
+	var $wrapper= $('<div class="btn btn-info btn-block">');
     $wrapper.append('<strong>이 위치를 추가</strong><br>');
     $wrapper.append('<span style="text-align:center;">'+place.place_name+'</span>');
     $wrapper.append("<i class='fas fa-map-marker-alt marker_font'></i>");
+    
+    
+   $wrapper.css("min-width","120%");
     
     $wrapper.on('click',function(){
     	callbackFunc(marker,place);

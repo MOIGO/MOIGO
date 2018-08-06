@@ -349,7 +349,7 @@ public class MemberController {
 				mee.setMemberGender(gender.equals("male")?"M":"F");
 				
 				result=-1;
-				msg = "페이스북 회원 추가";
+				msg = "페이스북 로그인";
 				int res =memberService.insertFbMember(mee);
 				Member m = memberService.selectOneMember(mee.getMemberEmail());
 				model.addAttribute("m", m);
