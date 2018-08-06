@@ -12,9 +12,11 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.vo.Post;
+
 import com.kh.moigo.groups.model.vo.PostReply;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
+import com.kh.moigo.groups.model.vo.Files;
 import com.kh.moigo.groups.model.vo.GroupMember;
 import com.kh.moigo.groups.model.vo.Groups;
 
@@ -39,14 +41,14 @@ public class GroupsDaoImpl implements GroupsDao {
 	@Override
 	public int insertPost(Post p) {
 		
-		Map<String,String> map = new HashMap<String, String>();
+		/*Map<String,String> map = new HashMap<String, String>();
 		
 		map.put("groupNo", p.getGroupNo());
 		map.put("memberNo", p.getMemberNo());;
 		map.put("postContent", p.getContent());
-		map.put("isNotice", p.getIsNotice());
+		map.put("isNotice", p.getIsNotice());*/
 		
-		return sqlSession.insert("groups.insertPost",map);
+		return sqlSession.insert("groups.insertPost",p);
 	}
 
 	@Override
@@ -187,6 +189,24 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.update("groups.updateGroupBasics",group);
 	}
 
+	@Override
+	public int insertImageFile(Files files) {
+		return sqlSession.insert("groups.insertImageFile",files);
+	}
+	
+	
+
+	@Override
+	public int deleteOneGroupMember(GroupMember groupMember) {
+		
+		return sqlSession.delete("groups.deleteOneGroupMember",groupMember);
+	}
+	
+	@Override
+	public List<Schedule> selectCloseScheduleList(String groupNo) {
+		
+		return new ArrayList<Schedule>(sqlSession.selectList("groups.selectCloseScheduleList",groupNo));
+	}
 
 
 	//------------------------------------------------------------------------- 혜진
@@ -236,6 +256,9 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
 	}
 
+	
+
+	
 
 
 }

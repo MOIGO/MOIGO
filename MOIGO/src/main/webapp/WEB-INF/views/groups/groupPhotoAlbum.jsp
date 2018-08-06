@@ -6,8 +6,12 @@
 <c:set var="root" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" >
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="${root}/resources/js/groups/jquery.ui.widget.js" ></script>
+<script src="${root}/resources/js/groups/jquery.iframe-transport.js" ></script>
+<script src="${root}/resources/js/groups/jquery.fileupload.js" ></script>
+<link rel="stylesheet" href="${root}/resources/css/groups/datepicker.min.css">
+<script src="${root}/resources/js/groups/datepicker.min.js"></script>
 <style>
 
    body{
@@ -35,8 +39,122 @@
 	}
 	
 	/* 사진첩 부분 */
+	.photo_body {
+		padding : 0em;
+		padding-bottom : 10px;
+	}
+	
 	.gpa_btn_wrap {
 		float : right;
+	}
+	
+	#photoUploadBtn {
+		margin-right: 3px;
+	}
+	
+	#photoDropzone {
+		display : none;
+		margin : 20px;
+		height : 200px;
+		border : 2px dashed #007BFF;
+		text-align: center;
+	}
+	
+	.dropzone_top {
+		margin-top: 50px;	
+	}
+	
+	.dropzone_txt {
+		margin-bottom: 4px;
+		font-size : 0.9em;
+		cursor: default; 
+	}
+	
+	#photoSelfBtn {
+		margin-top: 2px;
+	}
+	
+	#photoHeader {
+		text-align: center;
+		margin : 10px 0px 8px 0px;
+	}
+	
+	.photo_day_btn {
+		font-size : 1.5em;
+		color : darkgray;
+		cursor: pointer;
+	}
+	
+	#photoDayTxt {
+		padding : 0px 5px 0px 5px;
+		font-size: 1.6em;
+		font-family: 'nanum-barun-gothic-bold', sans-serif;
+		cursor: pointer; 
+	}
+	
+	#datepicker {
+		position: absolute;
+		top : 100px;
+		left : 190px;
+		z-index : 10;
+	}
+	
+	.datepicker--cells, .datepicker--nav-title,
+	.datepicker--days-names, .datepicker--buttons {
+		font-family: 'nanum-barun-gothic-bold', sans-serif;
+	}
+	
+	.photo_border {
+		background: #DDD;
+		height : 1px;
+	}
+	
+	#photoNone {
+		display: none;
+		margin : 20px;
+		padding-top : 170px;
+		height : 400px;
+		text-align: center;
+	}
+
+	#photoBody {
+		margin : 20px 20px 0px 20px;
+	}
+	
+	.photo {
+		display : inline-block;
+		float : left;
+		margin-bottom : 10px;
+		width : 140px;
+		height : 140px;
+		border : 1px solid #DDD;
+		background: skyblue;
+		/* background-image : url('${root}/resources/images/common/img_profile.png'); */
+		background-size : 100%;
+		cursor: pointer;
+	}
+	
+	.photo_not_last {
+		margin-right : 10px;
+	}
+	
+	.photo_check {
+		position : relative;
+		display : none;
+		top : 5px;
+		left : 5px;
+		width : 1.2em;
+		height : 1.2em;
+		font-size: 1.2em;
+		cursor: pointer;
+	}
+	
+	.photo_unchecked {
+		color : darkgray;
+	}
+	
+	.photo_unchecked:hover, .photo_checked {
+		color : #0078ff;
 	}
 	
 </style>
@@ -47,17 +165,51 @@
    <div class="row">
      
      <c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
+     <c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+     <c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+			<c:param name="groupNo" value="${groupNo }" />
+			<c:param name="memberNo" value="${gm.memberNo}" />
+			<c:param name="memberGrade" value="${memberGrade}" />
+		</c:import>
      
      <div class="col-7">
         <div class="card">
            <div class="card-header" >           
               <p class="group_tit">사진첩</p>
               <div class="gpa_btn_wrap">
-	              <button type="button" class="btn btn-primary btn-sm">사진올리기</button>
-	              <button type="button" class="btn btn-danger btn-sm">삭제</button>
+	              <button type="button" id="photoUploadBtn" class="btn btn-primary btn-sm">사진올리기</button>
+	              <button type="button" id="photoDeleteBtn" class="btn btn-danger btn-sm">삭제</button>
               </div>
            </div>
-            <div class="card-body" >
+            <div class="card-body photo_body">
+            	<input type="file" id="fileupload" name="files[]" hidden="hidden" accept="image/*" multiple/>
+            	<div id="photoDropzone" class="card">
+            		<div class="dropzone_txt dropzone_top">
+            			이미지 파일을 여기다 올려주세요<br />
+            			(한 번에 최대 50개까지 가능합니다)
+            		</div>
+            		<div class="dropzone_txt">또는</div>
+            		<button type="button" id="photoSelfBtn" class="btn btn-primary btn-sm">이미지 선택</button>
+            	</div>
+            	<div id="photoWrap">
+            		<div id="photoHeader">
+            			<span id="photoDayPrev" class="fa fa-chevron-left photo_day_btn"></span>
+            			<span id="photoDayTxt" class="photo_day_txt"></span>
+            			<span id="photoDayNext" class="fa fa-chevron-right photo_day_btn"></span>
+            			<div id="datepicker"></div>
+            		</div>
+            		<div class="photo_border"></div>
+            		<div id="photoNone" class="card">
+            			모임 사진이 없습니다. <br />
+            			모임 사진을 추가해주세요.
+            		</div>
+            		<div id="photoBody">
+            			<div class="photo photo_not_last"></div>
+            			<div class="photo photo_not_last"></div>
+            			<div class="photo photo_not_last"></div>
+            			<div class="photo"></div>
+            		</div>
+            	</div>
            </div>
         </div>
      </div>
@@ -69,11 +221,208 @@
 
 <script>
 
+	var year = new Date().getYear() + 1900;
+	var month = new Date().getMonth() + 1;
+	
+	function getPhotoAlbumList(year, month) {
+		$("#photoBody").children().remove();
+	}
+	
+	 function addClassMonthpicker(){
+			$("#datepicker").find('div, svg, nav').each(function() {
+				$(this).addClass('monthpicker');
+			});
+	   }
+
    $(function() {
-    
+	   
+    	$("#fileupload").fileupload({
+    		url : "${root}/groups/insertGroupPhoto.gp",
+    		dataType : "json",
+    		dropZone : $("#photpDropzone"),
+    		acceptFileTypes : /(\.|\/)(gif|jpe?g|png)$/i, // 이미지 파일만 올릴 수 있도록 정규식 적용
+    		maxFileSize : 10485760, // 1개의 파일을 업로드할 때 10MB까지 가능
+    		limitMultiFileUploads : 50, // 한번에 50개까지 업로드가 가능
+    		sequentialUploads : true, // 순차적 업로드 조건
+    		limitConcurrentUploads : 1
+    	});
+    	
+    	$("#photoDayTxt").text(year + "년 " + month + "월");
+    	
+    	$("#photoUploadBtn").on("click", function() {
+    		
+			if($("#photoDropzone").css("display") == "none"){
+				$("#photoDropzone").css("display", "block");
+				$("#photoDropzone").after("<div class='photo_border'></div>");	
+				$("#datepicker").css("top", "345px");
+			}
+			else{
+				$("#photoDropzone").css("display", "none");
+				$("#photoDropzone").next().remove();
+				$("#datepicker").css("top", "100px");
+			}			
+		});
+    	
+    	$("#photoSelfBtn").on("click", function() {
+			$("#fileupload").click();
+		});
       
+    	$("#photoDayPrev").on("click", function() {
+    		if(month == 1){
+    			year = year - 1;
+				month = 12;    			
+    		}
+    		else
+    			month = month - 1;
+    		
+    		$("#photoDayTxt").text(year + "년 " + month + "월");
+		});
+    	
+		$("#photoDayNext").on("click", function() {
+			
+			if(month == 12){
+    			year = year + 1;
+				month = 1;    			
+    		}
+    		else
+    			month = month + 1;
+    		
+    		$("#photoDayTxt").text(year + "년 " + month + "월");
+			
+		});
+		
+		$.fn.datepicker.language['ko'] = {
+			    days: ['일', '월', '화', '수', '목', '금', '토'],
+			    daysShort: ['일', '월', '화', '수', '목', '금', '토'],
+			    daysMin: ['일', '월', '화', '수', '목', '금', '토'],
+			    months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			    monthsShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			    today: '오늘',
+			    clear: '닫기',
+			    dateFormat: 'yyyy.mm.dd',
+			    timeFormat: 'hh:ii aa',
+			    firstDay: 0
+		};
+		
+		$("#datepicker").datepicker({
+			language : "ko",
+			view : "months",
+			minView : "months",
+			onSelect: function(date, inst) {
+				addClassMonthpicker();
+				$("#datepicker").hide();
+				
+				var dates = date.split(".");
+				if(date != ""){
+					year = dates[0];
+					month = dates[1];
+					if(month < 10)
+						month = dates[1].substring(1);
+				}
+				$("#photoDayTxt").text(year + "년 " + month + "월");
+			},
+			onChangeMonth : function() {
+				addClassMonthpicker();
+			},
+			onChangeYear : function() {
+				addClassMonthpicker();
+			},
+			onChangeDecade : function() {
+				addClassMonthpicker();
+			},
+			onChangeView : function(view) {
+				addClassMonthpicker();
+			}
+		}).hide();
+		
+		$("#datepicker").addClass("monthpicker");
+		
+		$("#photoDayTxt").click(function(){
+    	    $("#datepicker").find('div').each(function() {
+    			$(this).removeClass('-selected-');
+    		});
+    	    $("#datepicker").toggle();
+		});
+		
+		addClassMonthpicker();
+		
+		$(document).click(function(e) {
+			if(!$(e.target).hasClass('photo_day_txt') && !$(e.target).hasClass('monthpicker'))
+				$("#datepicker").hide();
+		});
+		
+		$(".photo").each(function() {
+			var inp = "<input type='checkbox' class='photo_inp' hidden='hidden'/>"
+			var chk = "<span class='far fa-check-circle photo_check photo_unchecked'></span>";
+			$(this).append(inp + chk);
+
+			$(this).on("mouseover", function() {
+				$(this).find(".photo_check").css("display", "block");
+			});
+			
+			$(this).on("mouseout", function() {
+				$(this).find(".photo_check").css("display", "none");
+			});
+			
+			$(this).on("click", function() {
+				// 누르면 사진 보여주는 기능 추가
+			});
+		});
+		
+		$(".photo_check").each(function() {
+			$(this).on("click", function(event) {
+				event.stopPropagation();
+				$(this).prev().click();
+				if($(this).prev().is(":checked")){
+					$(this).parent().css("outline", "3px solid #0078ff");
+					$(this).parent().css("border", "none");
+					$(this).removeClass('far photo_unchecked').addClass('fas photo_checked');
+					$(".photo_check").css("display", "block");
+					$(".photo").off("mouseover mouseout");
+				}
+				else{
+					$(this).parent().css("outline", "none");
+					$(this).parent().css("border", "1px solid #DDD");
+					$(this).removeClass('fas photo_checked').addClass('far photo_unchecked');
+				}
+				
+				if($(".photo_inp:checked").length == 0){
+					$(".photo_check").css("display", "none");
+					$(".photo").each(function() {
+						$(this).on("mouseover", function() {
+							$(this).find(".photo_check").css("display", "block");
+						});
+						
+						$(this).on("mouseout", function() {
+							$(this).find(".photo_check").css("display", "none");
+						});
+					});
+				}
+				
+			});
+		});
+		
+		$("#photoDeleteBtn").on("click", function() {
+			if($(".photo_inp:checked").length == 0)
+				alert("선택된 사진이 없습니다. 삭제할 사진을 선택해주세요.");
+			else{
+				
+				
+			}
+		});
 		
    });
+   
+   /*밀리세컨드를 data 객체로 가져오기  */
+	function milisecToDate(milisecondData){
+		
+		if(milisecondData==null)
+			return null;
+		
+		var date = new Date(milisecondData);
+		
+		return date;
+	}  
    
 </script>
 </body>

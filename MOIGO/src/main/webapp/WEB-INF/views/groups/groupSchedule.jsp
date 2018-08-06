@@ -82,9 +82,50 @@
 		font-weight: bold;
 	}
 	
+	.fc-title {
+		white-space: initial; 
+	}
+	
 	.fc-event-container:hover, .ko-holidays:hover {
 		cursor : default;
 	}
+	
+	.fc-more {
+		float : right !important;
+		margin-right : 5px !important;
+		font-family: 'nanum-barun-gothic-bold', sans-serif !important;
+	    font-size: 0.8em !important;
+    	font-weight: bold !important;
+    	color: #007bff !important;
+	}
+	
+	.fa-times {
+		color: #DC3545;
+    	font-size: 1em;
+    	margin-top: 3.3px;
+    	margin-right: 4px;
+	}
+	
+	.fc-more-popover{
+   		font-family: 'nanum-barun-gothic-bold', sans-serif;
+   }
+   
+   .fc-title:hover {
+   		cursor: default;
+   } 
+   
+   .moigo_schedule{
+   		font-family: 'nanum-barun-gothic-regular', sans-serif;
+   }
+   
+   a {
+   	text-decoration: none;
+   }
+   
+   .fc-list-item:hover, .fc-day-top {
+   		cursor : pointer;
+   }
+   
 </style>
 <title>일정</title>
 </head>
@@ -121,7 +162,10 @@
 <script>
 
    function customCalendar() {
-      // location of sort date header
+	   
+	   $(".fc-bg").find(".custom-border").remove();
+	   
+      // 요일 header의 스타일을 변경
          $(".fc-day-header").css({
             "padding-top" : "5px",
             "padding-bottom" : "5px",
@@ -142,8 +186,8 @@
          });
          
          // 토요일과 일요일의 색을 변경
-         $(".fc-sat").css("color", "#007bff");
-         $(".fc-sun").css("color", "#dc3545");
+         $(".fc-sat").css("color", "#007BFF");
+         $(".fc-sun").css("color", "#DC3545");
          
          // header에 가운데에 있는 h2태그에 클래스를 추가
          $(".fc-center").find("h2").addClass("full-title");
@@ -190,6 +234,8 @@
         
         
         $(".fc-bg").find(".fc-today").append("<div class='custom-border'/>");
+        $(".fc-month-view").find("thead").css("cursor", "default");
+        $(".fc-month-view").find("tbody").css("cursor", "pointer");
      
    }
    
@@ -203,6 +249,23 @@
    function scheduleModalOpen() {
 	   $("#scheduleConfirmBtn").addClass("call_schedule");
 	   toggleScheduleModal();
+   }
+   
+   function customCalendarListView(){
+	 	$(".fc-list-table").css("margin-bottom", "0px");
+	 	$(".fc-list-heading").css("cursor", "default");
+		$(".fc-list-item").each(function() {
+				if($(this).hasClass("ko-holidays")){
+					$(this).find(".fc-list-item-marker").remove();
+					$(this).find(".fc-list-item-title").attr("colspan", "2");
+					$(this).css("cursor", "default");
+					$(this).find("a").css({
+						"color" : "#DC3545",
+						"text-decoration" : "none",
+						"cursor" : "default"
+					});
+				}
+		});
    }
 
    $(function() {
@@ -240,11 +303,18 @@
          
          // 달력에 event 시간을 보여주는 기능을 사용하지 않음
          displayEventTime: false,
+        
+         // month에서 한 날짜에 보여줄 event label의 제한 지정
+         eventLimit: 4,
+         
+         eventAfterAllRender : function(view) {
+        	 customCalendar();
+        	 customCalendarListView();
+		},
          
          // 공휴일을 가져오기 위해서 구글의 calendar를 연동할 때 필요한 ApiKey
          googleCalendarApiKey : "AIzaSyAam0_4FBr7PhEoIkBna7pmnl7IF_sQfCo",
          
-		// DB에 존재하는 캘린더를 가져와서 event를 뿌려준다.
          events :{
              googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com", 
              className : "ko-holidays",
@@ -257,15 +327,19 @@
 		 },
          eventClick:function(event) {
                 if(event.url)
-                    return false;   
+                    return false;  
+                openScheduleViewModal(event.id);
           },
-		dayClick: function(date, jsEvent, view) {
-			console.log(date);		
-			console.log(view);		
-			console.log(jsEvent);			
+		dayClick: function(date, jsEvent, view) {	
+			console.log(date._d);
+			scheduleModalOpen();
+			$('#startDate').data('datepicker').selectDate(date._d);
+			$('#endDate').data('datepicker').clear();
+			$('#endTime').timepicker("setTime", null);
 		}
       });
       
+	  // DB에 존재하는 캘린더를 가져와서 event를 뿌려준다.
       $("#calendar").fullCalendar("addEventSource", function(start, end, timezone, callback) {
 	       	 $.ajax({
 	    			url : "${root}/groups/selectListGroupSchedule.gp",
@@ -279,6 +353,7 @@
 	    				var events = [];
 	  			        $.each(schedule, function(i, obj) {
 	  			          events.push({
+	  			        	id : obj.scheduleNo,
 	  			        	className : "moigo_schedule",
 	  			            title: obj.scheduleName,
 	  			            start: obj.startTime,
@@ -293,8 +368,8 @@
 	    			}
 	    		});
 		 });
-      
-      customCalendar();
+	  
+      	customCalendar();
 		
 		$(".full-title").after("<div id='datepicker'></div>");
       
@@ -337,23 +412,7 @@
 			if(!$(e.target).hasClass('full-title') && !$(e.target).hasClass('monthpicker'))
 				$("#datepicker").hide();
 		});
-		
-      $('.fc-prev-button').on("click", function(){
-    	  customCalendar();
-      });
-   
-      $('.fc-next-button').on("click", function(){
-    	  customCalendar();
-      });
-      
-      $('.fc-today-button').on("click", function(){
-    	  customCalendar();
-      });
-      
-      $('.fc-month-button').on("click", function(){
-    	  customCalendar();
-      });
-      
+                 
    });
    
 </script>

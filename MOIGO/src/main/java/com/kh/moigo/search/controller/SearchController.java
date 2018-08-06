@@ -22,20 +22,6 @@ public class SearchController {
    @Autowired
    SearchService searchService;
    
-   @Autowired
-   GroupsService groupsService;
-
-   @RequestMapping("search/searchList.do")
-   public String keywordList(Model model,@RequestParam(value="cPage", required=false, defaultValue="1") int cPage, @RequestParam String keyword) {
-      if(keyword == null) keyword = "";
-      int limit = 12;
-      
-      int listCount = searchService.listCount(keyword);
-      List<Groups> list = searchService.selectList(keyword, cPage, limit);
-      
-      model.addAttribute("limit", limit).addAttribute("listCount", listCount).addAttribute("keyword", keyword).addAttribute("list", list);
-      return "search/searchList";
-   }
    @RequestMapping("search/selectList.do")
    public String selectList(Model model, @RequestParam(value="cPage", required=false, defaultValue="1") int cPage, @RequestParam String keyword, @RequestParam String place, @RequestParam(value="regardlessArea", required=false, defaultValue="") String regardlessArea, @RequestParam String category, @RequestParam String sort) {
       if(keyword == null) keyword = "";
