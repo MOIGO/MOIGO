@@ -36,7 +36,11 @@
 <script>
 
 	$('#moreSchedule').on('click',function(){
-		$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
+		
+		if('${memberGrade>1}'==true)
+			$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
+		else
+			alert("회원 전용 메뉴입니다.");
 	});
 
 	function makeCloseSchedule(obj){
@@ -51,7 +55,11 @@
 	var date = milisecToDate(obj.startTime);
 	
 	$item.on("click",function(){
-		openScheduleViewModal(obj.scheduleNo);
+		
+		if('${memberGrade>1}'==true)
+			openScheduleViewModal(obj.scheduleNo);
+		else
+			alert("회원 전용 메뉴입니다.");
 	});
 	
 	$span.text((date.getMonth()+1)+"월"+" " +date.getDate()+"일 "+ date.getHours()+":"+date.getMinutes());
