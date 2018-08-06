@@ -67,12 +67,12 @@
 			</div>
 			
 			<c:choose>
-				<c:when test="${param.memberGrade eq -1 }">
+				<c:when test="${memberGrade eq -1 }">
 					<div class="row joinBtnWrapper">
 						<button class="btn btn-block" type="button" data-toggle="modal" data-target="#joinModal">가입하기</button>
 					</div>
 				</c:when>
-				<c:when test="${param.memberGrade eq 0 }"> 
+				<c:when test="${memberGrade eq 0 }"> 
 					<div class="row joinBtnWrapper">
 						<button class="btn btn-block" type="button" disabled>승인 대기중</button>
 					</div>
@@ -83,7 +83,7 @@
 				<p class="card-text groupDesc"></p>
 			</div>
 			<c:choose>
-				<c:when test="${param.memberGrade>0}">
+				<c:when test="${memberGrade>0}">
 					<div class="row mt-3 joined">
 						<div class="col-5 numLeaderFontSize">
 							<span>멤버:</span> <span class="group_memNum"></span>
@@ -93,7 +93,7 @@
 						</div>
 					</div>
 				</c:when>
-				<c:when test="${param.memberGrade<0 }">
+				<c:when test="${memberGrade<0 }">
 				<div class="row mt-3 notJoined">
 						<div class="col-5 numLeaderFontSize">
 							<span>멤버:</span> <span class="group_memNum">6명</span>
@@ -104,7 +104,7 @@
 				</div>
 					
 				</c:when>
-				<c:when test="${param.memberGrade eq 0 }">
+				<c:when test="${memberGrade eq 0 }">
 					<div class="row mt-3 notJoined">
 							<div class="col-5 numLeaderFontSize" >
 								<span>멤버:</span> <span class="group_memNum">6명</span>
@@ -139,7 +139,7 @@
 	<c:if test="${memberGrade!=3}">
 		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-exclamation mr-2"></i><span id="groupReport" >그룹 신고</span></button>
 	</c:if>
-	<c:if test="${gm!=null}">
+	<c:if test="${memberGrade>=1}">
 		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-user-minus"></i><span id="groupWithdrawal" >그룹 탈퇴</span></button>
 	</c:if>
 
@@ -157,7 +157,7 @@
  
  
  <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
- 	<input type="hidden" name="groupNo" id="groupNo" value="${param.groupNo}"/>
+ 	<input type="hidden" name="groupNo" id="groupNo" value="${groupNo}"/>
  </form>
  
  	<!--join modal  -->
@@ -252,33 +252,49 @@ $(function() {
 
 	setGroupDesc('${param.groupNo}','${param.isMember}');
 	
-	/* 각 메뉴로 이동하는 메소드 */
-	$(".group_list").on("click", function() {
-		var groupMenu = $(this).text();
-		
-		if(groupMenu == '전체글'){
-			
-			currentPage=1;
-		/* 	deleteAllPost();
-			setPostList(); */
-			
-			location.href = '${pageContext.request.contextPath}/groups/groupMain.gp?groupNo=${param.groupNo}';
-			
-		}
-		else if(groupMenu == '사진첩')
-			$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
-		else if(groupMenu == '일정')
-			$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
-		else
-			$("#groupNoForm").attr("action", "${root}/groups/groupMember.gp").submit();
-		
-	});
 	
-	$("#groupSetting").on("click", function() {
-		$("#groupNoForm").attr("action", "${root}/groups/groupSetting.gp").submit();
-	});
 	
-
+		/* 각 메뉴로 이동하는 메소드 */
+		$(".group_list").on("click", function() {
+			var groupMenu = $(this).text();
+			
+			if(groupMenu == '전체글'){
+				
+				currentPage=1;
+			/* 	deleteAllPost();
+				setPostList(); */
+				
+				location.href = '${pageContext.request.contextPath}/groups/groupMain.gp?groupNo=${param.groupNo}';
+				
+			}
+			else if(groupMenu == '사진첩'){
+				
+				if('${memberGrade>1}'==true)
+					$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
+				else
+					alert("회원 전용 메뉴입니다.");
+				
+			}
+			else if(groupMenu == '일정'){
+				if('${memberGrade>1}'==true)
+					$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
+				else
+					alert("회원 전용 메뉴입니다.");
+			}
+			else{
+				if('${memberGrade>1}'==true)
+					$("#groupNoForm").attr("action", "${root}/groups/groupMember.gp").submit();
+				else
+					alert("회원 전용 메뉴입니다.");
+				
+			}
+			
+		});
+		
+		$("#groupSetting").on("click", function() {
+			$("#groupNoForm").attr("action", "${root}/groups/groupSetting.gp").submit();
+		});
+	
 });
 	
 //회원 탈퇴
