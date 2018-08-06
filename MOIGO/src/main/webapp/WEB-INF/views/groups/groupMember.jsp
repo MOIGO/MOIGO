@@ -112,9 +112,10 @@ input:-webkit-autofill:active {
 
 #profileBtn {
 	float: right;
-	margin-top: 10px;
-	color: darkgray;
-	font-size: 1.7em;
+    margin-top: 15px;
+    margin-right: 2px;
+    color: darkgray;
+    font-size: 1.3em;
 }
 
 #profileBtn:hover {
@@ -254,6 +255,13 @@ input:-webkit-autofill:active {
 
 		<!-- 모임의 좌측 메뉴 -->
 		<c:import url="/WEB-INF/views/groups/leftAside.jsp" />
+		<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+		<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+			<c:param name="groupNo" value="${groupNo }" />
+			<c:param name="memberNo" value="${gm.memberNo}" />
+			<c:param name="memberGrade" value="${memberGrade}" />
+		</c:import>
+		
 
 		<!-- 모임의 가운데(주요 기능부분) -->
 		<div class="col-lg-7">
@@ -315,7 +323,7 @@ input:-webkit-autofill:active {
 										</c:if>
 										<c:if test="${groupMember.memberNo == m.memberNo}">
 											<c:set var="loginGroupMember" value="${groupMember}"/>
-											<ion-icon id="profileBtn" name="create" data-toggle="modal"></ion-icon>
+											<span id="profileBtn" class="fas fa-pen" data-toggle="modal"></span>
 										</c:if>
 									</div>
 								</li>

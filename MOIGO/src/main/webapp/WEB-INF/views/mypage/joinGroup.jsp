@@ -39,7 +39,7 @@
                 <c:if test="${empty list}">
                 	<div class="jumbotron col-12" style="text-align:center; ">
          				<h3>모임정보가 없습니다.</h3> 
-         				<button class="btn btn-success" onclick="location.href='${pageContext.request.contextPath}/search/searchList.do?keyword='">모임 찾기</button>
+         				<button class="btn btn-success" onclick="location.href='${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=&sort=newSort'">모임 찾기</button>
          			</div>
                 </c:if>
                 <c:if test="${! empty list}">

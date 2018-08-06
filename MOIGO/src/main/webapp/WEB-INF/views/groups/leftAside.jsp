@@ -36,8 +36,20 @@
 		cursor : pointer;
 	}
 	
+	.deleteListGroup{
+		background:#EDEFF2;
+		text-align:left;
+		
+	}
 	
+	@media (max-width: 992px) {
 	
+		.numLeaderFontSize{
+			
+		}
+	}
+
+
 </style>
 </head>
 
@@ -45,7 +57,7 @@
 
 <c:import url="/WEB-INF/views/admin/common/reportModal.jsp" />
 
-<div class="col-3">
+<div class="col-3 d-none d-lg-block">
  	<div class="card">
 		<img class="card-img-top" src="http://via.placeholder.com/300x300"
 			alt="Card image cap">
@@ -73,32 +85,32 @@
 			<c:choose>
 				<c:when test="${param.memberGrade>0}">
 					<div class="row mt-3 joined">
-						<div class="col-6 test">
-							멤버: <span class="group_memNum"></span>
+						<div class="col-5 numLeaderFontSize">
+							<span>멤버:</span> <span class="group_memNum"></span>
 						</div>
-						<div class="col-6  test">
-							<i class="fas fa-plus-circle"></i> 그룹 초대
+						<div class="col-7 numLeaderFontSize">
+							<span>리더:</span> <span class="group_leader ">홍길동</span>
 						</div>
 					</div>
 				</c:when>
 				<c:when test="${param.memberGrade<0 }">
 				<div class="row mt-3 notJoined">
-						<div class="col-6 test">
-							멤버: <span class="group_memNum">6명</span>
+						<div class="col-5 numLeaderFontSize">
+							<span>멤버:</span> <span class="group_memNum">6명</span>
 						</div>
-						<div class="col-6 test">
-							리더 : <span class="group_leader ">홍길동</span>
+						<div class="col-7  numLeaderFontSize">
+							<span>리더:</span>  <span class="group_leader ">홍길동</span>
 						</div>
 				</div>
 					
 				</c:when>
 				<c:when test="${param.memberGrade eq 0 }">
 					<div class="row mt-3 notJoined">
-							<div class="col-6 test">
-								멤버: <span class="group_memNum">6명</span>
+							<div class="col-5 numLeaderFontSize" >
+								<span>멤버:</span> <span class="group_memNum">6명</span>
 							</div>
-							<div class="col-6 test">
-								리더 : <span class="group_leader ">홍길동</span>
+							<div class="col-7 numLeaderFontSize">
+								<span>리더:</span>  <span class="group_leader ">홍길동</span>
 							</div>
 					</div>
 				</c:when>
@@ -117,15 +129,31 @@
 		</ul>
 	</div>
 	<hr />
-	<div class="d-flex justify-content-start">
+	<div class="d-flex flex-column ">
 		
+	
 	<c:if test="${memberGrade>=3}">
-		<i class="fas fa-cog"></i><span id="groupSetting" class="mr-3">그룹 설정</span>
+		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-cog"></i><span id="groupSetting" class="mr-3">그룹 설정</span></button>
 	</c:if>
-		<!-- <i class="fas fa-exclamation"></i><span id="groupReport" >그룹 신고</span> -->
+	
+	<c:if test="${memberGrade!=3}">
+		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-exclamation mr-2"></i><span id="groupReport" >그룹 신고</span></button>
+	</c:if>
+	<c:if test="${gm!=null}">
+		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-user-minus"></i><span id="groupWithdrawal" >그룹 탈퇴</span></button>
+	</c:if>
+
+
 	</div>
 	
  </div>
+ 
+ <form id="groupWithdrawalForm" action="${pageContext.request.contextPath}/groups/groupWithdrawal.gp" method="post">
+ 	<input type="hidden" name="memberNo" value="${gm.memberNo}"/>
+ 	<input type="hidden" name="groupNo" value="${groupNo}"/>
+ 	<input type="hidden" name="deleteGroup"/>
+ </form>
+ 
  
  
  <form id="groupNoForm" action="${root}/groups/joinGroup.gp">
@@ -164,6 +192,8 @@
 
 <script>
 
+var reportUrl;
+var memberNum;
 
 
 function setGroupDesc(groupNo,isMember){
@@ -174,13 +204,13 @@ function setGroupDesc(groupNo,isMember){
 		success:function(data){
 			var  group = data.group;
       
-			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
+			/* if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){ */
 				$('.card-img-top').attr("src",group.groupPicture);
 				$('#joinModal img').attr("src",group.groupPicture);
-			}else{
+			/* }else{
 				$('.card-img-top').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
-			}
+			} */
 			
 		
 			
@@ -190,6 +220,7 @@ function setGroupDesc(groupNo,isMember){
 			$('.groupDesc').text(group.groupMsg);
 			$('.group_leader').text(data.grpLeader.memberName);
 			$('.group_memNum').text(data.grpMemNum+" 명");
+			memberNum=data.grpMemNum;
 		},error:function(data){
 			
 		}
@@ -207,9 +238,15 @@ function joinGroup(){
 	
 }
 
-/* $('#groupReport').on("click",function(){
+$('#groupReport').on("click",function(){
+	
+	reportUrl="${pageContext.request.contextPath}/reporting2.ad";
+	
+	$('#accuseReporter').val("${m.memberNo}");
+	$('#accuseTarget').val("${groupNo}");
+	
 	$('#reportingModal').modal("toggle");
-}); */
+}); 
 
 $(function() {
 
@@ -220,9 +257,13 @@ $(function() {
 		var groupMenu = $(this).text();
 		
 		if(groupMenu == '전체글'){
+			
 			currentPage=1;
-			deleteAllPost();
-			setPostList();
+		/* 	deleteAllPost();
+			setPostList(); */
+			
+			location.href = '${pageContext.request.contextPath}/groups/groupMain.gp?groupNo=${param.groupNo}';
+			
 		}
 		else if(groupMenu == '사진첩')
 			$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
@@ -240,6 +281,43 @@ $(function() {
 
 });
 	
+//회원 탈퇴
+$('#groupWithdrawal').on("click",function(){
+	
+	
+	if('${gm.memberGradeCode>=3}'=='true'&&memberNum>1){
+		alert("모임장은 탈퇴 할 수 없습니다.");
+		return;
+	}
+	  
+	
+	
+	if('${gm.memberGradeCode>=1}'=='true'){
+		
+		if(memberNum<=1){
+			if(confirm("모임의 마지막 멤버인 경우 모임도 같이 삭제 됩니다. 탈퇴하시겠습니까?")){
+				
+				$('#groupWithdrawalForm input[name=deleteGroup]').val('Y');
+				$('#groupWithdrawalForm').submit();
+				return;
+			}
+					
+		}
+		
+		
+		if(confirm("탈퇴하시겠습니까?")){
+			$('#groupWithdrawalForm input[name=deleteGroup]').val('N');
+			$('#groupWithdrawalForm').submit();
+			return;
+		}
+	}
+	
+	
+	
+	
+});
+	
+	
 	
 //신고 모달 관련 스크립트
 
@@ -250,15 +328,18 @@ $('#reportSubmit').on('click',function(){
 	console.log(data+data2+data3);
     $.ajax({
         type: 'post', 
-        url: "${pageContext.request.contextPath}/reporting.ad", 
+        url: reportUrl, 
         data : {data : data, data2: data2, data3:data3},
         success : function(data){
 			alert("성공적으로 신고되었습니다."); 
+			$('#reportingModal').modal("hide");
         },error:function(request,status,error){
                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 });	
+
+
 
 function Activity(name, list){
     this.name = name;

@@ -175,14 +175,12 @@ body {
 
 		<!-- 검색 -->
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 search">
-		<form action="${pageContext.request.contextPath}/search/searchList.do">
 			<div class="input-group" id="search-input">
-				<input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="모임검색" size="50px">
+				<input type="text" class="form-control keyword" autocomplete="off" name="keyword" placeholder="모임검색" size="50px" onkeypress="if( event.keyCode==13 ){search();}">
 				<span class="input-group-btn">
-					<button class="btn btn-info" type="button" onclick="submit()">검색</button>
+					<button class="btn btn-info" type="button" onclick="search()">검색</button>
 				</span>
 			</div>
-		</form>
 		</div>
 		<!-- 로그인 -->
 		<div class="col-md-2 col-lg-2"></div>
@@ -226,7 +224,7 @@ body {
 		<div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNavDropdown">
 		  <ul class="navbar-nav">
 			<li class="nav-item active">
-			  <a class="nav-link navic" href='${pageContext.request.contextPath}/search/searchList.do?keyword='>
+			  <a class="nav-link navic" href='${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&regardlessArea=지역무관&category=&sort=newSort'>
 			  전체보기<span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item active">
@@ -320,6 +318,10 @@ body {
 			});
 				location.href="${pageContext.request.contextPath}/member/memberLogout.do";	
 					
+		}
+		
+		function search() {
+			location.href='${pageContext.request.contextPath}/search/selectList.do?keyword='+$('.keyword').val()+'&place=&category=&sort=newSort';
 		}
 	</script>
 </body>

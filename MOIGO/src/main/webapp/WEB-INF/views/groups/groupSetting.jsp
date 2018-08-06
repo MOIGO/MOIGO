@@ -388,9 +388,16 @@ input:-webkit-autofill:active {
 <!-- Group Content -->
 <div class="container">
    <div class="row">
-      
+       
       <!-- 모임의 좌측 메뉴 -->
       <c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
+      
+      <c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+      <c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+			<c:param name="groupNo" value="${groupNo }" />
+			<c:param name="memberNo" value="${gm.memberNo}" />
+			<c:param name="memberGrade" value="${memberGrade}" />
+	</c:import>
       
       <!-- 모임의 가운데(주요 기능부분) -->
       <div class="col-7">

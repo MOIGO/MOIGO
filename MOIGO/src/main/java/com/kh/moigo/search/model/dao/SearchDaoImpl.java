@@ -15,17 +15,6 @@ public class SearchDaoImpl implements SearchDao {
 
 	@Autowired
 	SqlSessionTemplate session;
-	
-	@Override
-	public int listCount(String keyword) {
-		return session.selectOne("search.listCount", keyword);
-	}
-
-	@Override
-	public List<Groups> selectList(String keyword, int cPage, int limit) {
-		RowBounds row = new RowBounds((cPage-1) * limit, limit);
-		return session.selectList("search.selectList", keyword, row);
-	}
 
 	@Override
 	public int detailListCount(Map<String, String> map) {

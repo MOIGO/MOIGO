@@ -14,8 +14,9 @@ public class Files implements java.io.Serializable{
 	private String memberNo;
 	private Date fileDate;
 	private String isImage;
+	private String postNo;
 	public Files(String fileNo, String fileOriginName, String fileNewName, String filePath, String groupNo,
-			String memberNo, Date fileDate, String isImage) {
+			String memberNo, Date fileDate, String isImage, String postNo) {
 		super();
 		this.fileNo = fileNo;
 		this.fileOriginName = fileOriginName;
@@ -25,7 +26,23 @@ public class Files implements java.io.Serializable{
 		this.memberNo = memberNo;
 		this.fileDate = fileDate;
 		this.isImage = isImage;
+		this.postNo = postNo;
 	}
+	
+	public Files(String fileOriginName, String fileNewName, String filePath, String groupNo,
+			String memberNo, String isImage) {
+		super();
+		
+		this.fileOriginName = fileOriginName;
+		this.fileNewName = fileNewName;
+		this.filePath = filePath;
+		this.groupNo = groupNo;
+		this.memberNo = memberNo;
+		this.isImage = isImage;
+		
+	}
+	
+	
 	public Files() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -78,6 +95,12 @@ public class Files implements java.io.Serializable{
 	public void setIsImage(String isImage) {
 		this.isImage = isImage;
 	}
+	public String getPostNo() {
+		return postNo;
+	}
+	public void setPostNo(String postNo) {
+		this.postNo = postNo;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -90,6 +113,7 @@ public class Files implements java.io.Serializable{
 		result = prime * result + ((groupNo == null) ? 0 : groupNo.hashCode());
 		result = prime * result + ((isImage == null) ? 0 : isImage.hashCode());
 		result = prime * result + ((memberNo == null) ? 0 : memberNo.hashCode());
+		result = prime * result + ((postNo == null) ? 0 : postNo.hashCode());
 		return result;
 	}
 	@Override
@@ -141,14 +165,19 @@ public class Files implements java.io.Serializable{
 				return false;
 		} else if (!memberNo.equals(other.memberNo))
 			return false;
+		if (postNo == null) {
+			if (other.postNo != null)
+				return false;
+		} else if (!postNo.equals(other.postNo))
+			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
 		return "Files [fileNo=" + fileNo + ", fileOriginName=" + fileOriginName + ", fileNewName=" + fileNewName
 				+ ", filePath=" + filePath + ", groupNo=" + groupNo + ", memberNo=" + memberNo + ", fileDate="
-				+ fileDate + ", isImage=" + isImage + "]";
+				+ fileDate + ", isImage=" + isImage + ", postNo=" + postNo + "]";
 	}
 
-
+	
 }

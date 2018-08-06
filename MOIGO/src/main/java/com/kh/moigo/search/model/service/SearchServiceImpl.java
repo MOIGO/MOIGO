@@ -14,16 +14,6 @@ public class SearchServiceImpl implements SearchService {
 
 	@Autowired
 	SearchDao searchDao;
-	
-	@Override
-	public int listCount(String keyword) {
-		return searchDao.listCount(keyword);
-	}
-
-	@Override
-	public List<Groups> selectList(String keyword, int cPage, int limit) {
-		return searchDao.selectList(keyword, cPage, limit);
-	}
 
 	@Override
 	public int detailListCount(Map<String, String> map) {

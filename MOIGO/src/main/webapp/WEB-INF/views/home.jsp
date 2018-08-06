@@ -19,6 +19,10 @@
 	height: 200px;
 }
 
+#joingroups{
+	width: 832px;
+	height: 200px;
+}
 .mainGroup {
 	display: inline-block;
 	width: 200px;
@@ -43,6 +47,12 @@
 	font-size: 18px;
 }
 
+.title{
+	white-space: nowrap;
+    /* word-break: break-word; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 @media all and (max-width: 1200px) { /* #carouselExampleIndicators1 {
 		position: absolute;
 		width: 1200px;
@@ -116,7 +126,11 @@
 
 	<!-- 내가 가입한 모임 -->
 	<div class="d-flex justify-content-center">
-		<b>내가 가입한 모입</b>
+		<c:choose>
+		<c:when test="${m eq null}"><b>가장 활발한 모입 추천</b>
+		</c:when>
+		<c:otherwise><b>내가 가입한 모입</b></c:otherwise>
+		</c:choose>
 	</div>
 	<br>
 	<br>
@@ -138,11 +152,7 @@
 				<c:otherwise>
 					<div id="carouselExampleIndicators1" class="carousel slide"
 					data-ride="carousel">
-						<ol class="carousel-indicators">
-							<li data-target="#carouselExampleIndicators" data-slide-to="0"
-								class="active"></li>
-							<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-							<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+						<ol class="carousel-indicators" id="carouselNum">
 						</ol>
 						
 							<div class="carousel-inner" id="joingroups"></div>
@@ -300,11 +310,28 @@
 					success : function(data){
 						var list = data.list;
 						
+						console.log(list.length);
+						
+						var cnt =0;
+						for(var i=0; i<list.length; i++){
+							if(i == 0){
+								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'" class="active">');
+								$('#carouselNum').append($li);
+								cnt++;
+							}else if(4%i == 1){
+								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'">');
+								$('#carouselNum').append($li);
+								cnt++;
+							}
+						}
+						
+						
 						for(l in list){
+							
 							if(l == 0){
 								var $div_carsel = $('<div class="carousel-item active">');
 								$('#joingroups').append($div_carsel);
-							} else if(l%4 == 1){
+							} else if(4%l == 1){
 								var $div_carsel = $('<div class="carousel-item">');	
 								$('#joingroups').append($div_carsel);
 							}
