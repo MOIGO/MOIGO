@@ -167,7 +167,7 @@ body {
 		<div class="row">
 		<!-- 로고 -->
 		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
-		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-top: 10px;">
 			<a href="${pageContext.request.contextPath}" class="navbar-logo"><img id="logo"
 				src="${pageContext.request.contextPath}/resources/images/main/moigo.png"
 				width="150" height="50" /> </a>
