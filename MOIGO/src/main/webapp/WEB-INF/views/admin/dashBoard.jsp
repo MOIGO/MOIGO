@@ -114,7 +114,9 @@
           data.addRows([
             ['${MemEnrollperMonth[0].enrollM}', ${MemEnrollperMonth[0].mmCount}],   
             ['${MemEnrollperMonth[1].enrollM}', ${MemEnrollperMonth[1].mmCount}],  
-            ['${MemEnrollperMonth[2].enrollM}', ${MemEnrollperMonth[2].mmCount}]
+            ['${MemEnrollperMonth[2].enrollM}', ${MemEnrollperMonth[2].mmCount}],
+            ['${MemEnrollperMonth[3].enrollM}', ${MemEnrollperMonth[3].mmCount}],
+            ['${MemEnrollperMonth[4].enrollM}', ${MemEnrollperMonth[4].mmCount}]
           ]);
 
           var options = {
@@ -153,7 +155,9 @@
             ['${GrpEnrollperMonth[0].enrollM}', ${GrpEnrollperMonth[0].grCount}],   
             ['${GrpEnrollperMonth[1].enrollM}', ${GrpEnrollperMonth[1].grCount}],  
             ['${GrpEnrollperMonth[2].enrollM}', ${GrpEnrollperMonth[2].grCount}],
-            ['${GrpEnrollperMonth[3].enrollM}', ${GrpEnrollperMonth[3].grCount}]
+            ['${GrpEnrollperMonth[3].enrollM}', ${GrpEnrollperMonth[3].grCount}],
+            ['${GrpEnrollperMonth[4].enrollM}', ${GrpEnrollperMonth[4].grCount}]
+
           ]);
 
           var options = {

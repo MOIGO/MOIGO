@@ -189,7 +189,8 @@ public class AdminController {
 		List<Map<String,Object>> groupStateCount = as.countState();
 		
 		List<Map<String,Object>> gmReportCount = as.gmReportCount();
-		
+		List<Map<String,Object>> moreActiveGroups = as.moreActiveGroups();
+
 		System.out.println("genderCount"+genderCount);
 		model.addAttribute("addressCount",addressCount);
 		model.addAttribute("genderCount",genderCount);
@@ -198,6 +199,7 @@ public class AdminController {
 		model.addAttribute("gGradeCount",gGradeCount);
 		model.addAttribute("ginterestCount",ginterestCount);
 		model.addAttribute("gmReportCount",gmReportCount);
+		model.addAttribute("moreActiveGroups",moreActiveGroups);
 		model.addAttribute("pageName","Analytics");
 		return "admin/analystics";
 	

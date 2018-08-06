@@ -78,9 +78,14 @@
 	</select>
 
 	<select id="memEnrollperMonth" resultMap="memberDetailResultMap">
-		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
-		GROUP BY  SUBSTR(enroll_date, 1, 5)
-		order by  SUBSTR(enroll_date, 1, 5)
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM  (SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
+				GROUP BY  SUBSTR(enroll_date, 1, 5)
+				order by  SUBSTR(enroll_date, 1, 5) desc)
+		    paging)
+		WHERE RNUM BETWEEN 1 AND 5
+		order by ENROLL_M
 	</select>
 
 
