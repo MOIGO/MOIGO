@@ -135,7 +135,6 @@
       var place = $('#place').val();
       var regardlessArea = $('.regardlessArea[value="${regardlessArea}"]').val();
       var category = $('#category').find('option[value="${category}"]').val();
-      
       $('.map-btn').click(function() {
          $('#map').toggle();
          $('#left-wrap').toggleClass('widthHandler');
