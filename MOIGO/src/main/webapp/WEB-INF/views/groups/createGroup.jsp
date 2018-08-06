@@ -817,7 +817,7 @@
        if(rSmall != "전체" && rSmall != "regionNone")
           regionFull += " " + rSmall;      
      
-       	alert(regionFull);
+       
 
           $("#regionFull").val(regionFull);
           

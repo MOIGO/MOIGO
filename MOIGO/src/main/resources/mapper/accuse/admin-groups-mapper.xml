@@ -33,11 +33,12 @@
 		<result property="enrollD" column="ENROLL_D" />	
 		<result property="totalGroup" column="TOTAL" />	
 		<result property="todayGroup" column="TODAY" />	
-		<result property="enrollM" column="ENROLL_M" />	
+		<result property="enrollM" column="ENROLL_M" />	 
 		<result property="grCount" column="GR_COUNT" />	
 	</resultMap>
 	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
 		FROM ACCUSE ORDER BY ACCUSE_NO DESC </select> -->
+
 
 
 	<select id="grpDetail" resultMap="groupDetailResultMap">
@@ -100,9 +101,28 @@
 	</select>
 
 	<select id="GrpEnrollperMonth" resultMap="groupDetailResultMap">
-		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) GR_COUNT FROM GROUPS
-		GROUP BY  SUBSTR(enroll_date, 1, 5)
-		order by  SUBSTR(enroll_date, 1, 5)
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM  (SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) GR_COUNT FROM GROUPS
+				GROUP BY  SUBSTR(enroll_date, 1, 5)
+				order by  SUBSTR(enroll_date, 1, 5) desc)
+		    paging)
+		WHERE RNUM BETWEEN 1 AND 5
+		order by ENROLL_M
+	</select>
+	
+	
+	<select id="moreActiveGroups" resultMap="groupDetailResultMap">
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM(   select GROUP_NO, GROUP_NAME,
+		(SELECT COUNT(*) FROM POST 
+		WHERE GROUP_NO = G.GROUP_NO
+		AND  SUBSTR(SUBMIT_DATE,1,5) = SUBSTR(SYSDATE,1,5)
+		) G_POST_COUNT
+		from groups g
+		order by G_POST_COUNT DESC) paging)
+		WHERE RNUM BETWEEN 1 AND 5
 	</select>
 	
 	
@@ -111,6 +131,8 @@
 	    SET GROUP_STATE_CODE ='S2' 
 	    WHERE GROUP_NO = #{id}
 	</update>
+	
+	
 	
 	
 </mapper>

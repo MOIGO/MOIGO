@@ -45,7 +45,7 @@
 		      		AND INTEREST_BIG_CODE LIKE '%'||#{category}||'%'
 		        </if>
 			    <choose>
-			    	<when test='regardlessArea != ""'>
+			    	<when test='regardlessArea != 
 			    		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%') AND GROUP_NAME LIKE '%'||#{keyword}||'%' AND GROUP_ADDRESS LIKE '%'||#{place}||'%' AND OPEN_SETTING NOT LIKE '%PRIVATE%' 
 			    	</when>
 			    	<otherwise>

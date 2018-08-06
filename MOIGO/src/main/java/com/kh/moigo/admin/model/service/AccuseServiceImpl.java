@@ -206,6 +206,12 @@ public class AccuseServiceImpl implements AccuseService {
 		// TODO Auto-generated method stub
 		return ad.gmReportCount();
 	}
+
+	@Override
+	public List<Map<String, Object>> moreActiveGroups() {
+		// TODO Auto-generated method stub
+		return ad.moreActiveGroups();
+	}
 	
 
 
