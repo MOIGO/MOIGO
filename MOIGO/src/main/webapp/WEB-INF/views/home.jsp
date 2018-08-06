@@ -302,7 +302,7 @@
 	$('.theme').on('click',function(){
 		var sel = $(this).find('input').val();
 		if(sel=="go"){
-			location.href="${pageContext.request.contextPath}/search/searchList.do?keyword=";	
+			location.href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=&sort=newSort";	
 		} else {
 			location.href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category="+sel+"&sort=newSort";	
 		}
