@@ -178,18 +178,7 @@
 						<ol class="carousel-indicators" id="carouselNum">
 						</ol>
 						
-							<div class="carousel-inner" id="joingroups"></div>
-							
-						<a class="carousel-control-prev" href="#carouselExampleIndicators1"
-						role="button" data-slide="prev"> <span
-						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-						class="sr-only">Previous</span>
-						</a>
-						 <a class="carousel-control-next" href="#carouselExampleIndicators1"
-						role="button" data-slide="next"> <span
-						class="carousel-control-next-icon" aria-hidden="true"></span> <span
-						class="sr-only">Next</span>
-						</a>
+						<div class="carousel-inner" id="joingroups"></div>
 					</div>
 				</c:otherwise>
 				</c:choose>
@@ -337,8 +326,8 @@
 					type : "get",
 					success : function(data){
 						var list = data.list;
-						
-						console.log(list.length);
+						var leng = list.length;
+						console.log(leng);
 						
 						var cnt =0;
 						for(var i=0; i<list.length; i++){
@@ -383,6 +372,13 @@
 							$div.append($div_bot);
 							
 							$('#joingroups').append($div);
+							
+							if(leng > 5){
+								var $a_pre = $('<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span></a>');
+								var $a_next = $('<a class="carousel-control-next" href="#carouselExampleIndicators1"	role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span></a>');
+								$('#carouselExampleIndicators1').append($a_pre);
+								$('#carouselExampleIndicators1').append($a_next);
+							}
 							
 							
 							$('.clickme').on("click",function(){
@@ -429,6 +425,7 @@
 							$div.append($div_bot);
 						
 							$('#recommendList').append($div);
+							
 							
 							$('.clickme').on("click",function(){
 								var sel = $(this).children('input').val();
