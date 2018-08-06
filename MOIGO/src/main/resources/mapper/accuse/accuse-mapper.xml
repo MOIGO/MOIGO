@@ -33,7 +33,7 @@
 			<when test='chk eq "true"'>
 			left JOIN GROUPS G ON(G.GROUP_NO= TARGET_GROUP)
    			left JOIN MEMBER M ON(M.MEMBER_NO= TARGET_MEMBER)
-   			WHERE M.DELFLAG != 'Y' OR G.GROUP_STATE_CODE != 'S2'
+   			WHERE (M.DELFLAG != 'Y' OR G.GROUP_STATE_CODE != 'S2')
 				<if test='searchingKey != ""'> 
 				<choose>
 					<when test='opt eq "reporter"'>
