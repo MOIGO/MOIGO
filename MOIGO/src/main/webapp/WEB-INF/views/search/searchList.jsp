@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchList.css?ver=4">
 
 </head>
-<c:import url="/WEB-INF/views/common/header.jsp" />
+<c:import url="/WEB-INF/views/common/header.jsp" /> 
 <body>
    <form action="${pageContext.request.contextPath}/search/selectList.do" id="left-form">
       <div id="left-wrap">
