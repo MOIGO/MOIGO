@@ -30,17 +30,19 @@
 		</div>
 </div>
  
- 
+ <c:out value="${memberGrade}"/>
 </body>
 
 <script>
 
 	$('#moreSchedule').on('click',function(){
 		
-		if('${memberGrade>1}'==true)
+		
+		
+		if('${memberGrade>=1}'=="true")
 			$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
 		else
-			alert("회원 전용 메뉴입니다.");
+			alert("회원 전용 메뉴입니다.");   
 	});
 
 	function makeCloseSchedule(obj){
@@ -56,7 +58,7 @@
 	
 	$item.on("click",function(){
 		
-		if('${memberGrade>1}'==true)
+		if('${memberGrade>1}'=="true")
 			openScheduleViewModal(obj.scheduleNo);
 		else
 			alert("회원 전용 메뉴입니다.");
