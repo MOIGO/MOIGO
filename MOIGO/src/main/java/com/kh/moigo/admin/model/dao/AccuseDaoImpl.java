@@ -211,6 +211,12 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("accuse.gmReportCount");
 	}
+
+	@Override
+	public List<Map<String, Object>> moreActiveGroups() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("groupDetail.moreActiveGroups");
+	}
 	
 	
 	

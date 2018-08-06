@@ -106,11 +106,27 @@
 	</select>
 	
 	
+	<select id="moreActiveGroups" resultMap="groupDetailResultMap">
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM(   select GROUP_NO, GROUP_NAME,
+		(SELECT COUNT(*) FROM POST 
+		WHERE GROUP_NO = G.GROUP_NO
+		AND  SUBSTR(SUBMIT_DATE,1,5) = SUBSTR(SYSDATE,1,5)
+		) G_POST_COUNT
+		from groups g
+		order by G_POST_COUNT DESC) paging)
+		WHERE RNUM BETWEEN 1 AND 5
+	</select>
+	
+	
 	<update id="grpDelete" parameterType="string">
 		UPDATE GROUPS 
 	    SET GROUP_STATE_CODE ='S2' 
 	    WHERE GROUP_NO = #{id}
 	</update>
+	
+	
 	
 	
 </mapper>
