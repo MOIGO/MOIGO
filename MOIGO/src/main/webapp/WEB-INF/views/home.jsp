@@ -154,10 +154,10 @@
 	<br>
 	<br>
 	<div id="jgroup" style="margin: auto;">
-		<div class="row jgroup">
+		<div class="row">
 			<div
 				class="mainGroup test d-flex justify-content-center align-items-center ani plusGroup"
-				style="background-color: skyblue; margin-right: 15px;">
+				style="background-color: skyblue; margin-left: 30px; margin-right: 15px;">
 				<a href="#" class="plusGroup"><img id="plus"
 					src="resources/images/main/plus.png" width="50" height="50" /> </a>
 				&nbsp; 모임 만들기
@@ -403,7 +403,7 @@
 						
 						for(l in list){
 							
-							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 8px;">');
+							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 20px;">');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							var $div_top = $('<div class="groupView_top test">');
