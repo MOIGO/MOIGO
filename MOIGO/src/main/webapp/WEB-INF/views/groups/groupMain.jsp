@@ -17,6 +17,15 @@
 <script src="${root}/resources/js/groups/summernote-bs4.js"></script>
 
 <style>
+
+@media (max-width: 992px) {
+	
+		
+		.postSize{
+			width:600px;
+		}
+	}
+
 .test {
 	border: 1px solid;
 }
@@ -68,7 +77,7 @@ background: #EDEFF2;
 	overflow:hidden;
 	text-overflow:ellipsis; 
 	white-space:nowrap;
-}
+}  
 
 .font-wordBreak{
 	word-break:break-all;
@@ -97,6 +106,27 @@ background: #EDEFF2;
 		max-width:650px;
 		
 	}
+	
+	#loading {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: fixed;
+		display: block;
+		opacity: 0.8;
+		background: white;
+		z-index: 99;
+		text-align: center;
+	}
+
+	#loading > img {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		z-index: 100;
+	}
+		
 
 </style>
 
@@ -130,7 +160,7 @@ background: #EDEFF2;
 				<div class="col">
 			
 					<c:if test="${memberGrade>0}">
-						<button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
+						<button class="btn btn-primary btn-block postSize" type="button" data-toggle="modal" data-target="#postEdit" onclick="createSummerNote();">글쓰기</button>
 					</c:if>
 				
 					<input type="hidden" name="memberNo" value="${m.memberNo}" />
@@ -141,16 +171,20 @@ background: #EDEFF2;
 						
 						<c:when test="${memberGrade > 0 or fn:trim(openSetting) eq 'PUBLIC' }">
 						
-							<div class="input-group input-group-lg">
+							<div class="input-group input-group-lg mt-2 mb-2 postSize">
 									<label for="searchPost" class="sr-only">searchPost</label>
-									<input type="text" class="form-control" id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
+									<input type="text" class="form-control " id="searchPost" placeholder="검색할 내용을 입력해 주세요"/>
 									<div class="input-group-append">
 										<button class="btn btn-primary" id="btn_searchPost" type="button" onclick="searchPostList()">검색</button>
 									</div>
 							</div>	
 						
-							<div id="postDiv" class="">
+							<div id="postDiv" class="postSize">
 								
+							</div>
+							
+							<div id="loading">
+								<img src="../resources/images/common/loadGif.gif" alt="" />
 							</div>
 						</c:when>
 						
@@ -230,6 +264,16 @@ $(function(){
 	setPostList();
 	destroyPostEditModal();
 	
+	$('#searchPost').on('keyup',function(event){
+		if (event.keyCode == 13)
+			searchPostList();
+	});
+	
+});
+
+
+$(window).on('load', function () {
+	$('#loading').hide();
 });
 
 
@@ -240,7 +284,7 @@ $('#postImages').on('shown.bs.modal',function(){
 function searchPostList(){
 	
 	if(($('#searchPost').val()).trim().length==0){
-		currPage =1;
+		currentPage =1;
 		deleteAllPost();
 		setPostList();
 		return;
@@ -251,7 +295,7 @@ function searchPostList(){
 		$.ajax({
 			url:"${pageContext.request.contextPath}/groups/getKeywordPostList.gp",
 			data:{	groupNo:"${groupNo}",
-					currPage:1,
+					currentPage:1,
 					keyword:$('#searchPost').val()
 					},
 			dataType:"json",
@@ -293,7 +337,7 @@ $(document).ready(function () {
 	    var currentScroll = $(window).scrollTop() + $(window).height();
 
 	    if (maxHeight <= currentScroll) {
-	     	
+	     	console.log(currentPage);
 	    	
 			currentPage+=1;
 			if(pageInfo.maxPage<currentPage){
@@ -337,7 +381,7 @@ function setPostList(){
 					$('#postDiv').append($postOuter);
 				}
 				
-				restoreScheduleElement();
+					restoreScheduleElement();
 			}else{
 				currentPage-=1;
 			}
@@ -355,7 +399,8 @@ function restoreScheduleElement(){
 	
 	$('#postDiv').find(".scheduleInputWrapper").each(function(){
 		
-		if($(this).find('.editScheduleWrap').length<=0){
+		
+		if($(this).find('[name=editScheduleWrap]').length<=0){
 		
 			restoreScheduleElementCallBack($(this));
 			
@@ -632,11 +677,10 @@ function updateReply(num,newContent,originContent){
 			
 				$(toEditContent).text(newContent);
 				toEditContent=undefined;
-				alert("글 수정 성공!");
-				
+	
 			}else{
 				$(toEditContent).text(originContent);
-				alert("댓글 삭제 실패!");
+				alert("댓글 수정 실패!");
 			}
 			
 		},
@@ -767,7 +811,7 @@ function updatePost(num,postContent){
 				$('#postImages').replaceWith($('#postImages').val('').clone(true));
 				$('#postImages').val(""); 
 				destroyPostEditModal();
-				alert("글 수정 성공!");
+				
 			}else
 				alert("댓글 삭제 실패!");	
 		},
@@ -856,7 +900,7 @@ function deleteReply(num){
 		success:function(data){
 			
 			if(data.result>0){
-				alert("댓글 삭제 성공!");
+				
 				$('.replyWrapper').children().find("input[value="+num+"]").closest(".profileWrapper").remove();
 			}else
 				alert("댓글 삭제 실패!");
@@ -878,7 +922,7 @@ function deletePost(num,wrapperObj){
 		success:function(data){
 			
 			if(data.result>0){
-				alert("글 삭제 성공!");
+				
 				$(wrapperObj).closest('.postOuter').remove();
 				
 			}else
@@ -972,18 +1016,17 @@ function submitPost(){
 	    processData: false,
 		success:function(data){
 			
-			if(data.result>0){
-				alert("글 등록 성공!");
-			}else
+			if(data.result<0)
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
-			currpage=1;
+			currentPage=1;
 			setPostList();
 			imageNameToSave=[];
 			schedule=null;
 			$('#postImages').replaceWith($('#postImages').val('').clone(true));
 			 $('#postImages').val(""); 
+			 //location.reload();
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -1020,18 +1063,13 @@ function submitReply(postNo,obj){
 		success:function(data){
 			
 			
-			if(data.result>0){
-				alert("댓글 등록 성공!");
-				
-				$(obj).closest('.postOuter').find('.replyWrapper').append(makeProfile(data.pwm));
-				
-				$(obj).val("");
-			}else
+			if(data.result<=0)
 				alert("댓글 등록 실패!");
 			
-			/* deleteAllPost();
-			setPostList();
-			 */
+			$(obj).closest('.postOuter').find('.replyWrapper').append(makeProfile(data.pwm));
+			
+			$(obj).val("");
+		
 		},
 		error:function(){
 			alert("글 등록 도중 에러가 생겼습니다.");
@@ -1123,6 +1161,7 @@ function createSummerNote(){
 		    ['myButton',['insertSchedule']]
 		    
 		  ],
+		  dialogsInBody: true,
 		  disableResizeEditor: true,
 		  height: 350,
 		  /* callbacks:{

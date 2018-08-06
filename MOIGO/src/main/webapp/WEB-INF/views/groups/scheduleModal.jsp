@@ -11,7 +11,8 @@
 <style>
 
 .modalSize_schedule{
-	max-width:30%;
+	/* max-width:30%; */
+	width:500px;
 }
 
 .day{
@@ -137,7 +138,7 @@ text-align:center;
 				    		<div class="col-2">
 				    			<input type="hidden" id="scheduleWriter" value=""/>
 				    			<div>
-				    				<span class="day" ></span><br>
+				    				<span class="day ml-2" ></span><br>
 				    				<span class="dayofweek" style="margin-top:-10px;"></span>
 				    			</div>
 				    		</div>
@@ -460,7 +461,7 @@ tempSchedule=new Object();
 		var startDate = parseDateAndTime($('#startDate'),$('#startTime'));
 		var endDate = null;
 		
-		console.log(startDate);
+		
 		
 		var timeString = getTimeToString(startDate); 
 		
@@ -631,8 +632,6 @@ tempSchedule=new Object();
 		
 	
 		
-		console.log(times.endTime);
-		
 		$(toEditObj).find('[name=scheduleAddress]').val($('#insertSchedule input[name=scheduleAddress]').val());
 		$(toEditObj).find('[name=scheduleName]').val($('#insertSchedule input[name=scheduleName]').val());
 		$(toEditObj).find('[name=allDay]').val($('#allDay').val());
@@ -707,7 +706,7 @@ tempSchedule=new Object();
 		var $mapCol2Day=$('<div name="day" style="text-align:center;font-weight:700; font-size:2.0em; margin-top:-10px;">'+milisecToDate(scheduleObj.startTime).getDate()+'</div>');
 		var $mapCol2Dow =$('<div name="dayofweek" style="text-align:center; margin-top:-10px;">'+getDayToKor(milisecToDate(scheduleObj.startTime).getDay())+'</div>');
 		var $col10RowCol2 =$('<div class="col-12 map_address scheduleTime">'+getTimeToString(milisecToDate(scheduleObj.startTime))+"  ~  "+getTimeToString(milisecToDate(scheduleObj.endTime))+'</div>');
-		
+		console.log(scheduleObj.endTime);
 				
 	
 		if(milisecToDate(scheduleObj.startTime).getDay()==0)
@@ -718,11 +717,7 @@ tempSchedule=new Object();
 			$mapCol2Day.css("color","black");
 		
 			
-			 	
-			
-			 
-			 	
-		
+	
 		
 		var $btnWrapper = $('<div class="map_btn_wrapper float-right">');
 		var $btn_edit =$('<button class="btn btn-primary mr-3" name="editBtn">수정</button>');
@@ -856,6 +851,9 @@ tempSchedule=new Object();
 	/*밀리세컨드를 data 객체로 가져오기  */
 	function milisecToDate(milisecondData){
 		
+		if(milisecondData==null)
+			return null;
+		
 		var date = new Date(milisecondData);
 		
 		return date;
@@ -864,10 +862,9 @@ tempSchedule=new Object();
 	/*date객체를 년월일 스트링으로 바꾸기  */
 	function getTimeToString(dateObj){
 		
-		/* if(dateObj=undefined||dateObj==null)
-			return ""; */
-		
-		console.log(dateObj);
+		if(dateObj==undefined||dateObj==null)
+			return ""; 
+	
 		
 		 return dateObj.getFullYear()+"년 "+(parseInt(dateObj.getMonth())+1)+"월 "+dateObj.getDate()+"일 "+dateObj.getHours()+":"+dateObj.getMinutes();
 	}
