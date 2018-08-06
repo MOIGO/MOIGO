@@ -404,6 +404,8 @@ public class GroupController {
 				
 				for(int j=0+processed;j<imageNameToSave.length;++j){
 					
+					System.out.println(postImages[i].getOriginalFilename());
+					System.out.println(imageNameToSave[i]);
 				
 					//이미지 파일이어야 한다.
 					if(imageNameToSave[j].equals(postImages[i].getOriginalFilename())){
@@ -438,7 +440,7 @@ public class GroupController {
 							
 								
 								post.setContent(post.getContent().replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+post.getGroupNo()+"/"+newImage));
-								
+								System.out.println(post.getContent());
 								processed++;
 								break;
 								
@@ -546,7 +548,7 @@ public class GroupController {
 							
 								
 								content = (content.replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+groupNo+"/"+newImage));
-								
+								System.out.println(content);
 								processed++;
 								break;
 								
