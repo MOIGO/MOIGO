@@ -46,7 +46,7 @@
 		        </if>
 			    <choose>
 			    	<when test='regardlessArea != ""'>
-			    		OR (GROUP_ADDRESS LIKE '%'||#{regardlessArea}||'%')
+			    		AND GROUP_ADDRESS LIKE '%%'
 			    	</when>
 			    	<otherwise>
 			    		AND GROUP_ADDRESS NOT LIKE '지역무관'

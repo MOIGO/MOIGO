@@ -19,6 +19,14 @@
 	height: 200px;
 }
 
+.maincarou{
+	width: 1200px;
+	height: 600px;
+}
+.maincarou:hover{
+	cursor: pointer;
+}
+
 #joingroups{
 	width: 832px;
 	height: 200px;
@@ -65,6 +73,14 @@
 		width: 300px;
 	} */
 }
+
+.maintagFont{
+	position:absolute; 
+	left: 300px;
+	z-index:1800;
+	color: snow;
+	font-weight: bold;
+}
 </style>
 </head>
 <body onload="start()">
@@ -84,29 +100,36 @@
 				<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
 			</ol>
 			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-60" src="resources/images/main/snow.jpg"
-						alt="First slide">
-					<div class="carousel-caption d-none d-md-block">
-						<h5>삿포로 눈</h5>
-						<p>눈꽃 축제 어떠세요??</p>
-					</div>
+				<div class="carousel-item active maincarou">
+				<input type="hidden" value="역사" />
+				<h3 class="maintagFont" style="top: 150px;">#역사</h3>
+				<h3 class="maintagFont" style="top: 200px;">#한국사</h3>
+				<h3 class="maintagFont" style="top: 250px;">#세계사</h3>
+				<h3 class="maintagFont" style="top: 300px;">#지리</h3>
+				<img class="d-block w-60" src="resources/images/main/history.png"
+						alt="First slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
+					
+					
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-60" src="resources/images/main/house.jpg"
-						alt="Second slide">
-					<div class="carousel-caption d-none d-md-block">
-						<h5>삿포로 호수</h5>
-						<p>호수에서 하룻밤 어떠세요??</p>
-					</div>
+				<div class="carousel-item maincarou">
+				<input type="hidden" value="일본" />
+				<h3 class="maintagFont" style="top: 150px;">#일본</h3>
+				<h3 class="maintagFont" style="top: 200px;">#J-POP</h3>
+				<h3 class="maintagFont" style="top: 250px;">#일본드라마</h3>
+				<h3 class="maintagFont" style="top: 300px;">#일본어</h3>
+					<img class="d-block w-60" src="resources/images/main/japan.jpg"
+						alt="Second slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
+					
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-60" src="resources/images/main/wind.jpg"
-						alt="Third slide">
-					<div class="carousel-caption d-none d-md-block">
-						<h5>바람이 부는 언덕</h5>
-						<p>편안~~</p>
-					</div>
+				<div class="carousel-item maincarou">
+				<input type="hidden" value="영화" />
+				<h3 class="maintagFont" style="top: 150px;">#영화</h3>
+				<h3 class="maintagFont" style="top: 200px;">#할리우드</h3>
+				<h3 class="maintagFont" style="top: 250px;">#국내영화</h3>
+				<h3 class="maintagFont" style="top: 300px;">#해외영화</h3>
+					<img class="d-block w-60" src="resources/images/main/movie.jpg"
+						alt="Third slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
+					
 				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleIndicators"
@@ -182,6 +205,11 @@
 				alert("로그인 하신 후 이용 가능합니다.");
 				$('#Login_Modal').modal('show');
 			}
+		});
+		
+		$('.maincarou').on('click',function(){
+			var keyword = $(this).find('input').val();
+			location.href="${pageContext.request.contextPath}/search/selectList.do?keyword="+keyword+"&place=&regardlessArea=지역무관&category=&sort=newSort";
 		});
 	</script>
 	<br>
