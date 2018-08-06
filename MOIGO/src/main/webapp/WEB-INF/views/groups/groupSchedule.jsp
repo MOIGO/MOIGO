@@ -249,6 +249,8 @@
    function scheduleModalOpen() {
 	   $("#scheduleConfirmBtn").addClass("call_schedule");
 	   toggleScheduleModal();
+	   $('#startDate').data('datepicker').selectDate(new Date());
+	   $('#endDate').datepicker({minDate : new Date()});
    }
    
    function customCalendarListView(){
@@ -335,6 +337,7 @@
 			scheduleModalOpen();
 			$('#startDate').data('datepicker').selectDate(date._d);
 			$('#endDate').data('datepicker').clear();
+			$('#endDate').datepicker({minDate : date._d});
 			$('#endTime').timepicker("setTime", null);
 		}
       });
