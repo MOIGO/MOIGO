@@ -106,7 +106,7 @@
 				<h3 class="maintagFont" style="top: 200px;">#한국사</h3>
 				<h3 class="maintagFont" style="top: 250px;">#세계사</h3>
 				<h3 class="maintagFont" style="top: 300px;">#지리</h3>
-				<img class="d-block w-60" src="resources/images/main/history.png"
+				<img class="d-block w-60" src="resources/images/main/history.jpg"
 						alt="First slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
 					
 					
