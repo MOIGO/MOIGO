@@ -24,6 +24,7 @@
     	FROM DUAL	
 	</select>
 	
+	
 	<select id="selectTargetListPaging" resultMap="accuseResultMap">	
      SELECT * FROM
 		(SELECT ROWNUM RNUM, PAGING.* 
