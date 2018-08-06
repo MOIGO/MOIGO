@@ -914,6 +914,9 @@ function deleteReply(num){
 
 function deletePost(num,wrapperObj){
 	
+	if(!confirm("삭제하시겠습니까?"))
+		return;
+	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/deletePost.gp",
 		data:{postNo:num},
@@ -978,7 +981,7 @@ function submitPost(){
 	
 	$(content).find("[name=editScheduleWrap]").remove();
 
-
+	
 	 
 	$('#summernote').summernote('reset');
 	$('#summernote').summernote("code",$(content));
@@ -992,6 +995,8 @@ function submitPost(){
 	} 
  	 
  	
+ 	console.log(imageNameToSave);
+ 	 
  	 
  	 imageNameToSave.sort();
   
@@ -1014,6 +1019,9 @@ function submitPost(){
 	    contentType: false,
 	    processData: false,
 		success:function(data){
+			
+			if(data.result>0)
+				alert("글 등록 성공!");
 			
 			if(data.result<0)
 				alert("글 등록 실패!");
