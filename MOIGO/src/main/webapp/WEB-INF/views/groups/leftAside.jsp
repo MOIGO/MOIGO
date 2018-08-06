@@ -204,13 +204,13 @@ function setGroupDesc(groupNo,isMember){
 		success:function(data){
 			var  group = data.group;
       
-			if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){
+			/* if((group.groupPicture).indexOf('createGroupDefaultPictures')>0){ */
 				$('.card-img-top').attr("src",group.groupPicture);
 				$('#joinModal img').attr("src",group.groupPicture);
-			}else{
+			/* }else{
 				$('.card-img-top').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
 				$('#joinModal img').attr("src",'${root}/resources/images/groupCovers/${param.groupNo}/'+group.groupPicture);
-			}
+			} */
 			
 		
 			

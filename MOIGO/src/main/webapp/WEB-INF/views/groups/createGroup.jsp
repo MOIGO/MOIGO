@@ -492,14 +492,14 @@
 			$('#inpGrpMsg').val('${group.groupMsg}');
 			
 			console.log("${root}/resources/images/groupCovers/${group.groupNo}/'+'${group.groupPicture}");
-			if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){
+			/* if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){ */
 				$('.mainCover').attr("src",'${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
-			
+			/* 
 			}else{
 				$('.mainCover').attr("src",'${root}/resources/images/groupCovers/${group.groupNo}/${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
-			}
+			} */
 			
 			$("input[name=openSetting][value=" + '${group.openSetting}' + "]").attr('checked', 'checked');
 		

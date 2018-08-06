@@ -143,7 +143,7 @@ public class GroupController {
 			}
 			
 			
-			group.setGroupPicture(groupPicture);
+			group.setGroupPicture("../resources/images/groupCovers/"+group.getGroupNo()+"/"+groupPicture);
 			
 			
 			
