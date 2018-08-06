@@ -167,7 +167,7 @@
 			
 			FB.api('/me?fields=id,name,age_range,birthday,gender,email',function(response) {
 						var fb_data = jQuery.parseJSON(JSON.stringify(response));
-						console.log(fb_data );
+						/* console.log(fb_data ); */
 							femail=response.email;
 							fname=response.name;
 							fbirthday=response.birthday;
