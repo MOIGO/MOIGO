@@ -42,8 +42,14 @@
 		
 	}
 	
+	@media (max-width: 992px) {
 	
-	
+		.numLeaderFontSize{
+			
+		}
+	}
+
+
 </style>
 </head>
 
@@ -51,7 +57,7 @@
 
 <c:import url="/WEB-INF/views/admin/common/reportModal.jsp" />
 
-<div class="col-3">
+<div class="col-3 d-none d-lg-block">
  	<div class="card">
 		<img class="card-img-top" src="http://via.placeholder.com/300x300"
 			alt="Card image cap">
@@ -79,32 +85,32 @@
 			<c:choose>
 				<c:when test="${param.memberGrade>0}">
 					<div class="row mt-3 joined">
-						<div class="col-5">
-							멤버: <span class="group_memNum"></span>
+						<div class="col-5 numLeaderFontSize">
+							<span>멤버:</span> <span class="group_memNum"></span>
 						</div>
-						<div class="col-7">
-							리더 : <span class="group_leader ">홍길동</span>
+						<div class="col-7 numLeaderFontSize">
+							<span>리더:</span> <span class="group_leader ">홍길동</span>
 						</div>
 					</div>
 				</c:when>
 				<c:when test="${param.memberGrade<0 }">
 				<div class="row mt-3 notJoined">
-						<div class="col-5">
-							멤버: <span class="group_memNum">6명</span>
+						<div class="col-5 numLeaderFontSize">
+							<span>멤버:</span> <span class="group_memNum">6명</span>
 						</div>
-						<div class="col-7">
-							리더 : <span class="group_leader ">홍길동</span>
+						<div class="col-7  numLeaderFontSize">
+							<span>리더:</span>  <span class="group_leader ">홍길동</span>
 						</div>
 				</div>
 					
 				</c:when>
 				<c:when test="${param.memberGrade eq 0 }">
 					<div class="row mt-3 notJoined">
-							<div class="col-5">
-								멤버: <span class="group_memNum">6명</span>
+							<div class="col-5 numLeaderFontSize" >
+								<span>멤버:</span> <span class="group_memNum">6명</span>
 							</div>
-							<div class="col-7">
-								리더 : <span class="group_leader ">홍길동</span>
+							<div class="col-7 numLeaderFontSize">
+								<span>리더:</span>  <span class="group_leader ">홍길동</span>
 							</div>
 					</div>
 				</c:when>
