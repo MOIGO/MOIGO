@@ -92,6 +92,11 @@ background: #EDEFF2;
 		height:300px !important;
 		
 	}
+	
+	#postEdit .modal-dialog {
+		max-width:650px;
+		
+	}
 
 </style>
 
@@ -164,12 +169,24 @@ background: #EDEFF2;
 				</div>
 			</div>
 
-			<c:import url="/WEB-INF/views/groups/rightAside.jsp" />
+			<c:import url="/WEB-INF/views/groups/rightAside.jsp" >
+				<c:param name="groupNo" value="${groupNo}"/>
+			</c:import>
 
 		</div>
 	</div>
 	<!--container end-->
-
+	
+	<!--post insertform -->
+	
+		<input type="hidden" name="content" />
+		<input type="file" name="postFiles"  style="display:none;" id="postFiles" multiple/>
+		<input type="file" name="postImages"  style="display:none;" id="postImages" multiple/>
+		<input type="hidden" value="${groupNo}" />
+		<input type="hidden" value="${gm.memberNo}" />
+		<input type="hidden" name="isNotice" value="N" />
+	
+	
 
 	<!--post edit modals  -->
 	<div class="modal fade" id="postEdit" tabindex="-1"
@@ -206,13 +223,18 @@ background: #EDEFF2;
 
 var pageInfo;
 var currentPage=1;
-var postFiles=[];
+
 
 $(function(){
 	currentPage=1;
 	setPostList();
+	destroyPostEditModal();
 	
-	
+});
+
+
+$('#postImages').on('shown.bs.modal',function(){
+	createSummerNote();
 });
 
 function searchPostList(){
@@ -301,7 +323,7 @@ function setPostList(){
 			
 			pageInfo = data.pageInfo;
 			
-			console.log(data);
+		
 			
 			if(data.posts.length>0){
 				
@@ -314,6 +336,8 @@ function setPostList(){
 					$postOuter.append(makeSubmitReply(data.posts[i].postNo));
 					$('#postDiv').append($postOuter);
 				}
+				
+				restoreScheduleElement();
 			}else{
 				currentPage-=1;
 			}
@@ -326,6 +350,47 @@ function setPostList(){
 	});
 	
 }
+
+function restoreScheduleElement(){
+	
+	$('#postDiv').find(".scheduleInputWrapper").each(function(){
+		
+		if($(this).find('.editScheduleWrap').length<=0){
+		
+			restoreScheduleElementCallBack($(this));
+			
+		}
+				
+	});
+	
+}
+
+function restoreScheduleElementCallBack(addObj){
+	
+
+
+	$.ajax({
+		url:"${pageContext.request.contextPath}/groups/selectOneSchedule.gp",
+		data:{scheduleNo:$(addObj).find("input").val()},
+		dataType:"json",
+		success:function(data){
+			
+			if(data.schedule!=null)
+				addScheduleElement(addObj,data.schedule);
+			else
+				addEmptyScheduleElement(addObj);
+	
+		},
+		error:function(){
+			alert("스케줄을 불러오는 도중 문제가 생겼습니다.");
+		}
+		
+	});
+	
+}
+
+
+
 
 function deleteAllPost(){
 	$('#postDiv').children().remove();
@@ -348,6 +413,7 @@ function makeReply(replyList){
 function makeContent(post){
 	var $contentWrapper = $('<div class="p-3 contentWrapper">');
 	
+	
 	$contentWrapper.append(post.content);
 	
 	$contentWrapper.find('p').css("word-break","break-all");
@@ -359,6 +425,8 @@ function makeContent(post){
 function makeProfile(obj){
 	/*profile Element  */
 	
+	
+	
 	var $profileWrapper = $('<div class="d-flex align-items-center mt-2 mr-auto profileWrapper">');
 	
 	var $profileImgWrapper;
@@ -367,8 +435,8 @@ function makeProfile(obj){
 	
 	if(typeof(obj.replyNo)=='undefined'){
 		$profileImgWrapper = $('<div class="">');
-		if(obj.groupMember.profileImg!=null)
-			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+		if(obj.groupMember.profileThumb!=null)
+			$profileImg= $("<img class='postProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileThumb);
 		else
 			$profileImg= $("<img class='postProfileImg rounded-circle'>").attr("src",'${root}/resources/images/common/img_profile.png');
 			$profileImgWrapper.append($("<input class='postNo'>").attr("type","hidden").val(obj.postNo));
@@ -377,8 +445,8 @@ function makeProfile(obj){
 	}
 	else{
 		$profileImgWrapper = $('<div class="align-self-start">');
-		if(obj.groupMember.profileImg!=null)
-			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",obj.groupMember.profileImg);
+		if(obj.groupMember.profileThumb!=null)
+			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src","../resources/images/profiles/${groupNo}/"+obj.groupMember.profileThumb);
 		else
 			$profileImg= $("<img class='replyProfileImg rounded-circle '>").attr("src",'${root}/resources/images/common/img_profile.png');
 		$profileImgWrapper.append($("<input class='replyNo'>").attr("type","hidden").val(obj.replyNo));
@@ -464,7 +532,7 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			});
 			
 			$dropDownItem3.on("click",function(){
-				deletePost(num);
+				deletePost(num,wrapperObj);
 			});
 		}
 		if('${memberGrade >3}'=='true'){
@@ -509,7 +577,7 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			
 			$dropDownItem4.on("click",function(){
 				
-						
+				reportUrl="${pageContext.request.contextPath}/reporting.ad";		
 				$('#accuseReporter').val("${gm.memberNo}");
 				$('#accuseTarget').val($(wrapperObj).find(".replyWriterNo").val());
 				$('#reportingModal').modal("toggle"); 
@@ -628,38 +696,91 @@ function prepareUpdatePost(num){
 		restoreMapEvent($temp.siblings('[name=editMapWrap]').eq(i));
 		
 	}
-	for(var i =0;i<$temp.siblings('[name=editScheduleWrap]').length;++i){
-		restoreScheduleEvent($temp.siblings('[name=editScheduleWrap]').eq(i));
-	}
+	
+	
+	
+	$temp.find('[name=editScheduleWrap]').each(function(){
+		restoreScheduleEvent($(this));
+	});
 	
 }
 
 function updatePost(num,postContent){
-	$.ajax({
+
+	//코드를 가져와서
+	var content =$($('#summernote').summernote('code'));
+	
+	
+	var formData = new FormData();
+	
+	//이미지 설정
+	$(content).find('img:not(.addedImage)').each(function(index){
+		imageNameToSave.push($(this).attr("data-filename"));
+	
+		$(this).attr("src",$(this).attr("data-filename"));
+		
+		
+	});
+	
+	for(var i = 0;i<document.getElementById('postImages').files.length;++i){
+			
+		formData.append("postImages",document.getElementById('postImages').files[i]);
+	} 
+	
+	$(content).find("[name=editScheduleWrap]").remove();
+
+		 
+	$('#summernote').summernote('reset');
+	$('#summernote').summernote("code",$(content));
+	
+	imageNameToSave.sort();
+	
+
+	formData.append("postNo",num);
+	formData.append("content",$('#summernote').summernote("code"));
+	formData.append("postImages",document.getElementById('postImages').files);
+	/* formData.append("schedules",JSON.stringify(schedules)); */
+	formData.append("imageNameToSave",imageNameToSave);
+	formData.append("groupNo",'${groupNo}');
+	formData.append("memberNo",'${gm.memberNo}');
+
+	
+	 $.ajax({
+		type:"POST",
 		url:"${pageContext.request.contextPath}/groups/updatePost.gp",
-		data:{postNo:num,content:postContent},
+		data:formData,
 		dataType:"json",
+		async : false,
+		cache: false,
+	    contentType: false,
+	    processData: false,
 		success:function(data){
 			var $temp = $('.profileWrapper').children().find("input[value="+num+"]").closest('.profileWrapper').siblings('.contentWrapper');
 			if(data.result>0){
+				
 				$temp.children().remove();
 				
 				$temp.append(postContent);
+				
+				imageNameToSave=[];
+				
+				$('#postImages').replaceWith($('#postImages').val('').clone(true));
+				$('#postImages').val(""); 
+				destroyPostEditModal();
 				alert("글 수정 성공!");
 			}else
 				alert("댓글 삭제 실패!");	
 		},
 		error:function(){
-			alert("댓글 삭제 도중 에러가 생겼습니다.");
+			alert("글 수정 도중 에러가 생겼습니다.");
 		}
 		
-	});
+	}); 
 }
 
 function restoreScheduleEvent(obj){
 	
-	console.log("들어오나?");
-	
+
 	$(obj).find('[name=editBtn]').on("click",function(event){
 		//toEditTarget=obj;
 		 event.stopPropagation();
@@ -724,6 +845,8 @@ function restoreMapEvent(obj){
 }
 
 
+
+
 function deleteReply(num){
 	
 	$.ajax({
@@ -746,7 +869,7 @@ function deleteReply(num){
 	});
 }
 
-function deletePost(num){
+function deletePost(num,wrapperObj){
 	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/deletePost.gp",
@@ -756,11 +879,13 @@ function deletePost(num){
 			
 			if(data.result>0){
 				alert("글 삭제 성공!");
+				$(wrapperObj).closest('.postOuter').remove();
+				
 			}else
 				alert("글 삭제 실패!");
 			
-			deleteAllPost();
-			setPostList(1);
+			//deleteAllPost();
+			//setPostList(1);
 		},
 		error:function(){
 			alert("글 삭제 도중 에러가 생겼습니다.");
@@ -783,15 +908,68 @@ function editOrSubmit(){
 	
 }
 
+var imageNameToSave=[];
+
 function submitPost(){
 	
 	if(!checkLogin())
 		return ;  
 	
-	$.ajax({
+	if('${gm==null}'=='true'){
+		alert("회원이 아닙니다.");
+		return;
+	}
+	
+	//코드를 가져와서
+	var content =$($('#summernote').summernote('code'));
+	
+	
+	//이미지 설정
+	$(content).find('img').each(function(index){
+		imageNameToSave.push($(this).attr("data-filename"));
+	
+		
+		$(this).attr("src",$(this).attr("data-filename"));
+		$(this).addClass("addedImage");
+	});
+	
+	$(content).find("[name=editScheduleWrap]").remove();
+
+
+	 
+	$('#summernote').summernote('reset');
+	$('#summernote').summernote("code",$(content));
+	
+
+  	var formData = new FormData();
+  
+ 	 for(var i = 0;i<document.getElementById('postImages').files.length;++i){
+		
+		formData.append("postImages",document.getElementById('postImages').files[i]);
+	} 
+ 	 
+ 	
+ 	 
+ 	 imageNameToSave.sort();
+  
+	 formData.append("postImages",document.getElementById('postImages').files); 
+	 formData.append("groupNo",'${groupNo}');
+	 formData.append("memberNo",'${gm.memberNo}');
+	 formData.append("content",$('#summernote').summernote("code"));
+	 formData.append("isNotice","N");
+	 formData.append("imageNameToSave",imageNameToSave);
+	/*  formData.append("schedules",JSON.stringify(schedules)); */
+	
+	 
+	   $.ajax({
+		type:"POST",
 		url:"${pageContext.request.contextPath}/groups/insertPost.gp",
-		data:{groupNo:'${groupNo}',memberNo:'${gm.memberNo}',content:$('#summernote').summernote('code'),isNotice:"N"},
+		data:formData,
 		dataType:"json",
+		async : false,
+		cache: false,
+	    contentType: false,
+	    processData: false,
 		success:function(data){
 			
 			if(data.result>0){
@@ -800,7 +978,12 @@ function submitPost(){
 				alert("글 등록 실패!");
 			
 			deleteAllPost();
+			currpage=1;
 			setPostList();
+			imageNameToSave=[];
+			schedule=null;
+			$('#postImages').replaceWith($('#postImages').val('').clone(true));
+			 $('#postImages').val(""); 
 			destroyPostEditModal();
 		},
 		error:function(){
@@ -808,8 +991,8 @@ function submitPost(){
 			destroyPostEditModal();
 		}
 		
-	});
-
+	});  
+ 
 }
 
 function checkLogin(){
@@ -835,7 +1018,7 @@ function submitReply(postNo,obj){
 		data:{postNo:postNo,memberNo:'${gm.memberNo}',content:$(obj).val(),groupNo:'${groupNo}'},
 		dataType:"json",
 		success:function(data){
-			console.log(data);
+			
 			
 			if(data.result>0){
 				alert("댓글 등록 성공!");
@@ -895,7 +1078,31 @@ function createSummerNote(){
 		    container:false,
 		    tooltip: '일정 삽입',
 		    click: function () {
+		    	var temp = $($('#summernote').summernote('code'));
+				
+				if($(temp).siblings(".scheduleInputWrapper").length>0){
+					alert("이미 일정이 존재합니다.");
+					return;
+				}
+		    	
 		    	toggleScheduleModal();
+		    }
+		  });
+
+		  return button.render();   // return button as jquery object
+		}
+	
+	
+	var insertImage = function (context) {
+		  var ui = $.summernote.ui;
+
+		  // create button
+		  var button = ui.button({
+		    contents: '<i class="fas fa-image"></i>',
+		    container:false,
+		    tooltip: '사진 삽입',
+		    click: function () {
+		    	$('#postImages').click();
 		    }
 		  });
 
@@ -910,14 +1117,15 @@ function createSummerNote(){
 		    ['color', ['color']],
 		    ['para', ['ul', 'ol', 'paragraph']],
 		    ['height', ['height']],
-		    ['insert', ['link', 'picture', 'video', 'hr', 'readmore']],
+		    ['insert', ['link', 'video', 'hr', 'readmore']],
+		    ['myButton',['insertImage']],
 		    ['mybutton', ['insertmap']],
 		    ['myButton',['insertSchedule']]
-		  	
+		    
 		  ],
 		  disableResizeEditor: true,
-		  height: 200,
-		  callbacks:{
+		  height: 350,
+		  /* callbacks:{
 			onImageUpload:function(files,editor,welEditable){
 				
 				if(files.size/(1024/1024)>=10){
@@ -925,8 +1133,7 @@ function createSummerNote(){
 		    		
 		    		return;
 		    	}
-				
-				console.log(files);
+
 				
 				var Extension = files[0].name.substring(
 						files[0].name.lastIndexOf('.') + 1).toLowerCase();
@@ -939,21 +1146,70 @@ function createSummerNote(){
 		    		}else{
 		    			alert("사진 형식만 가능합니다.");
 		    		}
-				
-				
-			},onMediaDelete : function ($target, $editable) {
-		            console.log($target.attr('src'));   // get image url 
-		       }
-		    
-		  }, 
+			
+			}
+		  },  */
 
 		  buttons: {
 		     insertmap: insertMap,
-		     insertSchedule:insertSchedule
+		     insertSchedule:insertSchedule,
+		     insertImage:insertImage 
 		  }
 	});
 	
 }
+
+
+$('#postImages').on("change",function(){
+	 
+	readURL(this);
+});
+
+
+function readURL(input) {
+	 
+	
+	for(var i =0;i<input.files.length;++i){
+	
+	   
+    	if(input.files[i].size/1024/1024>=10){
+    		alert("파일 크기는 10mb 이하여야 합니다.");
+    		
+    		return;
+    	}
+    	var Extension = input.files[i].name.substring(
+    			input.files[i].name.lastIndexOf('.') + 1).toLowerCase();
+    	
+    	if(Extension == "gif" || Extension == "png" || Extension == "bmp"
+            || Extension == "jpeg" || Extension == "jpg")
+    		{
+	    		var reader = new FileReader();
+	    		var originName = input.files[i].name;
+	    		var file = input.files[i];
+	    		
+		        reader.onload = (function (f) {
+		            return function(e) {
+		            	 $('#summernote').summernote("insertImage",e.target.result,f.name);
+		 		       
+		            };
+		        })(input.files[i]);
+		        
+		        
+		 
+		        reader.readAsDataURL(input.files[i]);
+		      
+    	
+    		}else{
+    			
+    			alert("이미지 파일을 올려주세요");
+    			return;
+    			
+    		}
+	
+	    
+	}
+}
+
 
 function sendFile(file, editor) {
 	
@@ -974,7 +1230,7 @@ function sendFile(file, editor) {
   		        processData: false,
   		        success : function(data) { // 처리가 성공할 경우
   	            // 에디터에 이미지 출력
-  	            console.log(data.url);
+  	            
   		        	$(editor).summernote('editor.insertImage','${root}/resources/images/groupImages/'+data.url);
   		        }
   		    }); 

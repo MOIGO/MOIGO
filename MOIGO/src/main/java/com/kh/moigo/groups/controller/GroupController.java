@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import com.kh.moigo.admin.model.vo.PageInfo;
 import com.kh.moigo.groups.model.service.GroupsService;
@@ -35,6 +39,9 @@ import com.kh.moigo.groups.model.vo.PostReplyWithMem;
 import com.kh.moigo.groups.model.vo.PostWithMem;
 import com.kh.moigo.groups.model.vo.Schedule;
 import com.kh.moigo.member.model.vo.Member;
+
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
 @Controller
 public class GroupController {
@@ -71,7 +78,7 @@ public class GroupController {
 		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
 		model.addAttribute("currentGroup",gp);
 		model.addAttribute("openSetting",gp.getOpenSetting());
-		System.out.println("그룹 오픈세팅 :" +gp.getOpenSetting());
+		
 		
 		return "groups/groupMain";
 	}
@@ -97,7 +104,7 @@ public class GroupController {
 	
 		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
 			try{		
-				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
+				
 				// 프로필 이미지를 저장할 경로
 				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
 				
@@ -132,7 +139,7 @@ public class GroupController {
 			
 			result = groupService.updateGroupImg(group);
 		}else{
-			System.out.println("이미지 파일이 없는 경우");
+			
 			group.setGroupPicture(groupDefaultImg);
 			groupService.updateGroupImg(group);
 		}
@@ -175,7 +182,7 @@ public class GroupController {
 		int result =-1;
 		if(groupImageFile!=null&&groupImageFile.getOriginalFilename().length()>0){
 			try{		
-				System.out.println("이미지 파일이 있는 경우"+groupImageFile.getOriginalFilename()+groupImageFile.getOriginalFilename().length() );
+				
 				// 프로필 이미지를 저장할 경로
 				String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupCovers/" + group.getGroupNo());
 				
@@ -208,7 +215,7 @@ public class GroupController {
 		
 			result = groupService.updategroupBasics(group);
 		}else{
-			System.out.println("이미지 파일이 없는 경우");
+			
 			group.setGroupPicture(groupDefaultImg);
 			groupService.updategroupBasics(group);
 		}
@@ -293,14 +300,164 @@ public class GroupController {
 	}
 
 	
+	
 	//글 쓰기
-	@RequestMapping("/groups/insertPost.gp")
+	@RequestMapping(value="/groups/insertPost.gp" , method=RequestMethod.POST)
 	@ResponseBody
-	public Map <String,Object> insertPost(Post post)
+	public Map <String,Object> insertPost(Post post,
+											@RequestParam("postImages") MultipartFile[] postImages,
+											@RequestParam String[] imageNameToSave,
+											
+											HttpServletRequest request)
 	{
-		Map <String,Object> map = new HashMap<String, Object>();
-		map.put("result", groupService.insertPost(post));
 		
+
+		/*System.out.println(schedules);
+		
+		//스케줄 처리
+		JSONParser jsparse = new JSONParser();
+		Schedule schedule=null;
+		try {
+		
+			JSONArray jsonarray =  (JSONArray)jsparse.parse(schedules);
+			
+			for(int i=0;i<jsonarray.size();++i){
+				JSONObject obj= (JSONObject)jsonarray.get(i);
+				
+				
+				
+				//시작시간
+				Timestamp sTime = new Timestamp((Long)obj.get("startT"));
+				Timestamp eTime=null;
+					
+				
+					try{
+						eTime = new Timestamp((Long)obj.get("endT"));
+					}
+					catch(Exception e){
+						
+						System.out.println("여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~");
+						eTime=null;
+					}
+				
+				schedule= new Schedule((String)obj.get("groupNo"),
+						(String)obj.get("scheduleName"),
+						(String)obj.get("scheduleContent"),
+						(String)obj.get("scheduleAddress"),
+						(String)obj.get("memberNo"),
+						sTime,
+						eTime,
+						(String)obj.get("colorLabel"),
+						(String)obj.get("allDay"));	
+				
+				groupService.insertSchedule(schedule);
+				
+				System.out.println(schedule);
+				System.out.println(post.getContent());
+				post.setContent(post.getContent().replaceFirst("notInsertedSchedule",schedule.getScheduleNo()));		
+				System.out.println(post.getContent());
+				
+				if(((String)obj.get("scheduleNo")).equals("notInsertedSchedule")){
+					groupService.insertSchedule(schedule);
+					post.setContent(post.getContent().replaceFirst("notInsertedSchedule",schedule.getScheduleNo()));
+				}else{
+					
+					schedule.setScheduleNo((String)obj.get("scheduleNo"));
+					groupService.updateSchedule(schedule);
+			
+				}
+				
+				
+			}
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		*/
+		
+		/////////
+		
+
+		
+		//이미지 처리
+		String orignImage ="";
+		ArrayList<Files> files=new ArrayList<Files>();
+		int processed=0;
+		
+		//파일이 널이 아닐때
+		if(postImages!=null){
+			
+			//갯수만큼 포문을 도는데
+			for(int i=0;i<postImages.length;++i){
+				
+				
+				for(int j=0+processed;j<imageNameToSave.length;++j){
+					
+				
+					//이미지 파일이어야 한다.
+					if(imageNameToSave[j].equals(postImages[i].getOriginalFilename())){
+						
+						try{		
+						
+							// 프로필 이미지를 저장할 경로
+							String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupImages/"+post.getGroupNo());
+							
+							// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+							File dir = new File(saveDir);
+							
+							if(!dir.exists())
+								dir.mkdirs();
+							
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+								
+							
+								String newImage = "groupImage"  + "_" + sdf.format(new Date(System.currentTimeMillis()))+Math.floor(new Random().nextFloat()*1000);
+								
+								
+								// 2. upload한 file을 rename, 경로 저장하기
+								orignImage = postImages[i].getOriginalFilename();
+								
+								
+								String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
+								newImage = newImage + "." + ext;
+								
+								postImages[i].transferTo(new File(saveDir +"/"+ newImage));
+								
+								files.add(new Files(orignImage,newImage,"../resources/images/groupImages/"+post.getGroupNo()+"/",post.getGroupNo(),post.getMemberNo(),"Y"));
+							
+								
+								post.setContent(post.getContent().replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+post.getGroupNo()+"/"+newImage));
+								
+								processed++;
+								break;
+								
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+						
+					}
+				}
+			}
+		
+		}
+		///////////////////
+		
+		
+		//groupService.insertImageFile(files);
+	
+		groupService.insertPost(post);
+		
+		for(int i=0;i<files.size();++i){
+			files.get(i).setPostNo(post.getPostNo());
+			groupService.insertImageFile(files.get(i));
+		}
+		
+		Map <String,Object> map = new HashMap<String, Object>();
+		
+		
+		map.put("result", 1);
 		return map;
 	}
 	
@@ -316,17 +473,108 @@ public class GroupController {
 		return map;
 	}	  
 	
+	
 	//글 수정
-	@RequestMapping("/groups/updatePost.gp")
+	@RequestMapping(value="/groups/updatePost.gp" , method=RequestMethod.POST)
 	@ResponseBody
-	public Map <String,Object>updatePost(Post post)
+	public Map <String,Object>updatePost(	@RequestParam String postNo,
+											@RequestParam String content,
+											@RequestParam String groupNo,
+											@RequestParam String memberNo,
+											@RequestParam("postImages") MultipartFile[] postImages,
+											@RequestParam String[] imageNameToSave,
+											
+											HttpServletRequest request)
 	{
+	
+		
+		//이미지 처리
+		String orignImage ="";
+		ArrayList<Files> files=new ArrayList<Files>();
+		int processed=0;
+		
+		//파일이 널이 아닐때
+		if(postImages!=null){
+			
+			//갯수만큼 포문을 도는데
+			for(int i=0;i<postImages.length;++i){
+				
+				
+				for(int j=0+processed;j<imageNameToSave.length;++j){
+					
+				
+					//이미지 파일이어야 한다.
+					if(imageNameToSave[j].equals(postImages[i].getOriginalFilename())){
+						
+						try{		
+						
+							// 프로필 이미지를 저장할 경로
+							String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/groupImages/"+groupNo);
+							
+							// 경로도 하나의 파일이기 때문에 경로를 생성해 줌
+							File dir = new File(saveDir);
+							
+							if(!dir.exists())
+								dir.mkdirs();
+							
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+								
+							
+								String newImage = "groupImage"  + "_" + sdf.format(new Date(System.currentTimeMillis()))+Math.floor(new Random().nextFloat()*1000);
+								
+								
+								// 2. upload한 file을 rename, 경로 저장하기
+								orignImage = postImages[i].getOriginalFilename();
+								
+								
+								String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
+								newImage = newImage + "." + ext;
+								
+								postImages[i].transferTo(new File(saveDir +"/"+ newImage));
+								
+								files.add(new Files(orignImage,newImage,"../resources/images/groupImages/"+groupNo+"/",groupNo,memberNo,"Y"));
+							
+								
+								content = (content.replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+groupNo+"/"+newImage));
+								
+								processed++;
+								break;
+								
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+						
+					}
+				}
+			}
+		
+		}
+	
+		
+		
+		Post post = new Post(postNo,content);
+		
+		
+		int result = groupService.updatePost(post);
+		
+		for(int i=0;i<files.size();++i){
+			files.get(i).setPostNo(postNo);
+			groupService.insertImageFile(files.get(i));
+		}
+
+		
+		
+		
+		
+		
 		Map <String,Object> map = new HashMap<String, Object>();
 		
-		map.put("result", groupService.updatePost(post));
+		map.put("result", 1);
 		
 		return map;
 	}	
+	
 	
 	//댓글 쓰기
 	@RequestMapping("/groups/insertReply.gp")
@@ -387,7 +635,6 @@ public class GroupController {
 			schedule.setEndTime(time);
 		}
 		
-		//System.out.println(schedule);
 		
 		int result=  groupService.insertSchedule(schedule);
 		
@@ -447,6 +694,8 @@ public class GroupController {
 	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
 		
 		
+		System.out.println("여기 들어오고 스케줄 넘버는?"+scheduleNo);
+		
 		int result = groupService.deleteSchedule(scheduleNo);
 		
 		Map <String,Object> map = new HashMap<String, Object>();
@@ -481,13 +730,7 @@ public class GroupController {
 		String orignImage = "";
 		String newImage = "";
 		Map <String,Object> map = new HashMap<String, Object>();
-		
-
-		
-		
-		
-		
-		System.out.println("memno:"+memberNo+"groupno : "+groupNo);
+	
 		
 		if(uploadFile!=null){
 			try{		
@@ -508,7 +751,7 @@ public class GroupController {
 					
 					// 2. upload한 file을 rename, 경로 저장하기
 					orignImage = uploadFile.getOriginalFilename();
-					System.out.println(uploadFile.getOriginalFilename());
+					
 					
 					String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
 					newImage = newImage + "." + ext;
@@ -529,6 +772,47 @@ public class GroupController {
 		}
 	
 			
+		return map;
+	}
+	
+	
+	//그룹에서 한명 탈퇴
+	@RequestMapping(value="/groups/groupWithdrawal.gp",method=RequestMethod.POST)
+	public String groupWithdrawal(@RequestParam String groupNo,@RequestParam String memberNo,@RequestParam String deleteGroup, Model model){
+		
+		int result;
+		
+		if(deleteGroup.equals("Y")){
+			
+			result = groupService.deleteGroup(groupNo);
+			
+			model.addAttribute("msg", "모임이 정상적으로 삭제되었습니다.");
+			return "common/msg";
+		}
+		
+	
+		
+			result = groupService.deleteOneGroupMember(new GroupMember(memberNo,groupNo));
+			
+			model.addAttribute("정상적으로 탈퇴 하셨습니다." );
+			
+		return "common/msg";
+	}
+	
+	//임박한 스케줄 리스트 가져오기
+	@RequestMapping("/groups/selectCloseScheduleList.gp")
+	@ResponseBody
+	public Map<String,Object> selectCloseScheduleList(@RequestParam String groupNo){
+		
+		
+		List<Schedule> list =  groupService.selectCloseScheduleList(groupNo);
+		
+		for(int i=0;i<list.size();++i){
+			System.out.println(list.get(i));
+		}
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("schedules", list);
 		return map;
 	}
 	

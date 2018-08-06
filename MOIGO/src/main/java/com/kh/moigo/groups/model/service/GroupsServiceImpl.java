@@ -168,6 +168,18 @@ public class GroupsServiceImpl implements GroupsService {
 		
 	}
 
+	
+	@Override
+	public int deleteOneGroupMember(GroupMember groupMember) {
+		return groupDao.deleteOneGroupMember(groupMember);
+	}
+
+
+	@Override
+	public List<Schedule> selectCloseScheduleList(String groupNo) {
+	
+		return groupDao.selectCloseScheduleList(groupNo);
+	}
   
 	//--------------------------------------------------------------------- 혜진
 	
@@ -217,5 +229,8 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.selectListGroupSchedule(groupNo);
 	}
 
+	
+
+	
 	
 }

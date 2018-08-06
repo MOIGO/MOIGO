@@ -50,6 +50,7 @@
 		<result property="groupNo" column="MEMBER_NO"/>
 		<result property="filePath" column="FILE_DATE"/>
 		<result property="isImage" column="IS_IMAGE"/>
+		<result property="postNo" column="POST_NO"/>
 	</resultMap>
 	
 	<resultMap type="postReply" id="postReplyResultMap">
@@ -82,6 +83,7 @@
 		<association property="groupMember" column="groupNo=GROUP_NO,memberNo=MEMBER_NO" javaType="groupMember" select="selectOneGroupMember"/>
 	</resultMap>
 	
+	
 	<!--댓글에 멤버 정보 세팅  -->
 	<select id="selectMemberForPostReply" resultMap="groupMemberResultMap">
 		SELECT * FROM GROUP_MEMBER
@@ -104,10 +106,9 @@
 	
 	<!--글에 첨부된 파일들 가져오기  -->
 	<select id="selectFilesForPost" resultMap="filesResultMap">
-		SELECT FILE_NO,FILE_ORIGIN_NAME,FILE_NEW_NAME,FILE_PATH FROM FILES 
-		JOIN POSTFILES USING(FILE_NO)
-		JOIN POST USING(POST_NO)
-		WHERE POST_NO=#{postNo}
+		SELECT FILES.* FROM FILES 
+		JOIN POST ON(FILES.POST_NO=POST.POST_NO)
+		WHERE FILES.POST_NO=#{postNo}
 	</select>
 	
 	<!-- 그룹 리스트 가져오기 -->
@@ -116,8 +117,12 @@
 	</select>
 	
 	<!--글 등록  -->
-	<insert id="insertPost" parameterType="hashmap">
-		INSERT INTO POST VALUES('P'||TO_CHAR(SEQ_POST.NEXTVAL,'FM000'),#{groupNo},#{memberNo},#{isNotice},#{postContent},DEFAULT,DEFAULT)
+	<insert id="insertPost" parameterType="post">
+		<selectKey keyProperty="postNo" resultType="string" order="AFTER" >
+			SELECT 'P'||TO_CHAR(SEQ_POST.CURRVAL,'FM000') FROM DUAL
+		</selectKey>
+	
+		INSERT INTO POST VALUES('P'||TO_CHAR(SEQ_POST.NEXTVAL,'FM000'),#{groupNo},#{memberNo},#{isNotice},#{content},DEFAULT,DEFAULT)
 	</insert>
 	
 	<!--글 삭제 -->
@@ -153,15 +158,22 @@
 	<!--글 목록 가져오기(페이징 적용)  -->
 	<select id="selectPostList" resultType="post" resultMap="postResultMap">
 		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
-		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo})
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} ORDER BY SUBMIT_DATE DESC)
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
 	</select>
 	
 	<!--글과 글쓴이 가져오기  -->
 	<select id="selectPostWithMemList" resultType="postWithMem" resultMap="postWithMemResultMap">
-		SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
-		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} ORDER BY POST.SUBMIT_DATE DESC)
+		<!-- SELECT POST_NO,GROUP_NO,MEMBER_NO,IS_NOTICE,CONTENT,DELFLAG,SUBMIT_DATE FROM (
+		SELECT ROWNUM RNUM,POST.* FROM POST WHERE GROUP_NO=#{groupNo} ORDER BY POST.SUBMIT_DATE DESC , POST.POST_NO DESC)
+		WHERE RNUM BETWEEN #{startRow} AND #{endRow} -->
+		
+		SELECT B.POST_NO,B.GROUP_NO,B.MEMBER_NO,B.IS_NOTICE,B.DELFLAG,B.CONTENT,B.SUBMIT_DATE FROM 
+		(SELECT ROWNUM RNUM, A.* FROM
+		(SELECT  * FROM POST WHERE GROUP_NO=#{groupNo}
+		ORDER BY POST.SUBMIT_DATE DESC , POST.POST_NO DESC) A) B
 		WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+		
 	</select>
 	
 	<!--댓글 가져오기  -->
@@ -215,7 +227,7 @@
 	
 	<update id="updateGroupBasics" parameterType="groups">
 		UPDATE GROUPS
-		SET GROUP_NAME=#{groupName},GROUP_PICTURE=#{groupPicture},OPEN_SETTING=#{openSetting},INTEREST_BIG_CODE=#{interestBigCode}
+		SET GROUP_NAME=#{groupName},GROUP_PICTURE=#{groupPicture},OPEN_SETTING=#{openSetting},INTEREST_BIG_CODE=#{interestBigCode},GROUP_MSG=#{groupMsg}
 		WHERE GROUP_NO=#{groupNo}
 	</update>
 	
@@ -269,12 +281,25 @@
 	<!--사진 파일 하나 넣기  -->
 	<insert id="insertImageFile" parameterType="files">
 	
-		<selectKey keyProperty="filesNo" resultType="string" order="AFTER" >
+		<selectKey keyProperty="fileNo" resultType="string" order="AFTER" >
 			SELECT 'F'||TO_CHAR(SEQ_FILES.CURRVAL,'FM000') FROM DUAL
 		</selectKey>
 	
-		INSERT INTO FILES VALUES('F'||TO_CHAR(SEQ_FILES.NEXTVAL,'FM000'),#{fileOriginName},#{fileNewName},#{filePath},#{groupNo},#{memberNo},SYSDATE,'Y')
+		INSERT INTO FILES VALUES('F'||TO_CHAR(SEQ_FILES.NEXTVAL,'FM000'),#{fileOriginName},#{fileNewName},#{filePath},#{groupNo},#{memberNo},SYSDATE,'Y',#{postNo})
 	</insert>
+	
+	<delete id="deleteOneGroupMember" parameterType="groupMember">
+		DELETE FROM GROUP_MEMBER
+		WHERE GROUP_NO=#{groupNo} AND MEMBER_NO=#{memberNo}
+	</delete>
+	
+	<select id="selectCloseScheduleList" resultType="schedule" resultMap="scheduleResultMap">
+		SELECT * FROM SCHEDULE
+		WHERE GROUP_NO=#{groupNo}
+		AND START_TIME BETWEEN SYSDATE AND SYSDATE+2
+	</select>
+	
+	
 	
 	<!-- ===================================================================================================== 혜진 -->
 

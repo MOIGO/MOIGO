@@ -29,6 +29,10 @@ public class Post implements java.io.Serializable{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public Post(String postNo, String content) {
+		this.postNo = postNo;
+		this.content = content;
+	}
 	public String getPostNo() {
 		return postNo;
 	}

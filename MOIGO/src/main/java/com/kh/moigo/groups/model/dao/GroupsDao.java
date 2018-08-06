@@ -60,6 +60,11 @@ public interface GroupsDao {
 	int updateGroupBasics(Groups group);
 	
 	int insertImageFile(Files files);
+
+	
+	int deleteOneGroupMember(GroupMember groupMember);
+	
+	List<Schedule> selectCloseScheduleList(String groupNo);
 	
 //-------------------------------------------------------------------------------- 혜진
 	
@@ -75,6 +80,12 @@ public interface GroupsDao {
 	int deleteGroup(String groupNo);
 
 	List<Schedule> selectListGroupSchedule(String groupNo);
+
+	
+
+	
+
+	
 
 	
 
