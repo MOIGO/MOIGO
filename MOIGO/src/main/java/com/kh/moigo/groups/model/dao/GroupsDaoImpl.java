@@ -256,10 +256,15 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.selectList("groups.selectListGroupSchedule", groupNo);
 	}
 
-	
+	@Override
+	public int insertGroupPhoto(Files file) {
+		return sqlSession.insert("groups.insertGroupPhoto", file);
+	}
 
-	
-
+	@Override
+	public List<Files> selectListGroupPhoto(Map<String, String> fileMap) {
+		return sqlSession.selectList("groups.selectListGroupPhoto", fileMap);
+	}
 
 }
 
