@@ -246,7 +246,7 @@ input[type="checkbox"] {
 						<div class="tab-pane fade" id="profile" role="tabpanel">
 							<div class="row">
 								<br>
-								<h2>삭제된 회원 관리</h2>
+								<h2>Deleted M</h2>
 								<div class="float-right">
 									<i class="fas fa-sync" style="color: tomato"></i>
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -281,7 +281,7 @@ input[type="checkbox"] {
 									</c:forEach>
 								</table>
 								<br>
-								<h2>비활성화된 그룹 관리</h2>
+								<h2>Deactivated G</h2>
 
 
 								<div class="float-right">

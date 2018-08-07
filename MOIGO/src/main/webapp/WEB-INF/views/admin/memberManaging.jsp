@@ -12,7 +12,7 @@
 <style type="text/css">
 .admin_member_table {
 	height: 500px;
-	overflow: scroll;
+	overflow: auto;
 }
 
 tr:hover {
@@ -29,7 +29,8 @@ tr {
 
 .carousel-inner div {
 	width: 100%;
-	height: 500px;
+	height: 550px;
+	overflow: auto;
 }
 
 

@@ -16,7 +16,7 @@
 
 .admin_group_table {
 	height: 500px;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .detail_group {
@@ -35,8 +35,8 @@ tr:hover {
 
 .carousel-inner div {
 	width: 100%;
-	height: 700px;
-	overflow: scroll;
+	height: 550px;
+	overflow: auto;
 }
 .carousel-control-prev>span, .carousel-control-next>span {
 	background-color: green;
@@ -330,7 +330,7 @@ $(document).ready(function(){
 								' </tr>'+
 								'<tr>'+
 		            			'<td>가입 연령</td>' +
-								'<td colspan="2">'+data[0].minAge+'~'+data[0].minAge+'</td>' +
+								'<td colspan="2">'+data[0].minAge+'~'+data[0].maxAge+'</td>' +
 								' </tr>'+
 								
 								'<tr>'+
