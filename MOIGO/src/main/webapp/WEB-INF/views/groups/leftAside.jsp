@@ -143,7 +143,7 @@
 	<c:if test="${memberGrade>=1}">
 		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-user-minus"></i><span id="groupWithdrawal" >그룹 탈퇴</span></button>
 	</c:if>
-
+  
 
 	</div>
 	
