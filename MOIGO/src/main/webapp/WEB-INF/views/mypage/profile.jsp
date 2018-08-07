@@ -254,10 +254,18 @@ select:DISABLED {
 			$('#userName').focus();
 			return;
 		}	
+    	
     });
     
     $('#btnUpdate').on('click',function(){
-    	$('#updateForm').submit();
+    	if($('#userName').val().trim().length<=0)
+		{
+	 		alert("이름을 입력해 주세요");
+	 		return false;
+		}else{
+			$('#updateForm').submit();	
+		}
+    	
     });
     
     $('#activity_area').on('click',function(){
