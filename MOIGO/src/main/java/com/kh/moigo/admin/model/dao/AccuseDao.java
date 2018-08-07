@@ -25,6 +25,8 @@ public interface AccuseDao {
 	List<Map<String, Object>> grpPerMem(String id);
 	List<Map<String, Object>> atop5memberList();
 	List<Map<String, Object>> atop5groupList();
+	List<Map<String, Object>> selectdeleteM();
+	List<Map<String, Object>> selectinactiveG();
 	
 	List<Map<String, Object>> selectAccuse(String id);
 	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);
@@ -56,6 +58,9 @@ public interface AccuseDao {
 	
 	//--
 	int insertAccuse(Accuse accuse);
+	int grpFlagDelete(String id);
+	int memFlagDelete(String id);
+
 
 
 }

@@ -39,7 +39,10 @@
 	<!-- <select id="selectAccuseList" resultMap="accuseResultMap"> SELECT * 
 		FROM ACCUSE ORDER BY ACCUSE_NO DESC </select> -->
 
-
+	<select id="selectinactiveG" resultMap="groupDetailResultMap">
+		SELECT * FROM GROUPS
+	    WHERE GROUP_STATE_CODE='S2'
+	</select>
 
 	<select id="grpDetail" resultMap="groupDetailResultMap">
 		SELECT GROUP_NO,GROUP_NAME,GROUP_MSG,GROUP_PICTURE,GROUP_ADDRESS,GROUP_GRADE_CODE,GROUP_STATE_CODE,MAX_MEMBER,ENROLL_DATE,INTEREST_BIG_CODE,ALLOW_SIGNUP,MIN_AGE,MAX_AGE,GROUP_GENDER,OPEN_SETTING,
@@ -131,7 +134,11 @@
 	    SET GROUP_STATE_CODE ='S2' 
 	    WHERE GROUP_NO = #{id}
 	</update>
-	
+	<update id="grpFlagDelete" parameterType="string">
+		UPDATE GROUPS 
+	    SET GROUP_STATE_CODE ='S1' 
+	    WHERE GROUP_NO = #{id}
+	</update>
 	
 	
 	
