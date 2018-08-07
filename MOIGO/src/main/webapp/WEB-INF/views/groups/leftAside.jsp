@@ -67,7 +67,8 @@
 			</div>
 			
 			<c:choose>
-				<c:when test="${memberGrade eq -1 }">
+			
+				<c:when test="${memberGrade eq -1 && m ne null }">
 					<div class="row joinBtnWrapper">
 						<button class="btn btn-block" type="button" data-toggle="modal" data-target="#joinModal">가입하기</button>
 					</div>
@@ -250,6 +251,7 @@ $('#groupReport').on("click",function(){
 
 $(function() {
 
+	
 	setGroupDesc('${param.groupNo}','${param.isMember}');
 	
 	
