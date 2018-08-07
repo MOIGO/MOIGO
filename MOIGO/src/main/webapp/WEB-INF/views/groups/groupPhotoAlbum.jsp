@@ -315,10 +315,6 @@
             			모임 사진을 추가해주세요.
             		</div>
             		<div id="photoBody">
-            			<div class="photo photo_not_last"></div>
-            			<div class="photo photo_not_last"></div>
-            			<div class="photo photo_not_last"></div>
-            			<div class="photo"></div>
             		</div>
             	</div>
            </div>
