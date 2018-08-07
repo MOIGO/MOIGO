@@ -252,7 +252,7 @@
                      var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption); */
                      
                      // 마커 생성 및 클러스터러에 마커 추가
-                     if(cnt == listData.length) { 
+                     if(cnt == listData.length) {
                         data = { positions };
                         var markers = data.positions.map(function(position) {
                         	return new daum.maps.Marker({
