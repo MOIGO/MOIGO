@@ -12,6 +12,8 @@
 <script src="${root}/resources/js/groups/jquery.fileupload.js" ></script>
 <link rel="stylesheet" href="${root}/resources/css/groups/datepicker.min.css">
 <script src="${root}/resources/js/groups/datepicker.min.js"></script>
+<link rel="stylesheet" href="${root}/resources/css/groups/jquery.imageview.css">
+<script src="${root}/resources/js/groups/jquery.imageview.js" ></script>
 <style>
 
    body{
@@ -315,10 +317,6 @@
             			모임 사진을 추가해주세요.
             		</div>
             		<div id="photoBody">
-            			<div class="photo photo_not_last"></div>
-            			<div class="photo photo_not_last"></div>
-            			<div class="photo photo_not_last"></div>
-            			<div class="photo"></div>
             		</div>
             	</div>
            </div>
@@ -438,10 +436,10 @@
 			$("#photoNone").css("display", "none");
 			for(var i=0; i < photo.length; i++){
 				
-				var photoAppend = "<div class='photo photo_not_last'></div>";
+				var photoAppend = "<a href='${root}"+ photo[i].filePath + photo[i].fileNewName + "'><div class='photo photo_not_last'></div></a>";
 				
 				if(i % 4 == 3)
-					photoAppend = "<div class='photo'></div>"
+					photoAppend = "<a href='${root}"+ photo[i].filePath + photo[i].fileNewName + "'><div class='photo'></div></a>";
 				
 				$("#photoBody").append(photoAppend);
 				$(".photo").eq(i).css("background-image", "url('${root}" + photo[i].filePath + photo[i].fileNewName + "')");
@@ -458,6 +456,8 @@
 			}
 		}
 		
+		$("#photoBody").imageview();
+		
 		$(".photo").each(function() {
 			
 			$(this).on("mouseover", function() {
@@ -469,8 +469,9 @@
 			});
 			
 			$(this).on("click", function() {
-				// 누르면 사진 보여주는 기능 추가
+				$("#search-input").css("z-index", "0");
 			});
+			
 		});
 		
 		$(".photo_check").each(function() {
@@ -673,9 +674,6 @@ function createPhotoInsertList(fileList) {
     		}
     		else
     			month = month - 1;
-    		
-    		console.log(month);
-    		console.log(year);
     		
     		$("#photoDayTxt").text(year + "년 " + month + "월");
     		getPhotoAlbumList(year, month);
