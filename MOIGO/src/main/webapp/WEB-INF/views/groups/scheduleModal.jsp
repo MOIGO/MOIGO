@@ -315,7 +315,7 @@ tempSchedule=new Object();
 			
 			deleteSchedule(undefined,obj.scheduleNo);
 			
-			location.reload();
+			
 		});
 		
 		
@@ -384,10 +384,14 @@ tempSchedule=new Object();
 		
 		toggleScheduleModal(); 
 		
-		if(typeof(scheduleNo)=='object')
+		if(typeof(scheduleNo)=='object'){
+		
 			getOneSchedule(scheduleNo.scheduleNo,setTargetScheduleData);
-		else
+		}
+		else{
+			
 			getOneSchedule(scheduleNo,setTargetScheduleData);
+		}
 		
 		$('#insertSchedule').find(".modal-footer button").unbind();
 		$('#insertSchedule').find(".modal-footer button").on("click",function(){
@@ -433,7 +437,7 @@ tempSchedule=new Object();
 	//수정을 위해 스케줄 번호를 이용해서 정보를 세팅
 	function setTargetScheduleData(obj){
 	
-		console.log(obj);
+		
 		
 		$('#insertSchedule').find('input[name=scheduleNo]').val(obj.scheduleNo);
 		
@@ -450,10 +454,16 @@ tempSchedule=new Object();
 		$('#startTime').timepicker("setTime",milisecToDate(obj.startTime));
 		$('#startDate').data('datepicker').selectDate(milisecToDate(obj.startTime));
 		
+		
+		
 		if(obj.endTime!=null){
-			$('#endTime').timepicker("setTime",milisecToDate(obj.endTime));
+			/*  $('#endDate').data('datepicker').selectDate(milisecToDate(obj.startTime)); */
+	        
+			$('#endDate').datepicker({minDate : milisecToDate(obj.startTime)});
 			$('#endDate').data('datepicker').selectDate(milisecToDate(obj.endTime));
-			$('#endDate').datepicker({minDate : getDate($('#startDate'))});
+			$('#endTime').timepicker("setTime",milisecToDate(obj.endTime));
+			
+			
 		}else{
 			$('#endTime').timepicker("setTime",null);
 			$('#endDate').datepicker("setDate",null);
@@ -501,8 +511,7 @@ tempSchedule=new Object();
 		
 		
 		var times=  getTimesFromInput();
-		console.log("스케줄 이름은?");
-		console.log($('#insertSchedule input[name=scheduleAddress]').val());
+		
 		
 	  	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/updateSchedule.gp",
@@ -521,7 +530,7 @@ tempSchedule=new Object();
 					
 					if(data.result>0){
 						alert("일정 수정에 성공하였습니다.");
-
+						location.reload();
 						$('#viewSchedule').modal('hide');
 						
 					}
@@ -683,7 +692,7 @@ tempSchedule=new Object();
 		var times=  getTimesFromInput();
 		
 		var $mapDiv =$('<div class="card" name="editScheduleWrap" style="border:3px solid black;" contenteditable="false" onclick="openScheduleViewModal('+"'"+scheduleObj.scheduleNo+"'"+')">');
-		
+		var $scheduleNo =$('<input type="hidden" name="scheduleNo">').val(scheduleObj.scheduleNo);
 		var $mapBody = $('<div style="cursor:pointer;" class="card-body">');
 		var $mapRow = $('<div class="row">');
 		var $mapCol2 = $('<div class="col-2">');
@@ -728,7 +737,7 @@ tempSchedule=new Object();
 		var $mapCol2Day=$('<div name="day" style="text-align:center;font-weight:700; font-size:2.0em; margin-top:-10px;">'+milisecToDate(scheduleObj.startTime).getDate()+'</div>');
 		var $mapCol2Dow =$('<div name="dayofweek" style="text-align:center; margin-top:-10px;">'+getDayToKor(milisecToDate(scheduleObj.startTime).getDay())+'</div>');
 		var $col10RowCol2 =$('<div class="col-12 map_address scheduleTime">'+getTimeToString(milisecToDate(scheduleObj.startTime))+"  ~  "+getTimeToString(milisecToDate(scheduleObj.endTime))+'</div>');
-		console.log(scheduleObj.endTime);
+		
 				
 	
 		if(milisecToDate(scheduleObj.startTime).getDay()==0)
@@ -762,6 +771,7 @@ tempSchedule=new Object();
 		$col10Row.append($scheduleContent); */
 		
 		//구성 add
+		$col10Row.append($scheduleNo);
 		$col10Row.append($col10RowCol1);
 		$col10Row.append($col10RowCol2);
 		$mapCol10.append($col10Row);
@@ -838,11 +848,11 @@ tempSchedule=new Object();
 		
 		if(confirm("일정을 삭제 하시겠습니까?")){
 			
-			console.log(deleteObj);
-			console.log(scheduleNo);
-			
-			if(deleteObj!=undefined)
+			if(deleteObj!=undefined){
 				$(deleteObj).remove();
+			}
+			
+			
 			
 			
 			 $.ajax({
@@ -853,6 +863,11 @@ tempSchedule=new Object();
 					  
 						if(data.result>0){
 							alert(" 일정 삭제에 성공하였습니다.");
+							
+							if(deleteObj!=undefined){
+								location.reload();
+							}
+							
 							
 						}
 						else
@@ -988,7 +1003,9 @@ tempSchedule=new Object();
 		});
 		
 		$('#startDate').on("change",function(){
+			$('#startDate').datepicker("")
 			$('#endDate').datepicker({minDate : getDate(this)});
+			
 			if(getDate($('#startDate')) > getDate($('#endDate')))
 				$('#endDate').data('datepicker').selectDate(getDate($('#startDate')));
 		});
@@ -1094,7 +1111,7 @@ tempSchedule=new Object();
 	      try {
 	    	 
 	        date = $.datepicker.parseDate("yy.mm.dd", $(element).val());
-	       
+	      
 	      } catch( error ) {
 	        date = null;
 	      }

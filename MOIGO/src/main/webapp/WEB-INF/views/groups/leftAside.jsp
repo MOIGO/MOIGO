@@ -269,20 +269,20 @@ $(function() {
 			}
 			else if(groupMenu == '사진첩'){
 				
-				if('${memberGrade>1}'=="true")
+				if('${memberGrade>=1}'=="true")
 					$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
 				else
 					alert("회원 전용 메뉴입니다.");
 				
 			}
 			else if(groupMenu == '일정'){
-				if('${memberGrade>1}'=="true")
+				if('${memberGrade>=1}'=="true")
 					$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
 				else
 					alert("회원 전용 메뉴입니다.");
 			}
 			else{
-				if('${memberGrade>1}'=="true")
+				if('${memberGrade>=1}'=="true")
 					$("#groupNoForm").attr("action", "${root}/groups/groupMember.gp").submit();
 				else
 					alert("회원 전용 메뉴입니다.");
@@ -338,6 +338,8 @@ $('#groupWithdrawal').on("click",function(){
 //신고 모달 관련 스크립트
 
 $('#reportSubmit').on('click',function(){
+	
+	alert("들어옴");
 	var data =$("input[name=reportRadios]:checked").val()+" | "+$("select[name=myList]").val();
 	var data2 =$("#accuseTarget").val();
 	var data3 =$("#accuseReporter").val();
