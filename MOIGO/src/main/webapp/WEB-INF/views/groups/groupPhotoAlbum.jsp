@@ -128,10 +128,9 @@
 		width : 140px;
 		height : 140px;
 		border : 1px solid #DDD;
-		background: skyblue;
-		/* background-image : url('${root}/resources/images/common/img_profile.png'); */
-		background-size : 100%;
+		background-size : 100% 100%;
 		cursor: pointer;
+		background-repeat: no-repeat;
 	}
 	
 	.photo_not_last {
@@ -243,6 +242,7 @@
 		height : 109px;
 		border : 1px solid #DDD;
 		background-size : 100% 100%;
+		background-repeat: no-repeat;
 	}
 	
 	.insert_photo_delete {
@@ -282,12 +282,6 @@
    <div class="row">
    
      <c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
-     <c:import url="/WEB-INF/views/groups/mapModal.jsp" />
-     <c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
-			<c:param name="groupNo" value="${groupNo }" />
-			<c:param name="memberNo" value="${gm.memberNo}" />
-			<c:param name="memberGrade" value="${memberGrade}" />
-		</c:import>
      
      <div class="col-7">
         <div class="card">
@@ -409,7 +403,104 @@
 	var month = new Date().getMonth() + 1;
 	
 	function getPhotoAlbumList(year, month) {
+		
+		var dates = "";
+		if(month < 10)
+			dates = year + "0" + month;
+		else
+			dates = year + month;
+		
+		$.ajax({
+			url : "${root}/groups/selectListGroupPhoto.gp",
+			type : "POST",
+    		dataType : "json",
+    		data : {
+    			groupNo : "${param.groupNo}",
+    			dates : dates
+    		},
+    		success : function(data) {
+				var photo = data.photo;
+				createPhotoAlbumList(photo);
+			},
+			error : function() {
+				console.log("사진 리스트 오류");
+			}
+		});
+	}
+	
+	function createPhotoAlbumList(photo) {
+		
 		$("#photoBody").children().remove();
+		
+		for(var i=0; i < photo.length; i++){
+			
+			var photoAppend = "<div class='photo photo_not_last'></div>";
+			
+			if(i % 4 == 3)
+				photoAppend = "<div class='photo'></div>"
+			
+			$("#photoBody").append(photoAppend);
+			$(".photo").eq(i).css("background-image", "url('${root}" + photo[i].filePath + photo[i].fileNewName + "')");
+
+			var inp = "<input type='checkbox' value='' class='photo_inp' hidden='hidden'/>"
+			var chk = "<span class='far fa-check-circle photo_check photo_unchecked'></span>";
+			
+			if("${gm.memberGradeCode}" > 1)
+				$(".photo").eq(i).append(inp + chk);
+			else{
+				if("${gm.memberNo}" == photo[i].memberNo)
+					$(".photo").eq(i).append(inp + chk);
+			}
+		}
+		
+		$(".photo").each(function() {
+			
+			$(this).on("mouseover", function() {
+				$(this).find(".photo_check").css("display", "block");
+			});
+			
+			$(this).on("mouseout", function() {
+				$(this).find(".photo_check").css("display", "none");
+			});
+			
+			$(this).on("click", function() {
+				// 누르면 사진 보여주는 기능 추가
+			});
+		});
+		
+		$(".photo_check").each(function() {
+			$(this).on("click", function(event) {
+				event.stopPropagation();
+				$(this).prev().click();
+				if($(this).prev().is(":checked")){
+					$(this).parent().css("outline", "3px solid #0078ff");
+					$(this).parent().css("border", "none");
+					$(this).removeClass('far photo_unchecked').addClass('fas photo_checked');
+					$(".photo_check").css("display", "block");
+					$(".photo").off("mouseover mouseout");
+				}
+				else{
+					$(this).parent().css("outline", "none");
+					$(this).parent().css("border", "1px solid #DDD");
+					$(this).removeClass('fas photo_checked').addClass('far photo_unchecked');
+				}
+				
+				if($(".photo_inp:checked").length == 0){
+					$(".photo_check").css("display", "none");
+					$(".photo").each(function() {
+						$(this).on("mouseover", function() {
+							$(this).find(".photo_check").css("display", "block");
+						});
+						
+						$(this).on("mouseout", function() {
+							$(this).find(".photo_check").css("display", "none");
+						});
+					});
+				}
+				
+			});
+		});
+		
 	}
 	
 	 function addClassMonthpicker(){
@@ -474,6 +565,8 @@ function createPhotoInsertList(fileList) {
 }
 	
    $(function() {
+	   
+	   getPhotoAlbumList(year, month);
 	   
 	    $("#fileupload").fileupload({
     		url : "${root}/groups/uploadGroupPhoto.gp",
@@ -654,11 +747,13 @@ function createPhotoInsertList(fileList) {
 		
 		$("#gpInsertConfirmBtn").on("click", function() {
 			var formData = new FormData();
-			for(var i=0; i < fileList.length; i++){
-				formData.append("files", fileList[i]);
-				formData.append("groupNo", "${param.groupNo}");
-				formData.append("memberNo", "${m.memberNo}");				
-			}
+			
+			for(var i=0; i < fileList.length; i++)
+				formData.append("files", fileList[i]);	
+			
+			formData.append("groupNo", "${param.groupNo}");
+			formData.append("memberNo", "${m.memberNo}");	
+			
 			$.ajax({
 				url : "${root}/groups/insertGroupPhoto.gp",
 				type : "POST",
@@ -669,7 +764,8 @@ function createPhotoInsertList(fileList) {
 	    	    contentType: false,
 	    	    processData: false,
 	    	    success : function(data) {
-					
+	    	    	$('#groupPhotoInsertModal').modal("hide");
+	    	    	getPhotoAlbumList(year, month);
 				},
 				error : function() {
 					console.log("파일 업로드 오류");
@@ -683,57 +779,6 @@ function createPhotoInsertList(fileList) {
 			fileList = [];
 		});	
 		
-		$(".photo").each(function() {
-			var inp = "<input type='checkbox' value='' class='photo_inp' hidden='hidden'/>"
-			var chk = "<span class='far fa-check-circle photo_check photo_unchecked'></span>";
-			$(this).append(inp + chk);
-
-			$(this).on("mouseover", function() {
-				$(this).find(".photo_check").css("display", "block");
-			});
-			
-			$(this).on("mouseout", function() {
-				$(this).find(".photo_check").css("display", "none");
-			});
-			
-			$(this).on("click", function() {
-				// 누르면 사진 보여주는 기능 추가
-			});
-		});
-		
-		$(".photo_check").each(function() {
-			$(this).on("click", function(event) {
-				event.stopPropagation();
-				$(this).prev().click();
-				if($(this).prev().is(":checked")){
-					$(this).parent().css("outline", "3px solid #0078ff");
-					$(this).parent().css("border", "none");
-					$(this).removeClass('far photo_unchecked').addClass('fas photo_checked');
-					$(".photo_check").css("display", "block");
-					$(".photo").off("mouseover mouseout");
-				}
-				else{
-					$(this).parent().css("outline", "none");
-					$(this).parent().css("border", "1px solid #DDD");
-					$(this).removeClass('fas photo_checked').addClass('far photo_unchecked');
-				}
-				
-				if($(".photo_inp:checked").length == 0){
-					$(".photo_check").css("display", "none");
-					$(".photo").each(function() {
-						$(this).on("mouseover", function() {
-							$(this).find(".photo_check").css("display", "block");
-						});
-						
-						$(this).on("mouseout", function() {
-							$(this).find(".photo_check").css("display", "none");
-						});
-					});
-				}
-				
-			});
-		});
-		
 		$("#photoDeleteBtn").on("click", function() {
 			if($(".photo_inp:checked").length == 0)
 				alert("선택된 사진이 없습니다. 삭제할 사진을 선택해주세요.");
@@ -744,17 +789,6 @@ function createPhotoInsertList(fileList) {
 		});
 		
    });
-   
-   /*밀리세컨드를 data 객체로 가져오기  */
-	function milisecToDate(milisecondData){
-		
-		if(milisecondData==null)
-			return null;
-		
-		var date = new Date(milisecondData);
-		
-		return date;
-	}  
    
 </script>
 </body>

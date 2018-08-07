@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="${root}/resources/js/groups/jquery.timepicker.js" ></script>
 <link rel="stylesheet" href="${root}/resources/css/groups/jquery.timepicker.css" />
 <link rel="stylesheet" href="${root}/resources/css/groups/datepicker.min.css">
@@ -383,7 +382,7 @@ tempSchedule=new Object();
 	function editSchedule(toEditObj,scheduleNo){
     
 		
-		toggleScheduleModal();
+		toggleScheduleModal(); 
 		
 		if(typeof(scheduleNo)=='object'){
 		
@@ -453,7 +452,7 @@ tempSchedule=new Object();
 		
 	
 		$('#startTime').timepicker("setTime",milisecToDate(obj.startTime));
-		$('#startDate').datepicker("setDate",milisecToDate(obj.startTime));
+		$('#startDate').data('datepicker').selectDate(milisecToDate(obj.startTime));
 		
 		
 		

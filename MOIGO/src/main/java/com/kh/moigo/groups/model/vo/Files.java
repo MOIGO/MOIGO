@@ -15,6 +15,7 @@ public class Files implements java.io.Serializable{
 	private Date fileDate;
 	private String isImage;
 	private String postNo;
+	
 	public Files(String fileNo, String fileOriginName, String fileNewName, String filePath, String groupNo,
 			String memberNo, Date fileDate, String isImage, String postNo) {
 		super();
