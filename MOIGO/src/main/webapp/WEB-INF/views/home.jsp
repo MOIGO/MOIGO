@@ -28,7 +28,7 @@
 }
 
 #joingroups{
-	width: 832px;
+	width: 880px;
 	height: 200px;
 }
 .mainGroup {
@@ -61,12 +61,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-/*  @media all and (min-width: 1px){ 
-	.jgroup{
-		width: 1100px !important;
-		height: 200px;
-	}
-} */ 
 
 .maintagFont{
 	position:absolute; 
@@ -175,6 +169,7 @@
 						</ol>
 						
 						<div class="carousel-inner" id="joingroups"></div>
+						</a>
 					</div>
 				</c:otherwise>
 				</c:choose>
@@ -325,8 +320,8 @@
 						var leng = list.length;
 						console.log(leng);
 						
-						var cnt =0;
-						for(var i=0; i<list.length; i++){
+						var cnt =1;
+						 for(var i=0; i<list.length; i++){
 							if(i == 0){
 								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'" class="active">');
 								$('#carouselNum').append($li);
@@ -336,17 +331,15 @@
 								$('#carouselNum').append($li);
 								cnt++;
 							}
-						}
+						} 
 						
 						
 						for(l in list){
 							
 							if(l == 0){
 								var $div_carsel = $('<div class="carousel-item active">');
-								$('#joingroups').append($div_carsel);
-							} else if(4%l == 1){
+							} else if(l%4 == 1){
 								var $div_carsel = $('<div class="carousel-item">');	
-								$('#joingroups').append($div_carsel);
 							}
 							
 							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 20px;">');
@@ -367,14 +360,11 @@
 							$div.append($div_top);
 							$div.append($div_bot);
 							
-							$('#joingroups').append($div);
+							$div_carsel.append($div);
+							$('#joingroups').append($div_carsel);
 							
-							if(leng > 5){
-								var $a_pre = $('<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span></a>');
-								var $a_next = $('<a class="carousel-control-next" href="#carouselExampleIndicators1"	role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span></a>');
-								$('#carouselExampleIndicators1').append($a_pre);
-								$('#carouselExampleIndicators1').append($a_next);
-							}
+							
+							
 							
 							
 							$('.clickme').on("click",function(){
@@ -385,6 +375,12 @@
 							
 							
 						}
+						 if(list.length >= 5){
+								var $a_pre = $('<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span></a>');
+								var $a_next = $('<a class="carousel-control-next" href="#carouselExampleIndicators1"	role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span></a>');
+								$('#carouselExampleIndicators1').append($a_pre);
+								$('#carouselExampleIndicators1').append($a_next);
+							} 
 						
 						
 					},
