@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 <c:import url="/WEB-INF/views/common/header.jsp"/>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
 <html>
@@ -249,6 +248,10 @@
    function scheduleModalOpen() {
 	   $("#scheduleConfirmBtn").addClass("call_schedule");
 	   toggleScheduleModal();
+	   $('#startDate').data('datepicker').selectDate(new Date());
+	   $('#endDate').datepicker({minDate : new Date()});
+		$('#endDate').data('datepicker').clear();
+		$('#endTime').timepicker("setTime", null);
    }
    
    function customCalendarListView(){
@@ -334,6 +337,7 @@
 			console.log(date._d);
 			scheduleModalOpen();
 			$('#startDate').data('datepicker').selectDate(date._d);
+			$('#endDate').datepicker({minDate : date._d});
 			$('#endDate').data('datepicker').clear();
 			$('#endTime').timepicker("setTime", null);
 		}

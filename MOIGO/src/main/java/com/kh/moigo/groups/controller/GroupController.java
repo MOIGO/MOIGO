@@ -1050,5 +1050,14 @@ public class GroupController {
 		
 		return "common/msg";
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value="/groups/insertGroupPhoto.gp", method=RequestMethod.POST)
+	public Map<String, Object> insertGroupPhoto(@RequestParam("files") MultipartFile photoFile){
+		
+		Map<String, Object> photoMap = new HashMap<String, Object>();
+		photoMap.put("photo", photoFile.getOriginalFilename());
+		
+		return photoMap;
+	}
 }
