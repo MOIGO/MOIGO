@@ -89,8 +89,8 @@ background: #EDEFF2;
 		left:250px;
 		background-color: grey;
 		opacity: 0.5;
-		min-width:1000px;
-		width:1300px;
+		min-width:1200px;
+		width:1500px;
 		height:100%;
 		text-align:center;
 		
@@ -135,8 +135,10 @@ background: #EDEFF2;
 <body>
 	<c:if test="${currentGroup.groupStateCode ne 'S1' }">
 		<div class="wrap row align-items-center justify-content-center" style="font-size:8em;">블라인드<br> 처리된 모임입니다.</div>
-		<span>관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
+		<span style="postion:absolute !important;z-index:9999;left:500px;">관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
 	</c:if>
+			
+	
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >

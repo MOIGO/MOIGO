@@ -787,8 +787,12 @@
 		$('#inpGrpName').val("");
 	 
 	 
+	console.log($('#min_ageSelect').val());
+	console.log($('#max_ageSelect').val());
+	
 	 if($('#min_ageSelect').val()!=-1&&$('#max_ageSelect').val()!=-1){
-		 if($('#min_ageSelect').val()>$('#max_ageSelect').val()){
+		 
+		 if(parseInt($('#min_ageSelect').val())<parseInt($('#max_ageSelect').val())){
 		    	alert("최소나이는 최대나이 보다 작아야 합니다.");
 		    	return;
 		 }

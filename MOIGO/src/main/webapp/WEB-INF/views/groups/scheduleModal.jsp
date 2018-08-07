@@ -124,12 +124,12 @@ text-align:center;
 	<div class="modal" id="viewSchedule" tabindex="-1"role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modalSize_schedule" role="document">
 		<div class="modal-content">
-			<!-- <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">일정 만들기</h5>
+			<div class="modal-header">
+				
 				<button type="button" class="close" data-dismiss="modal"aria-label="Close" onclick="closeScheduleModal()">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div> -->
+			</div>
 			
 			<div class="modal-body">
 				<div class="card">
@@ -258,7 +258,7 @@ tempSchedule=new Object();
 
 	function openScheduleViewModal(scheduleNo){
 		
-		$('#viewSchedule').modal("toggle");
+		$('#viewSchedule').modal("show");
 		makeScheduleMapView();
 	
 		getOneSchedule(scheduleNo,setScheduleViewModal);
@@ -280,10 +280,8 @@ tempSchedule=new Object();
 					groupNo:groupNo}
 				,success:(function(data){
 					
-					console.log(data);
 					if(data!=null){
-						
-						console.log(data);
+				
 						$('#viewSchedule').find(".memberName").text(data.groupMember.memberName);
 						
 						
@@ -306,10 +304,13 @@ tempSchedule=new Object();
 		if('${gm.memberNo}'!=obj.memberNo)
 			$('#scheduleViewDropDown').css("display","none");
 		
+		$('#scheduleViewDropDown button[name=edit]').unbind();
 		$('#scheduleViewDropDown button[name=edit]').on("click",function(){
 			editSchedule(undefined,obj.scheduleNo)
 		});
 		
+		
+		$('#scheduleViewDropDown button[name=delete]').unbind();
 		$('#scheduleViewDropDown button[name=delete]').on("click",function(){
 			
 			
@@ -373,7 +374,7 @@ tempSchedule=new Object();
 		
 		
 		 $('#endDate').data('datepicker').clear();
-		 $('#insertSchedule').modal("toggle");
+		 $('#insertSchedule').modal("show");
 	}
 	
 
@@ -392,10 +393,13 @@ tempSchedule=new Object();
 		$('#insertSchedule').find(".modal-footer button").unbind();
 		$('#insertSchedule').find(".modal-footer button").on("click",function(){
 				
-			if(typeof(scheduleNo)=='object')
+			if(typeof(scheduleNo)=='object'){
 				updateSchedule(scheduleNo.scheduleNo);
-			else
+			}
+			else{
+				
 				updateSchedule(scheduleNo);
+			}
 			editScheduleOnSummerNote(toEditObj);
 		
 		});
@@ -451,6 +455,7 @@ tempSchedule=new Object();
 			
 			$('#endTime').timepicker("setTime",milisecToDate(obj.endTime));
 			$('#endDate').data('datepicker').selectDate(milisecToDate(obj.endTime));
+			$('#endDate').datepicker({minDate : getDate($('#startDate'))});
 		}else{
 			$('#endTime').timepicker("setTime",null);
 			$('#endDate').datepicker("setDate",null);
@@ -495,10 +500,15 @@ tempSchedule=new Object();
 	/*뷰로 스케줄 업데이트  */
 	function updateSchedule(scheduleNo){
 		
+		
+		
 		var times=  getTimesFromInput();
-
+		console.log("스케줄 이름은?");
+		console.log($('#insertSchedule input[name=scheduleAddress]').val());
+		
 	  	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/updateSchedule.gp",
+			type:"post",
 			data:{	scheduleNo:scheduleNo,
 					scheduleName:$('#insertSchedule input[name=scheduleName]').val(),
 					scheduleContent:$('#insertSchedule textarea').val(),
@@ -508,6 +518,8 @@ tempSchedule=new Object();
 					allDay:$('#allDay').val(),
 					colorLabel:$('#scheduleLabelColor option:selected').val()
 				},success:(function(data){
+					
+					
 					
 					if(data.result>0){
 						alert("일정 수정에 성공하였습니다.");
@@ -567,6 +579,7 @@ tempSchedule=new Object();
 		
 	 	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/insertSchedule.gp",
+			type:"post",
 			data:{	groupNo:"${param.groupNo}",
 					scheduleName:$('#insertSchedule input[name=scheduleName]').val(),
 					scheduleContent:$('#insertSchedule textarea').val(),
@@ -776,7 +789,7 @@ tempSchedule=new Object();
 			
 			$btn_del.on("click",function(event){
 				
-				event.stopPropagation();
+					event.stopPropagation();
 				
 					deleteSchedule($mapDiv,scheduleObj.scheduleNo);
 				
@@ -826,6 +839,10 @@ tempSchedule=new Object();
 	function deleteSchedule(deleteObj,scheduleNo){
 		
 		if(confirm("일정을 삭제 하시겠습니까?")){
+			
+			console.log(deleteObj);
+			console.log(scheduleNo);
+			
 			if(deleteObj!=undefined)
 				$(deleteObj).remove();
 			
@@ -875,9 +892,12 @@ tempSchedule=new Object();
 		
 		if(dateObj==undefined||dateObj==null)
 			return ""; 
-	
 		
-		 return dateObj.getFullYear()+"년 "+(parseInt(dateObj.getMonth())+1)+"월 "+dateObj.getDate()+"일 "+dateObj.getHours()+":"+dateObj.getMinutes();
+		
+		var hours = (dateObj.getHours()<10?'0':'')+dateObj.getHours();
+		var minutes = (dateObj.getMinutes()<10?'0':'')+dateObj.getMinutes();
+		
+		 return dateObj.getFullYear()+"년 "+(parseInt(dateObj.getMonth())+1)+"월 "+dateObj.getDate()+"일 "+hours+":"+minutes;
 	}
 	
 	/*dow를 요일로 바꾸기  */
