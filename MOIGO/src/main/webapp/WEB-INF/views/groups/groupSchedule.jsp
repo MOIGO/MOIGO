@@ -339,6 +339,7 @@
 			$('#startDate').data('datepicker').selectDate(date._d);
 			$('#endDate').datepicker({minDate : date._d});
 			$('#endDate').data('datepicker').clear();
+			$('#endDate').datepicker({minDate : date._d});
 			$('#endTime').timepicker("setTime", null);
 		}
       });

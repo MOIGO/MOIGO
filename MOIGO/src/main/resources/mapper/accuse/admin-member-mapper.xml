@@ -22,15 +22,21 @@
 		<result property="bigInterest" column="INTEREST_BIG_NAME"/>
 		<result property="countWmember" column="COUNT_WM" />	
 		<result property="enrollD" column="ENROLL_D" />	
-		<result property="totalMember" column="TOTAL" />	
+		<result property="totalMember" column="TOTAL" />
+		<result property="todayMember" column="TODAY" />		
 		<result property="enrollM" column="ENROLL_M" />	
 		<result property="mmCount" column="MM_COUNT" />	
 		
 	</resultMap>
 
+	<select id="selectdeleteM" resultMap="memberDetailResultMap">
+		SELECT * FROM MEMBER WHERE DELFLAG='Y'
+	</select>
+
+
 	<select id="memDetail" parameterType="string" resultMap="memberDetailResultMap">
 		SELECT MEMBER_NO,
-		MEMBER_EMAIL,MEMBER_NAME,MEMBER_ADDRESS,MEMBER_BIRTH,MEMBER_GENDER,ENROLL_DATE,
+		MEMBER_EMAIL,MEMBER_NAME,MEMBER_ADDRESS,MEMBER_BIRTH,MEMBER_GENDER,ENROLL_DATE,DELFLAG,
 		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE MEMBER_NO = M.MEMBER_NO) ENROLL_GR,
 		(SELECT COUNT(*) FROM POST WHERE MEMBER_NO = M.MEMBER_NO) POST_COUNT,
 		(SELECT COUNT(*) FROM POST_REPLY WHERE MEMBER_NO = M.MEMBER_NO) REPLY_COUNT
@@ -78,9 +84,14 @@
 	</select>
 
 	<select id="memEnrollperMonth" resultMap="memberDetailResultMap">
-		SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
-		GROUP BY  SUBSTR(enroll_date, 1, 5)
-		order by  SUBSTR(enroll_date, 1, 5)
+		SELECT * FROM
+		(SELECT ROWNUM RNUM, PAGING.* 
+		FROM  (SELECT SUBSTR(enroll_date, 1, 5) ENROLL_M, COUNT(*) MM_COUNT FROM MEMBER
+				GROUP BY  SUBSTR(enroll_date, 1, 5)
+				order by  SUBSTR(enroll_date, 1, 5) desc)
+		    paging)
+		WHERE RNUM BETWEEN 1 AND 5
+		order by ENROLL_M
 	</select>
 
 
@@ -89,6 +100,10 @@
 		SET DELFLAG ='Y'
 		WHERE MEMBER_NO = #{id}	
 	</update>
-	
+	<update id="memFlagDelete" parameterType="string">
+		UPDATE MEMBER
+		SET DELFLAG ='N'
+		WHERE MEMBER_NO = #{id}	
+	</update>
 	
 </mapper>

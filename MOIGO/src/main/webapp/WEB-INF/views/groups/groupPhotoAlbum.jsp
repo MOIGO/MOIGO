@@ -282,6 +282,12 @@
    <div class="row">
    
      <c:import url="/WEB-INF/views/groups/leftAside.jsp"/>
+     <c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+     <c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+			<c:param name="groupNo" value="${groupNo }" />
+			<c:param name="memberNo" value="${gm.memberNo}" />
+			<c:param name="memberGrade" value="${memberGrade}" />
+		</c:import>
      
      <div class="col-7">
         <div class="card">
@@ -738,6 +744,17 @@ function createPhotoInsertList(fileList) {
 		});
 		
    });
+   
+   /*밀리세컨드를 data 객체로 가져오기  */
+	function milisecToDate(milisecondData){
+		
+		if(milisecondData==null)
+			return null;
+		
+		var date = new Date(milisecondData);
+		
+		return date;
+	}  
    
 </script>
 </body>

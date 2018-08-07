@@ -143,7 +143,6 @@ background: #EDEFF2;
 		<c:param name="groupNo" value="${groupNo }" />
 		<c:param name="memberNo" value="${gm.memberNo}" />
 		<c:param name="memberGrade" value="${memberGrade}" />
-		<%-- <c:param name="groupStateCode" value="${currGroup.groupStateCode}" /> --%>
 	</c:import>
 
 	<div class="container">
@@ -567,14 +566,10 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 	if(isPost){
 		
 		if($(wrapperObj).find(".postWriterNo").val()=='${gm.memberNo}'||'${memberGrade>=3}'=='true'){
-			$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
-			$dropDownMenu.append($dropDownItem1);
+			
+			
 			var $dropDownItem3=$("<a class='dropdown-item' >삭제하기</a>");
 			$dropDownMenu.append($dropDownItem3);
-			
-			$dropDownItem1.on("click",function(){
-				prepareUpdatePost(num);
-			});
 			
 			$dropDownItem3.on("click",function(){
 				deletePost(num,wrapperObj);
@@ -584,6 +579,15 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			$dropDownItem2=$("<a class='dropdown-item' >공지 등록</a>");
 			$dropDownMenu.append($dropDownItem2);
 		}
+		
+		if($(wrapperObj).find(".postWriterNo").val()=='${gm.memberNo}'){
+			$dropDownItem1=$("<a class='dropdown-item' >글 수정</a>");
+			$dropDownMenu.append($dropDownItem1);
+			$dropDownItem1.on("click",function(){
+				prepareUpdatePost(num);
+			});
+		}
+		
 		
 		//신고하기 넣기
 		if($(wrapperObj).find(".postWriterNo").val()!='${gm.memberNo}'&&'${memberGrade>=1}'=='true'){
@@ -601,17 +605,22 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 	}else{
 		
 		if($(wrapperObj).find(".replyWriterNo").val()=='${gm.memberNo}'||'${memberGrade>=3}'=='true'){
-			$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
+			
 			$dropDownItem2=$("<a class='dropdown-item'>댓글 삭제</a>");
-			$dropDownMenu.append($dropDownItem1);
+			
 			$dropDownMenu.append($dropDownItem2);
 			
-			$dropDownItem1.on("click",function(){
-				addReplyEditForm(num);
-			});
+			
 			
 			$dropDownItem2.on("click",function(){
 				deleteReply(num);
+			});
+		}
+		if($(wrapperObj).find(".replyWriterNo").val()=='${gm.memberNo}'){
+			$dropDownItem1=$("<a class='dropdown-item'>댓글 수정</a>");
+			$dropDownMenu.append($dropDownItem1);
+			$dropDownItem1.on("click",function(){
+				addReplyEditForm(num);
 			});
 		}
 		
@@ -758,14 +767,14 @@ function updatePost(num,postContent){
 	var formData = new FormData();
 	
 	//이미지 설정
-	$(content).find('img:not(.addedImage)').each(function(index){
+	$(content).find('img').each(function(index){
 		imageNameToSave.push($(this).attr("data-filename"));
 	
 		$(this).attr("src",$(this).attr("data-filename"));
 		
 		
 	});
-	
+	  
 	for(var i = 0;i<document.getElementById('postImages').files.length;++i){
 			
 		formData.append("postImages",document.getElementById('postImages').files[i]);
@@ -915,6 +924,9 @@ function deleteReply(num){
 
 function deletePost(num,wrapperObj){
 	
+	if(!confirm("삭제하시겠습니까?"))
+		return;
+	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/groups/deletePost.gp",
 		data:{postNo:num},
@@ -979,7 +991,7 @@ function submitPost(){
 	
 	$(content).find("[name=editScheduleWrap]").remove();
 
-
+	
 	 
 	$('#summernote').summernote('reset');
 	$('#summernote').summernote("code",$(content));
@@ -993,6 +1005,8 @@ function submitPost(){
 	} 
  	 
  	
+ 	console.log(imageNameToSave);
+ 	 
  	 
  	 imageNameToSave.sort();
   
@@ -1015,6 +1029,9 @@ function submitPost(){
 	    contentType: false,
 	    processData: false,
 		success:function(data){
+			
+			if(data.result>0)
+				alert("글 등록 성공!");
 			
 			if(data.result<0)
 				alert("글 등록 실패!");

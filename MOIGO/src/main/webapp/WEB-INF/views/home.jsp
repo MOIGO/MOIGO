@@ -14,9 +14,17 @@
 	margin: auto;
 }
 
-.jgroup{
+#jgroup{
 	width: 1110px;
 	height: 200px;
+}
+
+.maincarou{
+	width: 1200px;
+	height: 600px;
+}
+.maincarou:hover{
+	cursor: pointer;
 }
 
 #joingroups{
@@ -53,18 +61,22 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-@media all and (max-width: 1200px) { /* #carouselExampleIndicators1 {
-		position: absolute;
-		width: 1200px;
+/*  @media all and (min-width: 1px){ 
+	.jgroup{
+		width: 1100px !important;
+		height: 200px;
 	}
-	.carousel {
-		position: absolute;
-	}
-	.mainGroup test ani {
-		position: absolute;
-		width: 300px;
-	} */
+} */ 
+
+.maintagFont{
+	position:absolute; 
+	left: 300px;
+	z-index:1800;
+	color: snow;
+	font-weight: bold;
 }
+
+
 </style>
 </head>
 <body onload="start()">
@@ -84,29 +96,36 @@
 				<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
 			</ol>
 			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-60" src="resources/images/main/snow.jpg"
-						alt="First slide">
-					<div class="carousel-caption d-none d-md-block">
-						<h5>삿포로 눈</h5>
-						<p>눈꽃 축제 어떠세요??</p>
-					</div>
+				<div class="carousel-item active maincarou">
+				<input type="hidden" value="역사" />
+				<h3 class="maintagFont" style="top: 150px;">#역사</h3>
+				<h3 class="maintagFont" style="top: 200px;">#한국사</h3>
+				<h3 class="maintagFont" style="top: 250px;">#세계사</h3>
+				<h3 class="maintagFont" style="top: 300px;">#지리</h3>
+				<img class="d-block w-60" src="resources/images/main/history.jpg"
+						alt="First slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
+					
+					
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-60" src="resources/images/main/house.jpg"
-						alt="Second slide">
-					<div class="carousel-caption d-none d-md-block">
-						<h5>삿포로 호수</h5>
-						<p>호수에서 하룻밤 어떠세요??</p>
-					</div>
+				<div class="carousel-item maincarou">
+				<input type="hidden" value="일본" />
+				<h3 class="maintagFont" style="top: 150px;">#일본</h3>
+				<h3 class="maintagFont" style="top: 200px;">#J-POP</h3>
+				<h3 class="maintagFont" style="top: 250px;">#일본드라마</h3>
+				<h3 class="maintagFont" style="top: 300px;">#일본어</h3>
+					<img class="d-block w-60" src="resources/images/main/japan.jpg"
+						alt="Second slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
+					
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-60" src="resources/images/main/wind.jpg"
-						alt="Third slide">
-					<div class="carousel-caption d-none d-md-block">
-						<h5>바람이 부는 언덕</h5>
-						<p>편안~~</p>
-					</div>
+				<div class="carousel-item maincarou">
+				<input type="hidden" value="영화" />
+				<h3 class="maintagFont" style="top: 150px;">#영화</h3>
+				<h3 class="maintagFont" style="top: 200px;">#할리우드</h3>
+				<h3 class="maintagFont" style="top: 250px;">#국내영화</h3>
+				<h3 class="maintagFont" style="top: 300px;">#해외영화</h3>
+					<img class="d-block w-60" src="resources/images/main/movie.jpg"
+						alt="Third slide" style="width: 100%; height: 100%; vertical-align: middle; position: relative; opacity: 1;">
+					
 				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleIndicators"
@@ -134,11 +153,11 @@
 	</div>
 	<br>
 	<br>
-	<div class="container">
-		<div class="container row jgroup">
+	<div id="jgroup" style="margin: auto;">
+		<div class="row">
 			<div
 				class="mainGroup test d-flex justify-content-center align-items-center ani plusGroup"
-				style="background-color: skyblue; margin-right: 15px;">
+				style="background-color: skyblue; margin-left: 30px; margin-right: 15px;">
 				<a href="#" class="plusGroup"><img id="plus"
 					src="resources/images/main/plus.png" width="50" height="50" /> </a>
 				&nbsp; 모임 만들기
@@ -155,18 +174,7 @@
 						<ol class="carousel-indicators" id="carouselNum">
 						</ol>
 						
-							<div class="carousel-inner" id="joingroups"></div>
-							
-						<a class="carousel-control-prev" href="#carouselExampleIndicators1"
-						role="button" data-slide="prev"> <span
-						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-						class="sr-only">Previous</span>
-						</a>
-						 <a class="carousel-control-next" href="#carouselExampleIndicators1"
-						role="button" data-slide="next"> <span
-						class="carousel-control-next-icon" aria-hidden="true"></span> <span
-						class="sr-only">Next</span>
-						</a>
+						<div class="carousel-inner" id="joingroups"></div>
 					</div>
 				</c:otherwise>
 				</c:choose>
@@ -182,6 +190,11 @@
 				alert("로그인 하신 후 이용 가능합니다.");
 				$('#Login_Modal').modal('show');
 			}
+		});
+		
+		$('.maincarou').on('click',function(){
+			var keyword = $(this).find('input').val();
+			location.href="${pageContext.request.contextPath}/search/selectList.do?keyword="+keyword+"&place=&regardlessArea=지역무관&category=&sort=newSort";
 		});
 	</script>
 	<br>
@@ -289,7 +302,7 @@
 	$('.theme').on('click',function(){
 		var sel = $(this).find('input').val();
 		if(sel=="go"){
-			location.href="${pageContext.request.contextPath}/search/searchList.do?keyword=";	
+			location.href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category=&sort=newSort";	
 		} else {
 			location.href="${pageContext.request.contextPath}/search/selectList.do?keyword=&place=&category="+sel+"&sort=newSort";	
 		}
@@ -309,8 +322,8 @@
 					type : "get",
 					success : function(data){
 						var list = data.list;
-						
-						console.log(list.length);
+						var leng = list.length;
+						console.log(leng);
 						
 						var cnt =0;
 						for(var i=0; i<list.length; i++){
@@ -336,7 +349,7 @@
 								$('#joingroups').append($div_carsel);
 							}
 							
-							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 8px;">');
+							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 20px;">');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							
@@ -355,6 +368,13 @@
 							$div.append($div_bot);
 							
 							$('#joingroups').append($div);
+							
+							if(leng > 5){
+								var $a_pre = $('<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span></a>');
+								var $a_next = $('<a class="carousel-control-next" href="#carouselExampleIndicators1"	role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span></a>');
+								$('#carouselExampleIndicators1').append($a_pre);
+								$('#carouselExampleIndicators1').append($a_next);
+							}
 							
 							
 							$('.clickme').on("click",function(){
@@ -383,7 +403,7 @@
 						
 						for(l in list){
 							
-							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 8px;">');
+							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 20px;">');
 							$div.append('<input type="hidden" value="'+list[l].groupNo+'" />');
 							
 							var $div_top = $('<div class="groupView_top test">');
@@ -401,6 +421,7 @@
 							$div.append($div_bot);
 						
 							$('#recommendList').append($div);
+							
 							
 							$('.clickme').on("click",function(){
 								var sel = $(this).children('input').val();

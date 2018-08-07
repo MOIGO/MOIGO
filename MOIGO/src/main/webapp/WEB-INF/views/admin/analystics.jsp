@@ -6,6 +6,8 @@
 
 <html>
 <head>
+<title>통계</title>
+
 <!--Load the AJAX API-->
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
@@ -13,7 +15,9 @@
 
       // Load the Visualization API and the corechart package.
       google.charts.load('current', {'packages':['corechart']});
-
+      google.charts.load('current', {'packages':['table']});
+      
+      
       // Set a callback to run when the Google Visualization API is loaded.
       google.charts.setOnLoadCallback(drawGenderChart);      
       google.charts.setOnLoadCallback(drawGenderChart2);     
@@ -25,16 +29,43 @@
       google.charts.setOnLoadCallback(drawGgradeChart);
       google.charts.setOnLoadCallback(drawGstateChart);
       google.charts.setOnLoadCallback(drawReportCountChart);
+      google.charts.setOnLoadCallback(drawActiveGTable);
 
+      function drawActiveGTable() {
+    	  var data = new google.visualization.DataTable();
+    	  data.addColumn('string', 'Group Name');
+          data.addColumn('number', 'Post Count');
+          data.addRows([
+            ['${moreActiveGroups[0].groupName}'  , ${moreActiveGroups[0].postCount}],
+            ['${moreActiveGroups[1].groupName}'  , ${moreActiveGroups[1].postCount}],
+            ['${moreActiveGroups[2].groupName}'  , ${moreActiveGroups[2].postCount}],
+            ['${moreActiveGroups[3].groupName}'  , ${moreActiveGroups[3].postCount}],
+            ['${moreActiveGroups[4].groupName}'  , ${moreActiveGroups[4].postCount}]
+         
+          ]);
+          var options = {
+        	showRowNumber: true,
+        
+  			  'width':500,
+              'height':330
+          }
+          var table = new google.visualization.Table(document.getElementById('chart_div9'));
 
+          table.draw(data, options);
+        }
+    	  
+    	  
+    	  
+      
+      
       function drawGenderChart() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Gender');
         data.addColumn('number', 'percent');
         data.addRows([
        	 ['Male', ${genderCount[0].genderCount}],
-            ['Female', ${genderCount[1].genderCount}],
-       
+         ['Female', ${genderCount[1].genderCount}],
+      
        ]);
 
         // Set chart options

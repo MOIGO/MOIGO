@@ -66,14 +66,24 @@ public class GroupController {
 			if(gm!=null){
 				model.addAttribute("memberGrade",gm.getMemberGradeCode()); //권한 컬럼을 뷰에 리턴
 				model.addAttribute("gm",gm);
+				request.getSession().setAttribute("memberGrade", gm.getMemberGradeCode());
+				request.getSession().setAttribute("gm", gm);
+				
 			}
 			else{
+				request.getSession().setAttribute("memberGrade", -1);
+				request.getSession().setAttribute("gm", null);
 				model.addAttribute("memberGrade",-1); //없으면(가입 안되있으면) -1 리턴
 				model.addAttribute("gm",null);
 			}
 			
-		}else
+		}else{
+			
+			request.getSession().setAttribute("memberGrade", -1);
 			model.addAttribute("memberGrade",-1);//멤버가 아니어도 -1 리턴
+		}
+		
+		request.getSession().setAttribute("groupNo", groupNo);
 		
 		model.addAttribute("groupNo",groupNo); //그룹 번호도 뷰로 보냄
 		model.addAttribute("currentGroup",gp);
@@ -133,7 +143,7 @@ public class GroupController {
 			}
 			
 			
-			group.setGroupPicture(groupPicture);
+			group.setGroupPicture("../resources/images/groupCovers/"+group.getGroupNo()+"/"+groupPicture);
 			
 			
 			
@@ -312,74 +322,6 @@ public class GroupController {
 	{
 		
 
-		/*System.out.println(schedules);
-		
-		//스케줄 처리
-		JSONParser jsparse = new JSONParser();
-		Schedule schedule=null;
-		try {
-		
-			JSONArray jsonarray =  (JSONArray)jsparse.parse(schedules);
-			
-			for(int i=0;i<jsonarray.size();++i){
-				JSONObject obj= (JSONObject)jsonarray.get(i);
-				
-				
-				
-				//시작시간
-				Timestamp sTime = new Timestamp((Long)obj.get("startT"));
-				Timestamp eTime=null;
-					
-				
-					try{
-						eTime = new Timestamp((Long)obj.get("endT"));
-					}
-					catch(Exception e){
-						
-						System.out.println("여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~여기 들어오네~");
-						eTime=null;
-					}
-				
-				schedule= new Schedule((String)obj.get("groupNo"),
-						(String)obj.get("scheduleName"),
-						(String)obj.get("scheduleContent"),
-						(String)obj.get("scheduleAddress"),
-						(String)obj.get("memberNo"),
-						sTime,
-						eTime,
-						(String)obj.get("colorLabel"),
-						(String)obj.get("allDay"));	
-				
-				groupService.insertSchedule(schedule);
-				
-				System.out.println(schedule);
-				System.out.println(post.getContent());
-				post.setContent(post.getContent().replaceFirst("notInsertedSchedule",schedule.getScheduleNo()));		
-				System.out.println(post.getContent());
-				
-				if(((String)obj.get("scheduleNo")).equals("notInsertedSchedule")){
-					groupService.insertSchedule(schedule);
-					post.setContent(post.getContent().replaceFirst("notInsertedSchedule",schedule.getScheduleNo()));
-				}else{
-					
-					schedule.setScheduleNo((String)obj.get("scheduleNo"));
-					groupService.updateSchedule(schedule);
-			
-				}
-				
-				
-			}
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		*/
-		
-		/////////
-		
-
-		
 		//이미지 처리
 		String orignImage ="";
 		ArrayList<Files> files=new ArrayList<Files>();
@@ -389,14 +331,14 @@ public class GroupController {
 		if(postImages!=null){
 			
 			//갯수만큼 포문을 도는데
-			for(int i=0;i<postImages.length;++i){
+			for(int i=0;i<imageNameToSave.length;++i){
 				
 				
-				for(int j=0+processed;j<imageNameToSave.length;++j){
+				for(int j=0;j<postImages.length;++j){
 					
-				
+		
 					//이미지 파일이어야 한다.
-					if(imageNameToSave[j].equals(postImages[i].getOriginalFilename())){
+					if(imageNameToSave[i].equals(postImages[j].getOriginalFilename())){
 						
 						try{		
 						
@@ -416,18 +358,20 @@ public class GroupController {
 								
 								
 								// 2. upload한 file을 rename, 경로 저장하기
-								orignImage = postImages[i].getOriginalFilename();
+								orignImage = postImages[j].getOriginalFilename();
 								
 								
 								String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
 								newImage = newImage + "." + ext;
 								
-								postImages[i].transferTo(new File(saveDir +"/"+ newImage));
+								postImages[j].transferTo(new File(saveDir +"/"+ newImage));
 								
 								files.add(new Files(orignImage,newImage,"../resources/images/groupImages/"+post.getGroupNo()+"/",post.getGroupNo(),post.getMemberNo(),"Y"));
-							
 								
-								post.setContent(post.getContent().replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+post.getGroupNo()+"/"+newImage));
+								/*String test = imageNameToSave[i].replaceAll("(", "\\(");
+								test = test.replaceAll(")", "\\)");*/
+							
+								post.setContent(post.getContent().replaceFirst(imageNameToSave[i], "../resources/images/groupImages/"+post.getGroupNo()+"/"+newImage));
 								
 								processed++;
 								break;
@@ -497,14 +441,13 @@ public class GroupController {
 		if(postImages!=null){
 			
 			//갯수만큼 포문을 도는데
-			for(int i=0;i<postImages.length;++i){
-				
-				
-				for(int j=0+processed;j<imageNameToSave.length;++j){
+			for(int i=0;i<imageNameToSave.length;++i){
+								
+				for(int j=0;j<postImages.length;++j){
 					
 				
 					//이미지 파일이어야 한다.
-					if(imageNameToSave[j].equals(postImages[i].getOriginalFilename())){
+					if(imageNameToSave[i].equals(postImages[j].getOriginalFilename())){
 						
 						try{		
 						
@@ -524,20 +467,20 @@ public class GroupController {
 								
 								
 								// 2. upload한 file을 rename, 경로 저장하기
-								orignImage = postImages[i].getOriginalFilename();
+								orignImage = postImages[j].getOriginalFilename();
 								
 								
 								String ext = orignImage.substring(orignImage.lastIndexOf(".")+1);
 								newImage = newImage + "." + ext;
 								
-								postImages[i].transferTo(new File(saveDir +"/"+ newImage));
+								postImages[j].transferTo(new File(saveDir +"/"+ newImage));
 								
 								files.add(new Files(orignImage,newImage,"../resources/images/groupImages/"+groupNo+"/",groupNo,memberNo,"Y"));
 							
 								
-								content = (content.replaceFirst(imageNameToSave[j], "../resources/images/groupImages/"+groupNo+"/"+newImage));
+								content = (content.replaceFirst(imageNameToSave[i], "../resources/images/groupImages/"+groupNo+"/"+newImage));
+								System.out.println(content);
 								
-								processed++;
 								break;
 								
 						}
@@ -693,8 +636,7 @@ public class GroupController {
 	@ResponseBody
 	public Map<String,Object> deleteSchedule(@RequestParam String scheduleNo){
 		
-		
-		System.out.println("여기 들어오고 스케줄 넘버는?"+scheduleNo);
+
 		
 		int result = groupService.deleteSchedule(scheduleNo);
 		

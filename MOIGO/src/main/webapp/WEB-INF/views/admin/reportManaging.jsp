@@ -6,8 +6,9 @@
 
 <html>
 <head>
+<title>신고 관리</title>
 
- <style type="text/css">
+<style type="text/css">
 div.vertical-line {
 	border-left: 4px solid #808080;
 	height: 100%;
@@ -149,73 +150,183 @@ input[type="checkbox"] {
     </div>
    
     
-    
+    	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="background: white;">
+		<div class="card" style="width: 100%;">
+			<div class="card-header">
+				<ul class="nav nav-tabs card-header-tabs pull-right" id="myTab"
+					role="tablist">
+					<li class="nav-item"><a class="nav-link active" id="home-tab"
+						data-toggle="tab" href="#home" role="tab" aria-controls="home"
+						aria-selected="true">BLACKLIST</a></li>
+					<li class="nav-item"><a class="nav-link" id="profile-tab"
+						data-toggle="tab" href="#profile" role="tab"
+						aria-controls="profile" aria-selected="false">CANCEL</a></li>
+			
+				</ul>
+			</div>
+			<div class="card-body" >
+					<div class="tab-content" id="myTabContent" style="width: 100%;">
+
+						<div class="tab-pane fade show active" id="home" role="tabpanel"
+							aria-labelledby="home-tab">
+							<div class="row">
+								<br>
+								<h2>Blacklist M</h2>
+								<div class="float-right">
+									<i class="fas fa-sync" style="color: tomato"></i>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</div>
+
+								<br>
+								<table class="table table-hover ">
+									<thead class="thead-light table-primary">
+										<tr>
+											<th>누적순위</th>
+											<th>계정명</th>
+											<th>신고횟수</th>
+											<th>관리</th>
+
+										</tr>
+									</thead>
+									<c:forEach items="${mtop5}" var="mblack">
+										<tbody id="myMemberTop5Table">
+
+
+											<tr>
+												<td>${mblack.rNum}</td>
+												<td>${mblack.memberName}</td>
+												<td>${mblack.aCount}</td>
+												<td><button type="button" data-target="#myModal"
+														data-toggle="modal" data-id="${mblack.targetMember}"
+														class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
+											</tr>
+
+
+										</tbody>
+									</c:forEach>
+								</table>
+								<br>
+								<h2>Blacklist G</h2>
+
+
+								<div class="float-right">
+									<i class="fas fa-sync" style="color: tomato"></i>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</div>
+
+
+								<br>
+								<table class="table table-hover ">
+									<thead class="thead-light table-primary">
+										<tr>
+											<th>누적순위</th>
+											<th>그룹명</th>
+											<th>신고횟수</th>
+											<th>관리</th>
+
+										</tr>
+									</thead>
+									<c:forEach items="${gtop5}" var="gblack">
+										<tbody id="myGroupTop5Table">
+
+
+											<tr>
+												<td>${gblack.rNum}</td>
+												<td>${gblack.targetGroup}</td>
+												<td>${gblack.aCount}</td>
+												<td><button type="button" data-target="#myGroupModal"
+														data-toggle="modal" data-id="${gblack.targetGroup}"
+														class="btn btn-outline-info btn-sm identifyingClass2">관리</button></td>
+											</tr>
+									</c:forEach>
+								</table>
+							</div>
+						</div>
+
+						<div class="tab-pane fade" id="profile" role="tabpanel">
+							<div class="row">
+								<br>
+								<h2>삭제된 회원 관리</h2>
+								<div class="float-right">
+									<i class="fas fa-sync" style="color: tomato"></i>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</div>
+
+								<br>
+								<table class="table table-hover ">
+									<thead class="thead-light table-primary">
+										<tr>
+											<th>계정번호</th>
+											<th>계정명</th>
+											<th>신고횟수</th>
+											<th>관리</th>
+
+										</tr>
+									</thead>
+									<c:forEach items="${deleteM}" var="deleteM">
+										<tbody id="myMemberTop5Table">
+
+
+											<tr>
+												<td>${deleteM.targetMember}</td>
+												<td>${deleteM.memberName}</td>
+												<td>${deleteM.aCount}</td>
+												<td><button type="button" data-target="#myModal"
+														data-toggle="modal" data-id="${deleteM.targetMember}"
+														class="btn btn-outline-info btn-sm identifyingClass">복원</button></td>
+											</tr>
+
+
+										</tbody>
+									</c:forEach>
+								</table>
+								<br>
+								<h2>비활성화된 그룹 관리</h2>
+
+
+								<div class="float-right">
+									<i class="fas fa-sync" style="color: tomato"></i>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</div>
+
+
+								<br>
+								<table class="table table-hover ">
+									<thead class="thead-light table-primary">
+										<tr>
+											<th>그룹번호</th>
+											<th>그룹명</th>
+											<th>신고횟수</th>
+											<th>관리</th>
+
+										</tr>
+									</thead>
+									<c:forEach items="${inactiveG}" var="inactiveG">
+										<tbody id="myGroupTop5Table">
+
+
+											<tr>
+												<td>${inactiveG.targetGroup}</td>
+												<td>${inactiveG.groupName}</td>
+												<td>${inactiveG.aCount}</td>
+												<td><button type="button" data-target="#myGroupModal"
+														data-toggle="modal" data-id="${inactiveG.targetGroup}"
+														class="btn btn-outline-info btn-sm identifyingClass2">복원</button></td>
+											</tr>
+									</c:forEach>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+		</div>
+	</div>
    
-    <!-- top 5 신고 시작 -->
- 	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="background: white;">
- 		 <br>
-	    <h2>Blacklist M</h2>
-	    <div class="float-right"><i class="fas fa-sync" style="color: tomato"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> 
-	    
-	    <br>
-	    <table class="table table-hover ">
-	      <thead class="thead-light table-primary">
-	        <tr >
-	          <th>누적순위</th>
-	          <th>계정명</th>
-	          <th>신고횟수</th>
-	          <th>관리</th>
-	          
-	        </tr>
-	      </thead>
-	       <c:forEach items="${mtop5}" var="mblack">
-	      <tbody id="myMemberTop5Table">
-	      
-	     
-	        <tr >
-	          <td>${mblack.rNum}</td>
-	          <td>${mblack.targetMember}</td>
-	          <td>${mblack.aCount}</td>
-	          <td><button type="button" data-target="#myModal" data-toggle="modal" data-id="${mblack.targetMember}" class="btn btn-outline-info btn-sm identifyingClass">관리</button></td>
-	        </tr>
-	   	
-	
-	      </tbody>
-	       </c:forEach> 
-	    </table>
-	    <br>
-	    <h2>Blacklist G </h2>
+    
 	    
 	    
-	    <div class="float-right"><i class="fas fa-sync" style="color: tomato"></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> 
-	    
-	    
-	    <br>
-	    <table class="table table-hover ">
-	      <thead class="thead-light table-primary">
-	        <tr >
-	          <th>누적순위</th>
-	          <th>그룹명</th>
-	          <th>신고횟수</th>
-	          <th>관리</th>
-	          
-	        </tr>
-	      </thead>
-	      <c:forEach items="${gtop5}" var="gblack">
-	      <tbody id="myGroupTop5Table">
-	      
-	     
-	        <tr>
-	          <td>${gblack.rNum}</td>
-	          <td>${gblack.targetGroup}</td>
-	          <td>${gblack.aCount}</td>
-	          <td><button type="button" data-target="#myGroupModal" data-toggle="modal" data-id="${gblack.targetGroup}" class="btn btn-outline-info btn-sm identifyingClass2">관리</button></td>
-	        </tr>
-	   	   </c:forEach> 
-	   	 </table>
-	    
-	    
-    </div><!-- 두번째 단 end -->
+    
  
   </div> <!-- row end -->
 
@@ -317,9 +428,17 @@ input[type="checkbox"] {
 									
 								</form>
 								<div class="form-group row">
-										<div class="col-sm-12  text-center">
-											<button type="button" id="memDelSubmit"class="btn btn-outline-info">
+									<div class="col-sm-12  text-center memDelCancelSubmit">
+										<%-- <c:choose>
+											<c:when test="$(#inputGsc).val()=='S1'">
+												<button type="submit" id="memDelSubmit" class="btn btn-outline-info">
 												회원 탈퇴</button>
+											</c:when>
+											<c:otherwise>
+												<button type="submit" id="memDelCancelSubmit" class="btn btn-outline-info">
+													회원 탈퇴 취소</button>
+											</c:otherwise>
+											</c:choose> --%>
 										</div>
 								</div>
 							</div>
@@ -513,11 +632,22 @@ input[type="checkbox"] {
 											</div>
 										</div>
 									</fieldset>
-
+										
 									<div class="form-group row">
-										<div class="col-sm-12  text-center">
-											<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">
+										<div class="col-sm-12  text-center grpDelCancelSubmit">
+										<%-- <c:choose>
+											<c:when test="$(#inputGsc).val()!='S2'">
+												<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">
 												그룹 블라인드</button>
+											</c:when>
+											<c:otherwise>
+												<button type="submit" id="grpDelCancelSubmit" class="btn btn-outline-info">
+													그룹 블라인드 취소</button>
+											</c:otherwise>
+										</c:choose> --%>
+										
+											
+											
 										</div>
 									</div>
 								</form>
@@ -613,6 +743,18 @@ $(document).ready(function(){
 		            
 		            $("#recipientName1").val(data[0].memberEmail);
 		            console.log(data[1].length);
+		            
+		            console.log(data[0].delflag);
+		            $('.memDelCancelSubmit').empty();
+					if(data[0].delflag!='Y'){
+						 var strDel='<button type="submit" id="memDelSubmit" class="btn btn-outline-info">회원 탈퇴</button>';					
+					}else{
+						var strDel='<button type="submit" id="memDelCancelSubmit" class="btn btn-outline-info">회원 탈퇴 취소</button>';	
+					}
+					$('.memDelCancelSubmit').append(strDel);
+					
+		            
+		            
 		            $('.input_accuse_list').empty();
 		            for(var i in data[1]){
 		            	console.log(i);
@@ -641,29 +783,38 @@ $(document).ready(function(){
 			       	            }
 			       	  	  });
 		            });	  
-		            $("#memDelSubmit").click(function() {
+		            $("#memDelCancelSubmit").click(function() {
 		       	  	 var id =data[0].memberNo;
 		       	  	  $.ajax({
-		       	            url: "${pageContext.request.contextPath}/memDelete.ad",
+		       	            url: "${pageContext.request.contextPath}/memFlagDelete.ad",
 		       	            type:'get',
 		       	            data: {id:id},
 		       	            dataType:"json",
 		       	            success:function(data){	
-		       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
+		       	            	alert('회원번호 '+data+' 성공적으로 회원이 복원 되었습니다.');
 		       	            	location.reload();	  
 		       	            		       	            	
 		       	            },error:function(request,status,error){
 		       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 		       	            }
-		       	  	  
-
-
 		       	  	  });
-
-		       	    
-		       	}); 
-		            
-		           
+		            });
+		       	  	$("#memDelSubmit").click(function() {
+			       	  	 var id =data[0].memberNo;
+			       	  	  $.ajax({
+			       	            url: "${pageContext.request.contextPath}/memDelete.ad",
+			       	            type:'get',
+			       	            data: {id:id},
+			       	            dataType:"json",
+			       	            success:function(data){	
+			       	            	alert('회원번호 '+data+' 성공적으로 삭제 되었습니다.');
+			       	            	location.reload();	  
+			       	            		       	            	
+			       	            },error:function(request,status,error){
+			       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			       	         }
+			       	  	  });				       	    
+		       	  	});
 	            }
 	        });	           
 		}); //함수 끝
@@ -692,7 +843,15 @@ $(document).ready(function(){
 						$("#masterEmail").val(data[0].masterEmail); //모임장
 						
 			            $("#messageTextToMaster").val("그룹 "+data[0].groupName+" 모임장에게 알립니다. 귀하가 모임장으로 있는 그룹은 많은 신고가 접수되어 확인한 결과 운영방침에 맞지 않다고 판단되어 비가용 처리되었습니다. 문의사항이 있다면 본 메일로 문의하십시오.");
-			            
+			            console.log(data[0].groupStateCode);
+			            $('.grpDelCancelSubmit').empty();
+						if(data[0].groupStateCode!='S2'){
+							 var strDel='<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">그룹 탈퇴</button>';					
+						}else{
+							var strDel='<button type="submit" id="grpDelCancelSubmit" class="btn btn-outline-info">그룹 탈퇴 취소</button>';	
+						}
+						$('.grpDelCancelSubmit').append(strDel);
+						
 			            $('.input_accuse_list').empty();
 			            for(var i in data[1]){
 			            	console.log(i);
@@ -730,6 +889,21 @@ $(document).ready(function(){
 				       	            dataType:"json",
 				       	            success:function(data){	
 				       	            	alert('그룹번호 '+data+' 성공적으로 블라인드 처리 되었습니다.');
+				       	            	location.reload();	       	            	
+				       	            },error:function(request,status,error){
+				       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				       	            }
+				       	  	  });				       	    
+				       	});  
+			            $("#grpDelCancelSubmit").click(function() {
+				       	  	 var id =data[0].groupNo;
+				       	  	  $.ajax({
+				       	            url: "${pageContext.request.contextPath}/grpFlagDelete.ad",
+				       	            type:'get',
+				       	            data: {id:id},
+				       	            dataType:"json",
+				       	            success:function(data){	
+				       	            	alert('그룹번호 '+data+' 성공적으로 블라인드 처리 취소 되었습니다.');
 				       	            	location.reload();	       	            	
 				       	            },error:function(request,status,error){
 				       	                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

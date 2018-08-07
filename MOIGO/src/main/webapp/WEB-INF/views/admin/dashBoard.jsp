@@ -6,6 +6,8 @@
 
 <html>
 <head>
+<title>대시보드</title>
+
 <script type="text/javascript"	src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 
@@ -79,7 +81,7 @@
           var options = {
         		  
           
-        	'title':'Weekly New Group Count',
+        	'title':'A Week\'s Change of New Group',
   			titleTextStyle:{
   			fontName:'Poppins',
   			fontSize: 23
@@ -112,7 +114,9 @@
           data.addRows([
             ['${MemEnrollperMonth[0].enrollM}', ${MemEnrollperMonth[0].mmCount}],   
             ['${MemEnrollperMonth[1].enrollM}', ${MemEnrollperMonth[1].mmCount}],  
-            ['${MemEnrollperMonth[2].enrollM}', ${MemEnrollperMonth[2].mmCount}]
+            ['${MemEnrollperMonth[2].enrollM}', ${MemEnrollperMonth[2].mmCount}],
+            ['${MemEnrollperMonth[3].enrollM}', ${MemEnrollperMonth[3].mmCount}],
+            ['${MemEnrollperMonth[4].enrollM}', ${MemEnrollperMonth[4].mmCount}]
           ]);
 
           var options = {
@@ -151,7 +155,9 @@
             ['${GrpEnrollperMonth[0].enrollM}', ${GrpEnrollperMonth[0].grCount}],   
             ['${GrpEnrollperMonth[1].enrollM}', ${GrpEnrollperMonth[1].grCount}],  
             ['${GrpEnrollperMonth[2].enrollM}', ${GrpEnrollperMonth[2].grCount}],
-            ['${GrpEnrollperMonth[3].enrollM}', ${GrpEnrollperMonth[3].grCount}]
+            ['${GrpEnrollperMonth[3].enrollM}', ${GrpEnrollperMonth[3].grCount}],
+            ['${GrpEnrollperMonth[4].enrollM}', ${GrpEnrollperMonth[4].grCount}]
+
           ]);
 
           var options = {

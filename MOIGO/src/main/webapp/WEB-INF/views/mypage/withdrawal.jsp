@@ -142,7 +142,7 @@
 				}
 				else {return false;}
     	}else{
-			alert('탙퇴이유 체크 plz');
+			alert('탙퇴이유 체크해주세요');
 		}
     });
 	

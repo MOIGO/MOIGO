@@ -492,14 +492,14 @@
 			$('#inpGrpMsg').val('${group.groupMsg}');
 			
 			console.log("${root}/resources/images/groupCovers/${group.groupNo}/'+'${group.groupPicture}");
-			if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){
+			/* if(('${group.groupPicture}').indexOf('createGroupDefaultPictures')>0){ */
 				$('.mainCover').attr("src",'${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
-			
+			/* 
 			}else{
 				$('.mainCover').attr("src",'${root}/resources/images/groupCovers/${group.groupNo}/${group.groupPicture}');
 				$('#inpCoverImg').val('${group.groupPicture}');
-			}
+			} */
 			
 			$("input[name=openSetting][value=" + '${group.openSetting}' + "]").attr('checked', 'checked');
 		
@@ -782,6 +782,9 @@
 		$('#inpGrpMsg').focus();
 		return;
 	}
+	
+	if($('#inpGrpName').val().trim().length==0)
+		$('#inpGrpName').val("");
 	 
 	 
 	 if($('#min_ageSelect').val()!=-1&&$('#max_ageSelect').val()!=-1){
@@ -806,13 +809,16 @@
        // 지역을 한 String으로 담기 위해서 구분
        if(rLarge != "regionNone")
           regionFull = rLarge;
+       else
+    	   regionFull="지역무관";
+       
        if (rMedium != "전체" && rMedium != "regionNone")
           regionFull += " " + rMedium;
        if(rSmall != "전체" && rSmall != "regionNone")
           regionFull += " " + rSmall;      
+     
        
-      
-     	
+
           $("#regionFull").val(regionFull);
           
           if('${group==null}'=='true')

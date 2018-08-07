@@ -28,7 +28,8 @@ public interface AccuseService {
 	List<Map<String, Object>> grpPerMem(String id); //그룹에 가입한 멤버 정보 불러오기
 	List<Map<String, Object>> atop5memberList(); //accuse top 5 member
 	List<Map<String, Object>> atop5groupList();  //accuse top 5 group
-	
+	List<Map<String, Object>> selectdeleteM();
+	List<Map<String, Object>> selectinactiveG();
 	
 	List<Map<String, Object>> selectAccuse(String id);
 	//List<Map<String, Object>> selectAccusePaging(PageInfo pi);//ajax 페이징 포기해서 나중으로 넘겼음	
@@ -48,7 +49,8 @@ public interface AccuseService {
 	List<Map<String, Object>> countGinterest();
 	List<Map<String, Object>> countState();
 	List<Map<String, Object>> gmReportCount();//report
-	
+	List<Map<String, Object>> moreActiveGroups();
+
 	//이하 대시보드
 	List<Map<String, Object>> weeklyMemEnroll();
 	List<Map<String, Object>> weeklyGrpMake();
@@ -58,13 +60,17 @@ public interface AccuseService {
 	List<Map<String, Object>> GrpEnrollperMonth();
 	
 	
-	//신고 많이 받은 회원 삭제
+	//신고 많이 받은 회원 그룹 삭제
 	int memDelete(String id);
 	int grpDelete(String id);
-	
+	//삭제 취소
+	int grpFlagDelete(String id);
+	int memFlagDelete(String id);
 	
 	//신고하기
 	int insertAccuse(Accuse accuse);
+
+
 	
 	
 

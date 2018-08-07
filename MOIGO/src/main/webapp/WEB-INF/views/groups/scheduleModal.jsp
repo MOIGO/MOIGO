@@ -3,11 +3,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
 <script src="${root}/resources/js/groups/jquery.timepicker.js" ></script>
 <link rel="stylesheet" href="${root}/resources/css/groups/jquery.timepicker.css" />
 <link rel="stylesheet" href="${root}/resources/css/groups/datepicker.min.css">
 <script src="${root}/resources/js/groups/datepicker.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d862551bbf9771ee59207808ec1876ca&libraries=services,clusterer,drawing"></script>
 <style>
 
 .modalSize_schedule{
@@ -267,12 +268,22 @@ tempSchedule=new Object();
 	
 	function setMemberNameOnView(memberNo){
 		
+		
+		var groupNo = '${groupNo}';
+		
+		if(groupNo==null||groupNo=="")
+			groupNo = '${param.groupNo}';
+		
 		$.ajax({
 			url:"${pageContext.request.contextPath}/groups/selectOneGrpMem.gp",
 			data:{	memberNo:memberNo,
-					groupNo:'${groupNo}'}
+					groupNo:groupNo}
 				,success:(function(data){
+					
+					console.log(data);
 					if(data!=null){
+						
+						console.log(data);
 						$('#viewSchedule').find(".memberName").text(data.groupMember.memberName);
 						
 						

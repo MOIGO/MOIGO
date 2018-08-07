@@ -4,24 +4,51 @@ public class TopFive {
 	private int rNum;
 	private String targetGroup;
 	private String targetMember;
-	
+	private String memberName;
+	private String groupName;
 	private int aCount;
 	
 	
 	
-	public TopFive(int rNum, String targetGroup, String targetMember, int aCount) {
-		this.rNum = rNum;
-		this.targetGroup = targetGroup;
-		this.targetMember = targetMember;
-		this.aCount = aCount;
-	}
+	
+	
+	
 	public TopFive() {
 		
 	}
+	
+	
+	
+	public TopFive(int rNum, String targetGroup, String targetMember, String memberName, String groupName, int aCount) {
+		this.rNum = rNum;
+		this.targetGroup = targetGroup;
+		this.targetMember = targetMember;
+		this.memberName = memberName;
+		this.groupName = groupName;
+		this.aCount = aCount;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "Top5 [targetGroup=" + targetGroup + ", targetMember=" + targetMember + ", rowNum=" + rNum
-				+ ", aCount=" + aCount + "]";
+		return "TopFive [rNum=" + rNum + ", targetGroup=" + targetGroup + ", targetMember=" + targetMember
+				+ ", memberName=" + memberName + ", groupName=" + groupName + ", aCount=" + aCount + "]";
+	}
+
+
+
+	public String getMemberName() {
+		return memberName;
+	}
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	public String getGroupName() {
+		return groupName;
+	}
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 	public int getrNum() {
 		return rNum;
