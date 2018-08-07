@@ -67,7 +67,8 @@
 			</div>
 			
 			<c:choose>
-				<c:when test="${memberGrade eq -1 }">
+			
+				<c:when test="${memberGrade eq -1 && m ne null }">
 					<div class="row joinBtnWrapper">
 						<button class="btn btn-block" type="button" data-toggle="modal" data-target="#joinModal">가입하기</button>
 					</div>
@@ -142,7 +143,7 @@
 	<c:if test="${memberGrade>=1}">
 		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-user-minus"></i><span id="groupWithdrawal" >그룹 탈퇴</span></button>
 	</c:if>
-
+  
 
 	</div>
 	
@@ -234,7 +235,7 @@ function joinGroup(){
 	}else{
 		alert("로그인 해주세요!");
 	}
-	
+	   
 	
 }
 
@@ -250,6 +251,7 @@ $('#groupReport').on("click",function(){
 
 $(function() {
 
+	
 	setGroupDesc('${param.groupNo}','${param.isMember}');
 	
 	
