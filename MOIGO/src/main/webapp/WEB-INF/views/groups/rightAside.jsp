@@ -19,16 +19,18 @@
 </head>
 
 <body>
-<div class="col-2 d-none d-lg-block">
-     	<div class="card" style="width: 18rem;">
-		  <div class="card-header">
-		    	다가오는 일정   <span id="moreSchedule" style="float:right;cursor:pointer">더보기</span>
-		  </div>
-		  <ul class="list-group list-group-flush" id="closeSchedule">
-		    
-		  </ul>
-		</div>
-</div>
+<c:if test="${memberGrade>=1}">
+	<div class="col-2 d-none d-lg-block">
+	     	<div class="card" style="width: 18rem;">
+			  <div class="card-header">
+			    	다가오는 일정   <span id="moreSchedule" style="float:right;cursor:pointer">더보기</span>
+			  </div>
+			  <ul class="list-group list-group-flush" id="closeSchedule">
+			    
+			  </ul>
+			</div>
+	</div>
+</c:if>
 </body>
 
 <script>
