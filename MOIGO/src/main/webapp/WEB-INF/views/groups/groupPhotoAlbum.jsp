@@ -432,24 +432,29 @@
 		
 		$("#photoBody").children().remove();
 		
-		for(var i=0; i < photo.length; i++){
-			
-			var photoAppend = "<div class='photo photo_not_last'></div>";
-			
-			if(i % 4 == 3)
-				photoAppend = "<div class='photo'></div>"
-			
-			$("#photoBody").append(photoAppend);
-			$(".photo").eq(i).css("background-image", "url('${root}" + photo[i].filePath + photo[i].fileNewName + "')");
+		if(photo.length == 0)
+			$("#photoNone").css("display", "block");
+		else {
+			$("#photoNone").css("display", "none");
+			for(var i=0; i < photo.length; i++){
+				
+				var photoAppend = "<div class='photo photo_not_last'></div>";
+				
+				if(i % 4 == 3)
+					photoAppend = "<div class='photo'></div>"
+				
+				$("#photoBody").append(photoAppend);
+				$(".photo").eq(i).css("background-image", "url('${root}" + photo[i].filePath + photo[i].fileNewName + "')");
 
-			var inp = "<input type='checkbox' value='' class='photo_inp' hidden='hidden'/>"
-			var chk = "<span class='far fa-check-circle photo_check photo_unchecked'></span>";
-			
-			if("${gm.memberGradeCode}" > 1)
-				$(".photo").eq(i).append(inp + chk);
-			else{
-				if("${gm.memberNo}" == photo[i].memberNo)
+				var inp = "<input type='checkbox' value='" + photo[i].fileNo + "' class='photo_inp' hidden='hidden'/>"
+				var chk = "<span class='far fa-check-circle photo_check photo_unchecked'></span>";
+				
+				if("${gm.memberGradeCode}" > 1)
 					$(".photo").eq(i).append(inp + chk);
+				else{
+					if("${gm.memberNo}" == photo[i].memberNo)
+						$(".photo").eq(i).append(inp + chk);
+				}
 			}
 		}
 		
@@ -517,10 +522,10 @@ function createPhotoInsertList(fileList) {
 	$(".gpi_photo_wrap").children().remove();
 	$(".gpi_photo_wrap").next().remove();
 	$("#photoCurrentLength").text(fileList.length);
+	
 	if(fileList.length != 0)
 		$("#gpInsertConfirmBtn").prop("disabled", false);
 	
-	console.log(fileList);
 	for(var i = 0; i < fileList.length; i++){
 		var insertAppend = "<div class='insert_photo photo_not_last'><span class='fas fa-times insert_photo_delete'></span></div>";
 		if(i % 4 == 3)
@@ -670,6 +675,7 @@ function createPhotoInsertList(fileList) {
     			month = month - 1;
     		
     		$("#photoDayTxt").text(year + "년 " + month + "월");
+    		getPhotoAlbumList(year, month);
 		});
     	
 		$("#photoDayNext").on("click", function() {
@@ -682,6 +688,7 @@ function createPhotoInsertList(fileList) {
     			month = month + 1;
     		
     		$("#photoDayTxt").text(year + "년 " + month + "월");
+    		getPhotoAlbumList(year, month);
 			
 		});
 		
@@ -714,6 +721,7 @@ function createPhotoInsertList(fileList) {
 						month = dates[1].substring(1);
 				}
 				$("#photoDayTxt").text(year + "년 " + month + "월");
+				getPhotoAlbumList(year, month);
 			},
 			onChangeMonth : function() {
 				addClassMonthpicker();
@@ -783,7 +791,26 @@ function createPhotoInsertList(fileList) {
 			if($(".photo_inp:checked").length == 0)
 				alert("선택된 사진이 없습니다. 삭제할 사진을 선택해주세요.");
 			else{
+				var fileNo = [];
 				
+				$(".photo_inp:checked").each(function() {
+					fileNo.push($(this).val());
+				});
+				
+				$.ajax({
+					url : "${root}/groups/deleteGroupPhoto.gp",
+					type : "POST",
+		    		dataType : "json",
+		    		data : {
+		    			fileNo : fileNo
+		    		},
+		    		success : function(data) {
+		    			getPhotoAlbumList(year, month);
+					},
+					error : function() {
+						console.log("사진 삭제 오류");
+					}
+				});
 				
 			}
 		});

@@ -430,10 +430,10 @@
 		
 	</insert>
 	
-	<delete id="deleteGroupPhoto">
+	<delete id="deleteGroupPhoto" parameterType="list">
 		DELETE FROM FILES
 		WHERE FILE_NO IN
-		<foreach item="fNo" collection="fileNo" open="(" separator="," close=")">
+		<foreach item="fNo" collection="list" open="(" separator="," close=")">
 			#{fNo}
 		</foreach>
 	</delete>

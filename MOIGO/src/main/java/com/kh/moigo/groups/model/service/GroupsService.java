@@ -66,23 +66,6 @@ public interface GroupsService {
 	
 	int insertGroupPhoto(Files file);
 	List<Files> selectListGroupPhoto(Map<String, String> fileMap);
+	int deleteGroupPhoto(List<String> fileNo);
 	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-
-	
-
 }
