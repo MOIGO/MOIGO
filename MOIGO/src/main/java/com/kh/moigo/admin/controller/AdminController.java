@@ -61,7 +61,7 @@ public class AdminController {
 		accuse.setReporter(data3);
 		
 		int result = as.insertAccuse(accuse);
-		System.out.println(result);		
+		System.out.println("개인 신고 페이지"+result);		
 		return report;
 	
 	}
@@ -75,7 +75,7 @@ public class AdminController {
 		accuse.setTargetGroup(data2);
 		accuse.setReporter(data3);
 		int result = as.insertAccuse(accuse);
-		System.out.println(result);		
+		System.out.println("그룹 신고 페이지"+result);		
 		return report;
 		
 	}

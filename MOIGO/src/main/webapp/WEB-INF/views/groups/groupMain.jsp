@@ -597,6 +597,7 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			$dropDownMenu.append($dropDownItem4);
 			
 			$dropDownItem4.on("click",function(){
+				reportUrl="${pageContext.request.contextPath}/reporting.ad";
 				$('#accuseReporter').val("${gm.memberNo}");
 				$('#accuseTarget').val($(wrapperObj).find(".postWriterNo").val());
 				$('#reportingModal').modal("toggle"); 
