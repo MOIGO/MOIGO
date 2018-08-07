@@ -6,6 +6,8 @@
 		<id property="rNum" column="RNUM" />
 		<result property="targetMember" column="TARGET_MEMBER" />
 		<result property="targetGroup" column="TARGET_GROUP" />
+		<result property="memberName" column="MEMBER_NAME" />
+		<result property="groupName" column="GROUP_NAME" />		
 		<result property="aCount" column="A_COUNT" />
 	</resultMap>
 
@@ -15,24 +17,39 @@
 	<select id="atop5memberList" resultMap="top5ResultMap">
 	<![CDATA[
 		SELECT * FROM (SELECT ROWNUM RNUM, PAGING.*
-		FROM  (SELECT TARGET_MEMBER, 
+		FROM  (SELECT TARGET_MEMBER, MEMBER_NAME,
 		COUNT(*) A_COUNT FROM ACCUSE A
-    	JOIN MEMBER M ON(M.MEMBER_NO= A.TARGET_MEMBER)
+   		 JOIN MEMBER M ON(M.MEMBER_NO= A.TARGET_MEMBER)
 		WHERE TARGET_MEMBER is not null AND M.DELFLAG ='N'
-		GROUP BY TARGET_MEMBER ORDER BY A_COUNT DESC) PAGING) 
+		GROUP BY TARGET_MEMBER,MEMBER_NAME ORDER BY A_COUNT DESC) PAGING) 
 		WHERE RNUM <6
 		]]>
 	</select>
 	
+	<select id="selectdeleteM" resultMap="top5ResultMap">
+		SELECT TARGET_MEMBER, MEMBER_NAME,
+	   COUNT(*) A_COUNT FROM ACCUSE A
+	   JOIN MEMBER M ON(M.MEMBER_NO= A.TARGET_MEMBER)
+	   WHERE TARGET_MEMBER is not null AND M.DELFLAG ='Y'
+	   GROUP BY TARGET_MEMBER,MEMBER_NAME ORDER BY A_COUNT DESC
+	</select>
+	
+	<select id="selectinactiveG" resultMap="top5ResultMap">
+	    SELECT TARGET_GROUP, GROUP_NAME,
+		COUNT(*) A_COUNT FROM ACCUSE A
+   		JOIN GROUPS G ON(A.TARGET_GROUP=G.GROUP_NO)
+		WHERE TARGET_GROUP is not null AND GROUP_STATE_CODE ='S2'
+		GROUP BY TARGET_GROUP,GROUP_NAME ORDER BY A_COUNT DESC
+	</select>
 	
 	<select id="atop5groupList" resultMap="top5ResultMap">
 	<![CDATA[
 		SELECT * FROM (SELECT ROWNUM RNUM, PAGING.*
- 		FROM  (SELECT TARGET_GROUP, 
+ 		FROM  (SELECT TARGET_GROUP, GROUP_NAME,
 		COUNT(*) A_COUNT FROM ACCUSE A
     	JOIN GROUPS G ON(A.TARGET_GROUP=G.GROUP_NO)
 		WHERE TARGET_GROUP is not null AND GROUP_STATE_CODE ='S1'
-		GROUP BY TARGET_GROUP ORDER BY A_COUNT DESC) PAGING) 
+		GROUP BY TARGET_GROUP,GROUP_NAME ORDER BY A_COUNT DESC) PAGING) 
 		WHERE RNUM <6
 		]]>
 	</select>
