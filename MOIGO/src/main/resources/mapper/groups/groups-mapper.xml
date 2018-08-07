@@ -41,6 +41,7 @@
 	</resultMap>
 	
 	<resultMap type="files" id="filesResultMap">
+
 		<id property="fileNo" column="FILE_NO"/>
 		<result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
 		<result property="fileNewName" column="FILE_NEW_NAME"/>
@@ -51,6 +52,7 @@
 		<result property="isImage" column="IS_IMAGE"/>
 		<result property="postNo" column="POST_NO"/>
 	</resultMap>
+
 	
 	<resultMap type="postReply" id="postReplyResultMap">
 		<id property="replyNo" column="REPLY_NO"/>

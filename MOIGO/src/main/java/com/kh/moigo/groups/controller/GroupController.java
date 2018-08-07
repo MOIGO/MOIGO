@@ -267,7 +267,7 @@ public class GroupController {
 		
 		int memCnt = groupService.selectGrpMemNum(groupNo);
 		
-		if(!gp.getGroupGender().equals("N")&&(gp.getGroupGender()!=m.getMemberGender())){
+		if(!gp.getGroupGender().equals("N")&&!(gp.getGroupGender().equals(m.getMemberGender()))){
 			model.addAttribute("msg","성별이 제한이 걸려 있습니다.");
 		}else if(m.getMemberBirth().getYear()<gp.getMinAge()||m.getMemberBirth().getYear()<gp.getMaxAge()){
 			model.addAttribute("msg","나이 제한에 맞지 않습니다.");

@@ -1118,7 +1118,7 @@ function createSummerNote(){
 		  var button = ui.button({
 		    contents: '<i class="fas fa-map-marked-alt"></i>',
 		    container:false,
-		    tooltip: '지도 삽입',
+		    
 		    click: function () {
 		      toggleMapModal();
 		    }
@@ -1134,7 +1134,7 @@ function createSummerNote(){
 		  var button = ui.button({
 		    contents: '<i class="fas fa-calendar-alt"></i>',
 		    container:false,
-		    tooltip: '일정 삽입',
+		  	
 		    click: function () {
 		    	var temp = $($('#summernote').summernote('code'));
 				
@@ -1158,7 +1158,7 @@ function createSummerNote(){
 		  var button = ui.button({
 		    contents: '<i class="fas fa-image"></i>',
 		    container:false,
-		    tooltip: '사진 삽입',
+		    
 		    click: function () {
 		    	$('#postImages').click();
 		    }
@@ -1184,6 +1184,7 @@ function createSummerNote(){
 		  dialogsInBody: true,
 		  disableResizeEditor: true,
 		  height: 350,
+		  tooltip: false,
 		  /* callbacks:{
 			onImageUpload:function(files,editor,welEditable){
 				
