@@ -398,6 +398,9 @@ tempSchedule=new Object();
 				
 			if(typeof(scheduleNo)=='object'){
 				updateSchedule(scheduleNo.scheduleNo);
+				
+				if(!$('#postEdit').hasClass('show'))
+					location.reload();
 			}
 			else{
 				
@@ -530,8 +533,12 @@ tempSchedule=new Object();
 					
 					if(data.result>0){
 						alert("일정 수정에 성공하였습니다.");
-						location.reload();
+						
 						$('#viewSchedule').modal('hide');
+						
+						
+						/* if(toEditTarget!=undefined)
+							location.reload(); */
 						
 					}
 					else
@@ -801,7 +808,7 @@ tempSchedule=new Object();
 				
 					deleteSchedule($mapDiv,scheduleObj.scheduleNo);
 				
-					location.reload();
+					/* location.reload(); */
 				
 			});
 			
@@ -849,7 +856,7 @@ tempSchedule=new Object();
 		if(confirm("일정을 삭제 하시겠습니까?")){
 			
 			if(deleteObj!=undefined){
-				$(deleteObj).remove();
+				$(deleteObj).parent('.scheduleInputWrapper').remove();
 			}
 			
 			
@@ -864,9 +871,9 @@ tempSchedule=new Object();
 						if(data.result>0){
 							alert(" 일정 삭제에 성공하였습니다.");
 							
-							if(deleteObj!=undefined){
+							if(!$('#postEdit').hasClass('show'))
 								location.reload();
-							}
+							
 							
 							
 						}

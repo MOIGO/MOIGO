@@ -278,7 +278,7 @@ $(window).on('load', function () {
 });
 
 
-$('#postImages').on('shown.bs.modal',function(){
+$('#postEdit').on('shown.bs.modal',function(){
 	createSummerNote();
 });
 
@@ -401,12 +401,14 @@ function restoreScheduleElement(){
 	$('#postDiv').find(".scheduleInputWrapper").each(function(){
 		
 		
-		if($(this).find('[name=editScheduleWrap]').length<=0){
-		
-			restoreScheduleElementCallBack($(this));
+		if('${memberGrade>=1}'=="true"){
 			
-		}
+			if($(this).find('[name=editScheduleWrap]').length<=0){
+			
+				restoreScheduleElementCallBack($(this));
 				
+			}
+		}
 	});
 	
 }
@@ -666,7 +668,13 @@ function makeSubmitReply(postNo){
 	var $inputGroup = $('<div class="input-group">');
 	var $input = $('<input class="form-control" type="text" placeholder="댓글을 남겨주세요!">');
 	var $inputButton = $("<span class='input-group-btn'></span>").append($("<button class='btn btn-secondary' type='button'>등록</button>").on("click",function(){
-		submitReply(postNo, $input);
+		
+		if('${memberGrade>=1}'=="true")
+			submitReply(postNo, $input);
+		else{
+			alert("멤버만 가능합니다.");
+			$input.val("");	
+		}
 	}));
 
 	$inputGroup.append($input);

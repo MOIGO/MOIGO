@@ -241,12 +241,17 @@ function joinGroup(){
 
 $('#groupReport').on("click",function(){
 	
+	if('${memberGrade>=1}'=="true"){
+	
 	reportUrl="${pageContext.request.contextPath}/reporting2.ad";
 	
 	$('#accuseReporter').val("${m.memberNo}");
 	$('#accuseTarget').val("${groupNo}");
 	
-	$('#reportingModal').modal("toggle");
+	$('#reportingModal').modal("toggle");}
+	else{
+		alert("회원만 신고가 가능합니다.");
+	}
 }); 
 
 $(function() {
