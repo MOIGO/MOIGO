@@ -674,6 +674,9 @@ function createPhotoInsertList(fileList) {
     		else
     			month = month - 1;
     		
+    		console.log(month);
+    		console.log(year);
+    		
     		$("#photoDayTxt").text(year + "년 " + month + "월");
     		getPhotoAlbumList(year, month);
 		});
@@ -685,7 +688,7 @@ function createPhotoInsertList(fileList) {
 				month = 1;    			
     		}
     		else
-    			month = month + 1;
+    			month = parseInt(month) + 1;
     		
     		$("#photoDayTxt").text(year + "년 " + month + "월");
     		getPhotoAlbumList(year, month);
@@ -720,6 +723,7 @@ function createPhotoInsertList(fileList) {
 					if(month < 10)
 						month = dates[1].substring(1);
 				}
+				
 				$("#photoDayTxt").text(year + "년 " + month + "월");
 				getPhotoAlbumList(year, month);
 			},
