@@ -3,6 +3,7 @@ package com.kh.moigo.groups.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -994,12 +995,92 @@ public class GroupController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/groups/insertGroupPhoto.gp", method=RequestMethod.POST)
-	public Map<String, Object> insertGroupPhoto(@RequestParam("files") MultipartFile photoFile){
+	@RequestMapping(value="/groups/uploadGroupPhoto.gp", method=RequestMethod.POST)
+	public Map<String, Object> uploadGroupPhoto(@RequestParam("files") MultipartFile photoFile) throws IOException{
 		
 		Map<String, Object> photoMap = new HashMap<String, Object>();
-		photoMap.put("photo", photoFile.getOriginalFilename());
+		photoMap.put("photoName", photoFile.getOriginalFilename());
 		
 		return photoMap;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/groups/insertGroupPhoto.gp", method=RequestMethod.POST)
+	public Map<String, Object> insertGroupPhoto(Files file, @RequestParam("files") MultipartFile[] files, HttpServletRequest request){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		System.out.println(file);
+		System.out.println(files);
+		
+		file.setIsImage("Y");
+			
+		try{		
+			
+			String saveDir = request.getSession().getServletContext().getRealPath("/resources/images/photoalbum/" + file.getGroupNo());
+			
+			File dir = new File(saveDir);
+			
+			if(!dir.exists())
+				dir.mkdirs();
+
+			for(int i=0; i < files.length; i++){
+			
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+				
+				String newImage = "photo_" + file.getMemberNo() + "_" + sdf.format(new Date(System.currentTimeMillis())) + "_" + i + ".png";
+					
+				String originImage = files[i].getOriginalFilename();
+				
+				files[i].transferTo(new File(saveDir +"/"+ newImage));
+				
+				file.setFileOriginName(originImage);
+				file.setFileNewName(newImage);
+				file.setFilePath("/resources/images/photoalbum/" + file.getGroupNo() + "/");
+				
+				int result;
+				result = groupService.insertGroupPhoto(file);
+					
+			}
+		
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		map.put("result", "success");
+			
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/groups/selectListGroupPhoto.gp", method=RequestMethod.POST)
+	public Map<String, Object> selectListGroupPhoto(@RequestParam String groupNo, @RequestParam String dates){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		Map<String, String> fileMap = new HashMap<String, String>();
+		fileMap.put("groupNo", groupNo);
+		fileMap.put("dates", dates);
+		
+		List<Files> fileList = groupService.selectListGroupPhoto(fileMap);
+		
+		map.put("photo", fileList);
+		
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/groups/deleteGroupPhoto.gp", method=RequestMethod.POST)
+	public Map<String, Object> deleteGroupPhoto(@RequestParam("fileNo[]") List<String> fileNo){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int result;
+		result = groupService.deleteGroupPhoto(fileNo);
+		
+		map.put("result", "success");
+		
+		return map;
 	}
 }

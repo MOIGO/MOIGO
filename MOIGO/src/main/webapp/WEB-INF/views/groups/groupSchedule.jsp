@@ -250,8 +250,7 @@
 	   toggleScheduleModal();
 	   $('#startDate').data('datepicker').selectDate(new Date());
 	   $('#endDate').datepicker({minDate : new Date()});
-		$('#endDate').data('datepicker').clear();
-		$('#endTime').timepicker("setTime", null);
+	   $('#endTime').timepicker("setTime", null);
    }
    
    function customCalendarListView(){
@@ -334,7 +333,6 @@
                 openScheduleViewModal(event.id);
           },
 		dayClick: function(date, jsEvent, view) {	
-			console.log(date._d);
 			scheduleModalOpen();
 			$('#startDate').data('datepicker').selectDate(date._d);
 			$('#endDate').datepicker({minDate : date._d});

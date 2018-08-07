@@ -229,8 +229,19 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.selectListGroupSchedule(groupNo);
 	}
 
-	
+	@Override
+	public int insertGroupPhoto(Files file) {
+		return groupDao.insertGroupPhoto(file);
+	}
 
-	
-	
+	@Override
+	public List<Files> selectListGroupPhoto(Map<String, String> fileMap) {
+		return groupDao.selectListGroupPhoto(fileMap);
+	}
+
+	@Override
+	public int deleteGroupPhoto(List<String> fileNo) {
+		return groupDao.deleteGroupPhoto(fileNo);
+	}
+
 }

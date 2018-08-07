@@ -212,7 +212,7 @@
             category : category
          },
          success : function(listData) {
-            var cnt = 0;
+            var cnt = 1;
             var data = new Object();
             var positions = new Array();
             var contents = new Array();
