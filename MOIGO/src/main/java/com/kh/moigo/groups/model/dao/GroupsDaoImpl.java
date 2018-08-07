@@ -266,5 +266,10 @@ public class GroupsDaoImpl implements GroupsDao {
 		return sqlSession.selectList("groups.selectListGroupPhoto", fileMap);
 	}
 
+	@Override
+	public int deleteGroupPhoto(List<String> fileNo) {
+		return sqlSession.delete("groups.deleteGroupPhoto", fileNo);
+	}
+
 }
 

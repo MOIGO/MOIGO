@@ -239,8 +239,9 @@ public class GroupsServiceImpl implements GroupsService {
 		return groupDao.selectListGroupPhoto(fileMap);
 	}
 
-	
+	@Override
+	public int deleteGroupPhoto(List<String> fileNo) {
+		return groupDao.deleteGroupPhoto(fileNo);
+	}
 
-	
-	
 }

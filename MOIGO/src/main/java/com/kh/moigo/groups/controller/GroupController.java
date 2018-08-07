@@ -1069,4 +1069,18 @@ public class GroupController {
 		
 		return map;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/groups/deleteGroupPhoto.gp", method=RequestMethod.POST)
+	public Map<String, Object> deleteGroupPhoto(@RequestParam("fileNo[]") List<String> fileNo){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int result;
+		result = groupService.deleteGroupPhoto(fileNo);
+		
+		map.put("result", "success");
+		
+		return map;
+	}
 }
