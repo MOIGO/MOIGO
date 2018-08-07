@@ -340,8 +340,6 @@ $('#groupWithdrawal').on("click",function(){
 //신고 모달 관련 스크립트
 
 $('#reportSubmit').on('click',function(){
-	
-	alert("들어옴");
 	var data =$("input[name=reportRadios]:checked").val()+" | "+$("select[name=myList]").val();
 	var data2 =$("#accuseTarget").val();
 	var data3 =$("#accuseReporter").val();
