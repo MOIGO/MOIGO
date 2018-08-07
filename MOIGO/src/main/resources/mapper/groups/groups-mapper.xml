@@ -41,16 +41,18 @@
 	</resultMap>
 	
 	<resultMap type="files" id="filesResultMap">
-      <id property="fileNo" column="FILE_NO"/>
-      <result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
-      <result property="fileNewName" column="FILE_NEW_NAME"/>
-      <result property="filePath" column="FILE_PATH"/>
-      <result property="groupNo" column="GROUP_NO"/>
-      <result property="memberNo" column="MEMBER_NO"/>
-      <result property="fileDate" column="FILE_DATE"/>
-      <result property="isImage" column="IS_IMAGE"/>
-      <result property="postNo" column="POST_NO"/>
-   </resultMap>
+
+		<id property="fileNo" column="FILE_NO"/>
+		<result property="fileOriginName" column="FILE_ORIGIN_NAME"/>
+		<result property="fileNewName" column="FILE_NEW_NAME"/>
+		<result property="filePath" column="FILE_PATH"/>
+		<result property="groupNo" column="GROUP_NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="fileDate" column="FILE_DATE"/>
+		<result property="isImage" column="IS_IMAGE"/>
+		<result property="postNo" column="POST_NO"/>
+	</resultMap>
+
 	
 	<resultMap type="postReply" id="postReplyResultMap">
 		<id property="replyNo" column="REPLY_NO"/>
@@ -410,23 +412,23 @@
 		WHERE GROUP_NO = #{groupNo}
 	</select>
 	
-	<!-- <select id="selectListGroupPhoto" parameterMap="fileMap" resultMap="filesResultMap">
+	<select id="selectListGroupPhoto" parameterType="hashmap" resultMap="filesResultMap">
 		SELECT *
 		FROM FILES
 		WHERE TO_CHAR(FILE_DATE, 'RRRRMM') = #{dates}
 		AND GROUP_NO = #{groupNo}
-		ORDER BY FILE_DATE DESC
+		ORDER BY FILE_NEW_NAME DESC
 	</select>
 	
 	<insert id="insertGroupPhoto">
 		
-		<selectKey keyProperty="filesNo" resultType="string" order="AFTER" >
+		<selectKey keyProperty="fileNo" resultType="string" order="AFTER" >
 			SELECT 'F'||TO_CHAR(SEQ_FILES.CURRVAL,'FM000') FROM DUAL
 		</selectKey>
 	
 		INSERT INTO FILES VALUES('F'||TO_CHAR(SEQ_FILES.NEXTVAL,'FM000'),#{fileOriginName},#{fileNewName},#{filePath},#{groupNo},#{memberNo},SYSDATE,'Y', null)
 		
-	</insert> -->
+	</insert>
 	
 	<delete id="deleteGroupPhoto">
 		DELETE FROM FILES
