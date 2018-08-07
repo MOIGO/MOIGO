@@ -165,11 +165,9 @@
 				<c:otherwise>
 					<div id="carouselExampleIndicators1" class="carousel slide"
 					data-ride="carousel">
-						<ol class="carousel-indicators" id="carouselNum">
-						</ol>
 						
 						<div class="carousel-inner" id="joingroups"></div>
-						</a>
+						
 					</div>
 				</c:otherwise>
 				</c:choose>
@@ -318,28 +316,22 @@
 					success : function(data){
 						var list = data.list;
 						var leng = list.length;
-						console.log(leng);
 						
-						var cnt =1;
-						 for(var i=0; i<list.length; i++){
-							if(i == 0){
-								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'" class="active">');
-								$('#carouselNum').append($li);
-								cnt++;
-							}else if(4%i == 1){
-								var $li = $('<li data-target="#carouselExampleIndicators" data-slide-to="'+cnt+'">');
-								$('#carouselNum').append($li);
-								cnt++;
-							}
+						if(leng >= 5){
+							var $a_pre = $('<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span></a>');
+							var $a_next = $('<a class="carousel-control-next" href="#carouselExampleIndicators1"	role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span></a>');
+							$('#carouselExampleIndicators1').append($a_pre);
+							$('#carouselExampleIndicators1').append($a_next);
 						} 
 						
+						var $div_carsel;
 						
-						for(l in list){
-							
+						for(var l=0; l<leng; l++){
 							if(l == 0){
-								var $div_carsel = $('<div class="carousel-item active">');
-							} else if(l%4 == 1){
-								var $div_carsel = $('<div class="carousel-item">');	
+								$div_carsel = $('<div class="carousel-item active">');
+							} 
+							if(l%4 == 1 && l!= 1){
+								$div_carsel = $('<div class="carousel-item">');	
 							}
 							
 							var $div = $('<div class="mainGroup test ani clickme" style="margin-right: 20px;">');
@@ -365,8 +357,6 @@
 							
 							
 							
-							
-							
 							$('.clickme').on("click",function(){
 								var sel = $(this).children('input').val();
 								console.log(sel);
@@ -375,12 +365,7 @@
 							
 							
 						}
-						 if(list.length >= 5){
-								var $a_pre = $('<a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span></a>');
-								var $a_next = $('<a class="carousel-control-next" href="#carouselExampleIndicators1"	role="button" data-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span></a>');
-								$('#carouselExampleIndicators1').append($a_pre);
-								$('#carouselExampleIndicators1').append($a_next);
-							} 
+						 
 						
 						
 					},
