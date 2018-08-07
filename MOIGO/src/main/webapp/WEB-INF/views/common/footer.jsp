@@ -72,7 +72,6 @@
 
 
 	<!-- // 풋터부분 // -->
-	<br><br><br>
 </body>
 <script>
 	$('.footerMenu').on('click',function(){
