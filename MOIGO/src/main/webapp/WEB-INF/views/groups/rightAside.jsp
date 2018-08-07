@@ -64,7 +64,7 @@
 			alert("회원 전용 메뉴입니다.");
 	});
 	
-	$span.text((date.getMonth()+1)+"월"+" " +date.getDate()+"일 "+ date.getHours()+":"+date.getMinutes());
+	$span.text(getTimeToString(date));
 	
 	//getDayToKor(milisecToDate(obj.startTime).getDay()
 	

@@ -564,7 +564,7 @@ public class GroupController {
 	}
 	
 	//일정 넣기
-	@RequestMapping("/groups/insertSchedule.gp")
+	@RequestMapping(value="/groups/insertSchedule.gp" ,method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> insertSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
 	
@@ -605,7 +605,7 @@ public class GroupController {
 	}
 	
 	//일정 하나 수정하기
-	@RequestMapping("/groups/updateSchedule.gp")
+	@RequestMapping(value="/groups/updateSchedule.gp",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> updateSchedule(Schedule schedule ,@RequestParam String startT,@RequestParam String endT){
 		
