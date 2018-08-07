@@ -246,6 +246,16 @@ select:DISABLED {
     
     <script>
     
+    $('#userName').on('keyup',function(){
+    	if($('#userName').val().trim().length>5)
+		{
+			alert("이름은 5자 이내로 입력.");
+			$('#userName').val("");
+			$('#userName').focus();
+			return;
+		}	
+    });
+    
     $('#btnUpdate').on('click',function(){
     	$('#updateForm').submit();
     });
