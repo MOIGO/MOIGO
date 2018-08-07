@@ -58,7 +58,7 @@
 	
 	$item.on("click",function(){
 		
-		if('${memberGrade>1}'=="true")
+		if('${memberGrade>=1}'=="true")
 			openScheduleViewModal(obj.scheduleNo);
 		else
 			alert("회원 전용 메뉴입니다.");
