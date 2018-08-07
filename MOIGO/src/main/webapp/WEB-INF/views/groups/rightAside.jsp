@@ -29,8 +29,6 @@
 		  </ul>
 		</div>
 </div>
- 
- <c:out value="${memberGrade}"/>
 </body>
 
 <script>
