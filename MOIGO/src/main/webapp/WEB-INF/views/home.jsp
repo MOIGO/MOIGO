@@ -142,7 +142,7 @@
 		<c:choose>
 		<c:when test="${m eq null}"><b>가장 활발한 모임 추천</b>
 		</c:when>
-		<c:otherwise><b>내가 가입한 모입</b></c:otherwise>
+		<c:otherwise><b>내가 가입한 모임</b></c:otherwise>
 		</c:choose>
 	</div>
 	<br>
