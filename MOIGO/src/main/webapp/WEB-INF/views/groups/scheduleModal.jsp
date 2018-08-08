@@ -138,7 +138,7 @@ text-align:center;
 				    		<div class="col-2">
 				    			<input type="hidden" id="scheduleWriter" value=""/>
 				    			<div>
-				    				<span class="day ml-2" ></span><br>
+				    				<span class="day ml-2" style="font-size:1.8em" ></span><br>
 				    				<span class="dayofweek" style="margin-top:-10px;"></span>
 				    			</div>
 				    		</div>
@@ -147,7 +147,7 @@ text-align:center;
 				    				<div class="col-12 scheduleName">
 				    					
 				    				</div>
-				    				<div class="col-12 scheduleTime">
+				    				<div class="col-12 scheduleTime font-elipsis">
 				    				
 				    				</div>
 				    				<div class="col-12 memberName">
