@@ -846,9 +846,9 @@ $(document).ready(function(){
 			            console.log(data[0].groupStateCode);
 			            $('.grpDelCancelSubmit').empty();
 						if(data[0].groupStateCode!='S2'){
-							 var strDel='<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">그룹 탈퇴</button>';					
+							 var strDel='<button type="submit" id="grpDelSubmit" class="btn btn-outline-info">그룹 블라인드</button>';					
 						}else{
-							var strDel='<button type="submit" id="grpDelCancelSubmit" class="btn btn-outline-info">그룹 탈퇴 취소</button>';	
+							var strDel='<button type="submit" id="grpDelCancelSubmit" class="btn btn-outline-info">그룹 블라인드 취소</button>';	
 						}
 						$('.grpDelCancelSubmit').append(strDel);
 						

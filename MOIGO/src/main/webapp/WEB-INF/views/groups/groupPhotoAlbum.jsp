@@ -277,6 +277,12 @@
 <title>사진첩</title>
 </head>
 <body>
+<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
+<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
+	<c:param name="groupNo" value="${param.groupNo}" />
+	<c:param name="memberNo" value="${m.memberNo}" />
+</c:import>
+
 <div class="container">
    <div class="row">
    
@@ -434,8 +440,8 @@
          for(var i=0; i < photo.length; i++){
             
             var photoAppend = "<a href='${root}"+ photo[i].filePath + photo[i].fileNewName + "'><div class='photo'></div></a>";
-         
-            $("#photoBody").append(photoAppend);
+            if(photo[i].fileNewName.substring(0, 5) == "photo")
+            	$("#photoBody").append(photoAppend);
             $(".photo").eq(i).css("background-image", "url('${root}" + photo[i].filePath + photo[i].fileNewName + "')");
 
             var inp = "<input type='checkbox' value='" + photo[i].fileNo + "' class='photo_inp' hidden='hidden'/>"
