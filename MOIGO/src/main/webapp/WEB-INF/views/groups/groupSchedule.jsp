@@ -415,6 +415,18 @@
 			if(!$(e.target).hasClass('full-title') && !$(e.target).hasClass('monthpicker'))
 				$("#datepicker").hide();
 		});
+		
+		$(".fc-prev-button").on("click", function() {
+			customCalendar();
+		});
+		
+		$(".fc-next-button").on("click", function() {
+			customCalendar();
+		});
+		
+		$(".fc-today-button").on("click", function() {
+			customCalendar();
+		});
                  
    });
    

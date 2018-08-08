@@ -135,7 +135,6 @@ background: #EDEFF2;
 <body>
 	<c:if test="${currentGroup.groupStateCode ne 'S1' }">
 		<div class="wrap row align-items-center justify-content-center" style="font-size:8em;">블라인드<br> 처리된 모임입니다.</div>
-		<span style="postion:absolute !important;z-index:9999;left:500px;">관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
 	</c:if>
 			
 	
