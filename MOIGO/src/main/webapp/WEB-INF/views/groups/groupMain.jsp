@@ -169,7 +169,7 @@ background: #EDEFF2;
 					
 					<c:choose>
 						
-						<c:when test="${memberGrade > 0 or fn:trim(openSetting) eq 'PUBLIC' }">
+						<c:when test="${(memberGrade > 0) or (fn:trim(openSetting) eq 'PUBLIC') }">
 						
 							<div class="input-group input-group-lg mt-2 mb-2 postSize">
 									<label for="searchPost" class="sr-only">searchPost</label>
