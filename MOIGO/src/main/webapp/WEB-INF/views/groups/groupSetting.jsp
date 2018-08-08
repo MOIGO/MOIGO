@@ -993,9 +993,9 @@ function createGroupMemberModalList(usedList) {
 		
 		var liAppend = "<li class='list-group-item'>";
 		if(usedMember.profileThumb != null)
-			liAppend += "<img class='gmc_member_img' src='${root}/resources/images/profiles/${group.groupNo}/"+ usedMember.profileThumb +"'/>";
+			liAppend += "<img class='gmc_member_img rounded-circle' src='${root}/resources/images/profiles/${group.groupNo}/"+ usedMember.profileThumb +"'/>";
 		else
-			liAppend += "<img class='gmc_member_img' src='${root}/resources/images/common/img_profile.png'/>";
+			liAppend += "<img class='gmc_member_img rounded-circle'  src='${root}/resources/images/common/img_profile.png'/>";
 		liAppend += "<span class='gmc_member_lbl'>" + usedMember.memberName + "</span>";
 		liAppend += "<input type='hidden' value='" + usedMember.memberNo + "'>";
 		liAppend += "<span class='fas fa-minus-circle gmc_btn gmc_minus_btn'></span></li>";
