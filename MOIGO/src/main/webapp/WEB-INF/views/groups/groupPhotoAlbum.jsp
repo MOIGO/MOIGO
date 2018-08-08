@@ -204,6 +204,7 @@
    }
    
    .gpi_modal_body {
+      height : 600px;
       cursor : default;
    }
    
@@ -247,6 +248,7 @@
    .insert_photo_delete {
        position: relative;
       display : none;
+     width: 1.1em;
       top: 2px;
        left: 90px;
        font-size: 1.1em;
@@ -279,8 +281,9 @@
 <body>
 <c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 <c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
-	<c:param name="groupNo" value="${param.groupNo}" />
-	<c:param name="memberNo" value="${m.memberNo}" />
+	<c:param name="groupNo" value="${groupNo }" />
+	<c:param name="memberNo" value="${gm.memberNo}" />
+	<c:param name="memberGrade" value="${memberGrade}" />
 </c:import>
 
 <div class="container">
@@ -385,7 +388,9 @@
                <span class="gpi_lbl">/</span>
                <span class="gpi_lbl">100</span>
             </div>
-            <div class="gpi_photo_wrap">
+            <div class="gpi_modal_scroll">
+               <div class="gpi_photo_wrap">
+               </div>
             </div>
          </div>
                
@@ -441,7 +446,7 @@
             
             var photoAppend = "<a href='${root}"+ photo[i].filePath + photo[i].fileNewName + "'><div class='photo'></div></a>";
             if(photo[i].fileNewName.substring(0, 5) == "photo")
-            	$("#photoBody").append(photoAppend);
+                $("#photoBody").append(photoAppend);
             $(".photo").eq(i).css("background-image", "url('${root}" + photo[i].filePath + photo[i].fileNewName + "')");
 
             var inp = "<input type='checkbox' value='" + photo[i].fileNo + "' class='photo_inp' hidden='hidden'/>"
@@ -540,6 +545,46 @@ function createPhotoInsertList(fileList) {
    }
    
    $(".gpi_photo_wrap").after("<div id='insertFileAdd'><span class='fas fa-file-upload insert_file_icon'></span></div>");
+   
+   $(".insert_photo_delete").css({
+      "left" : "90px"
+   });
+   
+   $(".insert_photo").css({
+      "width" : "107px",
+      "height" : "107px"
+   });
+   
+   $("#insertFileAdd").css({
+      "width" : "107px",
+      "height" : "107px"
+   });
+   
+   $(".gpi_modal_scroll").css({
+      "overflow-y" : "none",
+      "height" : "500px"
+   });
+   
+   if(fileList.length > 15){
+      $(".insert_photo_delete").css({
+         "left" : "82px"
+      });
+      
+      $(".insert_photo").css({
+         "width" : "100px",
+         "height" : "100px"
+      });
+      
+      $("#insertFileAdd").css({
+         "width" : "100px",
+         "height" : "100px"
+      });
+      
+      $(".gpi_modal_scroll").css({
+         "overflow-y" : "scroll",
+         "height" : "500px"
+      });
+   }
    
    $(".insert_photo").each(function() {
       
