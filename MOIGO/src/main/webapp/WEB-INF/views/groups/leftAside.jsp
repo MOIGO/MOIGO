@@ -325,14 +325,16 @@ $('#groupWithdrawal').on("click",function(){
 				return;
 			}
 					
+		}else{
+			if(confirm("탈퇴하시겠습니까?")){
+				$('#groupWithdrawalForm input[name=deleteGroup]').val('N');
+				$('#groupWithdrawalForm').submit();
+				return;
+			}
 		}
 		
 		
-		if(confirm("탈퇴하시겠습니까?")){
-			$('#groupWithdrawalForm input[name=deleteGroup]').val('N');
-			$('#groupWithdrawalForm').submit();
-			return;
-		}
+		
 	}
 	
 	
