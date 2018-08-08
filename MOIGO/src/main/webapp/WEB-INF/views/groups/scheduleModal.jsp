@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="root" value="${pageContext.request.contextPath}"/>
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="${root}/resources/js/groups/jquery.timepicker.js" ></script>
 <link rel="stylesheet" href="${root}/resources/css/groups/jquery.timepicker.css" />
 <link rel="stylesheet" href="${root}/resources/css/groups/datepicker.min.css">
@@ -124,12 +123,12 @@ text-align:center;
 	<div class="modal" id="viewSchedule" tabindex="-1"role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-lg modalSize_schedule" role="document">
 		<div class="modal-content">
-			<!-- <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">일정 만들기</h5>
+			<div class="modal-header">
+				
 				<button type="button" class="close" data-dismiss="modal"aria-label="Close" onclick="closeScheduleModal()">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div> -->
+			</div>
 			
 			<div class="modal-body">
 				<div class="card">
@@ -258,7 +257,7 @@ tempSchedule=new Object();
 
 	function openScheduleViewModal(scheduleNo){
 		
-		$('#viewSchedule').modal("toggle");
+		$('#viewSchedule').modal("show");
 		makeScheduleMapView();
 	
 		getOneSchedule(scheduleNo,setScheduleViewModal);
@@ -280,10 +279,8 @@ tempSchedule=new Object();
 					groupNo:groupNo}
 				,success:(function(data){
 					
-					console.log(data);
 					if(data!=null){
-						
-						console.log(data);
+				
 						$('#viewSchedule').find(".memberName").text(data.groupMember.memberName);
 						
 						
@@ -306,16 +303,19 @@ tempSchedule=new Object();
 		if('${gm.memberNo}'!=obj.memberNo)
 			$('#scheduleViewDropDown').css("display","none");
 		
+		$('#scheduleViewDropDown button[name=edit]').unbind();
 		$('#scheduleViewDropDown button[name=edit]').on("click",function(){
 			editSchedule(undefined,obj.scheduleNo)
 		});
 		
+		
+		$('#scheduleViewDropDown button[name=delete]').unbind();
 		$('#scheduleViewDropDown button[name=delete]').on("click",function(){
 			
 			
 			deleteSchedule(undefined,obj.scheduleNo);
 			
-			location.reload();
+			
 		});
 		
 		
@@ -373,7 +373,7 @@ tempSchedule=new Object();
 		
 		
 		 $('#endDate').data('datepicker').clear();
-		 $('#insertSchedule').modal("toggle");
+		 $('#insertSchedule').modal("show");
 	}
 	
 
@@ -382,20 +382,30 @@ tempSchedule=new Object();
 	function editSchedule(toEditObj,scheduleNo){
     
 		
-		toggleScheduleModal();
+		toggleScheduleModal(); 
 		
-		if(typeof(scheduleNo)=='object')
+		if(typeof(scheduleNo)=='object'){
+		
 			getOneSchedule(scheduleNo.scheduleNo,setTargetScheduleData);
-		else
+		}
+		else{
+			
 			getOneSchedule(scheduleNo,setTargetScheduleData);
+		}
 		
 		$('#insertSchedule').find(".modal-footer button").unbind();
 		$('#insertSchedule').find(".modal-footer button").on("click",function(){
 				
-			if(typeof(scheduleNo)=='object')
+			if(typeof(scheduleNo)=='object'){
 				updateSchedule(scheduleNo.scheduleNo);
-			else
+				
+				if(!$('#postEdit').hasClass('show'))
+					location.reload();
+			}
+			else{
+				
 				updateSchedule(scheduleNo);
+			}
 			editScheduleOnSummerNote(toEditObj);
 		
 		});
@@ -430,7 +440,7 @@ tempSchedule=new Object();
 	//수정을 위해 스케줄 번호를 이용해서 정보를 세팅
 	function setTargetScheduleData(obj){
 	
-		console.log(obj);
+		
 		
 		$('#insertSchedule').find('input[name=scheduleNo]').val(obj.scheduleNo);
 		
@@ -445,12 +455,18 @@ tempSchedule=new Object();
 		
 	
 		$('#startTime').timepicker("setTime",milisecToDate(obj.startTime));
-		$('#startDate').datepicker("setDate",milisecToDate(obj.startTime));
+		$('#startDate').data('datepicker').selectDate(milisecToDate(obj.startTime));
+		
+		
 		
 		if(obj.endTime!=null){
-			
-			$('#endTime').timepicker("setTime",milisecToDate(obj.endTime));
+			/*  $('#endDate').data('datepicker').selectDate(milisecToDate(obj.startTime)); */
+	        
+			$('#endDate').datepicker({minDate : milisecToDate(obj.startTime)});
 			$('#endDate').data('datepicker').selectDate(milisecToDate(obj.endTime));
+			$('#endTime').timepicker("setTime",milisecToDate(obj.endTime));
+			
+			
 		}else{
 			$('#endTime').timepicker("setTime",null);
 			$('#endDate').datepicker("setDate",null);
@@ -495,10 +511,14 @@ tempSchedule=new Object();
 	/*뷰로 스케줄 업데이트  */
 	function updateSchedule(scheduleNo){
 		
+		
+		
 		var times=  getTimesFromInput();
-
+		
+		
 	  	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/updateSchedule.gp",
+			type:"post",
 			data:{	scheduleNo:scheduleNo,
 					scheduleName:$('#insertSchedule input[name=scheduleName]').val(),
 					scheduleContent:$('#insertSchedule textarea').val(),
@@ -509,10 +529,16 @@ tempSchedule=new Object();
 					colorLabel:$('#scheduleLabelColor option:selected').val()
 				},success:(function(data){
 					
+					
+					
 					if(data.result>0){
 						alert("일정 수정에 성공하였습니다.");
-
+						
 						$('#viewSchedule').modal('hide');
+						
+						
+						/* if(toEditTarget!=undefined)
+							location.reload(); */
 						
 					}
 					else
@@ -567,6 +593,7 @@ tempSchedule=new Object();
 		
 	 	$.ajax({
 			url:"${pageContext.request.contextPath}/groups/insertSchedule.gp",
+			type:"post",
 			data:{	groupNo:"${param.groupNo}",
 					scheduleName:$('#insertSchedule input[name=scheduleName]').val(),
 					scheduleContent:$('#insertSchedule textarea').val(),
@@ -672,7 +699,7 @@ tempSchedule=new Object();
 		var times=  getTimesFromInput();
 		
 		var $mapDiv =$('<div class="card" name="editScheduleWrap" style="border:3px solid black;" contenteditable="false" onclick="openScheduleViewModal('+"'"+scheduleObj.scheduleNo+"'"+')">');
-		
+		var $scheduleNo =$('<input type="hidden" name="scheduleNo">').val(scheduleObj.scheduleNo);
 		var $mapBody = $('<div style="cursor:pointer;" class="card-body">');
 		var $mapRow = $('<div class="row">');
 		var $mapCol2 = $('<div class="col-2">');
@@ -717,7 +744,7 @@ tempSchedule=new Object();
 		var $mapCol2Day=$('<div name="day" style="text-align:center;font-weight:700; font-size:2.0em; margin-top:-10px;">'+milisecToDate(scheduleObj.startTime).getDate()+'</div>');
 		var $mapCol2Dow =$('<div name="dayofweek" style="text-align:center; margin-top:-10px;">'+getDayToKor(milisecToDate(scheduleObj.startTime).getDay())+'</div>');
 		var $col10RowCol2 =$('<div class="col-12 map_address scheduleTime">'+getTimeToString(milisecToDate(scheduleObj.startTime))+"  ~  "+getTimeToString(milisecToDate(scheduleObj.endTime))+'</div>');
-		console.log(scheduleObj.endTime);
+		
 				
 	
 		if(milisecToDate(scheduleObj.startTime).getDay()==0)
@@ -751,6 +778,7 @@ tempSchedule=new Object();
 		$col10Row.append($scheduleContent); */
 		
 		//구성 add
+		$col10Row.append($scheduleNo);
 		$col10Row.append($col10RowCol1);
 		$col10Row.append($col10RowCol2);
 		$mapCol10.append($col10Row);
@@ -776,11 +804,11 @@ tempSchedule=new Object();
 			
 			$btn_del.on("click",function(event){
 				
-				event.stopPropagation();
+					event.stopPropagation();
 				
 					deleteSchedule($mapDiv,scheduleObj.scheduleNo);
 				
-					location.reload();
+					/* location.reload(); */
 				
 			});
 			
@@ -826,8 +854,12 @@ tempSchedule=new Object();
 	function deleteSchedule(deleteObj,scheduleNo){
 		
 		if(confirm("일정을 삭제 하시겠습니까?")){
-			if(deleteObj!=undefined)
-				$(deleteObj).remove();
+			
+			if(deleteObj!=undefined){
+				$(deleteObj).parent('.scheduleInputWrapper').remove();
+			}
+			
+			
 			
 			
 			 $.ajax({
@@ -838,6 +870,11 @@ tempSchedule=new Object();
 					  
 						if(data.result>0){
 							alert(" 일정 삭제에 성공하였습니다.");
+							
+							if(!$('#postEdit').hasClass('show'))
+								location.reload();
+							
+							
 							
 						}
 						else
@@ -875,9 +912,12 @@ tempSchedule=new Object();
 		
 		if(dateObj==undefined||dateObj==null)
 			return ""; 
-	
 		
-		 return dateObj.getFullYear()+"년 "+(parseInt(dateObj.getMonth())+1)+"월 "+dateObj.getDate()+"일 "+dateObj.getHours()+":"+dateObj.getMinutes();
+		
+		var hours = (dateObj.getHours()<10?'0':'')+dateObj.getHours();
+		var minutes = (dateObj.getMinutes()<10?'0':'')+dateObj.getMinutes();
+		
+		 return dateObj.getFullYear()+"년 "+(parseInt(dateObj.getMonth())+1)+"월 "+dateObj.getDate()+"일 "+hours+":"+minutes;
 	}
 	
 	/*dow를 요일로 바꾸기  */
@@ -970,7 +1010,9 @@ tempSchedule=new Object();
 		});
 		
 		$('#startDate').on("change",function(){
+			$('#startDate').datepicker("")
 			$('#endDate').datepicker({minDate : getDate(this)});
+			
 			if(getDate($('#startDate')) > getDate($('#endDate')))
 				$('#endDate').data('datepicker').selectDate(getDate($('#startDate')));
 		});
@@ -1076,7 +1118,7 @@ tempSchedule=new Object();
 	      try {
 	    	 
 	        date = $.datepicker.parseDate("yy.mm.dd", $(element).val());
-	       
+	      
 	      } catch( error ) {
 	        date = null;
 	      }

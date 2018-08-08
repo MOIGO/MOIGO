@@ -211,6 +211,7 @@
             regardlessArea : regardlessArea,
             category : category
          },
+         async: false,
          success : function(listData) {
             var cnt = 0;
             var data = new Object();
@@ -219,9 +220,10 @@
             var geocoder = new daum.maps.services.Geocoder();
             
             listData.forEach(function(addr, i) {
+            	
     			geocoder.addressSearch(addr.groupAddress, function(result, status) {
                  if (status === daum.maps.services.Status.OK) {
-                     positions.push({
+                	 positions.push({
                     	"content" : '<div class="moigo-item-wrap" style="width: 200px;">'+
                         ' <div class="content-context">'+
                         ' <div class="moigo-item list-item align-left">'+
@@ -253,7 +255,7 @@
                      
                      // 마커 생성 및 클러스터러에 마커 추가
                      if(cnt == listData.length) {
-                        data = { positions };
+                    	  data = { positions };
                         var markers = data.positions.map(function(position) {
                         	return new daum.maps.Marker({
                             	position : new daum.maps.LatLng(position.lat, position.lng),

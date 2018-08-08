@@ -217,6 +217,30 @@ public class AccuseDaoImpl implements AccuseDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("groupDetail.moreActiveGroups");
 	}
+
+	@Override
+	public List<Map<String, Object>> selectdeleteM() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("acusseTop5.selectdeleteM");
+	}
+
+	@Override
+	public List<Map<String, Object>> selectinactiveG() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("acusseTop5.selectinactiveG");
+	}
+
+	@Override
+	public int grpFlagDelete(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("groupDetail.grpFlagDelete",id);
+	}
+
+	@Override
+	public int memFlagDelete(String id) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("memberDetail.memFlagDelete",id);
+	}
 	
 	
 	

@@ -246,8 +246,26 @@ select:DISABLED {
     
     <script>
     
+    $('#userName').on('keyup',function(){
+    	if($('#userName').val().trim().length>5)
+		{
+			alert("이름은 5자 이내로 입력.");
+			$('#userName').val("");
+			$('#userName').focus();
+			return;
+		}	
+    	
+    });
+    
     $('#btnUpdate').on('click',function(){
-    	$('#updateForm').submit();
+    	if($('#userName').val().trim().length<=0)
+		{
+	 		alert("이름을 입력해 주세요");
+	 		return false;
+		}else{
+			$('#updateForm').submit();	
+		}
+    	
     });
     
     $('#activity_area').on('click',function(){

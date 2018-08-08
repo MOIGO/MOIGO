@@ -67,7 +67,8 @@
 			</div>
 			
 			<c:choose>
-				<c:when test="${memberGrade eq -1 }">
+			
+				<c:when test="${memberGrade eq -1 && m ne null }">
 					<div class="row joinBtnWrapper">
 						<button class="btn btn-block" type="button" data-toggle="modal" data-target="#joinModal">가입하기</button>
 					</div>
@@ -142,7 +143,7 @@
 	<c:if test="${memberGrade>=1}">
 		<button class="btn btn-default btn-sm deleteListGroup "><i class="fas fa-user-minus"></i><span id="groupWithdrawal" >그룹 탈퇴</span></button>
 	</c:if>
-
+  
 
 	</div>
 	
@@ -234,22 +235,28 @@ function joinGroup(){
 	}else{
 		alert("로그인 해주세요!");
 	}
-	
+	   
 	
 }
 
 $('#groupReport').on("click",function(){
+	
+	if('${memberGrade>=1}'=="true"){
 	
 	reportUrl="${pageContext.request.contextPath}/reporting2.ad";
 	
 	$('#accuseReporter').val("${m.memberNo}");
 	$('#accuseTarget').val("${groupNo}");
 	
-	$('#reportingModal').modal("toggle");
+	$('#reportingModal').modal("toggle");}
+	else{
+		alert("회원만 신고가 가능합니다.");
+	}
 }); 
 
 $(function() {
 
+	
 	setGroupDesc('${param.groupNo}','${param.isMember}');
 	
 	
@@ -269,20 +276,20 @@ $(function() {
 			}
 			else if(groupMenu == '사진첩'){
 				
-				if('${memberGrade>1}'=="true")
+				if('${memberGrade>=1}'=="true")
 					$("#groupNoForm").attr("action", "${root}/groups/groupPhotoAlbum.gp").submit();
 				else
 					alert("회원 전용 메뉴입니다.");
 				
 			}
 			else if(groupMenu == '일정'){
-				if('${memberGrade>1}'=="true")
+				if('${memberGrade>=1}'=="true")
 					$("#groupNoForm").attr("action", "${root}/groups/groupSchedule.gp").submit();
 				else
 					alert("회원 전용 메뉴입니다.");
 			}
 			else{
-				if('${memberGrade>1}'=="true")
+				if('${memberGrade>=1}'=="true")
 					$("#groupNoForm").attr("action", "${root}/groups/groupMember.gp").submit();
 				else
 					alert("회원 전용 메뉴입니다.");

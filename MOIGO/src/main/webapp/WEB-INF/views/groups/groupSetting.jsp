@@ -576,7 +576,7 @@ input:-webkit-autofill:active {
                   
                </div>
                   
-            <!-- 멤버 추가 목록 Modal -->
+            <!-- 멤버 변경 목록 Modal -->
             <div class="modal" id="groupMemberChangeModal" tabindex="-1" role="dialog" aria-labelledby="groupMemberChangeTitle" aria-hidden="true">
                  <div class="modal-dialog modal-dialog-centered" role="document">
                  <div class="modal-content">

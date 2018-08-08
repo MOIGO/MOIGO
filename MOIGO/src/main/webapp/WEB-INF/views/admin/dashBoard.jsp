@@ -81,7 +81,7 @@
           var options = {
         		  
           
-        	'title':'Weekly New Group Count',
+        	'title':'A Week\'s Change of New Group',
   			titleTextStyle:{
   			fontName:'Poppins',
   			fontSize: 23

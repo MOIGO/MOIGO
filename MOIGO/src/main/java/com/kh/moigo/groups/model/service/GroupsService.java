@@ -64,22 +64,8 @@ public interface GroupsService {
 	
 	List<Schedule> selectListGroupSchedule(String groupNo);
 	
+	int insertGroupPhoto(Files file);
+	List<Files> selectListGroupPhoto(Map<String, String> fileMap);
+	int deleteGroupPhoto(List<String> fileNo);
 	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-
-	
-
 }

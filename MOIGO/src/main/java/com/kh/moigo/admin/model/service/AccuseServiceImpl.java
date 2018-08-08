@@ -212,6 +212,30 @@ public class AccuseServiceImpl implements AccuseService {
 		// TODO Auto-generated method stub
 		return ad.moreActiveGroups();
 	}
+
+	@Override
+	public List<Map<String, Object>> selectdeleteM() {
+		// TODO Auto-generated method stub
+		return ad.selectdeleteM();
+	}
+
+	@Override
+	public List<Map<String, Object>> selectinactiveG() {
+		// TODO Auto-generated method stub
+		return ad.selectinactiveG();
+	}
+
+	@Override
+	public int grpFlagDelete(String id) {
+		// TODO Auto-generated method stub
+		return ad.grpFlagDelete(id);
+	}
+
+	@Override
+	public int memFlagDelete(String id) {
+		// TODO Auto-generated method stub
+		return ad.memFlagDelete(id);
+	}
 	
 
 

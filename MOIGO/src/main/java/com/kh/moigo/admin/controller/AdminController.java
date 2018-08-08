@@ -61,7 +61,7 @@ public class AdminController {
 		accuse.setReporter(data3);
 		
 		int result = as.insertAccuse(accuse);
-		System.out.println(result);		
+		System.out.println("개인 신고 페이지"+result);		
 		return report;
 	
 	}
@@ -75,7 +75,7 @@ public class AdminController {
 		accuse.setTargetGroup(data2);
 		accuse.setReporter(data3);
 		int result = as.insertAccuse(accuse);
-		System.out.println(result);		
+		System.out.println("그룹 신고 페이지"+result);		
 		return report;
 		
 	}
@@ -272,7 +272,10 @@ public class AdminController {
 		//report top 5 구하기
 		List<Map<String,Object>> mtop5 = as.atop5memberList();
 		List<Map<String,Object>> gtop5 = as.atop5groupList();
-
+		
+		
+		List<Map<String,Object>> deleteM = as.selectdeleteM();
+		List<Map<String,Object>> inactiveG = as.selectinactiveG();
 		System.out.println("top5"+mtop5);
 		System.out.println("top5"+gtop5);
 
@@ -280,8 +283,8 @@ public class AdminController {
 		System.out.println(accuseList);
 		model.addAttribute("pi",pi);
 		model.addAttribute("accuseList",accuseList).addAttribute("listCount",listCount);
-		model.addAttribute("mtop5",mtop5);
-		model.addAttribute("gtop5",gtop5);
+		model.addAttribute("mtop5",mtop5).addAttribute("gtop5",gtop5);
+		model.addAttribute("deleteM",deleteM).addAttribute("inactiveG",inactiveG);
 
 		model.addAttribute("pageName","Report");
 		return "admin/reportManaging";
@@ -378,6 +381,26 @@ public class AdminController {
 	public Object grpDelete(@RequestParam String id) throws Exception{
 		List<Object> List= new ArrayList<Object>();
 		int result = as.grpDelete(id);
+		//System.out.println("여기로 들어오나요?"+result);
+		List.add(id);
+		return List;	
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="grpFlagDelete.ad", method=RequestMethod.GET)
+	public Object grpFlagDelete(@RequestParam String id) throws Exception{
+		List<Object> List= new ArrayList<Object>();
+		int result = as.grpFlagDelete(id);
+		//System.out.println("여기로 들어오나요?"+result);
+		List.add(id);
+		return List;	
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="memFlagDelete.ad", method=RequestMethod.GET)
+	public Object memFlagDelete(@RequestParam String id) throws Exception{
+		List<Object> List= new ArrayList<Object>();
+		int result = as.memFlagDelete(id);
 		//System.out.println("여기로 들어오나요?"+result);
 		List.add(id);
 		return List;	

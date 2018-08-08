@@ -89,8 +89,8 @@ background: #EDEFF2;
 		left:250px;
 		background-color: grey;
 		opacity: 0.5;
-		min-width:1000px;
-		width:1300px;
+		min-width:1200px;
+		width:1500px;
 		height:100%;
 		text-align:center;
 		
@@ -135,8 +135,10 @@ background: #EDEFF2;
 <body>
 	<c:if test="${currentGroup.groupStateCode ne 'S1' }">
 		<div class="wrap row align-items-center justify-content-center" style="font-size:8em;">블라인드<br> 처리된 모임입니다.</div>
-		<span>관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
+		<span style="postion:absolute !important;z-index:9999;left:500px;">관리자에게 문의해 주세요 moigoAdmin@moigo.com</span>
 	</c:if>
+			
+	
 	
 	<c:import url="/WEB-INF/views/groups/mapModal.jsp" />
 	<c:import url="/WEB-INF/views/groups/scheduleModal.jsp" >
@@ -276,7 +278,7 @@ $(window).on('load', function () {
 });
 
 
-$('#postImages').on('shown.bs.modal',function(){
+$('#postEdit').on('shown.bs.modal',function(){
 	createSummerNote();
 });
 
@@ -399,12 +401,14 @@ function restoreScheduleElement(){
 	$('#postDiv').find(".scheduleInputWrapper").each(function(){
 		
 		
-		if($(this).find('[name=editScheduleWrap]').length<=0){
-		
-			restoreScheduleElementCallBack($(this));
+		if('${memberGrade>=1}'=="true"){
 			
-		}
+			if($(this).find('[name=editScheduleWrap]').length<=0){
+			
+				restoreScheduleElementCallBack($(this));
 				
+			}
+		}
 	});
 	
 }
@@ -595,6 +599,7 @@ function makeDropDown(isPost,num,memberNo,wrapperObj){
 			$dropDownMenu.append($dropDownItem4);
 			
 			$dropDownItem4.on("click",function(){
+				reportUrl="${pageContext.request.contextPath}/reporting.ad";
 				$('#accuseReporter').val("${gm.memberNo}");
 				$('#accuseTarget').val($(wrapperObj).find(".postWriterNo").val());
 				$('#reportingModal').modal("toggle"); 
@@ -663,7 +668,13 @@ function makeSubmitReply(postNo){
 	var $inputGroup = $('<div class="input-group">');
 	var $input = $('<input class="form-control" type="text" placeholder="댓글을 남겨주세요!">');
 	var $inputButton = $("<span class='input-group-btn'></span>").append($("<button class='btn btn-secondary' type='button'>등록</button>").on("click",function(){
-		submitReply(postNo, $input);
+		
+		if('${memberGrade>=1}'=="true")
+			submitReply(postNo, $input);
+		else{
+			alert("멤버만 가능합니다.");
+			$input.val("");	
+		}
 	}));
 
 	$inputGroup.append($input);
@@ -1115,7 +1126,7 @@ function createSummerNote(){
 		  var button = ui.button({
 		    contents: '<i class="fas fa-map-marked-alt"></i>',
 		    container:false,
-		    tooltip: '지도 삽입',
+		    
 		    click: function () {
 		      toggleMapModal();
 		    }
@@ -1131,7 +1142,7 @@ function createSummerNote(){
 		  var button = ui.button({
 		    contents: '<i class="fas fa-calendar-alt"></i>',
 		    container:false,
-		    tooltip: '일정 삽입',
+		  	
 		    click: function () {
 		    	var temp = $($('#summernote').summernote('code'));
 				
@@ -1155,7 +1166,7 @@ function createSummerNote(){
 		  var button = ui.button({
 		    contents: '<i class="fas fa-image"></i>',
 		    container:false,
-		    tooltip: '사진 삽입',
+		    
 		    click: function () {
 		    	$('#postImages').click();
 		    }
@@ -1181,6 +1192,7 @@ function createSummerNote(){
 		  dialogsInBody: true,
 		  disableResizeEditor: true,
 		  height: 350,
+		  tooltip: false,
 		  /* callbacks:{
 			onImageUpload:function(files,editor,welEditable){
 				

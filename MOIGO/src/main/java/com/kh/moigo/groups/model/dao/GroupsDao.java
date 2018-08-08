@@ -80,22 +80,10 @@ public interface GroupsDao {
 	int deleteGroup(String groupNo);
 
 	List<Schedule> selectListGroupSchedule(String groupNo);
-
 	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
+	int insertGroupPhoto(Files file);
+	List<Files> selectListGroupPhoto(Map<String, String> fileMap);
+	int deleteGroupPhoto(List<String> fileNo);
 
 }
 

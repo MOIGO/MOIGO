@@ -29,9 +29,14 @@
 		
 	</resultMap>
 
+	<select id="selectdeleteM" resultMap="memberDetailResultMap">
+		SELECT * FROM MEMBER WHERE DELFLAG='Y'
+	</select>
+
+
 	<select id="memDetail" parameterType="string" resultMap="memberDetailResultMap">
 		SELECT MEMBER_NO,
-		MEMBER_EMAIL,MEMBER_NAME,MEMBER_ADDRESS,MEMBER_BIRTH,MEMBER_GENDER,ENROLL_DATE,
+		MEMBER_EMAIL,MEMBER_NAME,MEMBER_ADDRESS,MEMBER_BIRTH,MEMBER_GENDER,ENROLL_DATE,DELFLAG,
 		(SELECT COUNT(*) FROM GROUP_MEMBER WHERE MEMBER_NO = M.MEMBER_NO) ENROLL_GR,
 		(SELECT COUNT(*) FROM POST WHERE MEMBER_NO = M.MEMBER_NO) POST_COUNT,
 		(SELECT COUNT(*) FROM POST_REPLY WHERE MEMBER_NO = M.MEMBER_NO) REPLY_COUNT
@@ -95,6 +100,10 @@
 		SET DELFLAG ='Y'
 		WHERE MEMBER_NO = #{id}	
 	</update>
-	
+	<update id="memFlagDelete" parameterType="string">
+		UPDATE MEMBER
+		SET DELFLAG ='N'
+		WHERE MEMBER_NO = #{id}	
+	</update>
 	
 </mapper>

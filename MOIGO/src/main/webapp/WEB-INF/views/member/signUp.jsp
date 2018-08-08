@@ -500,14 +500,22 @@ $(function(){
         	var name = $('#userName').val();
         	var regexp =/^[가-힣]{2,15}|[a-zA-Z]{2,15}\s[a-zA-Z]{2,15}$/;
         	
-        	if(regexp.test(name)){
-        		chkName=true;
-        		$('#nameChkMsg').html('OK!').addClass('okChk').removeClass('noChk');
-    
-        	}else{
-	       		chkName=false;
-        		$('#nameChkMsg').html('이름 확인').addClass('noChk').removeClass('okChk');
-        	}
+    	    	if($('#userName').val().trim().length>5)
+    			{
+    				alert("이름은 5자 이내로 입력.");
+    				$('#userName').val("");
+    				$('#userName').focus();
+    				return;
+    			}else{
+    				if(regexp.test(name)){
+            		chkName=true;
+            		$('#nameChkMsg').html('OK!').addClass('okChk').removeClass('noChk');
+        
+            	}else{
+    	       		chkName=false;
+            		$('#nameChkMsg').html('이름 확인').addClass('noChk').removeClass('okChk');
+            	}}
+        
         });
        
       $('#userYear, #userMonth, #userDay').on('change',function(){
